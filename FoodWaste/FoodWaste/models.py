@@ -16,4 +16,4 @@ class TrackingTool(models.Model):
     search = models.CharField(blank=False, null=False, max_length = 255)
     article_title = models.CharField(blank=False, null=False, max_length = 255)
     date_accessed = models.DateTimeField(blank=False, null=False, default=timezone.now)
-    comments = models.CharField(blank=False, null=False, max_length = 255)
+    comments = models.CharField(blank=True, null=True, max_length = 255)

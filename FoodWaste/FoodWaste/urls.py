@@ -16,8 +16,8 @@ urlpatterns = [
     url(r'^dashboard/$', home, name='dashboard'),
     url(r'^contact/?', contact, name='contact'),
     url(r'^about/?', about, name='about'),
+    url(r'^trackingtool/create/?', TrackingToolCreate.as_view(), name='tracking_tool_create'),
     url(r'^trackingtool/?', TrackingToolList.as_view(), name='tracking_tool'),
-    url(r'^trackingtool/create/?', TrackingToolCreate.as_view(), name='tracking_tool'),
 
     url(r'^accounts/', include('accounts.urls')),
     url(r'^support/', include('support.urls')),

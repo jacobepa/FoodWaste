@@ -8,6 +8,7 @@ from django.http import HttpRequest
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView
+from FoodWaste.forms import TrackingToolForm
 from FoodWaste.models import TrackingTool
 
 
@@ -17,6 +18,16 @@ class TrackingToolList(ListView):
     context_object_name = 'tracking_tool_list'
     queryset = TrackingTool.objects.all()
     template_name = 'trackingtool/tracking_tool_list.html'
+
+
+class TrackingToolCreate(CreateView):
+    """Class for creating new Secondary / Existing Data"""
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return a view with an empty form for creating a new Secondary / Existing Data"""
+        return render(request, "trackingtool/tracking_tool_create.html",
+                      {'form': TrackingToolForm()})
 
 
 def home(request):
