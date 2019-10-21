@@ -11,14 +11,14 @@
 # All of these packages appear to be necessary for both Windows and Linux environments. #
 #---------------------------------------------------------------------------------------#
 
-astroid==2.3.1                  # Currently the library powering pylint’s capabilities.
+astroid==2.3.2                  # Currently the library powering pylint’s capabilities.
 autopep8==1.4.4                 # Automatically formats Python code to conform to the PEP 8 style guide.
 certifi==2019.9.11              # Collection of Root Certificates for validating trustworthiness of SSL certificates while verifying identity TLS hosts.
 chardet==3.0.4                  # Universal encoding detector for Python 2 and 3.
 coverage==4.5.4                 # Measures code coverage, typically during test execution.
 django-session-security==2.6.5  # Provides a mechanism to logout inactive authenticated users.
 Django==2.2.6                   # Python Modules.
-django-phonenumber-field==3.0.1 # 
+django-phonenumber-field==3.0.1 # An international phone number field for django models.
 djangorestframework==3.10.3     # Powerful and flexible toolkit for building Web APIs.
 flake8==3.7.8                   # Flake8 is a wrapper around these tools: PyFlakes; pycodestyle; Ned Batchelder's McCabe script.
 jdcal==1.4.1                    # Julian dates from proleptic Gregorian and Julian calendars.
@@ -26,15 +26,15 @@ mccabe==0.6.1                   # McCabe checker, plugin for flake8.
 openpyxl==3.0.0                 # Python library to read/write Excel 2010 xlsx/xlsm/xltx/xltm files.
 packaging==19.2                 # Core utilities for Python packages.
 pep8==1.7.1                     # Tool to check your Python code against some of the style conventions in PEP 8.
-phonenumbers==8.10.21           #
+phonenumbers==8.10.21           # Python version of Google's common library for parsing, formatting, storing and validating international phone numbers.
 pluggy==0.13.0                  # Core framework used by the pytest, tox, and devpi projects.
-psycopg2==2.8.3                 # Python-PostgreSQL Database Adapter.
+psycopg2==2.8.4                 # Python-PostgreSQL Database Adapter.
 py==1.8.0                       # Python development support library.
 pycodestyle==2.5.0              # Tool to check your Python code against some of the style conventions in PEP 8 & PEP 257.
 pyflakes==2.1.1                 # Analyzes programs and detects various errors.
 pylint_django==2.0.11           # pylint_django.checkers.db_performance looks for migrations which add new model fields and these fields have a default value.
 pylint-plugin-utils==0.6        # Utilities and helpers for writing Pylint plugins.
-pylint==2.4.2                   # Static code analysis tool which looks for programming errors, helps enforcing PEP 8 coding standard.
+pylint==2.4.3                   # Static code analysis tool which looks for programming errors, helps enforcing PEP 8 coding standard.
 pyparsing==2.4.2                # Python parsing module.
 pytest==5.2.1                   # Framework to write small tests, yet scales to support complex functional testing for apps/lib.
 pytz==2019.3                    # UTC is pytz.timezone('UTC') True.
