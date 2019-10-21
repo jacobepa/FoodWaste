@@ -1,6 +1,10 @@
-"""
-Definition of urls for FoodWaste.
-"""
+# urls.py (FoodWaste)
+# !/usr/bin/env python3
+# coding=utf-8
+# young.daniel@epa.gov
+
+
+"""Definition of urls for FoodWaste."""
 
 from datetime import datetime
 from django.conf.urls import url

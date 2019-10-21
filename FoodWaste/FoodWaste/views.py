@@ -1,6 +1,10 @@
-"""
-Definition of views.
-"""
+# views.py (FoodWaste)
+# !/usr/bin/env python3
+# coding=utf-8
+# young.daniel@epa.gov
+
+
+"""Definition of views."""
 
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
@@ -13,7 +17,8 @@ from FoodWaste.models import TrackingTool
 
 
 class TrackingToolList(ListView):
-    """View for Secondary / Existing Data Tracking Tool"""
+    """View for Secondary / Existing Data Tracking Tool."""
+
     model = TrackingTool
     context_object_name = 'tracking_tool_list'
     queryset = TrackingTool.objects.all()
@@ -21,11 +26,11 @@ class TrackingToolList(ListView):
 
 
 class TrackingToolCreate(CreateView):
-    """Class for creating new Secondary / Existing Data"""
+    """Class for creating new Secondary / Existing Data."""
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return a view with an empty form for creating a new Secondary / Existing Data"""
+        """Return a view with an empty form for creating a new Secondary / Existing Data."""
         return render(request, "trackingtool/tracking_tool_create.html",
                       {'form': TrackingToolForm()})
 

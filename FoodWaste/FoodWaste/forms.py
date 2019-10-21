@@ -1,6 +1,9 @@
-"""
-Definition of forms.
-"""
+# forms.py (FoodWaste)
+# !/usr/bin/env python3
+# coding=utf-8
+# young.daniel@epa.gov
+
+"""Definition of forms."""
 
 from django.forms import CharField, ModelForm, TextInput, Textarea, PasswordInput
 from django.contrib.auth.forms import AuthenticationForm
@@ -10,6 +13,7 @@ from phonenumber_field.formfields import PhoneNumberField
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
+
     username = CharField(max_length=254,
                          widget=TextInput({
                              'class': 'form-control',
@@ -21,7 +25,8 @@ class BootstrapAuthenticationForm(AuthenticationForm):
 
 
 class TrackingToolForm(ModelForm):
-    """Form for creating a new Secondary / Existing Data Tracking instance"""
+    """Form for creating a new Secondary / Existing Data Tracking instance."""
+
     work = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2',
@@ -52,10 +57,10 @@ class TrackingToolForm(ModelForm):
         max_length=255,
         widget=Textarea({'rows': 3, 'class': 'form-control mb-2',
                          'placeholder': 'Comments'}),
-        label=_("Commments"), required=False)
+        label=_("Comments"), required=False)
 
     class Meta:
-        """Meta data for Secondary / Existing Data Tracking"""
+        """Meta data for Secondary / Existing Data Tracking."""
 
         model = TrackingTool
         fields = ()

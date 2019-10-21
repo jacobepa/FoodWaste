@@ -1,6 +1,10 @@
-"""
-Definition of models.
-"""
+# models.py (FoodWaste)
+# !/usr/bin/env python3
+# coding=utf-8
+# young.daniel@epa.gov
+
+
+"""Definition of models."""
 
 from django.db import models
 from django.utils import timezone
@@ -8,7 +12,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 class TrackingTool(models.Model):
-    """Class representing an instance of Secondary / Existing Data Tracking Tool"""
+    """Class representing an instance of Secondary / Existing Data Tracking Tool."""
 
     work = models.CharField(blank=False, null=False, max_length = 255)
     email = models.CharField(blank=False, null=False, max_length = 255)
