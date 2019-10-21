@@ -2096,7 +2096,7 @@ label.option {
     display: inline;
 }
 
-/* Disable all CSS related to checkbox and radio buttons for GEMM application */
+/* Disable all CSS related to checkbox and radio buttons for foodwaste application */
 /*input[type='checkbox'],
 input[type='radio'] {
     padding: 0;
@@ -4017,7 +4017,7 @@ th.headerSortDown {
     outline: 0;
 }
 
-/* Removed for GEMM website */
+/* Removed for foodwaste website */
 /*.mobile-links a:after {
     content: '>';
     float: right;

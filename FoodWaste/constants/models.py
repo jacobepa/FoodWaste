@@ -30,7 +30,7 @@ STEAM_CHOICES = (('medium', 'Medium Pressure Steam'), ('low', 'Low Pressure Stea
 SUBJECT_CHOICES = (('General Inquiry', 'General Inquiry'), ('Send Me More Info', 'Send Me More Info'),
                    ('Registration Problem', 'Registration Problem'), ('Log-In Issue', 'Log-In Issue'))
 SUBMISSION_CHOICES = (('Submitted', 'Submitted'), ('Under Review', 'Under Review'), ('Accepted', 'Accepted'))
-SUPPORT_CHOICES = (('', ''), ('GREENSCOPE', 'GREENSCOPE Values'), ('Help', 'Help'),
+SUPPORT_CHOICES = (('', ''), ('foodwaste', 'foodwaste Values'), ('Help', 'Help'),
                    ('Feature', 'Feature Request'), ('Other', 'Other'))
 
 TODO_STATUS_CHOICES = (('', ''), ('Emergency', 'Emergency'), ('Important', 'Important'),
