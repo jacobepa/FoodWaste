@@ -29,3 +29,8 @@ class ListTextWidget(forms.TextInput):
         data_list += '</datalist>'
 
         return text_html + data_list
+
+
+def strip_non_numerals(param_string):
+    """Given a string (such as a phone number) strip all non-numerics"""
+    return ''.join(c for c in param_string if c.isdigit())

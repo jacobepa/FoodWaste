@@ -6,9 +6,10 @@
 
 """Definition of views."""
 
+from constants.widgets import strip_non_numerals
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView
@@ -33,6 +34,18 @@ class TrackingToolCreate(CreateView):
         """Return a view with an empty form for creating a new Secondary / Existing Data."""
         return render(request, "trackingtool/tracking_tool_create.html",
                       {'form': TrackingToolForm()})
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a new Existing Data form filled out."""
+        # Strip all numerals from the user-entered phone number.
+        #request.POST = request.POST.copy()
+        #request.POST['phone'] = '+1' + strip_non_numerals(request.POST['phone'])
+        form = TrackingToolForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/trackingtool/')
+        return render(request, 'trackingtool/tracking_tool_create.html', {'form': form})
 
 
 def home(request):

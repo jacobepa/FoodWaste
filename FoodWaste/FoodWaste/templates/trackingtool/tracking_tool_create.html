@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <form action="/trackingtool/create/" method="post">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="" class="col-sm-3 control-label">{{form.work.label}}</label>
                     <div class="col-sm-9">{{form.work}}</div>
@@ -18,37 +19,41 @@
                     <label for="" class="col-sm-3 control-label">{{form.phone.label}}</label>
                     <div class="col-sm-9">{{form.phone}}</div>
                 </div>
-                <div class="form-group col-sm-12">
+
+                <div class="form-group">
+                    <label for="searchMethodSelect" class="col-sm-3 control-label">Internet/Intranet Search Method</label>
+                    <div class="col-sm-9">
+                        <select id="searchMethodSelect" class="form-control">
+                            <option value="google">Google Scholar</option>
+                            <option value="duck">DuckDuckGo</option>
+                            <option value="custom">Custom URL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mt-2">
                     <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
                     <div class="col-sm-9">
                         <div class="col-sm-11">{{form.search}}</div>
-                        <a id="searchLink" onclick="goSearch()" class="col-sm-1 btn btn-md btn-secondary disabled">Search Google Scholar</a>
+                        <a id="searchLink" class="col-sm-1 btn btn-md btn-secondary disabled">Search</a>
                     </div>
                 </div>
-                <div class="form-group col-sm-12">
-                    <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
-                    <div class="col-sm-9">
-                        <div class="col-sm-11">{{form.search}}</div>
-                        <a id="searchLink" onclick="goSearch()" class="col-sm-1 btn btn-md btn-secondary disabled">Search DuckDuckGo</a>
-                    </div>
-                </div>
-                <div class="form-group col-sm-12">
-                    <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
-                    <div class="col-sm-9">
-                        <div class="col-sm-11">{{form.search}}</div>
-                        <a id="searchLink" onclick="goSearch()" class="col-sm-1 btn btn-md btn-secondary disabled">Enter EPA/Other URL</a>
-                    </div>
-                </div>
+
                 <div class="form-group col-sm-12 hidden-div" style="display: none;">
                     <label for="" class="col-sm-3 control-label">{{form.article_title.label}}</label>
                     <div class="col-sm-9">{{form.article_title}}</div>
                 </div>
                 <div class="form-group col-sm-12 hidden-div" style="display: none;">
+                    <label for="" class="col-sm-3 control-label">{{form.citation.label}}</label>
+                    <div class="col-sm-9">{{form.citation}}</div>
+                </div>
+
+
+                <div class="form-group col-sm-12 hidden-div" style="display: none;">
                     <label for="" class="col-sm-3 control-label">{{form.comments.label}}</label>
                     <div class="col-sm-9">{{form.comments}}</div>
                 </div>
                 <div class="col-md-12">
-                    <button type="submit" value="Update" class="m-2 col-md-2 btn btn-md btn-success" disabled>Save</button>
+                    <button type="submit" class="m-2 col-md-2 btn btn-md btn-success">Save</button>
                     <button type="reset" class="m-2 col-md-2 col-md-offset-1 btn btn-md btn-warning">Reset</button>
                     <button type="reset" onclick="window.location.href='/trackingtool/'"
                             class="m-2 col-md-2 col-md-offset-1 btn btn-md btn-danger">
@@ -65,23 +70,19 @@
 {% block scripts %}
 <script>
     var searchUrl = '';
-    (function () {
-        $('#searchLink').on('change textInput input', searchFieldUpdate());
-        $('#searchLink').on('click', goSearch());
+    $(document).ready(function () {
+        $('#id_search').on('change textInput input', searchFieldUpdate);
+        $('#searchLink').on('click', goSearch);
     });
 
+    var DUCK_URL = 'https://duckduckgo.com/?q=';
+    var GOOGLE_URL = 'https://scholar.google.com/scholar?q=';
     function searchFieldUpdate() {
         var searchTerm = $("#id_search").val();
         if (searchTerm.length > 5) {
             $("#searchLink").removeClass('disabled');
             $("#searchLink").addClass('btn-success');
             $("#searchLink").removeClass('btn-secondary');
-            var url = 'https://scholar.google.com/search?q=' + searchTerm;
-            var url = 'https://https://duckduckgo.com/search?q=' + searchTerm;
-            var url = 'https://search?q=' + searchTerm;
-            // $("#searchLink").prop('href', url);
-            // TODO: Jake, need to make all three search option available
-            searchUrl = url;
         } else {
             if (!$("#searchLink").hasClass('disabled')) {
                 $("#searchLink").addClass('disabled');
@@ -89,13 +90,22 @@
                 $("#searchLink").removeClass('btn-success');
                 hidePostSearchFields();
             }
-            // $("#searchLink").prop('href', '');
             searchUrl = '';
         }
     }
 
     function goSearch() {
-        if (searchUrl.length !== 0) {
+        var searchTerm = $("#id_search").val();
+        if (searchTerm.length > 5) {
+
+            var searchSelection = $("#searchMethodSelect").val();
+            if (searchSelection === 'google')
+                searchUrl = GOOGLE_URL + searchTerm;
+            else if (searchSelection === 'duck')
+                searchUrl = DUCK_URL + searchTerm;
+            else
+                searchUrl = searchTerm;
+
             showPostSearchFields();
             window.open(searchUrl);
         }

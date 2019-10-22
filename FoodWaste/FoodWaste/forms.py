@@ -32,30 +32,47 @@ class TrackingToolForm(ModelForm):
         widget=TextInput({'class': 'form-control mb-2',
                           'placeholder': 'Work Office/Lab'}),
         label=_("User Work Office/Lab"), required=True)
+
     email = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2',
                           'placeholder': 'Email'}),
         label=_("Email Address"), required=True)
-    phone = PhoneNumberField(
+
+    #phone = PhoneNumberField(
+    #    widget=TextInput({'class': 'form-control mb-2',
+    #                      'placeholder': '(555) 555-5555 or 555-555-5555'}),
+    #    label=_("Phone Number"), required=True)
+    phone = CharField(
+        max_length=32,
         widget=TextInput({'class': 'form-control mb-2',
-                          'placeholder': '555-555-5555'}),
+                          'placeholder': '(555) 555-5555 or 555-555-5555'}),
         label=_("Phone Number"), required=True)
+
     search = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2',
                           'placeholder': 'Search Term'}),
         label=_("Search for Existing Data"), required=True)
+
     article_title = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2',
                           'placeholder': 'Paste Article Title Here'}),
         label=_("Article Title"), required=True)
+
+    citation = CharField(
+        max_length=255,
+        widget=Textarea({'rows': 2, 'class': 'form-control mb-2',
+                         'placeholder': 'APA Citation'}),
+        label=_("APA Citation"), required=True)
+
     # Date accessed should be automatically generated as NOW by the model.
     # date_accessed =
+
     comments = CharField(
         max_length=255,
-        widget=Textarea({'rows': 3, 'class': 'form-control mb-2',
+        widget=Textarea({'rows': 2, 'class': 'form-control mb-2',
                          'placeholder': 'Comments'}),
         label=_("Comments"), required=False)
 
@@ -63,4 +80,5 @@ class TrackingToolForm(ModelForm):
         """Meta data for Secondary / Existing Data Tracking."""
 
         model = TrackingTool
-        fields = ()
+        fields = ('work', 'email', 'phone', 'search', 'article_title',
+                  'citation', 'comments')

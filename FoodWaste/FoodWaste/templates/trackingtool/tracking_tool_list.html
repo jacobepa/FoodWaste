@@ -26,10 +26,10 @@
                 {% if tracking_tool_list %}
                 {% for data in tracking_tool_list %}
                 <tr id="{{data.id}}" onclick="">
-                    <th scope="row">{{data.email}}</th>
-                    <th>{{data.work}}</th>
-                    <th>{{data.article_title}}</th>
-                    <th>{{data.date_accessed}}</th>
+                    <td scope="row">{{data.email}}</td>
+                    <td>{{data.work}}</td>
+                    <td>{{data.article_title}}</td>
+                    <td>{{data.date_accessed}}</td>
                 </tr>
 
                 {% endfor %}
