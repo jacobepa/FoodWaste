@@ -22,7 +22,21 @@
                     <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
                     <div class="col-sm-9">
                         <div class="col-sm-11">{{form.search}}</div>
-                        <a id="searchLink" onclick="goSearch()" class="col-sm-1 btn btn-md btn-secondary disabled">Go</a>
+                        <a id="searchLink" onclick="goSearch()" class="col-sm-1 btn btn-md btn-secondary disabled">Search Google Scholar</a>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
+                    <div class="col-sm-9">
+                        <div class="col-sm-11">{{form.search}}</div>
+                        <a id="searchLink" onclick="goSearch()" class="col-sm-1 btn btn-md btn-secondary disabled">Search DuckDuckGo</a>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
+                    <div class="col-sm-9">
+                        <div class="col-sm-11">{{form.search}}</div>
+                        <a id="searchLink" onclick="goSearch()" class="col-sm-1 btn btn-md btn-secondary disabled">Enter EPA/Other URL</a>
                     </div>
                 </div>
                 <div class="form-group col-sm-12 hidden-div" style="display: none;">
@@ -62,8 +76,11 @@
             $("#searchLink").removeClass('disabled');
             $("#searchLink").addClass('btn-success');
             $("#searchLink").removeClass('btn-secondary');
-            var url = 'https://www.google.com/search?q=' + searchTerm;
+            var url = 'https://scholar.google.com/search?q=' + searchTerm;
+            var url = 'https://https://duckduckgo.com/search?q=' + searchTerm;
+            var url = 'https://search?q=' + searchTerm;
             // $("#searchLink").prop('href', url);
+            // TODO: Jake, need to make all three search option available
             searchUrl = url;
         } else {
             if (!$("#searchLink").hasClass('disabled')) {

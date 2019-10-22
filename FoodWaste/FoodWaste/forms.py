@@ -45,7 +45,7 @@ class TrackingToolForm(ModelForm):
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2',
                           'placeholder': 'Search Term'}),
-        label=_("Search for Secondary / Existing Data"), required=True)
+        label=_("Search for Existing Data"), required=True)
     article_title = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2',
