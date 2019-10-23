@@ -92,7 +92,7 @@ class TrackingToolForm(ModelForm):
     # TODO File Upload
     attachments = FileField(label=_("Upload File Attachments"), required=False,
                             widget=ClearableFileInput(
-                                attrs={'multiple': True,
+                                attrs={'multiple': False,
                                        'class': 'custom-file-input'}))
 
     def __init__(self, *args, **kwargs):

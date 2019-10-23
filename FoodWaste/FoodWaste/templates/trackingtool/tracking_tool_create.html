@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <form action="/trackingtool/create/" method="post">
+            <form enctype="multipart/form-data" action="/trackingtool/create/" method="post" role="form">
                 {% csrf_token %}
 
                 <div class="form-group">
@@ -119,12 +119,16 @@
     var fileNameList = [];
     $('.custom-file-input').on('change', function () {
         var fileName = $(this).val().split('\\').pop();
-        if (fileName) {
-            if (!$.inArray(fileName, fileNameList)) fileNameList.push(fileName)
-            $(this).next('.custom-file-label').addClass("selected").html(fileNameList.join(', '));
-        }
-        else
-            $(this).next('.custom-file-label').addClass("selected").html('Select a file...');
+        // Single upload implementation:
+        if (fileName) $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        // Multiple upload implementation, broken:
+        //if (fileName) {
+        //    if ($.inArray(fileName, fileNameList)) {
+        //        fileNameList.push(fileName);
+        //    }
+        //    $(this).next('.custom-file-label').addClass("selected").html(fileNameList.join(', '));
+        //}
+        else $(this).next('.custom-file-label').addClass("selected").html('Select a file...');
     });
 
     var searchUrl = '';

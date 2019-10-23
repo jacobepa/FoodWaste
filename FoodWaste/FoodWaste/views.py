@@ -47,12 +47,15 @@ class TrackingToolCreate(CreateView):
         """Process the post request with a new Existing Data form filled out."""
         #request.POST = request.POST.copy()
         #request.POST['phone'] = '+1' + strip_non_numerals(request.POST['phone'])
-        form = TrackingToolForm(request.POST, user=request.user)
+        form = TrackingToolForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.created_by = request.user
             obj.disclaimer_req = form.cleaned_data['disclaimer_req']
             obj.save()
+            # TODO Parse and insert attached files:
+            for file in request.FILES:
+                breakhere = True
             # Prepare and insert teams data
             for team_membership in form.cleaned_data['teams']:
                 data_team_map = SecondaryDataSharingTeamMap()
