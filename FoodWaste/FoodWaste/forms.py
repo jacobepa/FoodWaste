@@ -5,11 +5,16 @@
 
 """Definition of forms."""
 
-from django.forms import CharField, ModelForm, TextInput, Textarea, PasswordInput
+from accounts.models import User
+from constants.models import YES_OR_NO
+from django.forms import CharField, ModelForm, TextInput, Textarea, \
+    PasswordInput, ModelMultipleChoiceField, SelectMultiple, BooleanField, \
+    RadioSelect
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from FoodWaste.models import TrackingTool
-from phonenumber_field.formfields import PhoneNumberField
+#from phonenumber_field.formfields import PhoneNumberField
+from teams.models import TeamMembership, Team
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -26,6 +31,12 @@ class BootstrapAuthenticationForm(AuthenticationForm):
 
 class TrackingToolForm(ModelForm):
     """Form for creating a new Secondary / Existing Data Tracking instance."""
+
+    teams = ModelMultipleChoiceField(
+        widget=SelectMultiple({'class': 'form-control mb-2',
+                               'placeholder': 'Teams'}),
+        queryset=Team.objects.none(),
+        label=_("Share With Teams"), required=False)
 
     work = CharField(
         max_length=255,
@@ -61,14 +72,16 @@ class TrackingToolForm(ModelForm):
                           'placeholder': 'Paste Article Title Here'}),
         label=_("Article Title"), required=True)
 
+    disclaimer_req = BooleanField(label=_("EPA Discaimer Required"),
+                                  required=False,
+                                  initial=False,
+                                  widget=RadioSelect(choices=YES_OR_NO))
+
     citation = CharField(
         max_length=255,
         widget=Textarea({'rows': 2, 'class': 'form-control mb-2',
                          'placeholder': 'APA Citation'}),
         label=_("APA Citation"), required=True)
-
-    # Date accessed should be automatically generated as NOW by the model.
-    # date_accessed =
 
     comments = CharField(
         max_length=255,
@@ -76,9 +89,16 @@ class TrackingToolForm(ModelForm):
                          'placeholder': 'Comments'}),
         label=_("Comments"), required=False)
 
+    def __init__(self, *args, **kwargs):
+        """Override default init to add custom queryset for teams."""
+        current_user = kwargs.pop('user')
+        super(TrackingToolForm, self).__init__(*args, **kwargs)
+        team_ids = TeamMembership.objects.filter(member=current_user).values_list('team', flat=True)
+        self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
+        self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
+
     class Meta:
         """Meta data for Secondary / Existing Data Tracking."""
-
         model = TrackingTool
         fields = ('work', 'email', 'phone', 'search', 'article_title',
                   'citation', 'comments')

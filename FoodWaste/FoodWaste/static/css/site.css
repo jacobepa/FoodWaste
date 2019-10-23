@@ -3,3 +3,16 @@ a.disabled {
     cursor: not-allowed;
     opacity: .5;
 }
+
+/* Turn off bullets in Django form UL */
+fieldset.inlineLabels ul {
+    list-style: none;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    list-style: none;
+}

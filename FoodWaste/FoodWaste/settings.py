@@ -118,6 +118,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'FoodWaste', 'static')
 
+DOWNLOADS_DIR = os.path.join("..", "DOCS")
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "FoodWaste/media")
+MEDIA_URL = "/media/"
+
+APP_NAME = ''
+APP_VERSION = ''
+APP_DISCLAIMER = ''
+
 try:
     from .local_settings import * # pylint: disable=unused-wildcard-import,wildcard-import
 except ImportError:

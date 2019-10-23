@@ -11,6 +11,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include
 from FoodWaste.views import home, contact, about, TrackingToolList, TrackingToolCreate
+from FoodWaste.settings import MEDIA_ROOT, MEDIA_URL
 
 
 urlpatterns = [
@@ -27,3 +28,5 @@ urlpatterns = [
     url(r'^support/', include('support.urls')),
     url(r'^teams/', include('teams.urls')),
 ]
+
+urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

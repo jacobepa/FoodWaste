@@ -23,3 +23,4 @@ WGK_CHOICES = (('', ''), ('0', 'nwg'), ('1', 'WGK 1'), ('2', 'WGK 2'), ('3', 'WG
 
 YN_CHOICES = (('', ''), ('Y', 'Yes'), ('N', 'No'))
 ONLY_YN_CHOICES = (('Y', 'Y'),)
+YES_OR_NO = ((True, 'Yes'), (False, "No"))

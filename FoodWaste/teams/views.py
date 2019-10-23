@@ -70,8 +70,8 @@ class TeamCreateView(FormView):
             membership_instance.can_edit = True
             membership_instance.save()
 
-            return HttpResponseRedirect(reverse('team_manage',
-                                                kwargs={'team_id': team_instance.id}))
+            return HttpResponseRedirect(
+                reverse('team_manage', kwargs={'team_id': team_instance.id}))
 
         return render(request, self.template, locals())
 
@@ -228,7 +228,7 @@ class APITeamListView(APIView):
 
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self, request, exclude=None, _format=None):
+    def get(self, request, exclude=None, format=None):
         """Return all teams the current user is a member of."""
         user = self.request.user
         # get the list of teams to exclude
@@ -256,7 +256,7 @@ class APITeamListView(APIView):
         serializer = TeamSerializer(teams, many=True)
         return Response(serializer.data)
 
-    def post(self, request, _format=None):
+    def post(self, request, format=None):
         """Create a new team."""
         serializer = TeamSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
@@ -296,14 +296,14 @@ class APITeamDetailView(APIView):
         except Team.DoesNotExist:
             raise Http404
 
-    def get(self, request, team_id, _format=None):
+    def get(self, request, team_id, format=None):
         """Get details for the specified team."""
         (team, _membership) = self.get_object(team_id, request.user)
         serializer = TeamSerializer(team)
         return Response(serializer.data)
 
-    def put(self, request, team_id, _format=None):
-        """Update an existing team. :param request: :param team_id: :param _format: :return:."""
+    def put(self, request, team_id, format=None):
+        """Update an existing team. :param request: :param team_id: :param format: :return:."""
         (team, membership) = self.get_object(team_id, request.user)
         if not membership.can_edit:
             return Response({"detail": "current user cannot edit this team"}, status=status.HTTP_400_BAD_REQUEST)
@@ -314,13 +314,13 @@ class APITeamDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, team_id, _format=None):
+    def delete(self, request, team_id, format=None):
         """
         Delete a team.
 
         :param team_id:
         :param request:
-        :param _format:
+        :param format:
         :return:
         """
         (team, membership) = self.get_object(team_id, request.user)
@@ -353,7 +353,7 @@ class APITeamMembershipListView(APIView):
         except Team.DoesNotExist:
             raise Http404
 
-    def get(self, request, team_id, nonmember=None, _format=None):
+    def get(self, request, team_id, nonmember=None, format=None):
         """Get the membership information for the specified team."""
         # if query param "nonmember" is set, returns users not on this team
         nonmember = request.query_params.get('nonmember', None) if nonmember is None else nonmember
@@ -365,7 +365,7 @@ class APITeamMembershipListView(APIView):
         serializer = TeamMembershipSerializer(team_memberships, many=True)
         return Response(serializer.data)
 
-    def post(self, request, team_id, _format=None):
+    def post(self, request, team_id, format=None):
         """Add a new membership for a user."""
         # add the team info to the data
         request.data["team"] = team_id
@@ -404,20 +404,20 @@ class APITeamMembershipDetailView(APIView):
         except Team.DoesNotExist:
             raise Http404
 
-    def get(self, request, team_id, membership_id, _format=None):
+    def get(self, request, team_id, membership_id, format=None):
         """Get details for the specified team."""
         (membership, _current_user_can_edit) = self.get_object(membership_id, request.user)
         serializer = TeamMembershipSerializer(instance=membership)
         return Response(serializer.data)
 
-    def put(self, request, team_id, membership_id, _format=None):
+    def put(self, request, team_id, membership_id, format=None):
         """
         Update an existing team.
 
         :param membership_id:
         :param request:
         :param team_id:
-        :param _format:
+        :param format:
         :return:
         """
         (membership, current_user_can_edit) = self.get_object(membership_id, request.user)
@@ -432,7 +432,7 @@ class APITeamMembershipDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, team_id, membership_id, _format=None):
+    def delete(self, request, team_id, membership_id, format=None):
         """Delete the specified team membership."""
         (membership, current_user_can_edit) = self.get_object(membership_id, request.user)
         if not current_user_can_edit:
