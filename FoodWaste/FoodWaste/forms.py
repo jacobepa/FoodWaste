@@ -9,7 +9,7 @@ from accounts.models import User
 from constants.models import YES_OR_NO
 from django.forms import CharField, ModelForm, TextInput, Textarea, \
     PasswordInput, ModelMultipleChoiceField, SelectMultiple, BooleanField, \
-    RadioSelect
+    RadioSelect, FileField, ClearableFileInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from FoodWaste.models import TrackingTool
@@ -88,6 +88,12 @@ class TrackingToolForm(ModelForm):
         widget=Textarea({'rows': 2, 'class': 'form-control mb-2',
                          'placeholder': 'Comments'}),
         label=_("Comments"), required=False)
+
+    # TODO File Upload
+    attachments = FileField(label=_("Upload File Attachments"), required=False,
+                            widget=ClearableFileInput(
+                                attrs={'multiple': True,
+                                       'class': 'custom-file-input'}))
 
     def __init__(self, *args, **kwargs):
         """Override default init to add custom queryset for teams."""

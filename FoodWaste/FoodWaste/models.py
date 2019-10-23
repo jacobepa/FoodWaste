@@ -12,6 +12,17 @@ from django.utils import timezone
 #from phonenumber_field.modelfields import PhoneNumberField
 from teams.models import Team, User
 
+def get_attachment_storage_path(instance, filename):
+    """Build the attachment storage path using username and filename"""
+    return '%s/attachments/%s' % (instance.user.username, filename)
+
+
+class Attachment(models.Model):
+    """Class representing a file attachment to an Existing Data entry"""
+    name = models.CharField(blank=False, null=False, max_length=255)
+    file = models.FileField(null=True, blank=True, upload_to=get_attachment_storage_path)
+
+
 # Create your models here.
 class TrackingTool(models.Model):
     """Class representing an instance of Secondary / Existing Data Tracking Tool."""
@@ -35,17 +46,6 @@ class TrackingTool(models.Model):
     attachments = models.ManyToManyField(Attachment, through='DataAttachmentMap')
 
 
-def get_attachment_storage_path(instance, filename):
-    """Build the attachment storage path using username and filename"""
-    return '%s/attachments/%s' % (instance.user.username, filename)
-
-
-class Attachment(models.Model):
-    """Class representing a file attachment to an Existing Data entry"""
-    name = models.CharField(blank=False, null=False, max_length=255)
-    file = models.FileField(null=True, blank=True, upload_to=get_attachment_storage_path)
-
-
 class DataAttachmentMap(models.Model):
     """Mapping between Secondary / Existing Data and uploaded attachments"""
 
@@ -53,7 +53,8 @@ class DataAttachmentMap(models.Model):
                              related_name='secondary_data_attachments',
                              on_delete=models.CASCADE)
     attachment = models.ForeignKey(Attachment, blank=False,
-                                   related_name='attachment_secondary_data')
+                                   related_name='attachment_secondary_data',
+                                   on_delete=models.CASCADE)
 
 
 class SecondaryDataSharingTeamMap(models.Model):

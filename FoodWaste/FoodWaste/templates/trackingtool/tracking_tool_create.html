@@ -7,6 +7,7 @@
         <div class="col-md-12">
             <form action="/trackingtool/create/" method="post">
                 {% csrf_token %}
+
                 <div class="form-group">
                     <div class="col-sm-3">
                         <label for="" class="col-sm-12 control-label">{{form.teams.label}}</label>
@@ -17,14 +18,17 @@
                     </div>
                     <div class="col-sm-9">{{form.teams}}</div>
                 </div>
+
                 <div class="form-group">
                     <label for="" class="col-sm-3 control-label">{{form.work.label}}</label>
                     <div class="col-sm-9">{{form.work}}</div>
                 </div>
+
                 <div class="form-group">
                     <label for="" class="col-sm-3 control-label">{{form.email.label}}</label>
                     <div class="col-sm-9">{{form.email}}</div>
                 </div>
+
                 <div class="form-group">
                     <label for="" class="col-sm-3 control-label">{{form.phone.label}}</label>
                     <div class="col-sm-9">{{form.phone}}</div>
@@ -40,6 +44,7 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="form-group col-sm-12 mt-2">
                     <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
                     <div class="col-sm-9">
@@ -58,17 +63,39 @@
                     <div class="col-sm-9">{{form.disclaimer_req}}</div>
                 </div>
 
-
                 <div class="form-group col-sm-12 hidden-div" style="display: none;">
                     <label for="" class="col-sm-3 control-label">{{form.citation.label}}</label>
                     <div class="col-sm-9">{{form.citation}}</div>
                 </div>
 
-
                 <div class="form-group col-sm-12 hidden-div" style="display: none;">
                     <label for="" class="col-sm-3 control-label">{{form.comments.label}}</label>
                     <div class="col-sm-9">{{form.comments}}</div>
                 </div>
+
+                <div class="form-group col-sm-12">
+                    <label class="col-sm-3" for="id_attachments">{{form.attachments.label}}</label>
+                    <div class="col-sm-9">
+                        {{form.attachments}}
+                        <label class="custom-file-label" for="id_attachments">Select a file...</label>
+                    </div>
+                </div>
+
+                <!--{#<div class="form-group col-sm-12 file-field hidden-div" style="display: none;">
+                    <div class="col-sm-3 control-label">
+                        <div class="btn btn-info col-sm-8">
+                            <span onclick="triggerFileInput()">Choose Attachments</span>
+                            <input id="fileUploadInput" type="file" multiple
+                                   style="opacity:0;display:inline;"/>
+                        </div>
+                    </div>
+                    <div class="file-path-wrapper col-sm-9">
+                        <input class="file-path validate form-control" type="text" placeholder="Upload file attachment(s)" />
+                    </div>
+                </div>#}-->
+
+
+
                 <div class="col-md-12">
                     <button type="submit" class="m-2 col-md-2 btn btn-md btn-success">Save</button>
                     <button type="reset" class="m-2 col-md-2 col-md-offset-1 btn btn-md btn-warning">Reset</button>
@@ -86,6 +113,20 @@
 
 {% block scripts %}
 <script>
+    //function triggerFileInput() {
+    //    $("#fileUploadInput").click();
+    //}
+    var fileNameList = [];
+    $('.custom-file-input').on('change', function () {
+        var fileName = $(this).val().split('\\').pop();
+        if (fileName) {
+            if (!$.inArray(fileName, fileNameList)) fileNameList.push(fileName)
+            $(this).next('.custom-file-label').addClass("selected").html(fileNameList.join(', '));
+        }
+        else
+            $(this).next('.custom-file-label').addClass("selected").html('Select a file...');
+    });
+
     var searchUrl = '';
     $(document).ready(function () {
         $('#id_search').on('change textInput input', searchFieldUpdate);
