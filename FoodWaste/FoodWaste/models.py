@@ -14,13 +14,14 @@ from teams.models import Team, User
 
 def get_attachment_storage_path(instance, filename):
     """Build the attachment storage path using username and filename"""
-    return '%s/attachments/%s' % (instance.user.username, filename)
+    return '%s/attachments/%s' % (instance.uploaded_by.username, filename)
 
 
 class Attachment(models.Model):
     """Class representing a file attachment to an Existing Data entry"""
     name = models.CharField(blank=False, null=False, max_length=255)
     file = models.FileField(null=True, blank=True, upload_to=get_attachment_storage_path)
+    uploaded_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
 
 
 class SecondaryExistingData(models.Model):

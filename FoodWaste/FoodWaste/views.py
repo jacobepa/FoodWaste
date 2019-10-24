@@ -9,13 +9,15 @@
 from constants.widgets import strip_non_numerals
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView
 from FoodWaste.forms import SecondaryExistingDataForm
-from FoodWaste.models import SecondaryExistingData, SecondaryDataSharingTeamMap
+from FoodWaste.models import SecondaryExistingData, SecondaryDataSharingTeamMap, \
+    Attachment, DataAttachmentMap
 from teams.models import TeamMembership, Team
 
 
@@ -56,16 +58,30 @@ class SecondaryExistingDataCreate(CreateView):
             obj.disclaimer_req = form.cleaned_data['disclaimer_req']
             obj.save()
             # TODO Parse and insert attached files:
-            for file in request.FILES:
-                breakhere = True
+            for field in request.FILES:
+                file = request.FILES[field]
+                #fs = FileSystemStorage()
+                #filename = fs.save(file.name, file)
+                #uploaded_file_url = fs.url(filename)
+                # Insert the attachment
+                attch = Attachment()
+                attch.uploaded_by = request.user
+                attch.name = file.name
+                attch.file = file
+                attch.save()
+                # Insert DataAttachmentMap
+                attch_map = DataAttachmentMap()
+                attch_map.data = obj
+                attch_map.attachment = attch
+                attch_map.save()
             # Prepare and insert teams data
-            for team_membership in form.cleaned_data['teams']:
-                data_team_map = SecondaryDataSharingTeamMap()
-                data_team_map.can_edit = True
-                data_team_map.team = team_membership.team
-                data_team_map.data = obj
-                data_team_map.save()
-                breakhere = True
+            if form.cleaned_data['teams']:
+                for team in form.cleaned_data['teams']:
+                    data_team_map = SecondaryDataSharingTeamMap()
+                    data_team_map.can_edit = True
+                    data_team_map.team = team
+                    data_team_map.data = obj
+                    data_team_map.save()
             return HttpResponseRedirect('/secondaryexistingdata/')
         return render(request, 'secondaryexistingdata/secondary_existing_data_create.html',
                       {'form': form})
