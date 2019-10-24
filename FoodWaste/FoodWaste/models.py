@@ -23,7 +23,6 @@ class Attachment(models.Model):
     file = models.FileField(null=True, blank=True, upload_to=get_attachment_storage_path)
 
 
-# Create your models here.
 class TrackingTool(models.Model):
     """Class representing an instance of Secondary / Existing Data Tracking Tool."""
 
