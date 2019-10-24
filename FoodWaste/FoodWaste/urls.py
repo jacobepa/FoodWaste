@@ -11,7 +11,9 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
-from FoodWaste.views import home, contact, about, SecondaryExistingDataList, SecondaryExistingDataCreate
+from FoodWaste.views import home, contact, about, SecondaryExistingDataList, \
+    SecondaryExistingDataCreate, SecondaryExistingDataDetail, \
+    export_pdf, export_excel
 from FoodWaste.settings import MEDIA_ROOT, MEDIA_URL
 
 
@@ -22,9 +24,21 @@ urlpatterns = [
     url(r'^dashboard/$', home, name='dashboard'),
     url(r'^contact/?', contact, name='contact'),
     url(r'^about/?', about, name='about'),
-    url(r'^secondaryexistingdata/create/?', SecondaryExistingDataCreate.as_view(), name='secondary_existing_data_create'),
+
+    # Begin secondaryexistingdata URLs
+    # URLs for PDF and Excel exports
+    url(r'^secondaryexistingdata/exportpdf/(?P<pk>\d+)/?$',
+        export_pdf, name='secondary_existing_data_pdf'),
+    url(r'^secondaryexistingdata/exportexcel/(?P<pk>\d+)/?$',
+        export_excel, name='secondary_existing_data_excel'),
+    url(r'^secondaryexistingdata/create/?', SecondaryExistingDataDetail.as_view(), name='secondary_existing_data_create'),
+    url(r'^secondaryexistingdata/detail/(?P<pk>\d+)/?$',
+        SecondaryExistingDataDetail.as_view(),
+        name='secondary_existing_data_detail'),
+    # This should be the last secondaryexistingdata URL
     url(r'^secondaryexistingdata/?', SecondaryExistingDataList.as_view(), name='tracking_tool'),
 
+    # Begin other module import URLs
     url(r'^accounts/', include('accounts.urls')),
     url(r'^support/', include('support.urls')),
     url(r'^teams/', include('teams.urls')),

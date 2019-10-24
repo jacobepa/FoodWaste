@@ -45,6 +45,10 @@ class SecondaryExistingData(models.Model):
     teams = models.ManyToManyField(Team, through='SecondaryDataSharingTeamMap')
     attachments = models.ManyToManyField(Attachment, through='DataAttachmentMap')
 
+    def get_fields(self):
+        """Method used in the template to iterate and display all fields"""
+        return [(field.name, field.value_to_string(self)) for field in SecondaryExistingData._meta.fields]
+
 
 class DataAttachmentMap(models.Model):
     """Mapping between Secondary / Existing Data and uploaded attachments"""

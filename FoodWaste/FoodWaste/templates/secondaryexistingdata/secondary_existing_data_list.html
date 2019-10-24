@@ -1,7 +1,6 @@
 ﻿{% extends "main/base.html" %}
 
 {% block content %}
-
     <div class="container">
 
         <div class="mb-3 row">
@@ -25,7 +24,7 @@
             <tbody>
                 {% if secondary_existing_data_list %}
                 {% for data in secondary_existing_data_list %}
-                <tr id="{{data.id}}" onclick="">
+                <tr id="{{data.id}}" onclick="rowClick('{{data.id}}')">
                     <td scope="row">{{data.email}}</td>
                     <td>{{data.work}}</td>
                     <td>{{data.article_title}}</td>
@@ -39,6 +38,28 @@
             </tbody>
             <!--{#<caption>List of Secondary / Existing Data</caption>#}-->
         </table>
-    </div>
 
+        <div class="row">
+            <div class="col-sm-6">
+                <i class="btn btn-info btn-md" onclick="viewEditSecondaryExistingData(this)" disabled>
+                    View or Edit Secondary/Existing Data
+                </i>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function rowClick(rowId) {
+            $("tr").removeClass('table-active');
+            $("#" + rowId).addClass('table-active');
+            $("i").removeAttr('disabled');
+            $("i").attr('id', rowId);
+        }
+        function viewEditSecondaryExistingData(btn) {
+            if ($(btn).attr('disabled')) return;
+            window.location.href = '/secondaryexistingdata/detail/' + $(btn).attr('id');
+        }
+    </script>
 {% endblock %}

@@ -20,6 +20,7 @@ django-session-security==2.6.5  # Provides a mechanism to logout inactive authen
 Django==2.2.6                   # Python Modules.
 django-phonenumber-field==3.0.1 # An international phone number field for django models.
 djangorestframework==3.10.3     # Powerful and flexible toolkit for building Web APIs.
+django-wkhtmltopdf==3.2.0       # Allows a Django site to output dynamic PDFs.
 flake8==3.7.8                   # Flake8 is a wrapper around these tools: PyFlakes; pycodestyle; Ned Batchelder's McCabe script.
 jdcal==1.4.1                    # Julian dates from proleptic Gregorian and Julian calendars.
 mccabe==0.6.1                   # McCabe checker, plugin for flake8.

@@ -1,0 +1,29 @@
+﻿{% extends "main/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h3>Details for Secondar/Existing Data {{object.id}}</h3>
+        <div class="row">
+        {% for name, value in object.get_fields %}
+            {% if value %}
+            <div class="col-sm-12">
+                <label class="col-sm-3">{{name}}</label>
+                <div class="col-sm-9">{{value}}</div>
+            </div>
+            {% endif %}
+        {% endfor %}
+        </div>
+        <div class="row mt-2">
+            <a href="/secondaryexistingdata/exportpdf/{{object.id}}" class="btn btn-info mx-2">Export to PDF</a>
+            <a href="/secondaryexistingdata/exportexcel/{{object.id}}" class="btn btn-info mx-2">Export to Excel</a>
+            <a href="/secondaryexistingdata/edit/{{object.id}}" class="btn btn-warning mx-2">Edit Data Entry</a>
+            <a href="/secondaryexistingdata/" class="btn btn-danger mx-2">Back</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+
+    </script>
+{% endblock %}

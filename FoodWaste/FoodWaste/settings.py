@@ -22,6 +22,14 @@ import posixpath
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+WKHTMLTOPDF_CMD_OPTIONS = {
+    'quiet': True,
+}
+if os.name != 'nt':
+    WKHTMLTOPDF_CMD = '/usr/local/bin/wkhtmltopdf'
+else:
+    WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -79,6 +87,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'FoodWaste.context_processors.software_info',
             ],
         },
     },
@@ -123,9 +132,12 @@ DOWNLOADS_DIR = os.path.join("..", "DOCS")
 MEDIA_ROOT = os.path.join(BASE_DIR, "FoodWaste/media")
 MEDIA_URL = "/media/"
 
-APP_NAME = ''
-APP_VERSION = ''
-APP_DISCLAIMER = ''
+APP_NAME = 'FoodWaste'
+APP_VERSION = '0.0.1'
+APP_DISCLAIMER = '''The information and data presented in this product were obtained
+                    from sources that are believed to be reliable. However, in many
+                    cases the quality of the information or data was not documented
+                    by those sources; therefore, no claim is made regarding their quality.'''
 
 try:
     from .local_settings import * # pylint: disable=unused-wildcard-import,wildcard-import

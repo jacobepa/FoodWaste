@@ -11,14 +11,16 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, ListView, CreateView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView
 from FoodWaste.forms import SecondaryExistingDataForm
 from FoodWaste.models import SecondaryExistingData, SecondaryDataSharingTeamMap, \
     Attachment, DataAttachmentMap
+from FoodWaste.settings import APP_DISCLAIMER
 from teams.models import TeamMembership, Team
+from wkhtmltopdf.views import PDFTemplateResponse
 
 
 class SecondaryExistingDataList(ListView):
@@ -35,6 +37,11 @@ class SecondaryExistingDataList(ListView):
         queryset = SecondaryExistingData.objects.exclude(id__in=exclude_data)
         return queryset
 
+
+class SecondaryExistingDataDetail(DetailView):
+    """View for viewing the details of a Secondary/Existing data instance"""
+    model = SecondaryExistingData
+    template_name = 'secondaryexistingdata/secondary_existing_data_detail.html'
 
 
 class SecondaryExistingDataCreate(CreateView):
@@ -126,3 +133,56 @@ def about(request):
             'year':datetime.now().year,
         }
     )
+
+
+def export_pdf(request, *args, **kwargs):
+    """Function to export Secondary Existing Data as a PDF document."""
+    data_id = kwargs['pk']
+    data = SecondaryExistingData.objects.get(id=data_id)
+    filename = 'export_%s.pdf' % data.article_title
+    resp = PDFTemplateResponse(
+        request=request,
+        template=get_template(''),
+        filename=filename,
+        context={},
+        show_content_in_browser=False,
+        cmd_options={},
+    )
+    return resp
+
+
+def export_excel(request, *args, **kwargs):
+    """Function to export Secondary Existing Data as an Excel sheet."""
+    data_id = kwargs['pk']
+    data = SecondaryExistingData.objects.get(id=data_id)
+    filename = 'export_%s.xlsx' % data.article_title
+    from openpyxl import Workbook
+    #from openpyxl.styles import PatternFill, Font
+    #from openpyxl.styles.borders import Border, Side
+    #from openpyxl.styles.colors import Color
+
+    workbook = Workbook()
+    sheet = workbook.active
+    row = 1
+
+    # Optionally add colors formatting before writing to cells.
+    # Programmatically write results to the PDF
+    for name, value in data.get_fields():
+        sheet.cell(row=row, column=1).value = name
+        sheet.cell(row=row, column=2).value = name
+        row += 1
+
+    if data.disclaimer_req:
+        sheet.cell(row=row, column=1).value = 'Disclaimer'
+        # Replace '\n                    ' with ' ' in the disclaimer
+        repl_str = '\n                    '
+        sheet.cell(row=row, column=2).value = APP_DISCLAIMER.replace(repl_str, ' ')
+
+    breakhere = True
+    # Now return the generated excel sheet to be downloaded.
+    type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response = HttpResponse(content_type=type)
+    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+    sheet.title = filename.split('.')[0]
+    workbook.save(response)
+    return response
