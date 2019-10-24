@@ -12,7 +12,7 @@ from django.forms import CharField, ModelForm, TextInput, Textarea, \
     RadioSelect, FileField, ClearableFileInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
-from FoodWaste.models import TrackingTool
+from FoodWaste.models import SecondaryExistingData
 #from phonenumber_field.formfields import PhoneNumberField
 from teams.models import TeamMembership, Team
 
@@ -29,7 +29,7 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                              'placeholder':'Password'}))
 
 
-class TrackingToolForm(ModelForm):
+class SecondaryExistingDataForm(ModelForm):
     """Form for creating a new Secondary / Existing Data Tracking instance."""
 
     teams = ModelMultipleChoiceField(
@@ -98,13 +98,13 @@ class TrackingToolForm(ModelForm):
     def __init__(self, *args, **kwargs):
         """Override default init to add custom queryset for teams."""
         current_user = kwargs.pop('user')
-        super(TrackingToolForm, self).__init__(*args, **kwargs)
+        super(SecondaryExistingDataForm, self).__init__(*args, **kwargs)
         team_ids = TeamMembership.objects.filter(member=current_user).values_list('team', flat=True)
         self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
         self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
 
     class Meta:
         """Meta data for Secondary / Existing Data Tracking."""
-        model = TrackingTool
+        model = SecondaryExistingData
         fields = ('work', 'email', 'phone', 'search', 'article_title',
                   'citation', 'comments')

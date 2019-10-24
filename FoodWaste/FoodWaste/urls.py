@@ -11,7 +11,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
-from FoodWaste.views import home, contact, about, TrackingToolList, TrackingToolCreate
+from FoodWaste.views import home, contact, about, SecondaryExistingDataList, SecondaryExistingDataCreate
 from FoodWaste.settings import MEDIA_ROOT, MEDIA_URL
 
 
@@ -22,8 +22,8 @@ urlpatterns = [
     url(r'^dashboard/$', home, name='dashboard'),
     url(r'^contact/?', contact, name='contact'),
     url(r'^about/?', about, name='about'),
-    url(r'^trackingtool/create/?', TrackingToolCreate.as_view(), name='tracking_tool_create'),
-    url(r'^trackingtool/?', TrackingToolList.as_view(), name='tracking_tool'),
+    url(r'^secondaryexistingdata/create/?', SecondaryExistingDataCreate.as_view(), name='secondary_existing_data_create'),
+    url(r'^secondaryexistingdata/?', SecondaryExistingDataList.as_view(), name='tracking_tool'),
 
     url(r'^accounts/', include('accounts.urls')),
     url(r'^support/', include('support.urls')),

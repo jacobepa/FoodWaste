@@ -23,7 +23,7 @@ class Attachment(models.Model):
     file = models.FileField(null=True, blank=True, upload_to=get_attachment_storage_path)
 
 
-class TrackingTool(models.Model):
+class SecondaryExistingData(models.Model):
     """Class representing an instance of Secondary / Existing Data Tracking Tool."""
 
     work = models.CharField(blank=False, null=False, max_length=255)
@@ -48,7 +48,7 @@ class TrackingTool(models.Model):
 class DataAttachmentMap(models.Model):
     """Mapping between Secondary / Existing Data and uploaded attachments"""
 
-    data = models.ForeignKey(TrackingTool, blank=False,
+    data = models.ForeignKey(SecondaryExistingData, blank=False,
                              related_name='secondary_data_attachments',
                              on_delete=models.CASCADE)
     attachment = models.ForeignKey(Attachment, blank=False,
@@ -63,7 +63,7 @@ class SecondaryDataSharingTeamMap(models.Model):
     """
 
     added_date = models.DateTimeField(auto_now_add=True, blank=False, editable=False)
-    data = models.ForeignKey(TrackingTool, blank=False,
+    data = models.ForeignKey(SecondaryExistingData, blank=False,
                              related_name='secondary_data_teams',
                              on_delete=models.CASCADE)
     team = models.ForeignKey(Team, blank=False,

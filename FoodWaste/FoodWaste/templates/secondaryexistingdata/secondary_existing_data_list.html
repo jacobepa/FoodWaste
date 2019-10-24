@@ -7,7 +7,7 @@
         <div class="mb-3 row">
             <h3 class="col-sm-9">Secondary / Existing Data Tracking Tool</h3>
             <div class="col-sm-3">
-                <button class="col-sm-12 btn btn-md btn-info" onclick="window.location.href='/trackingtool/create/'">
+                <button class="col-sm-12 btn btn-md btn-info" onclick="window.location.href='/secondaryexistingdata/create/'">
                     Add Secondary / Existing Data
                 </button>
             </div>
@@ -23,8 +23,8 @@
                 </tr>
             </thead>
             <tbody>
-                {% if tracking_tool_list %}
-                {% for data in tracking_tool_list %}
+                {% if secondary_existing_data_list %}
+                {% for data in secondary_existing_data_list %}
                 <tr id="{{data.id}}" onclick="">
                     <td scope="row">{{data.email}}</td>
                     <td>{{data.work}}</td>

@@ -9,45 +9,47 @@
 from constants.widgets import strip_non_numerals
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView
-from FoodWaste.forms import TrackingToolForm
-from FoodWaste.models import TrackingTool, SecondaryDataSharingTeamMap
+from FoodWaste.forms import SecondaryExistingDataForm
+from FoodWaste.models import SecondaryExistingData, SecondaryDataSharingTeamMap
 from teams.models import TeamMembership, Team
 
 
-class TrackingToolList(ListView):
+class SecondaryExistingDataList(ListView):
     """View for Secondary / Existing Data Tracking Tool."""
 
-    model = TrackingTool
-    context_object_name = 'tracking_tool_list'
-    template_name = 'trackingtool/tracking_tool_list.html'
+    model = SecondaryExistingData
+    context_object_name = 'secondary_existing_data_list'
+    template_name = 'secondaryexistingdata/secondary_existing_data_list.html'
 
     def get_queryset(self):
-        member_teams = TeamMembership.objects.filter(member=self.request.user).values_list('team', flat=True)
-        data = SecondaryDataSharingTeamMap.objects.filter(team__in=member_teams).values_list('data', flat=True)
-        queryset = TrackingTool.objects.filter(id__in=data)
+        # Instead of querying for member teams, filter on non-member teams and do EXCLUDE
+        exclude_teams = TeamMembership.objects.exclude(member=self.request.user).values_list('team', flat=True)
+        exclude_data = SecondaryDataSharingTeamMap.objects.filter(team__in=exclude_teams).values_list('data', flat=True)
+        queryset = SecondaryExistingData.objects.exclude(id__in=exclude_data)
         return queryset
 
 
 
-class TrackingToolCreate(CreateView):
+class SecondaryExistingDataCreate(CreateView):
     """Class for creating new Secondary / Existing Data."""
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new Secondary / Existing Data."""
-        return render(request, "trackingtool/tracking_tool_create.html",
-                      {'form': TrackingToolForm(user=request.user)})
+        return render(request, "secondaryexistingdata/secondary_existing_data_create.html",
+                      {'form': SecondaryExistingDataForm(user=request.user)})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a new Existing Data form filled out."""
         #request.POST = request.POST.copy()
         #request.POST['phone'] = '+1' + strip_non_numerals(request.POST['phone'])
-        form = TrackingToolForm(request.POST, request.FILES, user=request.user)
+        form = SecondaryExistingDataForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.created_by = request.user
@@ -64,8 +66,8 @@ class TrackingToolCreate(CreateView):
                 data_team_map.data = obj
                 data_team_map.save()
                 breakhere = True
-            return HttpResponseRedirect('/trackingtool/')
-        return render(request, 'trackingtool/tracking_tool_create.html',
+            return HttpResponseRedirect('/secondaryexistingdata/')
+        return render(request, 'secondaryexistingdata/secondary_existing_data_create.html',
                       {'form': form})
 
 
