@@ -13,6 +13,7 @@ from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView, DetailView
 from FoodWaste.forms import SecondaryExistingDataForm
@@ -142,9 +143,9 @@ def export_pdf(request, *args, **kwargs):
     filename = 'export_%s.pdf' % data.article_title
     resp = PDFTemplateResponse(
         request=request,
-        template=get_template(''),
+        template=get_template('secondaryexistingdata/secondary_existing_data_detail.html'),
         filename=filename,
-        context={},
+        context={'object': data},
         show_content_in_browser=False,
         cmd_options={},
     )
