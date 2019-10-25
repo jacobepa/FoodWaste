@@ -1,18 +1,23 @@
 # Other custom ignores:
 .mypy_cache/
 node_modules/
-traci/traci/static/admin/
-traci/traci/static/rest_framework/
+foodwaste/foodwaste/static/admin/
+foodwaste/foodwaste/static/rest_framework/
 
 # Default taken from https://github.com/github/gitignore/blob/master/Python.gitignore
 # *log* # Causing login.html and similar files to be ignored.
 *.log
 Backup/
 temp/
-gemm_doxygen_config.txt
+foodwaste_doxygen_config.txt
 .DS_Store
 .idea
 Databases/
+
+# Documents
+.doc
+.docx
+.pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
