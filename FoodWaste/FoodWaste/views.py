@@ -25,7 +25,7 @@ from wkhtmltopdf.views import PDFTemplateResponse
 
 
 class SecondaryExistingDataList(ListView):
-    """View for Secondary / Existing Data Tracking Tool."""
+    """View for Existing Data Tracking Tool."""
 
     model = SecondaryExistingData
     context_object_name = 'secondary_existing_data_list'
@@ -40,17 +40,17 @@ class SecondaryExistingDataList(ListView):
 
 
 class SecondaryExistingDataDetail(DetailView):
-    """View for viewing the details of a Secondary/Existing data instance"""
+    """View for viewing the details of a Existing data instance"""
     model = SecondaryExistingData
     template_name = 'secondaryexistingdata/secondary_existing_data_detail.html'
 
 
 class SecondaryExistingDataCreate(CreateView):
-    """Class for creating new Secondary / Existing Data."""
+    """Class for creating new Existing Data."""
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return a view with an empty form for creating a new Secondary / Existing Data."""
+        """Return a view with an empty form for creating a new Existing Data."""
         return render(request, "secondaryexistingdata/secondary_existing_data_create.html",
                       {'form': SecondaryExistingDataForm(user=request.user)})
 
@@ -137,7 +137,7 @@ def about(request):
 
 
 def export_pdf(request, *args, **kwargs):
-    """Function to export Secondary Existing Data as a PDF document."""
+    """Function to export Existing Existing Data as a PDF document."""
     data_id = kwargs['pk']
     data = SecondaryExistingData.objects.get(id=data_id)
     filename = 'export_%s.pdf' % data.article_title
@@ -153,7 +153,7 @@ def export_pdf(request, *args, **kwargs):
 
 
 def export_excel(request, *args, **kwargs):
-    """Function to export Secondary Existing Data as an Excel sheet."""
+    """Function to export Existing Existing Data as an Excel sheet."""
     data_id = kwargs['pk']
     data = SecondaryExistingData.objects.get(id=data_id)
     filename = 'export_%s.xlsx' % data.article_title

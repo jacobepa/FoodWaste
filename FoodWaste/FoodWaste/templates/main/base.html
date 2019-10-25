@@ -92,7 +92,7 @@
 
                 <!-- navbar when user is logged in -->
                 {% if user.is_authenticated %}
-                <!-- 'Secondary / Existing Data Tracking Tool -->
+                <!-- 'Existing Data Tracking Tool -->
                 {% url 'tracking_tool' as tracking_tool_url %}
                 <li class="menu-item" role="presentation">
                     <a href="{{tracking_tool_url}}" class="menu-link" role="menuitem">Existing Data Tracking</a>

@@ -30,7 +30,7 @@ class BootstrapAuthenticationForm(AuthenticationForm):
 
 
 class SecondaryExistingDataForm(ModelForm):
-    """Form for creating a new Secondary / Existing Data Tracking instance."""
+    """Form for creating a new Existing Data Tracking instance."""
 
     teams = ModelMultipleChoiceField(
         widget=SelectMultiple({'class': 'form-control mb-2',
@@ -104,7 +104,7 @@ class SecondaryExistingDataForm(ModelForm):
         self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
 
     class Meta:
-        """Meta data for Secondary / Existing Data Tracking."""
+        """Meta data for Existing Data Tracking."""
         model = SecondaryExistingData
         fields = ('work', 'email', 'phone', 'search', 'article_title',
                   'citation', 'comments')

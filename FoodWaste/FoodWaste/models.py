@@ -25,7 +25,7 @@ class Attachment(models.Model):
 
 
 class SecondaryExistingData(models.Model):
-    """Class representing an instance of Secondary / Existing Data Tracking Tool."""
+    """Class representing an instance of Existing Data Tracking Tool."""
 
     work = models.CharField(blank=False, null=False, max_length=255)
     email = models.CharField(blank=False, null=False, max_length=255)
@@ -41,7 +41,7 @@ class SecondaryExistingData(models.Model):
     date_accessed = models.DateTimeField(blank=False, null=False, default=timezone.now)
     comments = models.CharField(blank=True, null=True, max_length=512)
     created_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
-    # List of teams with which the Secondary Data is shared.
+    # List of teams with which the Existing Data is shared.
     teams = models.ManyToManyField(Team, through='SecondaryDataSharingTeamMap')
     attachments = models.ManyToManyField(Attachment, through='DataAttachmentMap')
 
@@ -51,7 +51,7 @@ class SecondaryExistingData(models.Model):
 
 
 class DataAttachmentMap(models.Model):
-    """Mapping between Secondary / Existing Data and uploaded attachments"""
+    """Mapping between Existing Data and uploaded attachments"""
 
     data = models.ForeignKey(SecondaryExistingData, blank=False,
                              related_name='secondary_data_attachments',
@@ -63,7 +63,7 @@ class DataAttachmentMap(models.Model):
 
 class SecondaryDataSharingTeamMap(models.Model):
     """
-    Mapping between Secondary/Existing Data and the Teams
+    Mapping between Existing Data and the Teams
     with which they are shared.
     """
 
