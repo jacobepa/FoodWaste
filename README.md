@@ -8,6 +8,9 @@ This work is related to additional food waste research under SHC RA7, including 
 ## Land and Materials Management Division
 US EPA
 Office of Research and Development
+Center for Environmental Solutions & Emergency Response (CESER)
+Land Remediation & Technology Division (LRTD)
+Environmental Decision Analytics Branch (EDAB)
 26 W. Martin Luther King Dr. (ML-CHL)
 Cincinnati, OH 45268-3001
 
@@ -15,20 +18,17 @@ Cincinnati, OH 45268-3001
 ### Contact Software Configuration Management: Daniel Young (young.daniel@epa.gov)
 ***
 ## Home
-See [Wiki/Home](https://github.com/USEPA/E4S/wiki).
-***
-## Local Installation for Programmers
-See [Wiki/Local Installation for Programmers](https://github.com/USEPA/E4S/wiki/Local-Installation-for-Programmers).
+See [Wiki/Home](https://github.com/USEPA/FoodWaste/wiki).
 ***
 ## Build & run
-See [Wiki/Build & run](https://github.com/USEPA/E4S/wiki/Build-&-Run).
+See [Wiki/Build & Run](https://github.com/USEPA/FoodWaste/wiki/Build-&-Run).
 ***
 ## Testing
-See [Wiki/Testing](https://github.com/USEPA/E4S/wiki/Testing).
+See [Wiki/Testing](https://github.com/USEPA/FoodWaste/wiki/Testing).
 ***
 ## Contributing
-See [Wiki/Contributing & Collaboration](https://github.com/USEPA/E4S/wiki/Contributing).
+See [Wiki/Contributing & Collaboration](https://github.com/USEPA/FoodWaste/wiki/Contributing).
 ***
 ## License
-See [Wiki/License](https://github.com/USEPA/E4S/wiki/GEMM-License) and [Wiki/3rd Party License](https://github.com/USEPA/E4S/wiki/License-3rd-Party).
+See [Wiki/License](https://github.com/USEPA/FoodWaste/wiki/Licensing).
 ***
