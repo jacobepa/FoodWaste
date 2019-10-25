@@ -33,8 +33,12 @@ class ExistingDataList(ListView):
 
     def get_queryset(self):
         # Instead of querying for member teams, filter on non-member teams and do EXCLUDE
-        exclude_teams = TeamMembership.objects.exclude(member=self.request.user).values_list('team', flat=True)
-        exclude_data = ExistingDataSharingTeamMap.objects.filter(team__in=exclude_teams).values_list('data', flat=True)
+        include_teams = TeamMembership.objects.filter(
+            member=self.request.user).values_list('team', flat=True)
+        exclude_teams = TeamMembership.objects.exclude(
+            team__in=include_teams).distinct().values_list('team', flat=True)
+        exclude_data = ExistingDataSharingTeamMap.objects.filter(
+            team__in=exclude_teams).values_list('data', flat=True)
         queryset = ExistingData.objects.exclude(id__in=exclude_data)
         return queryset
 
@@ -143,7 +147,7 @@ def export_pdf(request, *args, **kwargs):
     filename = 'export_%s.pdf' % data.article_title
     resp = PDFTemplateResponse(
         request=request,
-        template=get_template('existingdata/existing_data_detail.html'),
+        template=get_template('existingdata/existing_data_pdf.html'),
         filename=filename,
         context={'object': data},
         show_content_in_browser=False,
@@ -175,8 +179,8 @@ def export_excel(request, *args, **kwargs):
 
     if data.disclaimer_req:
         sheet.cell(row=row, column=1).value = 'Disclaimer'
-        # Replace '\n                    ' with ' ' in the disclaimer
         repl_str = '\n                    '
+        # Replace '\n                    ' with ' ' in the disclaimer
         sheet.cell(row=row, column=2).value = APP_DISCLAIMER.replace(repl_str, ' ')
 
     # Now return the generated excel sheet to be downloaded.
