@@ -19,7 +19,7 @@
             </div>
             {% endif %}
 
-            <form enctype="multipart/form-data" action="/secondaryexistingdata/create/" method="post" role="form">
+            <form enctype="multipart/form-data" action="/existingdata/create/" method="post" role="form">
                 {% csrf_token %}
 
                 <div class="form-group">
@@ -98,7 +98,7 @@
                 <div class="col-md-12">
                     <button type="submit" class="m-2 col-md-2 btn btn-md btn-success save">Save</button>
                     <button type="reset" class="m-2 col-md-2 col-md-offset-1 btn btn-md btn-warning">Reset</button>
-                    <button type="reset" onclick="window.location.href='/secondaryexistingdata/'"
+                    <button type="reset" onclick="window.location.href='/existingdata/'"
                             class="m-2 col-md-2 col-md-offset-1 btn btn-md btn-danger">
                         Cancel
                     </button>

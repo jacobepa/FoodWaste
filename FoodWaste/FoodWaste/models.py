@@ -24,7 +24,7 @@ class Attachment(models.Model):
     uploaded_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
 
 
-class SecondaryExistingData(models.Model):
+class ExistingData(models.Model):
     """Class representing an instance of Existing Data Tracking Tool."""
 
     work = models.CharField(blank=False, null=False, max_length=255)
@@ -39,40 +39,40 @@ class SecondaryExistingData(models.Model):
 
     citation = models.CharField(blank=False, null=False, max_length=512)
     date_accessed = models.DateTimeField(blank=False, null=False, default=timezone.now)
-    comments = models.CharField(blank=True, null=True, max_length=512)
+    comments = models.CharField(blank=True, null=True, max_length=1024)
     created_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
     # List of teams with which the Existing Data is shared.
-    teams = models.ManyToManyField(Team, through='SecondaryDataSharingTeamMap')
+    teams = models.ManyToManyField(Team, through='ExistingDataSharingTeamMap')
     attachments = models.ManyToManyField(Attachment, through='DataAttachmentMap')
 
     def get_fields(self):
         """Method used in the template to iterate and display all fields"""
-        return [(field.name, field.value_to_string(self)) for field in SecondaryExistingData._meta.fields]
+        return [(field.name, field.value_to_string(self)) for field in ExistingData._meta.fields]
 
 
 class DataAttachmentMap(models.Model):
     """Mapping between Existing Data and uploaded attachments"""
 
-    data = models.ForeignKey(SecondaryExistingData, blank=False,
-                             related_name='secondary_data_attachments',
+    data = models.ForeignKey(ExistingData, blank=False,
+                             related_name='existing_data_attachments',
                              on_delete=models.CASCADE)
     attachment = models.ForeignKey(Attachment, blank=False,
-                                   related_name='attachment_secondary_data',
+                                   related_name='attachment_existing_data',
                                    on_delete=models.CASCADE)
 
 
-class SecondaryDataSharingTeamMap(models.Model):
+class ExistingDataSharingTeamMap(models.Model):
     """
     Mapping between Existing Data and the Teams
     with which they are shared.
     """
 
     added_date = models.DateTimeField(auto_now_add=True, blank=False, editable=False)
-    data = models.ForeignKey(SecondaryExistingData, blank=False,
-                             related_name='secondary_data_teams',
+    data = models.ForeignKey(ExistingData, blank=False,
+                             related_name='existing_data_teams',
                              on_delete=models.CASCADE)
     team = models.ForeignKey(Team, blank=False,
-                             related_name='team_secondary_data',
+                             related_name='team_existing_data',
                              on_delete=models.CASCADE)
     # indicates if the team can edit the project
     can_edit = models.BooleanField(blank=False)

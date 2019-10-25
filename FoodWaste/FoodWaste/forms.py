@@ -12,7 +12,7 @@ from django.forms import CharField, ModelForm, TextInput, Textarea, \
     RadioSelect, FileField, ClearableFileInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
-from FoodWaste.models import SecondaryExistingData
+from FoodWaste.models import ExistingData
 #from phonenumber_field.formfields import PhoneNumberField
 from teams.models import TeamMembership, Team
 
@@ -29,7 +29,7 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                              'placeholder':'Password'}))
 
 
-class SecondaryExistingDataForm(ModelForm):
+class ExistingDataForm(ModelForm):
     """Form for creating a new Existing Data Tracking instance."""
 
     teams = ModelMultipleChoiceField(
@@ -84,8 +84,8 @@ class SecondaryExistingDataForm(ModelForm):
         label=_("APA Citation"), required=True)
 
     comments = CharField(
-        max_length=255,
-        widget=Textarea({'rows': 2, 'class': 'form-control mb-2',
+        max_length=1024,
+        widget=Textarea({'rows': 3, 'class': 'form-control mb-2',
                          'placeholder': 'Comments'}),
         label=_("Comments"), required=False)
 
@@ -98,13 +98,13 @@ class SecondaryExistingDataForm(ModelForm):
     def __init__(self, *args, **kwargs):
         """Override default init to add custom queryset for teams."""
         current_user = kwargs.pop('user')
-        super(SecondaryExistingDataForm, self).__init__(*args, **kwargs)
+        super(ExistingDataForm, self).__init__(*args, **kwargs)
         team_ids = TeamMembership.objects.filter(member=current_user).values_list('team', flat=True)
         self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
         self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
 
     class Meta:
         """Meta data for Existing Data Tracking."""
-        model = SecondaryExistingData
+        model = ExistingData
         fields = ('work', 'email', 'phone', 'search', 'article_title',
                   'citation', 'comments')

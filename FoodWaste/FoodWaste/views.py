@@ -16,50 +16,50 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView, DetailView
-from FoodWaste.forms import SecondaryExistingDataForm
-from FoodWaste.models import SecondaryExistingData, SecondaryDataSharingTeamMap, \
+from FoodWaste.forms import ExistingDataForm
+from FoodWaste.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
 from FoodWaste.settings import APP_DISCLAIMER
 from teams.models import TeamMembership, Team
 from wkhtmltopdf.views import PDFTemplateResponse
 
 
-class SecondaryExistingDataList(ListView):
+class ExistingDataList(ListView):
     """View for Existing Data Tracking Tool."""
 
-    model = SecondaryExistingData
-    context_object_name = 'secondary_existing_data_list'
-    template_name = 'secondaryexistingdata/secondary_existing_data_list.html'
+    model = ExistingData
+    context_object_name = 'existing_data_list'
+    template_name = 'existingdata/existing_data_list.html'
 
     def get_queryset(self):
         # Instead of querying for member teams, filter on non-member teams and do EXCLUDE
         exclude_teams = TeamMembership.objects.exclude(member=self.request.user).values_list('team', flat=True)
-        exclude_data = SecondaryDataSharingTeamMap.objects.filter(team__in=exclude_teams).values_list('data', flat=True)
-        queryset = SecondaryExistingData.objects.exclude(id__in=exclude_data)
+        exclude_data = ExistingDataSharingTeamMap.objects.filter(team__in=exclude_teams).values_list('data', flat=True)
+        queryset = ExistingData.objects.exclude(id__in=exclude_data)
         return queryset
 
 
-class SecondaryExistingDataDetail(DetailView):
+class ExistingDataDetail(DetailView):
     """View for viewing the details of a Existing data instance"""
-    model = SecondaryExistingData
-    template_name = 'secondaryexistingdata/secondary_existing_data_detail.html'
+    model = ExistingData
+    template_name = 'existingdata/existing_data_detail.html'
 
 
-class SecondaryExistingDataCreate(CreateView):
+class ExistingDataCreate(CreateView):
     """Class for creating new Existing Data."""
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new Existing Data."""
-        return render(request, "secondaryexistingdata/secondary_existing_data_create.html",
-                      {'form': SecondaryExistingDataForm(user=request.user)})
+        return render(request, "existingdata/existing_data_create.html",
+                      {'form': ExistingDataForm(user=request.user)})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a new Existing Data form filled out."""
         #request.POST = request.POST.copy()
         #request.POST['phone'] = '+1' + strip_non_numerals(request.POST['phone'])
-        form = SecondaryExistingDataForm(request.POST, request.FILES, user=request.user)
+        form = ExistingDataForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.created_by = request.user
@@ -85,13 +85,13 @@ class SecondaryExistingDataCreate(CreateView):
             # Prepare and insert teams data
             if form.cleaned_data['teams']:
                 for team in form.cleaned_data['teams']:
-                    data_team_map = SecondaryDataSharingTeamMap()
+                    data_team_map = ExistingDataSharingTeamMap()
                     data_team_map.can_edit = True
                     data_team_map.team = team
                     data_team_map.data = obj
                     data_team_map.save()
-            return HttpResponseRedirect('/secondaryexistingdata/')
-        return render(request, 'secondaryexistingdata/secondary_existing_data_create.html',
+            return HttpResponseRedirect('/existingdata/')
+        return render(request, 'existingdata/existing_data_create.html',
                       {'form': form})
 
 
@@ -139,11 +139,11 @@ def about(request):
 def export_pdf(request, *args, **kwargs):
     """Function to export Existing Existing Data as a PDF document."""
     data_id = kwargs['pk']
-    data = SecondaryExistingData.objects.get(id=data_id)
+    data = ExistingData.objects.get(id=data_id)
     filename = 'export_%s.pdf' % data.article_title
     resp = PDFTemplateResponse(
         request=request,
-        template=get_template('secondaryexistingdata/secondary_existing_data_detail.html'),
+        template=get_template('existingdata/existing_data_detail.html'),
         filename=filename,
         context={'object': data},
         show_content_in_browser=False,
@@ -155,7 +155,7 @@ def export_pdf(request, *args, **kwargs):
 def export_excel(request, *args, **kwargs):
     """Function to export Existing Existing Data as an Excel sheet."""
     data_id = kwargs['pk']
-    data = SecondaryExistingData.objects.get(id=data_id)
+    data = ExistingData.objects.get(id=data_id)
     filename = 'export_%s.xlsx' % data.article_title
     from openpyxl import Workbook
     #from openpyxl.styles import PatternFill, Font
@@ -170,7 +170,7 @@ def export_excel(request, *args, **kwargs):
     # Programmatically write results to the PDF
     for name, value in data.get_fields():
         sheet.cell(row=row, column=1).value = name
-        sheet.cell(row=row, column=2).value = name
+        sheet.cell(row=row, column=2).value = value
         row += 1
 
     if data.disclaimer_req:
@@ -179,7 +179,6 @@ def export_excel(request, *args, **kwargs):
         repl_str = '\n                    '
         sheet.cell(row=row, column=2).value = APP_DISCLAIMER.replace(repl_str, ' ')
 
-    breakhere = True
     # Now return the generated excel sheet to be downloaded.
     type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     response = HttpResponse(content_type=type)
