@@ -39,7 +39,10 @@ lgr = getLogger('duecredit.tests.injector')
 
 
 class TestActiveInjector(object):
+    """Add docstring."""  # TODO add docstring.
+
     def setup(self):
+        """TODO: Add function docstring."""
         lgr.log(5, "Setting up for a TestActiveInjector test")
         self._cleanup_modules()
         self.due = DueCreditCollector()
@@ -47,6 +50,7 @@ class TestActiveInjector(object):
         self.injector.activate(retrospect=False)  # numpy might be already loaded...
 
     def teardown(self):
+        """TODO: Add function docstring."""
         lgr.log(5, "Tearing down after a TestActiveInjector test")
         # gc might not pick up inj after some tests complete
         # so we will always deactivate explicitly
@@ -152,14 +156,16 @@ class TestActiveInjector(object):
 
     @pytest.mark.parametrize("func, import_stmt, func_call", [test1, test2, test3])
     def test_simple_injection(self, func, import_stmt, func_call):
+        """TODO: Add function docstring."""
         self._test_simple_injection(func, import_stmt, func_call)
 
     @pytest.mark.parametrize("func, import_stmt, func_call", [test1, test2, test3])
     def test_double_injection(self, func, import_stmt, func_call):
+        """TODO: Add function docstring."""
         self._test_double_injection(func, import_stmt, func_call)
 
     def test_delayed_entries(self):
-        # verify that addition of delayed injections happened
+        """Verify that addition of delayed injections happened."""
         modules_for_injection = get_modules_for_injection()
         assert len(self.injector._delayed_injections) == len(modules_for_injection)
         assert self.injector._entry_records == {}  # but no entries were added
@@ -172,6 +178,7 @@ class TestActiveInjector(object):
             pytest.skip("scipy was not found: %s" % (e,))
 
     def test_import_mvpa2_suite(self):
+        """TODO: Add function docstring."""
         if not _have_mvpa2:
             pytest.skip("no mvpa2 found")
         # just a smoke test for now
@@ -190,10 +197,12 @@ class TestActiveInjector(object):
                                           ("duecredit.tests.mod", "nonexisting"),
                                           ("duecredit.tests.mod", "nonexisting.whocares")])
     def test_incorrect_path(self, mod, obj):
+        """TODO: Add function docstring."""
         self._test_incorrect_path(mod, obj)
 
 
 def test_find_iobject():
+    """TODO: Add function docstring."""
     assert find_object(mod, 'testfunc1') == (mod, 'testfunc1', mod.testfunc1)
     assert find_object(mod, 'TestClass1') == (mod, 'TestClass1', mod.TestClass1)
     assert find_object(mod, 'TestClass1.testmeth1') == (mod.TestClass1, 'testmeth1', mod.TestClass1.testmeth1)
@@ -202,6 +211,7 @@ def test_find_iobject():
 
 
 def test_no_double_activation():
+    """TODO: Add function docstring."""
     orig__import__ = __builtin__.__import__
     try:
         due = DueCreditCollector()
@@ -218,6 +228,7 @@ def test_no_double_activation():
 
 
 def test_get_modules_for_injection():
+    """TODO: Add function docstring."""
     assert get_modules_for_injection() == ['mod_biosig',
                                            'mod_dipy',
                                            'mod_mdp',
@@ -234,7 +245,7 @@ def test_get_modules_for_injection():
 
 
 def test_cover_our_injections():
-    # this one tests only import/syntax/api for the injections
+    """This one tests only import/syntax/api for the injections."""
     due = DueCreditCollector()
     inj = DueCreditInjector(collector=due)
     for modname in get_modules_for_injection():
@@ -243,12 +254,14 @@ def test_cover_our_injections():
 
 
 def test_no_harm_from_deactivate():
+    """TODO: Add function docstring."""
     # if we have not activated one -- shouldn't blow if we deactivate it
     # TODO: catch warning being spitted out
     DueCreditInjector().deactivate()
 
 
 def test_injector_del():
+    """TODO: Add function docstring."""
     orig__import__ = __builtin__.__import__
     try:
         due = DueCreditCollector()
@@ -270,6 +283,7 @@ def test_injector_del():
 
 
 def test_injector_delayed_del():
+    """TODO: Add function docstring."""
     # interesting case -- if we still have an instance of injector hanging around
     # and then create a new one, activate it but then finally delete/gc old one
     # it would (currently) reset import back (because atm defined as class var)

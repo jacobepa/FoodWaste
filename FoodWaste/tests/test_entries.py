@@ -25,6 +25,7 @@ from ..entries import BibTeX, Doi, Text, Url
 
 
 def test_comparison():
+    """TODO: Add function docstring."""
     assert Text("123") == Text("123")
     assert Text("123") != Text("124")
     assert Text("123", 'key') == Text("123", 'key')
@@ -36,5 +37,6 @@ def test_comparison():
 
 
 def test_sugaring_api():
+    """TODO: Add function docstring."""
     assert Url("http://1.com").url == "http://1.com"
     assert Doi("1.com").doi == "1.com"

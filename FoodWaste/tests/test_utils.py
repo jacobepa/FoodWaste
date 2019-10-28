@@ -17,14 +17,19 @@ from ..utils import is_interactive
 
 
 def test_is_interactive_crippled_stdout(monkeypatch):
+    """TODO: Add function docstring."""
     class MockedOut(object):
-        """the one which has no isatty
-        """
+        """The one which has no isatty.        """
+
         def write(self, *args, **kwargs):
+            """TODO: Add function docstring."""
             pass
 
     class MockedIsaTTY(MockedOut):
+        """Add docstring."""  # TODO add docstring.
+
         def isatty(self):
+            """TODO: Add function docstring."""
             return True
 
     for inout in ('in', 'out', 'err'):

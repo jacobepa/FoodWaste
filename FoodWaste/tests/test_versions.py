@@ -25,10 +25,12 @@ from six import PY3
 if PY3:
     # just to ease testing
     def cmp(a, b):
+        """TODO: Add function docstring."""
         return (a > b) - (a < b)
 
 
 def test_external_versions_basic():
+    """TODO: Add function docstring."""
     ev = ExternalVersions()
     assert ev._versions == {}
     assert ev['duecredit'] == __version__
@@ -56,7 +58,7 @@ def test_external_versions_basic():
     # And get a record on that inside
     assert ev._versions.get('os') == ev.UNKNOWN
     # And that thing is "True", i.e. present
-    assert(ev['os'])
+    assert ev['os']
     # but not comparable with anything besides itself (was above)
     with pytest.raises(TypeError):
         cmp(ev['os'], '0')
@@ -75,6 +77,7 @@ def test_external_versions_basic():
 
 
 def test_external_versions_unknown():
+    """TODO: Add function docstring."""
     assert str(ExternalVersions.UNKNOWN) == 'UNKNOWN'
 
 
@@ -93,6 +96,7 @@ def _test_external(ev, modname):
 @pytest.mark.parametrize("modname", ['scipy', 'numpy', 'mvpa2', 'sklearn', 'statsmodels',
                                      'pandas', 'matplotlib', 'psychopy'])
 def test_external_versions_popular_packages(modname):
+    """TODO: Add function docstring."""
     ev = ExternalVersions()
 
     _test_external(ev, modname)

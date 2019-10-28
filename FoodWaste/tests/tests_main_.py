@@ -21,7 +21,7 @@ from .. import due
 
 
 def test_main_help(monkeypatch):
-    # Patch stdout
+    """Patch stdout."""
     fakestdout = StringIO()
     monkeypatch.setattr(sys, "stdout", fakestdout)
 
@@ -32,7 +32,7 @@ def test_main_help(monkeypatch):
 
 
 def test_main_version(monkeypatch):
-    # Patch stdout
+    """Patch stdout."""
     fakestdout = StringIO()
     monkeypatch.setattr(sys, "stdout", fakestdout)
 
@@ -41,6 +41,7 @@ def test_main_version(monkeypatch):
 
 
 def test_main_run_a_script(tmpdir, monkeypatch):
+    """Add docstring."""  # TODO add docstring.
     tempfile = str(tmpdir.mkdir("sub").join("tempfile.txt"))
     content = b'print("Running the script")\n'
     with open(tempfile, 'wb') as f:

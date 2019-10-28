@@ -31,6 +31,7 @@ try:
 
     @vcr.use_cassette()
     def test_import_doi():
+        """TODO: Add function docstring."""
         doi_good = '10.1038/nrd842'
         kw = dict(sleep=0.00001, retries=2)
         assert isinstance(import_doi(doi_good, **kw), text_type)
@@ -48,7 +49,7 @@ except ImportError:
 
 
 def test_pickleoutput(tmpdir):
-    #entry = BibTeX('@article{XXX0, ...}')
+    """TODO: Add function docstring."""
     entry = BibTeX("@article{Atkins_2002,\n"
                    "title=title,\n"
                    "volume=1, \n"
@@ -85,6 +86,7 @@ def test_pickleoutput(tmpdir):
 
 
 def test_output():
+    """TODO: Add function docstring."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -179,6 +181,7 @@ def test_output():
 
 
 def test_output_return_all(monkeypatch):
+    """TODO: Add function docstring."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -209,6 +212,7 @@ def test_output_return_all(monkeypatch):
 
 
 def test_output_tags(monkeypatch):
+    """TODO: Add function docstring."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -244,6 +248,7 @@ def test_output_tags(monkeypatch):
 
 
 def test_text_output():
+    """TODO: Add function docstring."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -305,6 +310,7 @@ def test_text_output():
 
 
 def test_text_output_dump_formatting():
+    """TODO: Add function docstring."""
     due = DueCreditCollector()
 
     # XXX: atm just to see if it spits out stuff
@@ -395,6 +401,7 @@ def test_text_output_dump_formatting():
 
 
 def test_bibtex_output():
+    """TODO: Add function docstring."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -475,7 +482,7 @@ def _generate_sample_bibtex():
 
 
 def test_get_text_rendering(monkeypatch):
-    # Patch bibtex_rendering
+    """Patch bibtex_rendering."""
     sample_bibtex = BibTeX(_sample_bibtex)
 
     def get_bibtex_rendering(*args, **kwargs):
@@ -509,22 +516,22 @@ def test_get_text_rendering(monkeypatch):
 
 
 def test_text_text_rendering():
+    """TODO: Add function docstring."""
     text = "I am so free"
     citation = Citation(Text(text), path='mypath')
     assert get_text_rendering(citation) == text
 
 
 def test_url_text_rendering():
+    """TODO: Add function docstring."""
     url = "http://example.com"
     citation = Citation(Url(url), path='mypath')
     assert get_text_rendering(citation) == "URL: " + url
 
 
 def test_format_bibtex_zenodo_doi():
-    """
-    test that we can correctly parse bibtex entries obtained from a zenodo doi
-    """
-    # this was fetched on 2016-05-10
+    """Test can correctly parse bibtex entries obtained from zenodo doi."""
+    # This was fetched on 2016-05-10.
     bibtex_zenodo = """
     @data{0b1284ba-5ce5-4367-84f3-c44b4962ad90,
     doi = {10.5281/zenodo.50186},
@@ -560,10 +567,11 @@ def test_format_bibtex_with_utf_characters():
                   u"and {Bpinsard} and {Chaselgrove} and Oosterhof, Nikolaas N. and St-Jean, Samuel and {Bago " \
                   u"Amirbekian} and Nimmo-Smith, Ian and {Satrajit Ghosh}},\n  keywords = {},\n  title = {nibabel " \
                   u"2.0.1},\n  publisher = {Zenodo},\n  year = {2015}\n} "
-    assert (format_bibtex(BibTeX(bibtex_utf8)) == u'Brótt, M. et al., 2015. nibabel 2.0.1.')
+    assert format_bibtex(BibTeX(bibtex_utf8) == u'Brótt, M. et al., 2015. nibabel 2.0.1.')
 
 
 def test_is_contained():
+    """TODO: Add function docstring."""
     toppath = 'package'
     assert _is_contained(toppath, 'package.module')
     assert _is_contained(toppath, 'package.module.submodule')

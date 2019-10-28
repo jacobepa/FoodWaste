@@ -20,12 +20,13 @@ from ..cmdline import main
 
 
 def test_import():
+    """TODO: Add function docstring."""
     import duecredit.cmdline
     import duecredit.cmdline.main
 
 
 def test_main_help(monkeypatch):
-    # Patch stdout
+    """Patch stdout."""
     fakestdout = StringIO()
     monkeypatch.setattr(sys, "stdout", fakestdout)
 
@@ -34,7 +35,7 @@ def test_main_help(monkeypatch):
 
 
 def test_main_version(monkeypatch):
-    # Patch stdout or stderr for different Python versions -- catching both
+    """Patch stdout or stderr for different Python versions - catching both."""
     fakestdout = StringIO()
     fakeout = 'std' + ('err' if sys.version_info < (3, 4) else 'out')
     monkeypatch.setattr(sys, fakeout, fakestdout)
@@ -46,8 +47,10 @@ def test_main_version(monkeypatch):
 # smoke test the cmd_summary
 # TODO: carry sample .duecredit.p, point to that file, monkeypatch TextOutput and BibTeXOutput .dumps
 def test_smoke_cmd_summary():
+    """TODO: Add function docstring."""
     main.main(['summary'])
 
 
-def test_cmd_test():  # test the not implemented cmd_test
+def test_cmd_test():
+    """Test the not implemented cmd_test."""
     pytest.raises(SystemExit, main.main, ['test'])
