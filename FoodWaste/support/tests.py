@@ -31,7 +31,7 @@ class TestSupport(TestCase):
 
     def test_home(self):
         """Tests the home page."""
-        # response = self.client.get('/support/index')
+        # Response = self.client.get('/support/index')
         response = self.client.get('/support/index/')
         self.assertContains(response, 'Help/Suggestions', 0, 200)
 

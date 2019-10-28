@@ -61,8 +61,8 @@ class ExistingDataCreate(CreateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a new Existing Data form filled out."""
-        #request.POST = request.POST.copy()
-        #request.POST['phone'] = '+1' + strip_non_numerals(request.POST['phone'])
+        # request.POST = request.POST.copy()
+        # request.POST['phone'] = '+1' + strip_non_numerals(request.POST['phone'])
         form = ExistingDataForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             obj = form.save(commit=False)
@@ -72,9 +72,9 @@ class ExistingDataCreate(CreateView):
             # TODO Parse and insert attached files:
             for field in request.FILES:
                 file = request.FILES[field]
-                #fs = FileSystemStorage()
-                #filename = fs.save(file.name, file)
-                #uploaded_file_url = fs.url(filename)
+                # fs = FileSystemStorage()
+                # filename = fs.save(file.name, file)
+                # uploaded_file_url = fs.url(filename)
                 # Insert the attachment
                 attch = Attachment()
                 attch.uploaded_by = request.user
@@ -162,9 +162,9 @@ def export_excel(request, *args, **kwargs):
     data = ExistingData.objects.get(id=data_id)
     filename = 'export_%s.xlsx' % data.article_title
     from openpyxl import Workbook
-    #from openpyxl.styles import PatternFill, Font
-    #from openpyxl.styles.borders import Border, Side
-    #from openpyxl.styles.colors import Color
+    # from openpyxl.styles import PatternFill, Font
+    # from openpyxl.styles.borders import Border, Side
+    # from openpyxl.styles.colors import Color
 
     workbook = Workbook()
     sheet = workbook.active

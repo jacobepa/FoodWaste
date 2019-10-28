@@ -49,7 +49,7 @@ class Country(models.Model):
         """
         :return:
         """
-        # NOTE: DON'T REMOVE THE PARENTHESES, IT BREAKS MIGRATIONS
+        # NOTE: DO NOT REMOVE THE PARENTHESES, IT BREAKS MIGRATIONS
         return (self.country,)
 
     def __str__(self):
@@ -79,7 +79,7 @@ class Sector(models.Model):
         """
         :return:
         """
-        # NOTE: DON'T REMOVE THE PARENTHESES, IT BREAKS MIGRATIONS
+        # NOTE: DO NOT REMOVE THE PARENTHESES, IT BREAKS MIGRATIONS
         return (self.sector,)
 
     def __str__(self):
@@ -96,7 +96,7 @@ class Role(models.Model):
         """
         :return:
         """
-        # NOTE: DON'T REMOVE THE PARENTHESES, IT BREAKS MIGRATIONS
+        # NOTE: DO NOT REMOVE THE PARENTHESES, IT BREAKS MIGRATIONS
         return (self.role,)
 
     def __str__(self):
@@ -109,12 +109,12 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, blank=False, on_delete=models.CASCADE)
 
-    # created/modified info
+    # Created/modified info
     created = models.DateTimeField(auto_now_add=True, blank=False,
                                    editable=False)
     last_modified = models.DateTimeField(auto_now=True, blank=False)
 
-    # affiliation and job information
+    # Affiliation and job information
     affiliation = models.CharField(blank=True, null=True, max_length=255)
     sector = models.ForeignKey(Sector, null=True, blank=True,
                                on_delete=models.CASCADE)
@@ -122,7 +122,7 @@ class UserProfile(models.Model):
     role = models.ForeignKey(Role, null=True, blank=True,
                              on_delete=models.CASCADE)
 
-    # address
+    # Address
     address_line1 = models.CharField(blank=True, null=True, max_length=255)
     address_line2 = models.CharField(blank=True, null=True, max_length=255)
     city = models.CharField(blank=True, null=True, max_length=255)
@@ -137,7 +137,7 @@ class UserProfile(models.Model):
         return self.user.last_name + ', ' + self.user.first_name
 
 
-# these calls create a user profile object whenever a user is created
+# These calls create a user profile object whenever a user is created
 def create_user_profile(sender, instance, created, **kwargs):
     # pylint: disable=unused-argument
     """
@@ -153,5 +153,5 @@ def create_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.create(user=instance)
 
 
-# register the create profile function with the user save handler
+# Register the create profile function with the user save handler
 post_save.connect(create_user_profile, sender=User)

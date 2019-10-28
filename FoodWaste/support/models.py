@@ -150,15 +150,15 @@ class InformationRequest(models.Model):
     """Class describing information requests."""
 
     created_date = models.DateTimeField(auto_now_add=True, blank=False)
-    # email to which the request was forwarded upon submission,
+    # Email to which the request was forwarded upon submission,
     sent_to_email = models.CharField(null=True, blank=True, max_length=255)
-    # contact info for the person submitting the request
+    # Contact info for the person submitting the request
     requestor_first_name = models.CharField(max_length=255, blank=True)
     requestor_last_name = models.CharField(max_length=255, blank=True)
     requestor_email_address = models.EmailField(blank=False, max_length=255)
-    # request details
+    # Request details
     request_subject = models.CharField(max_length=255, blank=False)
     request_details = models.TextField(blank=False)
-    # response from
+    # Response from
     response = models.TextField(null=True, blank=True)
     response_date = models.DateField(null=True, blank=True)

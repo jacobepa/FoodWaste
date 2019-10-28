@@ -47,7 +47,7 @@ class SupportForm(forms.ModelForm):
                               help_text="Please Submit Your Return Email Address")
 
     class Meta:
-        """Add docstring."""
+        """TODO Add docstring."""
 
         model = Support
         fields = (
@@ -93,7 +93,7 @@ class SupportAdminForm(forms.ModelForm):
                               required=False)
 
     class Meta:
-        """Add docstring."""
+        """TODO Add docstring."""
 
         model = Support
         fields = (
@@ -113,7 +113,7 @@ class SupportTypeForm(forms.ModelForm):
         attrs={'class': 'form-control'}), required=False)
 
     class Meta:
-        """Add docstring."""
+        """TODO Add docstring."""
 
         model = SupportType
         fields = ("name",)
@@ -140,9 +140,9 @@ class InformationRequestForm(forms.ModelForm):
     """Form for creating an information request."""
 
     created_date = models.DateTimeField(auto_now_add=True, blank=False)
-    # email to which the request was forwarded upon submission,
+    # Email to which the request was forwarded upon submission,
     sent_to_email = DEFAULT_FROM_EMAIL
-    # contact info for the person submitting the request
+    # Contact info for the person submitting the request
     requestor_first_name = forms.CharField(label=_("First"),
                                            widget=forms.TextInput(attrs={
                                                'class': 'form-control'}),
@@ -155,7 +155,7 @@ class InformationRequestForm(forms.ModelForm):
                                               widget=forms.TextInput(attrs={
                                                   'class': 'form-control'}),
                                               required=True, max_length=255)
-    # request details
+    # Request details
     request_subject = forms.CharField(label=_("Subject"),
                                       widget=forms.TextInput(
                                           attrs={'class': 'form-control'}),

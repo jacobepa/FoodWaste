@@ -13,12 +13,13 @@ from django.utils import timezone
 from teams.models import Team, User
 
 def get_attachment_storage_path(instance, filename):
-    """Build the attachment storage path using username and filename"""
+    """Build the attachment storage path using username and filename."""
     return '%s/attachments/%s' % (instance.uploaded_by.username, filename)
 
 
 class Attachment(models.Model):
-    """Class representing a file attachment to an Existing Data entry"""
+    """Class representing a file attachment to an Existing Data entry."""
+
     name = models.CharField(blank=False, null=False, max_length=255)
     file = models.FileField(null=True, blank=True, upload_to=get_attachment_storage_path)
     uploaded_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
@@ -29,12 +30,12 @@ class ExistingData(models.Model):
 
     work = models.CharField(blank=False, null=False, max_length=255)
     email = models.CharField(blank=False, null=False, max_length=255)
-    #phone = PhoneNumberField(blank=False, null=False)
+    # Phone = PhoneNumberField(blank=False, null=False)
     phone = models.CharField(blank=False, null=False, max_length = 32)
     search = models.CharField(blank=False, null=False, max_length=255)
     article_title = models.CharField(blank=False, null=False, max_length=255)
 
-    # indicates if EPA disclaimer should be included when printing/exporting this data
+    # Indicates if EPA disclaimer should be included when printing/exporting this data
     disclaimer_req = models.BooleanField(blank=False)
 
     citation = models.CharField(blank=False, null=False, max_length=512)
@@ -46,12 +47,12 @@ class ExistingData(models.Model):
     attachments = models.ManyToManyField(Attachment, through='DataAttachmentMap')
 
     def get_fields(self):
-        """Method used in the template to iterate and display all fields"""
+        """Method used in the template to iterate and display all fields."""
         return [(field.name, field.value_to_string(self)) for field in ExistingData._meta.fields]
 
 
 class DataAttachmentMap(models.Model):
-    """Mapping between Existing Data and uploaded attachments"""
+    """Mapping between Existing Data and uploaded attachments."""
 
     data = models.ForeignKey(ExistingData, blank=False,
                              related_name='existing_data_attachments',
@@ -62,10 +63,7 @@ class DataAttachmentMap(models.Model):
 
 
 class ExistingDataSharingTeamMap(models.Model):
-    """
-    Mapping between Existing Data and the Teams
-    with which they are shared.
-    """
+    """Mapping between Existing Data and Teams they share."""
 
     added_date = models.DateTimeField(auto_now_add=True, blank=False, editable=False)
     data = models.ForeignKey(ExistingData, blank=False,

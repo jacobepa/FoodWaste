@@ -41,15 +41,15 @@ class TeamMembership(models.Model):
 
     added_date = models.DateTimeField(auto_now_add=True, blank=False,
                                       editable=False)
-    # the user
+    # The user
     member = models.ForeignKey(User, blank=False,
                                related_name="member_memberships",
                                on_delete=models.CASCADE)
-    # the team
+    # The team
     team = models.ForeignKey(Team, blank=False,
                              related_name="team_memberships",
                              on_delete=models.CASCADE)
-    # indicates if the user is a group owner
+    # Indicates if the user is a group owner
     is_owner = models.BooleanField(blank=False)
-    # indicates if the user can edit projects in the group
+    # Indicates if the user can edit projects in the group
     can_edit = models.BooleanField(blank=False)

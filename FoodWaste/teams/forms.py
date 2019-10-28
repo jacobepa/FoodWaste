@@ -18,7 +18,7 @@ from teams.models import Team
 class TeamManagementForm(forms.ModelForm):
     """Form For Creating or Updating a Project."""
 
-    # name of the project
+    # Name of the project
     name = forms.CharField(label=_("Name"),
                            help_text="Project names must be unique",
                            widget=forms.TextInput(

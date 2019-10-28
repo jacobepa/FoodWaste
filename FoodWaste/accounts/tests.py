@@ -180,7 +180,7 @@ class _AssertTemplateNotUsedContext(_AssertTemplateUsedContext):
         return self.template_name not in self.rendered_template_names
 
     def message(self):
-        """Add docstring."""
+        """Add docstring."""  # TODO add docstring.
         return '%s was rendered.' % self.template_name
 
 
@@ -629,7 +629,7 @@ def _assert_template_used(self, response, template_name, msg_prefix):
         if response:
             template_name = response
             response = None
-        # use this template with context manager
+        # Use this template with context manager
         return template_name, None, msg_prefix
 
     template_names = [tonnes.name for tonnes in response.templates if
@@ -749,11 +749,11 @@ def assertfieldoutput(self, fieldclass, valid, invalid, field_args=None,
     required = fieldclass(*field_args, **field_kwargs)
     optional = fieldclass(*field_args,
                           **dict(field_kwargs, required=False))
-    # test valid inputs
+    # Test valid inputs
     for t_input, output in valid.items():
         self.assertEqual(required.clean(t_input), output)
         self.assertEqual(optional.clean(t_input), output)
-    # test invalid inputs
+    # Test invalid inputs
     for t_input, errors in invalid.items():
         with self.assertRaises(ValidationError) as context_manager:
             required.clean(t_input)
@@ -762,14 +762,14 @@ def assertfieldoutput(self, fieldclass, valid, invalid, field_args=None,
         with self.assertRaises(ValidationError) as context_manager:
             optional.clean(t_input)
         self.assertEqual(context_manager.exception.messages, errors)
-    # test required inputs
+    # Test required inputs
     error_required = [force_text(required.error_messages['required'])]
     for empty in required.empty_values:
         with self.assertRaises(ValidationError) as context_manager:
             required.clean(empty)
         self.assertEqual(context_manager.exception.messages, error_required)
         self.assertEqual(optional.clean(empty), empty_value)
-    # test that max_length and min_length are always accepted
+    # Test that max_length and min_length are always accepted
     if issubclass(fieldclass, CharField):
         field_kwargs.update({'min_length': 2, 'max_length': 20})
         self.assertIsInstance(fieldclass(*field_args, **field_kwargs), fieldclass)
@@ -1307,8 +1307,8 @@ class FSFilesHandler(WSGIHandler):
         """
         Check if the path should be handled. Ignore the path if:
 
-        * the host is provided as part of the base_url
-        * the request's path isn't under the media path (or equal)
+        * The host is provided as part of the base_url
+        * The request's path isn't under the media path (or equal)
         """
         return path.startswith(self.base_url[2]) and not self.base_url[1]
 
@@ -1457,10 +1457,10 @@ class LiveServerTestCase(TransactionTestCase):
     def setupclass(cls):
         super().setupclass()
         connections_override = {}
-        # for conn in connections.all():
+        # For conn in connections.all():
         #     # If using in-memory sqlite databases, pass the connections to
         #     # the server thread.
-        #     if conn.vendor == 'sqlite' and conn.is_in_memory_db():
+        #     If conn.vendor == 'sqlite' and conn.is_in_memory_db():
         #         # Explicitly enable thread-shareability for this connection
         #         conn.allow_thread_sharing = True
         #         connections_override[conn.alias] = conn
