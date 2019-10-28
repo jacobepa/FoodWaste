@@ -3,6 +3,7 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
+"""TODO: Add module docstring."""
 # emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
 # ex: set sts=4 ts=4 sw=4 noet:
 # See COPYING file distributed along with the duecredit package for the
@@ -11,8 +12,15 @@
 import gc
 import sys
 import pytest
+import duecredit.tests.mod as mod
 
+from .. import __version__
+from ..injections.injector import DueCreditInjector, find_object, get_modules_for_injection
 from six import viewvalues, PY2
+from duecredit.collector import DueCreditCollector
+from duecredit.entries import Doi
+from logging import getLogger
+
 
 if PY2:
     import __builtin__
@@ -20,12 +28,6 @@ else:
     import builtins as __builtin__
 _orig__import__ = __builtin__.__import__
 
-from duecredit.collector import DueCreditCollector
-from duecredit.entries import Doi
-import duecredit.tests.mod as mod
-
-from ..injections.injector import DueCreditInjector, find_object, get_modules_for_injection
-from .. import __version__
 
 try:
     import mvpa2
@@ -33,7 +35,6 @@ try:
 except ImportError:
     _have_mvpa2 = False
 
-from logging import getLogger
 lgr = getLogger('duecredit.tests.injector')
 
 

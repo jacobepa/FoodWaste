@@ -3,6 +3,7 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
+"""TODO: Add module docstring."""
 # emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
 # ex: set sts=4 ts=4 sw=4 noet:
 #   See COPYING file distributed along with the duecredit package for the
@@ -88,6 +89,8 @@ def test_api(collector_class):
         return None
 
     class Child(object):
+        """TODO: Add docstring."""
+
         # Conception process is usually way too easy to be referenced
         def __init__(self):
             pass

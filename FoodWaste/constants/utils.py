@@ -131,4 +131,3 @@ def is_float(val_str):
     except ValueError:
         return False
     return True
-

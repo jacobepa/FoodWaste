@@ -15,9 +15,7 @@ Tests were taken from https://github.com/duecredit/duecredit/tree/master/duecred
 from django.test import TestCase
 import sys
 import pytest
-
 from six.moves import StringIO
-
 from .. import __main__, __version__
 from .. import due
 
@@ -30,7 +28,7 @@ def test_main_help(monkeypatch):
     pytest.raises(SystemExit, __main__.main, ['__main__.py', '--help'])
     assert(
         fakestdout.getvalue().startswith(
-        "Usage: %s -m duecredit [OPTIONS] <file> [ARGS]\n" % sys.executable))
+            "Usage: %s -m duecredit [OPTIONS] <file> [ARGS]\n" % sys.executable))
 
 
 def test_main_version(monkeypatch):

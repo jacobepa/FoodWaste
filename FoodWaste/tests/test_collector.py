@@ -3,20 +3,21 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
+"""TODO: Add module docstring."""
 # emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
 # ex: set sts=4 ts=4 sw=4 noet:
 #   See COPYING file distributed along with the duecredit package for the
 #   copyright and license terms.
 
 
+import os
+import pytest
+
 from ..collector import DueCreditCollector, InactiveDueCreditCollector, \
     CollectorSummary, Citation
 from ..dueswitch import DueSwitch
 from ..entries import BibTeX, Doi
 from ..io import PickleOutput
-
-import os
-import pytest
 
 
 def _test_entry(due, entry):
@@ -116,6 +117,8 @@ def test_dcite_method():
             return "load"
 
         class SomeClass(object):
+            """TODO: Add docstring."""
+
             @due.dcite("XXX0", path='someclass:method')
             def method(self, arg1, kwarg2="blah"):
                 """docstring"""
@@ -153,7 +156,8 @@ def test_dcite_method():
             assert citation.cite_module
 
         class SomeClass2(object):
-            # Used to test for classes that are not instantiated
+            """Used to test for classes that are not instantiated."""
+
             @due.dcite("XXX0", path="some.module.without.method")
             def method2(self, arg1, kwarg2="blah"):
                 assert arg1 == "magical"
@@ -293,7 +297,7 @@ def test_get_output_handler_method(tmpdir, monkeypatch):
 
 def test_collectors_uniform_api():
     get_api = lambda objs: [x for x in sorted(sum((dir(obj) for obj in objs), []))
-                           if not x.startswith('_') or x in '__call__']
+                            if not x.startswith('_') or x in '__call__']
     assert get_api([DueCreditCollector, DueSwitch]) == get_api([InactiveDueCreditCollector])
 
 
