@@ -3,11 +3,13 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
-"""TODO: Add module docstring."""
-# emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
-# ex: set sts=4 ts=4 sw=4 noet:
-#   See COPYING file distributed along with the duecredit package for the
-#   copyright and license terms.
+"""
+emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
+
+ex: set sts=4 ts=4 sw=4 noet:
+See COPYING file distributed along with the duecredit package for
+copyright and license terms.
+"""
 
 import os
 import sys
@@ -107,7 +109,7 @@ def test_api(collector_class):
 
 
 def run_python_command(cmd=None, script=None):
-    """Just a tiny helper which runs command and returns exit code, stdout, stderr"""
+    """Tiny helper which runs command and returns exit code, stdout, stderr."""
     assert bool(cmd) != bool(script)  # one or another, not both
     args = ['-c', cmd] if cmd else [script]
     try:
@@ -186,7 +188,7 @@ def test_noincorrect_import_if_no_lxml_numpy(monkeypatch, kwargs, env, stubbed_e
     elif os.environ.get('DUECREDIT_ENABLE', False):  # we enabled duecredit
         if (os.environ.get('DUECREDIT_REPORT_TAGS', None) == '*' and kwargs.get('script')) \
             or 'numpy' in kwargs.get('cmd', ''):
-            # we requested to have all tags output, and used bibtex in our entry
+            # Requested to have all tags output, and used bibtex in our entry.
             assert 'For formatted output we need citeproc' in out
         else:
             # there was nothing to format so we did not fail for no reason

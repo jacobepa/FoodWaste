@@ -20,20 +20,20 @@ from ..dueswitch import DueSwitch, due
 def test_dueswitch_activate(monkeypatch):
     """TODO: Add function docstring."""
     if due.active:
-       pytest.skip("due is already active, can't test more at this point")
+         pytest.skip("due is already active, can't test more at this point")
 
     state = dict(activate=0, register=0, register_func=None)
 
     # Patch DueCreditInjector.activate
     def activate_calls(*args, **kwargs):
-       state["activate"] += 1
+         state["activate"] += 1
 
     monkeypatch.setattr(DueCreditInjector, "activate", activate_calls)
 
     # Patch atexit.register
     def register(func):
-       state["register"] += 1
-       state["register_func"] = func
+         state["register"] += 1
+         state["register_func"] = func
 
     monkeypatch.setattr(atexit, "register", register)
 

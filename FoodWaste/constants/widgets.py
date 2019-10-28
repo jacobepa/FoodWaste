@@ -7,7 +7,8 @@
 Defines custom widgets to be shared across any EPA Django apps.
 
 Available widgets:
-- ListTextWidget allows the user to select from a dropdown or optionally enter an option as free text.
+- ListTextWidget allows the user to select from a dropdown or optionally enter
+an option as free text.
 """
 
 from django import forms

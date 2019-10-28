@@ -934,7 +934,7 @@ intellisense.annotate(jQuery.fn, {
   },
   'attributeNotEqual': function() {
     /// <signature>
-    ///   <summary>Select elements that either don't have the specified attribute, or do have the specified attribute but not with a certain value.</summary>
+    ///   <summary>Select elements that either do not have the specified attribute, or do have the specified attribute but not with a certain value.</summary>
     ///   <param name="attribute" type="String">An attribute name.</param>
     ///   <param name="value" type="String">An attribute value. Can be either an unquoted single word or a quoted string.</param>
     /// </signature>

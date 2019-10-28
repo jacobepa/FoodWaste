@@ -207,7 +207,7 @@ class SimpleTestCase(unittest.TestCase):
     _overridden_settings = None
     _modified_settings = None
 
-    # Tests shouldn't be allowed to query the database since
+    # Tests should not be allowed to query the database since
     # this base class does not enforce any isolation.
     allow_database_queries = False
 
@@ -1029,7 +1029,7 @@ class TransactionTestCase(SimpleTestCase):
         Perform post-test things:
 
         * Flush the contents of the database to leave a clean slate. If the
-          class has an 'available_apps' attribute, don't fire post_migrate.
+          class has an 'available_apps' attribute, do not fire post_migrate.
         * Force-close the connection so the next test gets a clean cursor.
         """
         try:
@@ -1054,7 +1054,7 @@ class TransactionTestCase(SimpleTestCase):
                                      enter=False)
 
     def _fixture_teardown(self):
-        # Allow TRUNCATE ... CASCADE and don't emit the post_migrate signal
+        # Allow TRUNCATE ... CASCADE and do not emit the post_migrate signal
         # when flushing only a subset of the apps
         for db_name in self._databases_names(include_mirrors=False):
             # Flush the database
@@ -1438,7 +1438,7 @@ class LiveServerTestCase(TransactionTestCase):
     In addition, launch a live HTTP server in separate thread so tests may use
     another testing framework, e.g., Selenium for example, instead of built-in
     dummy client. It inherits from TransactionTestCase instead of TestCase
-    because the threads don't share the same transactions (unless if using
+    because the threads do not share the same transactions (unless if using
     in-memory sqlite) and each thread needs to commit all their transactions so
     the other thread can see the changes.
     """

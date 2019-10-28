@@ -3,11 +3,14 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
-"""TODO: Add module docstring."""
-# emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
-# ex: set sts=4 ts=4 sw=4 noet:
-# See COPYING file distributed along with the duecredit package for the
-# copyright and license terms.
+"""
+emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
+
+ex: set sts=4 ts=4 sw=4 noet:
+See COPYING file distributed along with the duecredit package for the
+copyright and license terms.
+"""
+
 
 import gc
 import sys
@@ -47,7 +50,8 @@ class TestActiveInjector(object):
         self._cleanup_modules()
         self.due = DueCreditCollector()
         self.injector = DueCreditInjector(collector=self.due)
-        self.injector.activate(retrospect=False)  # numpy might be already loaded...
+        self.injector.activate(retrospect=False)
+        # numpy may already be loaded.
 
     def teardown(self):
         """TODO: Add function docstring."""
@@ -95,7 +99,7 @@ class TestActiveInjector(object):
 
         # TODO: there must be a cleaner way to get first value
         citation = list(viewvalues(self.due.citations))[0]
-        # TODO: ATM we don't allow versioning of the submodules -- we should
+        # TODO: ATM we do not allow versioning of the submodules -- we should
         # assert_equal(citation.version, '0.5')
         # ATM it will be the duecredit's version
         assert citation.version == __version__
@@ -142,7 +146,7 @@ class TestActiveInjector(object):
 
         # TODO: there must be a cleaner way to get first value
         citation = list(viewvalues(self.due.citations))[0]
-        # TODO: ATM we don't allow versioning of the submodules -- we should
+        # TODO: ATM we do not allow versioning of the submodules -- we should
         # assert_equal(citation.version, '0.5')
         # ATM it will be the duecredit's version
         assert citation.version, __version__
@@ -172,7 +176,7 @@ class TestActiveInjector(object):
         assert 'scipy' in self.injector._delayed_injections  # We must have it ATM
 
         try:
-            # We do have injections for scipy
+            # We do have injections for scipy.
             import scipy
         except ImportError as e:
             pytest.skip("scipy was not found: %s" % (e,))
@@ -255,7 +259,7 @@ def test_cover_our_injections():
 
 def test_no_harm_from_deactivate():
     """TODO: Add function docstring."""
-    # if we have not activated one -- shouldn't blow if we deactivate it
+    # if we have not activated one -- should not blow if we deactivate it
     # TODO: catch warning being spitted out
     DueCreditInjector().deactivate()
 
@@ -274,7 +278,7 @@ def test_injector_del():
         assert inj._orig_import is not None
         del inj   # delete active but not used
         inj = None
-        __builtin__.__import__ = None # We need to do that since otherwise gc will not pick up inj
+        __builtin__.__import__ = None  # We need to do that since otherwise gc will not pick up inj
         gc.collect()  # To cause __del__
         assert __builtin__.__import__ is orig__import__
         import abc   # and new imports work just fine

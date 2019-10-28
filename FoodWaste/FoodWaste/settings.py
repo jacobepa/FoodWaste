@@ -36,7 +36,7 @@ else:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5d1c445a-e8d6-481f-b1ce-ce0a51e096c3'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []

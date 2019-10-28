@@ -3,12 +3,13 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
-"""TODO: Add module docstring."""
-# emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
-# ex: set sts=4 ts=4 sw=4 noet:
-#   See COPYING file distributed along with the duecredit package for the
-#   copyright and license terms.
+"""
+emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
 
+ex: set sts=4 ts=4 sw=4 noet:
+See COPYING file distributed along with the duecredit package for the
+copyright and license terms.
+"""
 
 import os
 import pytest
@@ -106,7 +107,7 @@ def _test_dcite_basic(due, callable):
 
 
 def test_dcite_method():
-    """Test basic wrapping that we don't mask out the arguments."""
+    """Test basic wrapping that we do not mask out the arguments."""
     for due in [DueCreditCollector(), InactiveDueCreditCollector()]:
         active = isinstance(due, DueCreditCollector)
         due.add(BibTeX(_sample_bibtex))

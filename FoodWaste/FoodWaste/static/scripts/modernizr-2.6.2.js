@@ -158,7 +158,7 @@ window.Modernizr = (function( window, document, undefined ) {
       }
 
       ret = callback(div, rule);
-      // If this is done after page load we don't want to remove the body so check if body exists
+      // If this is done after page load we do not want to remove the body so check if body exists
       if ( !body ) {
           fakeBody.parentNode.removeChild(fakeBody);
           docElement.style.overflow = docOverflow;
@@ -256,7 +256,7 @@ window.Modernizr = (function( window, document, undefined ) {
       };
     }
     else {
-      hasOwnProp = function (object, property) { /* yes, this can give false positives/negatives, but most of the time we don't care about those */
+      hasOwnProp = function (object, property) { /* yes, this can give false positives/negatives, but most of the time we do not care about those */
         return ((property in object) && is(object.constructor.prototype[property], 'undefined'));
       };
     }
@@ -351,7 +351,7 @@ window.Modernizr = (function( window, document, undefined ) {
     // opposed to the camelCase DOM properties) is non-portable and
     // non-standard but works in WebKit and IE (but not Gecko or Opera),
     // we explicitly reject properties with dashes so that authors
-    // developing in WebKit or IE first don't end up with
+    // developing in WebKit or IE first do not end up with
     // browser-specific content by accident.
 
     function testProps( props, prefixed ) {
@@ -489,7 +489,7 @@ window.Modernizr = (function( window, document, undefined ) {
     // geolocation is often considered a trivial feature detect...
     // Turns out, it's quite tricky to get right:
     //
-    // Using !!navigator.geolocation does two things we don't want. It:
+    // Using !!navigator.geolocation does two things we do not want. It:
     //   1. Leaks memory in IE9: github.com/Modernizr/Modernizr/issues/513
     //   2. Disables page caching in WebKit: webk.it/43956
     //
@@ -515,7 +515,7 @@ window.Modernizr = (function( window, document, undefined ) {
     // Vendors had inconsistent prefixing with the experimental Indexed DB:
     // - Webkit's implementation is accessible through webkitIndexedDB
     // - Firefox shipped moz_indexedDB before FF4b9, but since then has been mozIndexedDB
-    // For speed, we don't test the legacy (and beta-only) indexedDB
+    // For speed, we do not test the legacy (and beta-only) indexedDB
     tests['indexedDB'] = function() {
       return !!testPropsAll("indexedDB", window);
     };
@@ -908,7 +908,7 @@ window.Modernizr = (function( window, document, undefined ) {
                 bool = inputElem.type !== 'text';
 
                 // We first check to see if the type we give it sticks..
-                // If the type does, we feed it a textual value, which shouldn't be valid.
+                // If the type does, we feed it a textual value, which should not be valid.
                 // If the value doesn't stick, we know there's input sanitization which infers a custom UI
                 if ( bool ) {
 

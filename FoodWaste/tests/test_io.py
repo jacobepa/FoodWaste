@@ -3,11 +3,13 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
-"""TODO: Add module docstring."""
-# emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil; coding: utf-8 -*-
-# ex: set sts=4 ts=4 sw=4 noet:
-# See COPYING file distributed along with the duecredit package for the
-# copyright and license terms.
+"""
+emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil; coding: utf-8 -*-
+
+ex: set sts=4 ts=4 sw=4 noet:
+See COPYING file distributed along with the duecredit package for the
+copyright and license terms.
+"""
 
 
 import random
@@ -204,7 +206,7 @@ def test_output_return_all(monkeypatch):
         assert len(packages) == 2
         assert not modules
         assert not objects
-        # however if _all is set it shouldn't work
+        # however if _all is set it should not work
         packages, modules, objects = output._get_collated_citations(tags=['*'], all_=False)
         assert not packages
         assert not modules
@@ -240,7 +242,7 @@ def test_output_tags(monkeypatch):
         assert len(packages) == (1 if 'edu' in tags else 0)
         assert len(modules) == (1 if 'wip' in tags else 0)
         assert not objects
-        # however if tags is set it shouldn't work
+        # however if tags is set it should not work
         packages, modules, objects = output._get_collated_citations(tags=['implementation'])
         assert not packages
         assert not modules
@@ -252,7 +254,7 @@ def test_text_output():
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
-    # in this case, since we're not citing any module or method, we shouldn't
+    # in this case, since we're not citing any module or method, we should not
     # output anything
     collector = DueCreditCollector()
     collector.cite(entry, path='package')
@@ -290,7 +292,6 @@ def test_text_output():
     assert "Halchenko, Y.O." in value, "value was %s" % value
     assert value.strip().endswith("Frontiers in Neuroinformatics, 6(22).")
 
-
     # in this case, we should be citing the package since we are also citing a
     # submodule
     collector = DueCreditCollector()
@@ -305,8 +306,8 @@ def test_text_output():
     assert "1 module cited" in value, "value was %s" % value
     assert "0 functions cited" in value, "value was %s" % value
     assert "Halchenko, Y.O." in value, "value was %s" % value
-    assert '[1, 2]' in value, "value was %s" %value
-    assert '[3]' not in value, "value was %s" %value
+    assert '[1, 2]' in value, "value was %s" % value
+    assert '[3]' not in value, "value was %s" % value
 
 
 def test_text_output_dump_formatting():
@@ -329,7 +330,7 @@ def test_text_output_dump_formatting():
         myfunction('argh')
         return "load"
 
-    # check we don't have anything output
+    # check we do not have anything output
     strio = StringIO()
     TextOutput(strio, due).dump(tags=['*'])
     value = strio.getvalue()
@@ -405,7 +406,7 @@ def test_bibtex_output():
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
-    # in this case, since we're not citing any module or method, we shouldn't
+    # in this case, since we're not citing any module or method, we should not
     # output anything
     collector = DueCreditCollector()
     collector.cite(entry, path='package')

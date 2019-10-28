@@ -3,13 +3,13 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
-# emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
-# ex: set sts=4 ts=4 sw=4 noet:
-# See COPYING file distributed along with the duecredit package for the
-# copyright and license terms.
-
 """
 Tests were taken from https://github.com/duecredit/duecredit/tree/master/duecredit/tests.
+
+emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
+ex: set sts=4 ts=4 sw=4 noet:
+See COPYING file distributed along with the duecredit package for the
+copyright and license terms.
 """
 
 from django.test import TestCase

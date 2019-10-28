@@ -377,7 +377,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 					// Never move original objects, clone them
 					target[ name ] = jQuery.extend( deep, clone, copy );
 
-				// Don't bring in undefined values
+				// do not bring in undefined values
 				} else if ( copy !== undefined ) {
 					target[ name ] = copy;
 				}
@@ -486,7 +486,7 @@ jQuery.extend({
 
 		// Must be an Object.
 		// Because of IE, we also have to check the presence of the constructor property.
-		// Make sure that DOM nodes and window objects don't pass through, as well
+		// Make sure that DOM nodes and window objects do not pass through, as well
 		if ( !obj || jQuery.type(obj) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {
 			return false;
 		}
@@ -1518,7 +1518,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 	// Support: IE<10
 	// Check if getElementById returns elements by name
-	// The broken getElementById methods don't pick up programatically-set names,
+	// The broken getElementById methods do not pick up programatically-set names,
 	// so use a roundabout getElementsByName test
 	support.getById = assert(function( div ) {
 		docElem.appendChild( div ).id = expando;
@@ -1846,7 +1846,7 @@ Sizzle.attr = function( elem, name ) {
 	}
 
 	var fn = Expr.attrHandle[ name.toLowerCase() ],
-		// Don't get fooled by Object.prototype properties (jQuery #13807)
+		// do not get fooled by Object.prototype properties (jQuery #13807)
 		val = fn && hasOwn.call( Expr.attrHandle, name.toLowerCase() ) ?
 			fn( elem, name, !documentIsHTML ) :
 			undefined;
@@ -2427,7 +2427,7 @@ function tokenize( selector, parseOnly ) {
 		// Comma and first run
 		if ( !matched || (match = rcomma.exec( soFar )) ) {
 			if ( match ) {
-				// Don't consume trailing commas as valid
+				// do not consume trailing commas as valid
 				soFar = soFar.slice( match[0].length ) || soFar;
 			}
 			groups.push( tokens = [] );
@@ -2506,7 +2506,7 @@ function addCombinator( matcher, combinator, base ) {
 			var data, cache, outerCache,
 				dirkey = dirruns + " " + doneName;
 
-			// We can't set arbitrary data on XML nodes, so they don't benefit from dir caching
+			// We can't set arbitrary data on XML nodes, so they do not benefit from dir caching
 			if ( xml ) {
 				while ( (elem = elem[ dir ]) ) {
 					if ( elem.nodeType === 1 || checkNonElements ) {
@@ -3449,7 +3449,7 @@ jQuery.support = (function( support ) {
 
 	// Support: IE<9
 	// Opera does not clone events (and typeof div.attachEvent === undefined).
-	// IE9-10 clones events bound via attachEvent, but they don't trigger with .click()
+	// IE9-10 clones events bound via attachEvent, but they do not trigger with .click()
 	if ( div.attachEvent ) {
 		div.attachEvent( "onclick", function() {
 			support.noCloneEvent = false;
@@ -3484,7 +3484,7 @@ jQuery.support = (function( support ) {
 			body = document.getElementsByTagName("body")[0];
 
 		if ( !body ) {
-			// Return for frameset docs that don't have a body
+			// Return for frameset docs that do not have a body
 			return;
 		}
 
@@ -3735,7 +3735,7 @@ function internalRemoveData( elem, name, pvt ) {
 	if ( !pvt ) {
 		delete cache[ id ].data;
 
-		// Don't destroy the parent cache unless the internal data object
+		// do not destroy the parent cache unless the internal data object
 		// had been the only thing left in it
 		if ( !isEmptyDataObject( cache[ id ] ) ) {
 			return;
@@ -4318,14 +4318,14 @@ jQuery.extend({
 
 					// oldIE doesn't update selected after form reset (#2551)
 					if ( ( option.selected || i === index ) &&
-							// Don't return options that are disabled or in a disabled optgroup
+							// do not return options that are disabled or in a disabled optgroup
 							( jQuery.support.optDisabled ? !option.disabled : option.getAttribute("disabled") === null ) &&
 							( !option.parentNode.disabled || !jQuery.nodeName( option.parentNode, "optgroup" ) ) ) {
 
 						// Get the specific value for the option
 						value = jQuery( option ).val();
 
-						// We don't need an array for one selects
+						// We do not need an array for one selects
 						if ( one ) {
 							return value;
 						}
@@ -4364,7 +4364,7 @@ jQuery.extend({
 		var hooks, ret,
 			nType = elem.nodeType;
 
-		// don't get/set attributes on text, comment and attribute nodes
+		// do not get/set attributes on text, comment and attribute nodes
 		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
 			return;
 		}
@@ -4465,7 +4465,7 @@ jQuery.extend({
 		var ret, hooks, notxml,
 			nType = elem.nodeType;
 
-		// don't get/set properties on text, comment and attribute nodes
+		// do not get/set properties on text, comment and attribute nodes
 		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
 			return;
 		}
@@ -4751,7 +4751,7 @@ jQuery.event = {
 			handlers, type, namespaces, origType,
 			elemData = jQuery._data( elem );
 
-		// Don't attach events to noData or text/comment nodes (but allow plain objects)
+		// do not attach events to noData or text/comment nodes (but allow plain objects)
 		if ( !elemData ) {
 			return;
 		}
@@ -4941,7 +4941,7 @@ jQuery.event = {
 
 		cur = tmp = elem = elem || document;
 
-		// Don't do events on text and comment nodes
+		// do not do events on text and comment nodes
 		if ( elem.nodeType === 3 || elem.nodeType === 8 ) {
 			return;
 		}
@@ -5037,10 +5037,10 @@ jQuery.event = {
 
 				// Call a native DOM method on the target with the same name name as the event.
 				// Can't use an .isFunction() check here because IE6/7 fails that test.
-				// Don't do default actions on window, that's where global variables be (#6170)
+				// do not do default actions on window, that's where global variables be (#6170)
 				if ( ontype && elem[ type ] && !jQuery.isWindow( elem ) ) {
 
-					// Don't re-trigger an onFOO event when we call its FOO() method
+					// do not re-trigger an onFOO event when we call its FOO() method
 					tmp = elem[ ontype ];
 
 					if ( tmp ) {
@@ -5141,14 +5141,14 @@ jQuery.event = {
 			for ( ; cur != this; cur = cur.parentNode || this ) {
 				/* jshint eqeqeq: true */
 
-				// Don't check non-elements (#13208)
-				// Don't process clicks on disabled elements (#6911, #8165, #11382, #11764)
+				// do not check non-elements (#13208)
+				// do not process clicks on disabled elements (#6911, #8165, #11382, #11764)
 				if ( cur.nodeType === 1 && (cur.disabled !== true || event.type !== "click") ) {
 					matches = [];
 					for ( i = 0; i < delegateCount; i++ ) {
 						handleObj = handlers[ i ];
 
-						// Don't conflict with Object.prototype properties (#13203)
+						// do not conflict with Object.prototype properties (#13203)
 						sel = handleObj.selector + " ";
 
 						if ( matches[ sel ] === undefined ) {
@@ -5262,7 +5262,7 @@ jQuery.event = {
 			}
 
 			// Add which for click: 1 === left; 2 === middle; 3 === right
-			// Note: button is not normalized, so don't use it
+			// Note: button is not normalized, so do not use it
 			if ( !event.which && button !== undefined ) {
 				event.which = ( button & 1 ? 1 : ( button & 2 ? 3 : ( button & 4 ? 2 : 0 ) ) );
 			}
@@ -5310,7 +5310,7 @@ jQuery.event = {
 				}
 			},
 
-			// For cross-browser consistency, don't fire native .click() on links
+			// For cross-browser consistency, do not fire native .click() on links
 			_default: function( event ) {
 				return jQuery.nodeName( event.target, "a" );
 			}
@@ -5501,7 +5501,7 @@ if ( !jQuery.support.submitBubbles ) {
 					jQuery._data( form, "submitBubbles", true );
 				}
 			});
-			// return undefined since we don't need an event listener
+			// return undefined since we do not need an event listener
 		},
 
 		postDispatch: function( event ) {
@@ -5800,7 +5800,7 @@ jQuery.fn.extend({
 				if ( cur.nodeType < 11 && (pos ?
 					pos.index(cur) > -1 :
 
-					// Don't pass non-elements to Sizzle
+					// do not pass non-elements to Sizzle
 					cur.nodeType === 1 &&
 						jQuery.find.matchesSelector(cur, selectors)) ) {
 
@@ -6204,7 +6204,7 @@ jQuery.fn.extend({
 				parent = args[ i++ ];
 
 			if ( parent ) {
-				// Don't use the snapshot next if it has moved (#13810)
+				// do not use the snapshot next if it has moved (#13810)
 				if ( next && next.parentNode !== parent ) {
 					next = this.nextSibling;
 				}
@@ -6970,7 +6970,7 @@ jQuery.extend({
 		}
 	},
 
-	// Don't automatically add "px" to these possibly-unitless properties
+	// do not automatically add "px" to these possibly-unitless properties
 	cssNumber: {
 		"columnCount": true,
 		"fillOpacity": true,
@@ -6993,7 +6993,7 @@ jQuery.extend({
 
 	// Get and set the style property on a DOM Node
 	style: function( elem, name, value, extra ) {
-		// Don't set styles on text and comment nodes
+		// do not set styles on text and comment nodes
 		if ( !elem || elem.nodeType === 3 || elem.nodeType === 8 || !elem.style ) {
 			return;
 		}
@@ -7149,7 +7149,7 @@ if ( window.getComputedStyle ) {
 			style = elem.style;
 
 		// Avoid setting ret to empty string here
-		// so we don't default to auto
+		// so we do not default to auto
 		if ( ret == null && style && style[ name ] ) {
 			ret = style[ name ];
 		}
@@ -7292,7 +7292,7 @@ function css_defaultDisplay( nodeName ) {
 				.css( "cssText", "display:block !important" )
 			).appendTo( doc.documentElement );
 
-			// Always write a new HTML skeleton so Webkit and Firefox don't choke on reuse
+			// Always write a new HTML skeleton so Webkit and Firefox do not choke on reuse
 			doc = ( iframe[0].contentWindow || iframe[0].contentDocument ).document;
 			doc.write("<!doctype html><html><body>");
 			doc.close();
@@ -7858,9 +7858,9 @@ jQuery.extend({
 			"text xml": jQuery.parseXML
 		},
 
-		// For options that shouldn't be deep extended:
+		// For options that should not be deep extended:
 		// you can add your own custom options here if
-		// and when you create one that shouldn't be
+		// and when you create one that should not be
 		// deep extended (see ajaxExtend)
 		flatOptions: {
 			url: true,
@@ -8620,7 +8620,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 });
 var xhrCallbacks, xhrSupported,
 	xhrId = 0,
-	// #5280: Internet Explorer will keep connections alive if we don't abort on unload
+	// #5280: Internet Explorer will keep connections alive if we do not abort on unload
 	xhrOnUnloadAbort = window.ActiveXObject && function() {
 		// Abort all pending requests
 		var key;
@@ -8855,7 +8855,7 @@ var fxNow, timerId,
 
 				do {
 					// If previous iteration zeroed out, double until we get *something*
-					// Use a string for doubling factor so we don't accidentally see scale as unchanged below
+					// Use a string for doubling factor so we do not accidentally see scale as unchanged below
 					scale = scale || ".5";
 
 					// Adjust and apply
@@ -8909,7 +8909,7 @@ function Animation( elem, properties, options ) {
 		index = 0,
 		length = animationPrefilters.length,
 		deferred = jQuery.Deferred().always( function() {
-			// don't match elem in the :animated selector
+			// do not match elem in the :animated selector
 			delete tick.elem;
 		}),
 		tick = function() {
@@ -9429,7 +9429,7 @@ function genFx( type, includeWidth ) {
 		i = 0;
 
 	// if we include width, step value is 1 to do all cssExpand values,
-	// if we don't include width, step value is 2 to skip over Left and Right
+	// if we do not include width, step value is 2 to skip over Left and Right
 	includeWidth = includeWidth? 1 : 0;
 	for( ; i < 4 ; i += 2 - includeWidth ) {
 		which = cssExpand[ i ];
@@ -9582,7 +9582,7 @@ jQuery.fn.offset = function( options ) {
 		return box;
 	}
 
-	// If we don't have gBCR, just use 0,0 rather than error
+	// If we do not have gBCR, just use 0,0 rather than error
 	// BlackBerry 5, iOS 3 (original iPhone)
 	if ( typeof elem.getBoundingClientRect !== core_strundefined ) {
 		box = elem.getBoundingClientRect();

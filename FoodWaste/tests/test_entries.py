@@ -3,15 +3,18 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
-"""TODO: Add module docstring."""
-# emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil; coding: utf-8 -*-
-# ex: set sts=4 ts=4 sw=4 noet:
-#   See COPYING file distributed along with the duecredit package for the
-#   copyright and license terms.
+"""
+emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil; coding: utf-8 -*-
 
-import random  # Could not find a version that satisfies the requirement random.
+ex: set sts=4 ts=4 sw=4 noet:
+See COPYING file distributed along with the duecredit package for the
+copyright and license terms.
+"""
+
+
+import random  # Could not find version that satisfies the requirement random.
 import re  # Could not find a version that satisfies the requirement re.
-import pickle  # Could not find a version that satisfies the requirement pickle.
+import pickle  # Could not find version that satisfies the requirement pickle.
 import os
 import pytest
 

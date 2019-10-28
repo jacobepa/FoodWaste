@@ -3,11 +3,13 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
-"""TODO: Add module docstring."""
-# emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
-# ex: set sts=4 ts=4 sw=4 noet:
-# See COPYING file distributed along with the duecredit package for the
-# copyright and license terms.
+"""
+emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
+
+ex: set sts=4 ts=4 sw=4 noet:
+See COPYING file distributed along with the duecredit package for the
+copyright and license terms.
+"""
 
 
 import sys
@@ -45,7 +47,8 @@ def test_main_version(monkeypatch):
 
 
 # smoke test the cmd_summary
-# TODO: carry sample .duecredit.p, point to that file, monkeypatch TextOutput and BibTeXOutput .dumps
+# TODO: carry sample .duecredit.p, point to that file, monkeypatch
+# TextOutput and BibTeXOutput .dumps
 def test_smoke_cmd_summary():
     """TODO: Add function docstring."""
     main.main(['summary'])
