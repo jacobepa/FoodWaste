@@ -13,10 +13,9 @@ copyright and license terms.
 
 
 import sys
-
-from six.moves import StringIO
 import pytest
 
+from six.moves import StringIO
 from .. import __version__
 from ..cmdline import main
 

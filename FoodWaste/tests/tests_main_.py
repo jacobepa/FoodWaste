@@ -12,9 +12,11 @@ See COPYING file distributed along with the duecredit package for the
 copyright and license terms.
 """
 
-from django.test import TestCase
+
 import sys
 import pytest
+
+from django.test import TestCase
 from six.moves import StringIO
 from .. import __main__, __version__
 from .. import due

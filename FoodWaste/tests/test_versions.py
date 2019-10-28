@@ -14,10 +14,6 @@ copyright and license terms.
 
 from os import linesep
 import pytest
-
-from ..version import __version__
-from ..versions import ExternalVersions, StrictVersion
-
 from six import PY3
 
 if PY3:

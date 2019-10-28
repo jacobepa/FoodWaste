@@ -17,11 +17,10 @@ import re  # Could not find a version that satisfies the requirement re.
 import pickle  # Could not find version that satisfies the requirement pickle.
 import os
 import pytest
+import duecredit.io
 
 from six.moves import StringIO
 from six import text_type
-
-import duecredit.io
 from ..collector import DueCreditCollector, Citation
 from .test_collector import _sample_bibtex, _sample_doi, _sample_bibtex2
 from ..entries import BibTeX, Doi, Text, Url

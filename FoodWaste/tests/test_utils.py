@@ -23,7 +23,6 @@ def test_is_interactive_crippled_stdout(monkeypatch):
 
         def write(self, *args, **kwargs):
             """TODO: Add function docstring."""
-            pass
 
     class MockedIsaTTY(MockedOut):
         """Add docstring."""  # TODO add docstring.

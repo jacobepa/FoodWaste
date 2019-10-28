@@ -181,13 +181,6 @@ class TestActiveInjector(object):
         except ImportError as e:
             pytest.skip("scipy was not found: %s" % (e,))
 
-    def test_import_mvpa2_suite(self):
-        """TODO: Add function docstring."""
-        if not _have_mvpa2:
-            pytest.skip("no mvpa2 found")
-        # just a smoke test for now
-        import mvpa2.suite as mv
-
     def _test_incorrect_path(self, mod, obj):
         ref = Doi('1.2.3.4')
         # none of them should lead to a failure

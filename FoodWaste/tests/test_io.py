@@ -314,7 +314,7 @@ def test_text_output_dump_formatting():
     """TODO: Add function docstring."""
     due = DueCreditCollector()
 
-    # XXX: atm just to see if it spits out stuff
+    # Note: XXX atm just to see if it spits out stuff
     @due.dcite(BibTeX(_sample_bibtex), description='solution to life',
                path='mymodule', version='0.0.16')
     def mymodule(arg1, kwarg2="blah"):

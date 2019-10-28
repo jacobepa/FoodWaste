@@ -31,7 +31,7 @@ class ExistingData(models.Model):
     work = models.CharField(blank=False, null=False, max_length=255)
     email = models.CharField(blank=False, null=False, max_length=255)
     # Phone = PhoneNumberField(blank=False, null=False)
-    phone = models.CharField(blank=False, null=False, max_length = 32)
+    phone = models.CharField(blank=False, null=False, max_length=32)
     search = models.CharField(blank=False, null=False, max_length=255)
     article_title = models.CharField(blank=False, null=False, max_length=255)
 

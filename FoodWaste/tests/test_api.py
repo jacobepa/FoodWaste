@@ -15,16 +15,15 @@ import os
 import sys
 import pytest
 import shutil
+import tempfile
 
 from os.path import dirname, join as pathjoin, pardir, normpath
 from subprocess import Popen, PIPE
-
 from duecredit.collector import DueCreditCollector
 from duecredit.stub import InactiveDueCreditCollector
 from duecredit.entries import BibTeX, Doi
-
 from ..utils import on_windows
-import tempfile
+
 # temporary location where stuff would be copied
 badlxml_path = pathjoin(dirname(__file__), 'envs', 'nolxml')
 stubbed_dir = tempfile.mktemp()
