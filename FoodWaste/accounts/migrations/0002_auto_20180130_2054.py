@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=invalid-name
+# pylint: C0301
 """
 docstring
 """
@@ -10,9 +10,7 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-    """
-    docstring
-    """
+    """Add docstring."""
 
     dependencies = [
         ('accounts', '0001_initial'),

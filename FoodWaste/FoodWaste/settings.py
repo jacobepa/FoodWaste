@@ -142,6 +142,6 @@ APP_DISCLAIMER = '''The information and data presented in this product were obta
 
 try:
     from .local_settings import *
-    # pylint: disable=unused-wildcard-import,wildcard-import.
+    # pylint: disable=E0012
 except ImportError:
     pass

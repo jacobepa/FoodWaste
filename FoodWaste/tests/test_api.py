@@ -101,7 +101,7 @@ def test_api(collector_class):
         # Including functionality within/by the methods.
         @due.dcite('XXX00')
         def birth(self, gender):
-            """Add docstring."""  # TODO add docstring.
+            """Enter birth gender."""
             return "Rachel was born"
 
     kid = Child()
@@ -126,9 +126,9 @@ def run_python_command(cmd=None, script=None):
 
 
 # Since duecredit and possibly lxml already loaded, let's just test
-# ability to import in absence of lxml via external call to python.
+# Ability to import in absence of lxml via external call to python.
 def test_noincorrect_import_if_no_lxml(monkeypatch):
-    """Add docstring."""  # TODO add docstring.
+    """Process XML and HTML in Python."""
     if on_windows:
         pytest.xfail("Fails for some reason on Windows")
 
@@ -157,7 +157,7 @@ def test_noincorrect_import_if_no_lxml(monkeypatch):
         {'script': stubbed_script}
     ])
 def test_noincorrect_import_if_no_lxml_numpy(monkeypatch, kwargs, env, stubbed_env):
-    """Add docstring."""  # TODO add docstring.
+    """Test lxml using numpy."""
     # Now make sure that we would not crash entire process at the end when
     # unable to produce sensible output when we have something to cite we do
     # inject for numpy.

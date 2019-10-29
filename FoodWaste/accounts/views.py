@@ -408,7 +408,7 @@ class UserRegistrationView(FormView):
 
             # Render the activation needed template.
             return render(request, self.template_register_inactive, locals())
-            # pylint: disable=no-member.
+            # pylint: disable=E1101
         return render(request, self.template_register, locals())
 
 
@@ -416,7 +416,7 @@ class UserApprovalView(TemplateView):
     """
     View for activating a user.
 
-    This view can only be accessed by an administrator.  Typically accessed
+    This view can only be accessed by an administrator. Typically accessed
     from the registration request email.
     """
 

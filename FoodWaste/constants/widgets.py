@@ -20,14 +20,14 @@ class ListTextWidget(forms.TextInput):
     """Custom widget to allow a user to select a dropdown option, or type in a custom option."""
 
     def __init__(self, data_list, name, *args, **kwargs):
-        """Add docstring."""  # TODO add docstring.
+        """Drop down for selection."""
         super(ListTextWidget, self).__init__(*args, **kwargs)
         self._name = name
         self._list = data_list
         self.attrs.update({'list': 'list__%s' % self._name})
 
     def render(self, name, value, attrs=None, renderer=None):
-        """Add docstring."""  # TODO add docstring.
+        """Drop down for selection."""
         text_html = super(ListTextWidget, self).render(name, value, attrs=attrs)
         data_list = '<datalist id="list__%s">' % self._name
         for item in self._list:

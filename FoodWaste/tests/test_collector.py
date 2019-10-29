@@ -101,8 +101,8 @@ def test_entry():
 
 
 def _test_dcite_basic(due, callable):
+    """Verify that @wraps correctly passes all the docstrings etc."""
     assert callable("magical", 1) == "load"
-    # verify that @wraps correctly passes all the docstrings etc
     assert callable.__name__ == "method"
     assert callable.__doc__ == "docstring"
 

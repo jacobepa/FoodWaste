@@ -6,7 +6,7 @@ This file is the initial migration file for the accounts project
 # !/usr/bin/env python
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=invalid-name
+# pylint: C0301
 
 from __future__ import unicode_literals
 from django.db import models, migrations
@@ -14,9 +14,7 @@ from django.conf import settings
 
 
 class Migration(migrations.Migration):
-    """
-    Migrate user settings.
-    """
+    """Migrate user settings."""
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
