@@ -3,6 +3,11 @@
 # coding=utf-8
 # young.daniel@epa.gov
 
+# TODO: Jake, this needs to be re-imported and setup for duecredit.
+# https://github.com/duecredit/duecredit
+# To cite the modules and methods you are using
+# To let others cite your software
+
 interactions:
 - request:
     body: null
