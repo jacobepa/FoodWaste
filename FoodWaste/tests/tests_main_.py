@@ -2,6 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
+# pylint: disable=line-too-long
 
 """
 Tests were taken from https://github.com/duecredit/duecredit/tree/master/duecredit/tests.

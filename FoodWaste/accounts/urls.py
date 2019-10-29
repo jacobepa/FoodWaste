@@ -4,6 +4,7 @@
 # young.daniel@epa.gov
 # pylint: disable=invalid-name
 # We disable the invalid name because urlpatterns is the Django default.
+# pylint: disable=line-too-long
 
 """
 Module related to urls for user accounts.

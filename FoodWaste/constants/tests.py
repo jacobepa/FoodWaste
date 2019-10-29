@@ -2,6 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
+# pylint: disable=line-too-long
 
 """
 This file houses test cases for the constants module.
@@ -14,6 +15,7 @@ from django.test import TestCase
 from django.core.mail import EmailMultiAlternatives
 from constants.utils import split_email_list, is_epa_email, non_epa_email_message, create_qt_email_message, xstr, \
     sort_rap_numbers, get_rap_fields, is_float
+
 
 class TestUtils(TestCase):
     """Test utils."""

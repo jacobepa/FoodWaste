@@ -3,6 +3,7 @@
 # coding=utf-8
 # pylint: skip-file
 # We skip this file because it wasn't written by/for EPA.
+# pylint: disable=line-too-long
 
 """
 Module related to tests for user accounts.
@@ -1490,7 +1491,6 @@ class LiveServerTestCase(TransactionTestCase):
         if hasattr(cls, 'server_thread'):
             # Terminate the live server's thread.
             cls.server_thread.terminate()
-
 
     @classmethod
     def teardownclass(cls):

@@ -2,6 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
+# pylint: disable=line-too-long
 
 """
 Defines custom widgets to be shared across any EPA Django apps.
@@ -14,6 +15,7 @@ an option as free text.
 from django import forms
 
 # https://stackoverflow.com/questions/24783275/django-form-with-choices-but-also-with-freetext-option
+
 class ListTextWidget(forms.TextInput):
     """Custom widget to allow a user to select a dropdown option, or type in a custom option."""
 
@@ -22,7 +24,7 @@ class ListTextWidget(forms.TextInput):
         super(ListTextWidget, self).__init__(*args, **kwargs)
         self._name = name
         self._list = data_list
-        self.attrs.update({'list':'list__%s' % self._name})
+        self.attrs.update({'list': 'list__%s' % self._name})
 
     def render(self, name, value, attrs=None, renderer=None):
         """Add docstring."""  # TODO add docstring.

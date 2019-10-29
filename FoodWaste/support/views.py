@@ -2,6 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
+# pylint: disable=line-too-long
 
 """
 Views for support application.
@@ -63,6 +64,7 @@ class UserManualView(FormView):
     """
 
     form_class = InformationRequestForm
+
     def get(self, request, *args, **kwargs):
         """Present the request info form."""
         form = self.form_class()

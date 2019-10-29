@@ -2,6 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
+# pylint: disable=line-too-long
 
 
 """Definition of models."""
@@ -10,6 +11,7 @@ from constants.models import YES_OR_NO
 from django.db import models
 from django.utils import timezone
 from teams.models import Team, User
+
 
 def get_attachment_storage_path(instance, filename):
     """Build the attachment storage path using username and filename."""

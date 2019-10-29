@@ -2,6 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
+# pylint: disable=line-too-long
 
 """Definition of forms."""
 
@@ -15,6 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 from FoodWaste.models import ExistingData
 from teams.models import TeamMembership, Team
 
+
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
 
@@ -25,7 +27,7 @@ class BootstrapAuthenticationForm(AuthenticationForm):
     password = CharField(label=_("Password"),
                          widget=PasswordInput({
                              'class': 'form-control',
-                             'placeholder':'Password'}))
+                             'placeholder': 'Password'}))
 
 
 class ExistingDataForm(ModelForm):

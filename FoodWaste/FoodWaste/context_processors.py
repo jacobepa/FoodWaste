@@ -16,6 +16,7 @@ Available functions:
 
 from django.conf import settings
 
+
 def software_info(request):
     """
     Return dictionary containing the app's version, name, and disclaimer.
