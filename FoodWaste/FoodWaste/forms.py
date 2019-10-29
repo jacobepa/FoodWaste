@@ -13,7 +13,6 @@ from django.forms import CharField, ModelForm, TextInput, Textarea, \
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from FoodWaste.models import ExistingData
-#from phonenumber_field.formfields import PhoneNumberField
 from teams.models import TeamMembership, Team
 
 class BootstrapAuthenticationForm(AuthenticationForm):
@@ -50,10 +49,6 @@ class ExistingDataForm(ModelForm):
                           'placeholder': 'Email'}),
         label=_("Email Address"), required=True)
 
-    #Phone = PhoneNumberField(
-    #    widget=TextInput({'class': 'form-control mb-2',
-    #                      'placeholder': '(555) 555-5555 or 555-555-5555'}),
-    #    label=_("Phone Number"), required=True)
     phone = CharField(
         max_length=32,
         widget=TextInput({'class': 'form-control mb-2',

@@ -30,8 +30,8 @@ if os.name != 'nt':
 else:
     WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
+# Quick-start development settings - unsuitable for production.
+# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/.
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5d1c445a-e8d6-481f-b1ce-ce0a51e096c3'
@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'support',
     'teams',
     'phonenumber_field',
-    # Add your apps here to enable them
+    # Add your apps here to enable them.
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,8 +60,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 ]
 
-# Middleware framework
-# https://docs.djangoproject.com/en/2.1/topics/http/middleware/
+# Middleware framework.
+# https://docs.djangoproject.com/en/2.1/topics/http/middleware/.
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,8 +74,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'FoodWaste.urls'
 
-# Template configuration
-# https://docs.djangoproject.com/en/2.1/topics/templates/
+# Template configuration.
+# https://docs.djangoproject.com/en/2.1/topics/templates/.
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -95,10 +95,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FoodWaste.wsgi.application'
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases.
 
-# Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+# Password validation.
+# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators.
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -114,16 +114,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
+# Internationalization.
+# https://docs.djangoproject.com/en/2.1/topics/i18n/.
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# Static files (CSS, JavaScript, Images).
+# https://docs.djangoproject.com/en/2.1/howto/static-files/.
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'FoodWaste', 'static')
 
@@ -140,6 +140,7 @@ APP_DISCLAIMER = '''The information and data presented in this product were obta
                     by those sources; therefore, no claim is made regarding their quality.'''
 
 try:
-    from .local_settings import * # pylint: disable=unused-wildcard-import,wildcard-import
+    from .local_settings import *
+    # pylint: disable=unused-wildcard-import,wildcard-import.
 except ImportError:
     pass

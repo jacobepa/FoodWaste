@@ -37,8 +37,6 @@ urlpatterns = [
     url(r'^delete/(?P<obj_id>\d+)/$', delete_support, name='delete_support'),
     url(r'^list/$', list_supports, name='list_supports'),
     url(r'^search/$', search_support, name='search_support'),
-    # url(r'^search/result/$', result_search_support,
-    #    name='result_search_support'),
     url(r'^show/(?P<obj_id>\d+)/$', show_support, name='show_support'),
 
     url(r'^type/create/$', create_support_type, name='create_support_type'),
@@ -48,8 +46,6 @@ urlpatterns = [
         name='delete_support_type'),
     url(r'^type/list/$', list_support_types, name='list_support_types'),
     url(r'^type/search/$', search_support_type, name='search_support_type'),
-    # url(r'^type/search/result/$', result_search_support_type,
-    #    name='result_search_support_type'),
     url(r'^type/show/(?P<obj_id>\d+)/$', show_support_type,
         name='show_support_type'),
 
@@ -60,8 +56,6 @@ urlpatterns = [
         name='delete_priority'),
     url(r'^priority/list/$', list_priorities, name='list_priorities'),
     url(r'^priority/search/$', search_priority, name='search_priority'),
-    # url(r'^priority/search/result/$', result_search_priority,
-    #    name='result_search_priority'),
     url(r'^priority/show/(?P<obj_id>\d+)/$', show_priority,
         name='show_priority'),
 

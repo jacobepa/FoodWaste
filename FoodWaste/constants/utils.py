@@ -21,12 +21,13 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
 
-# Email Utility functions
+# Email Utility functions.
 def split_email_list(email_list):
     """Replace all defined delimiter characters with spaces."""
     delimiters = [';', ',', '\t', '|']
     for delim in delimiters:
-        email_list = email_list.replace(delim, ' ')  # replace delims with a space
+        email_list = email_list.replace(delim, ' ')
+        # replace delims with a space.
 
     return email_list.split()
 

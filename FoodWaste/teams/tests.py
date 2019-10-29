@@ -28,13 +28,13 @@ class TestTeams(TestCase):
     def test_team_create_view_get(self):
         """Tests the Team Create View get method on an empty form."""
         response = self.client.get("/teams/team/")
-        # Print(response)
+        # Print(response).
         self.assertContains(response, 'create', 1, 200)
 
     def test_team_create_view_post(self):
         """Tests the Team Create View post method on an empty form."""
         response = self.client.post("/teams/team/")
-        # Print(response)
+        # Print(response).
         self.assertContains(response, 'create', 1, 200)
 
     def test_team_create_view_post_with_form(self):
@@ -42,7 +42,7 @@ class TestTeams(TestCase):
         form = TeamManagementForm(data={'name': "test1"})
         self.assertTrue(form.is_valid())
         results = self.client.post("/teams/team/", {'name': "test1"})
-        # Print(results)
+        # Print(results).
         self.assertEqual(results.status_code, 302)
 
     def test_team_edit_view_get(self):
@@ -103,7 +103,7 @@ class TestTeams(TestCase):
     def test_team_management_view_post_two(self):
         """Tests the Team management View post method."""
         results = self.client.post("/teams/team/", {'name': "test1"})
-        # Print(results)
+        # Print(results).
         create_url = str(results)
         create_url_split_array = create_url.split("/")
         url_object_number = create_url_split_array[4]
@@ -126,7 +126,7 @@ class TestTeams(TestCase):
 
     def test_api_team_list_view_post(self):
         """Tests the Team list View post method."""
-        # Results = self.client.post("/teams/team/", {'name': "test1"})
+        # Results = self.client.post("/teams/team/", {'name': "test1"}).
         response = self.client.post("/teams/api/team/", {'name': "test1"})
         self.assertContains(response, "id", 5, 201)
 

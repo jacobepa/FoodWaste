@@ -9,7 +9,6 @@
 from constants.models import YES_OR_NO
 from django.db import models
 from django.utils import timezone
-#from phonenumber_field.modelfields import PhoneNumberField
 from teams.models import Team, User
 
 def get_attachment_storage_path(instance, filename):
@@ -30,12 +29,12 @@ class ExistingData(models.Model):
 
     work = models.CharField(blank=False, null=False, max_length=255)
     email = models.CharField(blank=False, null=False, max_length=255)
-    # Phone = PhoneNumberField(blank=False, null=False)
     phone = models.CharField(blank=False, null=False, max_length=32)
     search = models.CharField(blank=False, null=False, max_length=255)
     article_title = models.CharField(blank=False, null=False, max_length=255)
 
-    # Indicates if EPA disclaimer should be included when printing/exporting this data
+    # Indicates if EPA disclaimer should be included when printing/exporting
+    # this data.
     disclaimer_req = models.BooleanField(blank=False)
 
     citation = models.CharField(blank=False, null=False, max_length=512)
@@ -72,5 +71,5 @@ class ExistingDataSharingTeamMap(models.Model):
     team = models.ForeignKey(Team, blank=False,
                              related_name='team_existing_data',
                              on_delete=models.CASCADE)
-    # indicates if the team can edit the project
+    # Indicates if the team can edit the project.
     can_edit = models.BooleanField(blank=False)

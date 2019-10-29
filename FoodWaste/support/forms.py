@@ -140,9 +140,9 @@ class InformationRequestForm(forms.ModelForm):
     """Form for creating an information request."""
 
     created_date = models.DateTimeField(auto_now_add=True, blank=False)
-    # Email to which the request was forwarded upon submission,
+    # Email to which the request was forwarded upon submission.
     sent_to_email = DEFAULT_FROM_EMAIL
-    # Contact info for the person submitting the request
+    # Contact info for the person submitting the request.
     requestor_first_name = forms.CharField(label=_("First"),
                                            widget=forms.TextInput(attrs={
                                                'class': 'form-control'}),

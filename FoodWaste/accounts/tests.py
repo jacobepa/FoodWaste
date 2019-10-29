@@ -342,7 +342,7 @@ def assertredirects(self, response, expected_url, status_code=302,
         )
 
     else:
-        # Not a followed redirect
+        # Not a followed redirect.
         self.assertEqual(
             response.status_code, status_code,
             msg_prefix + "Response didn't redirect as expected: Response "
@@ -537,7 +537,7 @@ def assertformseterror(self, response, formset, form_index, field, errors,
     For non-form errors, specify ``form_index`` as None and the ``field``
     as None.
     """
-    # Add punctuation to msg_prefix
+    # Add punctuation to msg_prefix.
     if msg_prefix:
         msg_prefix += ": "
 
@@ -629,7 +629,7 @@ def _assert_template_used(self, response, template_name, msg_prefix):
         if response:
             template_name = response
             response = None
-        # Use this template with context manager
+        # Use this template with context manager.
         return template_name, None, msg_prefix
 
     template_names = [tonnes.name for tonnes in response.templates if
@@ -749,11 +749,11 @@ def assertfieldoutput(self, fieldclass, valid, invalid, field_args=None,
     required = fieldclass(*field_args, **field_kwargs)
     optional = fieldclass(*field_args,
                           **dict(field_kwargs, required=False))
-    # Test valid inputs
+    # Test valid inputs.
     for t_input, output in valid.items():
         self.assertEqual(required.clean(t_input), output)
         self.assertEqual(optional.clean(t_input), output)
-    # Test invalid inputs
+    # Test invalid inputs.
     for t_input, errors in invalid.items():
         with self.assertRaises(ValidationError) as context_manager:
             required.clean(t_input)
@@ -762,14 +762,14 @@ def assertfieldoutput(self, fieldclass, valid, invalid, field_args=None,
         with self.assertRaises(ValidationError) as context_manager:
             optional.clean(t_input)
         self.assertEqual(context_manager.exception.messages, errors)
-    # Test required inputs
+    # Test required inputs.
     error_required = [force_text(required.error_messages['required'])]
     for empty in required.empty_values:
         with self.assertRaises(ValidationError) as context_manager:
             required.clean(empty)
         self.assertEqual(context_manager.exception.messages, error_required)
         self.assertEqual(optional.clean(empty), empty_value)
-    # Test that max_length and min_length are always accepted
+    # Test that max_length and min_length are always accepted.
     if issubclass(fieldclass, CharField):
         field_kwargs.update({'min_length': 2, 'max_length': 20})
         self.assertIsInstance(fieldclass(*field_args, **field_kwargs), fieldclass)
@@ -915,7 +915,7 @@ class TransactionTestCase(SimpleTestCase):
 
     reset_sequences = False
 
-    # Subclasses can enable only a subset of apps for faster tests
+    # Subclasses can enable only a subset of apps for faster tests.
     available_apps = None
 
     # Subclasses can define fixtures which will be automatically installed.
@@ -938,7 +938,7 @@ class TransactionTestCase(SimpleTestCase):
         """
         Perform pre-test setup:
 
-        * If the class has an 'available_apps' attribute, restrict the app
+        * If the class has an 'available_apps' attribute, restrict the app.
           registry to these applications, then fire the post_migrate signal --
           it must run with the correct set of applications for the test case.
         * If the class has a 'fixtures' attribute, install those fixtures.
@@ -1000,7 +1000,7 @@ class TransactionTestCase(SimpleTestCase):
 
     def _fixture_setup(self):
         for db_name in self._databases_names(include_mirrors=False):
-            # Reset sequences
+            # Reset sequences.
             if self.reset_sequences:
                 self._reset_sequences(db_name)
 
@@ -1039,10 +1039,10 @@ class TransactionTestCase(SimpleTestCase):
                 # Some DB cursors include SQL statements as part of cursor
                 # creation. If you have a test that does a rollback, the effect
                 # of these statements is lost, which can affect the
-                # operation of
-                # tests (e.g., losing a timezone setting causing objects to be
-                # created with the wrong time). To make sure this does not
-                # happen, get a clean connection at the start of every test.
+                # operation of tests (e.g., losing a timezone setting causing
+                # objects to be created with the wrong time). To make sure
+                # this does not happen, get a clean connection at the start
+                # of every test.
                 for conn in connections.all():
                     conn.close()
         finally:
@@ -1055,9 +1055,9 @@ class TransactionTestCase(SimpleTestCase):
 
     def _fixture_teardown(self):
         # Allow TRUNCATE ... CASCADE and do not emit the post_migrate signal
-        # when flushing only a subset of the apps
+        # when flushing only a subset of the apps.
         for db_name in self._databases_names(include_mirrors=False):
-            # Flush the database
+            # Flush the database.
             inhibit_post_migrate = (
                     self.available_apps is not None or
                     (  # Inhibit the post_migrate signal when using serialized
@@ -1079,8 +1079,8 @@ class TransactionTestCase(SimpleTestCase):
         if not ordered:
             return self.assertEqual(Counter(items), Counter(values), msg=msg)
         values = list(values)
-        # For example queryset.iterator() could be passed as queryset, but it does not
-        # have 'ordered' attribute.
+        # For example queryset.iterator() could be passed as queryset, but it
+        # does not have 'ordered' attribute.
         if len(values) > 1 and hasattr(queryset, 'ordered') and not queryset.ordered:
             raise ValueError("Trying to compare non-ordered queryset "
                              "against more than one ordered values")
@@ -1176,7 +1176,7 @@ class TestCase(TransactionTestCase):
     def _fixture_setup(self):
         if not conns_support_trans():
             # If the backend does not support transactions, we should reload
-            # class data before each test
+            # class data before each test.
             self.set_up_test_data()
             return super()._fixture_setup()
 
@@ -1240,7 +1240,7 @@ def _deferredskip(condition, reason):
 
             test_item = skip_wrapper
         else:
-            # Assume a class is decorated
+            # Assume a class is decorated.
             test_item = test_func
             # Retrieve the possibly existing value from the class's dict to
             # avoid triggering the descriptor.
@@ -1403,7 +1403,7 @@ class LiveServerThread(threading.Thread):
             for alias, conn in self.connections_override.items():
                 connections[alias] = conn
         try:
-            # Create the handler for serving static and media files
+            # Create the handler for serving static and media files.
             handler = self.static_handler(_MediaFilesHandler(WSGIHandler()))
             # If binding to port zero, assign the port allocated by the OS.
             if self.port == 0:
@@ -1425,7 +1425,7 @@ class LiveServerThread(threading.Thread):
     def terminate(self):
         """Add docstring."""  # TODO add docstring.
         if hasattr(self, 'httpd'):
-            # Stop the WSGI server
+            # Stop the WSGI server.
             self.httpd.shutdown()
             self.httpd.server_close()
         self.join()
@@ -1457,13 +1457,6 @@ class LiveServerTestCase(TransactionTestCase):
     def setupclass(cls):
         super().setupclass()
         connections_override = {}
-        # For conn in connections.all():
-        #     # If using in-memory sqlite databases, pass the connections to
-        #     # the server thread.
-        #     If conn.vendor == 'sqlite' and conn.is_in_memory_db():
-        #         # Explicitly enable thread-shareability for this connection
-        #         conn.allow_thread_sharing = True
-        #         connections_override[conn.alias] = conn
 
         cls._live_server_modified_settings = modify_settings(
             ALLOWED_HOSTS={'append': cls.host},
@@ -1473,10 +1466,11 @@ class LiveServerTestCase(TransactionTestCase):
         cls.server_thread.daemon = True
         cls.server_thread.start()
 
-        # Wait for the live server to be ready
+        # Wait for the live server to be ready.
         cls.server_thread.is_ready.wait()
         if cls.server_thread.error:
-            # Clean up behind ourselves, since teardownclass won't get called in case of errors.
+            # Clean up behind ourselves, since teardownclass will not
+            # get called in case of errors.
             cls._teardownclass()
             raise cls.server_thread.error
 
@@ -1494,13 +1488,9 @@ class LiveServerTestCase(TransactionTestCase):
         # There may not be a 'server_thread' attribute if setupclass() for some
         # reasons has raised an exception.
         if hasattr(cls, 'server_thread'):
-            # Terminate the live server's thread
+            # Terminate the live server's thread.
             cls.server_thread.terminate()
 
-        # Restore sqlite in-memory database connections' non-shareability
-        # for conn in connections.all():
-        #     if conn.vendor == 'sqlite' and conn.is_in_memory_db():
-        #         conn.allow_thread_sharing = False
 
     @classmethod
     def teardownclass(cls):

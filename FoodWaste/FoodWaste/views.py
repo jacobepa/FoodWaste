@@ -32,7 +32,8 @@ class ExistingDataList(ListView):
     template_name = 'existingdata/existing_data_list.html'
 
     def get_queryset(self):
-        # Instead of querying for member teams, filter on non-member teams and do EXCLUDE
+        # Instead of querying for member teams, filter on non-member teams and
+        # do EXCLUDE.
         include_teams = TeamMembership.objects.filter(
             member=self.request.user).values_list('team', flat=True)
         exclude_teams = TeamMembership.objects.exclude(
@@ -72,21 +73,21 @@ class ExistingDataCreate(CreateView):
             # TODO Parse and insert attached files:
             for field in request.FILES:
                 file = request.FILES[field]
-                # fs = FileSystemStorage()
-                # filename = fs.save(file.name, file)
-                # uploaded_file_url = fs.url(filename)
-                # Insert the attachment
+                # fs = FileSystemStorage().
+                # filename = fs.save(file.name, file).
+                # uploaded_file_url = fs.url(filename).
+                # Insert the attachment.
                 attch = Attachment()
                 attch.uploaded_by = request.user
                 attch.name = file.name
                 attch.file = file
                 attch.save()
-                # Insert DataAttachmentMap
+                # Insert DataAttachmentMap.
                 attch_map = DataAttachmentMap()
                 attch_map.data = obj
                 attch_map.attachment = attch
                 attch_map.save()
-            # Prepare and insert teams data
+            # Prepare and insert teams data.
             if form.cleaned_data['teams']:
                 for team in form.cleaned_data['teams']:
                     data_team_map = ExistingDataSharingTeamMap()
@@ -162,16 +163,13 @@ def export_excel(request, *args, **kwargs):
     data = ExistingData.objects.get(id=data_id)
     filename = 'export_%s.xlsx' % data.article_title
     from openpyxl import Workbook
-    # from openpyxl.styles import PatternFill, Font
-    # from openpyxl.styles.borders import Border, Side
-    # from openpyxl.styles.colors import Color
 
     workbook = Workbook()
     sheet = workbook.active
     row = 1
 
     # Optionally add colors formatting before writing to cells.
-    # Programmatically write results to the PDF
+    # Programmatically write results to the PDF.
     for name, value in data.get_fields():
         sheet.cell(row=row, column=1).value = name
         sheet.cell(row=row, column=2).value = value

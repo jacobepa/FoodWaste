@@ -297,7 +297,7 @@ def test_get_output_handler_method(tmpdir, monkeypatch):
     handlers = [summary._get_output_handler(type_, collector)
                 for type_ in ['pickle']]
 
-    # assert isinstance(handlers[0], TextOutput)
+    # Assert isinstance(handlers[0], TextOutput)
     assert isinstance(handlers[0], PickleOutput)
 
     pytest.raises(NotImplementedError, summary._get_output_handler,

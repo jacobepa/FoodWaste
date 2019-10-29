@@ -45,9 +45,9 @@ def test_main_version(monkeypatch):
     assert (fakestdout.getvalue()).split('\n')[0] == "duecredit %s" % __version__
 
 
-# smoke test the cmd_summary
+# Smoke test the cmd_summary.
 # TODO: carry sample .duecredit.p, point to that file, monkeypatch
-# TextOutput and BibTeXOutput .dumps
+# TextOutput and BibTeXOutput .dumps.
 def test_smoke_cmd_summary():
     """TODO: Add function docstring."""
     main.main(['summary'])

@@ -10,7 +10,8 @@
 # See COPYING file distributed along with the duecredit package for the
 # copyright and license terms.
 
-import atexit  # Note: Could not find a version that satisfies the requirement atexit.
+import atexit
+# Note: Could not find a version that satisfies the requirement atexit.
 import pytest
 
 from ..injections.injector import DueCreditInjector
@@ -24,13 +25,13 @@ def test_dueswitch_activate(monkeypatch):
 
     state = dict(activate=0, register=0, register_func=None)
 
-    # Patch DueCreditInjector.activate
+    # Patch DueCreditInjector.activate.
     def activate_calls(*args, **kwargs):
          state["activate"] += 1
 
     monkeypatch.setattr(DueCreditInjector, "activate", activate_calls)
 
-    # Patch atexit.register
+    # Patch atexit.register.
     def register(func):
          state["register"] += 1
          state["register_func"] = func
@@ -39,7 +40,7 @@ def test_dueswitch_activate(monkeypatch):
 
     due.activate()
 
-    # was not active, so should have called activate of the injector class
+    # Was not active, so should have called activate of the injector class.
     assert state["activate"] == 1
     assert state["register"] == 1
     assert state["register_func"] == due.dump
@@ -47,7 +48,7 @@ def test_dueswitch_activate(monkeypatch):
 
 def test_a_bad_one():
     """TODO: Add function docstring."""
-    # We might get neither of those and should fail
+    # We might get neither of those and should fail.
     # see https://github.com/duecredit/duecredit/issues/142
-    # So let's through ValueError right away
+    # So let us through ValueError right away.
     pytest.raises(ValueError, DueSwitch, None, None, True)

@@ -49,11 +49,11 @@ def test_main_run_a_script(tmpdir, monkeypatch):
     with open(tempfile, 'wb') as f:
         f.write(content)
 
-    # Patch stdout
+    # Patch stdout.
     fakestdout = StringIO()
     monkeypatch.setattr(sys, "stdout", fakestdout)
 
-    # Patch due.activate
+    # Patch due.activate.
     count = [0]
 
     def count_calls(*args, **kwargs):
@@ -64,5 +64,5 @@ def test_main_run_a_script(tmpdir, monkeypatch):
     __main__.main(['__main__.py', tempfile])
     assert fakestdout.getvalue().rstrip() == "Running the script"
 
-    # And we have "activated" the due
+    # And we have "activated" the due.
     assert count[0] == 1

@@ -25,8 +25,8 @@ urlpatterns = [
     url(r'^contact/?', contact, name='contact'),
     url(r'^about/?', about, name='about'),
 
-    # Begin existingdata URLs
-    # URLs for PDF and Excel exports
+    # Begin existingdata URLs.
+    # URLs for PDF and Excel exports.
     url(r'^existingdata/exportpdf/(?P<pk>\d+)/?$',
         export_pdf, name='existing_data_pdf'),
     url(r'^existingdata/exportexcel/(?P<pk>\d+)/?$',
@@ -40,10 +40,10 @@ urlpatterns = [
         ExistingDataDetail.as_view(),
         name='existing_data_detail'),
 
-    # This should be the last existingdata URL
+    # This should be the last existingdata URL.
     url(r'^existingdata/?', ExistingDataList.as_view(), name='tracking_tool'),
 
-    # Begin other module import URLs
+    # Begin other module import URLs.
     url(r'^accounts/', include('accounts.urls')),
     url(r'^support/', include('support.urls')),
     url(r'^teams/', include('teams.urls')),

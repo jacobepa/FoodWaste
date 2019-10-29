@@ -49,19 +49,19 @@ class TeamCreateView(FormView):
         form = self.form_class(request.POST)
         if form.is_valid():
             team_instance = form.save(commit=False)
-            # Team creator
+            # Team creator.
             team_instance.created_by = request.user
-            # When and by whom the project was created
+            # When and by whom the project was created.
             date_now = datetime.now()
             team_instance.created_date = date_now
             team_instance.created_by = request.user
-            # When and by whom the project was last modified
+            # When and by whom the project was last modified.
             team_instance.last_modified_date = date_now
             team_instance.last_modified_by = request.user
             # Save the project
             team_instance.save()
 
-            # Add a membership for the requesting user
+            # Add a membership for the requesting user.
             membership_instance = TeamMembership()
             membership_instance.added_date = date_now
             membership_instance.member = request.user
@@ -102,7 +102,7 @@ class TeamEditView(FormView):
         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
 
         if ctx['team_id'] is not None:
-            # Update the team name
+            # Update the team name.
             ctx['team_obj'] = Team.objects.get(id=ctx['team_id'])
             if ctx['team_obj'] is not None:
                 ctx['name'] = ctx['params']['name'] if 'name' in ctx['params'] else None
@@ -115,7 +115,7 @@ class TeamEditView(FormView):
             else:
                 ctx['error_msg'] = "Invalid team id specified."
 
-            # Retrieve the updated data and render the view
+            # Retrieve the updated data and render the view.
             get_request = RequestFactory().get('/')
             get_request.user = request.user
             ctx['team_data'] = APITeamDetailView.as_view()(
@@ -123,7 +123,7 @@ class TeamEditView(FormView):
             ctx['team'] = JSONParser().parse(BytesIO(ctx['team_data']))
             return render(request, self.template, ctx)
 
-        # We should never get here, so just redirect to the dashboard
+        # We should never get here, so just redirect to the dashboard.
         return HttpResponseRedirect(reverse('dashboard'))
 
 
@@ -158,14 +158,15 @@ class TeamManagementView(FormView):
 
         if ctx['team_id'] is not None and ctx['command'] is not None:
             if ctx['command'] == 'adduser':
-                # Add a user membership to the team
+                # Add a user membership to the team.
                 ctx['user_id'] = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
                 if ctx['user_id'] is not None:
-                    # Check if the user already has a membership, this can happen if the user reloads the page
+                    # Check if the user already has a membership, this can
+                    # happen if the user reloads the page.
                     ctx['membership_list'] = TeamMembership.objects.filter(
                         team_id=ctx['team_id'], member_id=ctx['user_id']).all()
                     if ctx['membership_list'] is None or not ctx['membership_list']:
-                        # Add a membership
+                        # Add a membership.
                         ctx['team_obj'] = Team.objects.get(id=ctx['team_id'])
                         ctx['member_obj'] = User.objects.get(id=ctx['user_id'])
                         ctx['membership'] = TeamMembership()
@@ -179,10 +180,10 @@ class TeamManagementView(FormView):
                     ctx['error_msg'] = "Invalid user id specified."
 
             elif ctx['command'] == 'deleteuser':
-                # Remove a user membership
+                # Remove a user membership.
                 ctx['user_id'] = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
                 if ctx['user_id'] is not None:
-                    # Add a membership
+                    # Add a membership.
                     ctx['membership'] = TeamMembership.objects.get(team_id=ctx['team_id'], member_id=ctx['user_id'])
                     if ctx['membership'] is not None:
                         ctx['membership'].delete()
@@ -190,7 +191,7 @@ class TeamManagementView(FormView):
                     ctx['error_msg'] = "Invalid user id specified."
 
             elif ctx['command'] == 'updatename':
-                # Update the team name
+                # Update the team name.
                 ctx['team_obj'] = Team.objects.get(id=ctx['team_id'])
                 if ctx['team_obj'] is not None:
                     ctx['name'] = ctx['params']['name'] if 'name' in ctx['params'] else None
@@ -203,7 +204,7 @@ class TeamManagementView(FormView):
                 else:
                     ctx['error_msg'] = "Invalid team id specified."
 
-            # Retrieve the updated data and render the view
+            # Retrieve the updated data and render the view.
             get_request = RequestFactory().get('/')
             get_request.user = request.user
 
@@ -215,7 +216,7 @@ class TeamManagementView(FormView):
             ctx['nonmembers'] = JSONParser().parse(BytesIO(ctx['nonmembers_data']))
             return render(request, self.template, ctx)
 
-        # We should never get here, so just redirect to the dashboard
+        # We should never get here, so just redirect to the dashboard.
         return HttpResponseRedirect(reverse('dashboard'))
 
 
@@ -231,7 +232,7 @@ class APITeamListView(APIView):
     def get(self, request, exclude=None, format=None):
         """Return all teams the current user is a member of."""
         user = self.request.user
-        # Get the list of teams to exclude
+        # Get the list of teams to exclude.
         exclude = self.kwargs.get('exclude', None) if exclude is None else exclude
         if exclude is None:
             exclude_json = self.request.query_params.get('exclude', None)
@@ -261,7 +262,7 @@ class APITeamListView(APIView):
         serializer = TeamSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             team = serializer.save()
-            # Add a membership for the requesting user
+            # Add a membership for the requesting user.
             membership_instance = TeamMembership()
             membership_instance.added_date = datetime.now()
             membership_instance.member = request.user
@@ -355,7 +356,7 @@ class APITeamMembershipListView(APIView):
 
     def get(self, request, team_id, nonmember=None, format=None):
         """Get the membership information for the specified team."""
-        # If query param "nonmember" is set, returns users not on this team
+        # If query param "nonmember" is set, returns users not on this team.
         nonmember = request.query_params.get('nonmember', None) if nonmember is None else nonmember
         if nonmember is not None:
             users = User.objects.exclude(member_memberships__team_id=team_id).order_by('last_name').all()
@@ -367,11 +368,11 @@ class APITeamMembershipListView(APIView):
 
     def post(self, request, team_id, format=None):
         """Add a new membership for a user."""
-        # Add the team info to the data
+        # Add the team info to the data.
         request.data["team"] = team_id
         serializer = TeamMembershipModifySerializer(data=request.data)
         if serializer.is_valid():
-            # Make sure the membership doesn't already exist
+            # Make sure the membership doesn't already exist.
             existing_membership = TeamMembership.objects.filter(team__id=team_id,
                                                                 member__id=request.data["member"]).first()
             if existing_membership is not None:
@@ -396,7 +397,7 @@ class APITeamMembershipDetailView(APIView):
                 .select_related("member", "team")
                 .get(id=membership_id)
             )
-            # Make sure this user can view this team information
+            # Make sure this user can view this team information.
             for membership in current_membership.team.team_memberships.all():
                 if user == membership.member:
                     return current_membership, membership.can_edit

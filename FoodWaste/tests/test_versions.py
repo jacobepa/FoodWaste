@@ -17,7 +17,7 @@ import pytest
 from six import PY3
 
 if PY3:
-    # just to ease testing
+    # Just to ease testing.
     def cmp(a, b):
         """TODO: Add function docstring."""
         return (a > b) - (a < b)
@@ -28,7 +28,7 @@ def test_external_versions_basic():
     ev = ExternalVersions()
     assert ev._versions == {}
     assert ev['duecredit'] == __version__
-    # and it could be compared
+    # And it could be compared.
     assert ev['duecredit'] >= __version__
     assert ev['duecredit'] > '0.1'
     assert list(ev.keys()) == ['duecredit']
@@ -41,29 +41,29 @@ def test_external_versions_basic():
         else __version__
     assert ev.dumps() == "Versions: duecredit=%s" % version_str
 
-    # For non-existing one we get None
+    # For non-existing one we get None.
     assert ev['duecreditnonexisting'] is None
 
-    # and nothing gets added to _versions for nonexisting
+    # And nothing gets added to _versions for nonexisting.
     assert set(ev._versions.keys()) == {'duecredit'}
 
-    # but if it is a module without version, we get it set to UNKNOWN
+    # But if it is a module without version, we get it set to UNKNOWN.
     assert ev['os'] == ev.UNKNOWN
-    # And get a record on that inside
+    # And get a record on that inside.
     assert ev._versions.get('os') == ev.UNKNOWN
-    # And that thing is "True", i.e. present
+    # And that thing is "True", i.e. present.
     assert ev['os']
-    # but not comparable with anything besides itself (was above)
+    # But not comparable with anything besides itself (was above).
     with pytest.raises(TypeError):
         cmp(ev['os'], '0')
 
     # assert_raises(TypeError, assert_greater, ev['os'], '0')
 
-    # And we can get versions based on modules themselves
+    # And we can get versions based on modules themselves.
     from duecredit.tests import mod
     assert ev[mod] == mod.__version__
 
-    # Check that we can get a copy of the versions
+    # Check that we can get a copy of the versions.
     versions_dict = ev.versions
     versions_dict['duecredit'] = "0.0.1"
     assert versions_dict['duecredit'] == "0.0.1"
@@ -95,6 +95,6 @@ def test_external_versions_popular_packages(modname):
 
     _test_external(ev, modname)
 
-    # more of a smoke test
+    # More of a smoke test.
     assert linesep not in ev.dumps()
     assert ev.dumps(indent=True).endswith(linesep)

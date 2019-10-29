@@ -80,9 +80,9 @@ class UsernameReminderRequestView(FormView):
             if form.is_valid():
                 data = form.cleaned_data["email"]
 
-            # Uses the method written above
+            # Uses the method written above.
             if self.validate_email_address(data) is True:
-                # Find the users associated with this email
+                # Find the users associated with this email.
                 associated_users = User.objects.filter(
                     Q(email=data) | Q(username=data))
                 if associated_users.exists():
@@ -95,11 +95,13 @@ class UsernameReminderRequestView(FormView):
                             'protocol': 'http'
                         }
                         subject_template_name = 'registration/username_reminder_subject.txt'
-                        # Copied from django/contrib/admin/templates/registration/password_reset_subject.txt
-                        # to templates directory.
+                        # Copied from django/contrib/admin/templates/
+                        # registration/password_reset_subject.txt to templates
+                        # directory.
                         email_template_name = 'registration/username_reminder_email.html'
-                        # Copied from django/contrib/admin/templates/registration/password_reset_email.html
-                        # to templates directory.
+                        # Copied from django/contrib/admin/templates/
+                        # registration/password_reset_email.html to templates
+                        # directory.
                         subject = loader.render_to_string(
                             subject_template_name, content)
                         # Email subject *must not* contain newlines.
@@ -256,7 +258,8 @@ class PasswordResetConfirmView(FormView):
         return render(request, 'registration/password_reset.html',
                       {'form': form, 'usermodel': usermodel, 'uid': uid, 'user': user})
 
-    def post(self, request, uidb64=None, token=None, *arg, **kwargs):  # pylint: disable=keyword-arg-before-vararg
+    def post(self, request, uidb64=None, token=None, *arg, **kwargs):
+        # pylint: disable=keyword-arg-before-vararg
         """
         :param request:
         :param uidb64:
@@ -331,10 +334,10 @@ class UserRegistrationView(FormView):
     """
 
     template_register = "registration/register.html"
-    # Email and subject line for the message sent to the app admins
+    # Email and subject line for the message sent to the app admins.
     admin_subject_template_name = 'registration/register_request_admin_subject.txt'
     admin_email_template_name = 'registration/register_request_admin_email.html'
-    # Email and subject line for the message sent to the potential app user
+    # Email and subject line for the message sent to the potential app user.
     user_subject_template_name = 'registration/register_request_user_subject.txt'
     user_email_template_name = 'registration/register_request_user_email.html'
     form_class = ProfileCreationForm
@@ -353,7 +356,7 @@ class UserRegistrationView(FormView):
             # Save the user information and get a pointer to the User object.
             user = form.save()
 
-            # Get values for the foreign key values
+            # Get values for the foreign key values.
             role = Role.objects.get(id=user.userprofile.role_id)
             sector = Sector.objects.get(id=user.userprofile.sector_id)
             try:
@@ -378,15 +381,16 @@ class UserRegistrationView(FormView):
             }
             subject = loader.render_to_string(
                 self.admin_subject_template_name, request_email_context)
-            # Email subject *must not* contain newlines
+            # Email subject *must not* contain newlines.
             subject = ''.join(subject.splitlines())
             email = loader.render_to_string(
                 self.admin_email_template_name, request_email_context)
-            # This is driven by local_settings.py
+            # This is driven by local_settings.py.
             send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
                       settings.USER_APPROVAL_EMAIL, fail_silently=False)
 
-            # Send an email to the user notifying them that the account request is under review
+            # Send an email to the user notifying them that the account request
+            # is under review.
             user_email_context = {
                 'APP_NAME': settings.APP_NAME,
                 'email': user.email
@@ -400,8 +404,9 @@ class UserRegistrationView(FormView):
             send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
                       [user.email], fail_silently=False)
 
-            # Render the activation needed template
-            return render(request, self.template_register_inactive, locals())  # pylint: disable=no-member
+            # Render the activation needed template.
+            return render(request, self.template_register_inactive, locals())
+            # pylint: disable=no-member.
         return render(request, self.template_register, locals())
 
 
@@ -415,7 +420,7 @@ class UserApprovalView(TemplateView):
 
     template_name = "registration/register_approved.html"
     template_name_no_uid = "registration/register_approved_no_uid.html"
-    # Email and subject line for approval email
+    # Email and subject line for approval email.
     subject_template_name = 'registration/register_approved_subject.txt'
     email_template_name = 'registration/register_approved_email.html'
 
@@ -435,7 +440,7 @@ class UserApprovalView(TemplateView):
             user.is_active = True
             user.save()
 
-            # Notify the user
+            # Notify the user.
             user_email_context = {
                 'APP_NAME': settings.APP_NAME,
                 'email': user.email,
@@ -446,7 +451,7 @@ class UserApprovalView(TemplateView):
 
             subject = loader.render_to_string(
                 self.subject_template_name, user_email_context)
-            # Email subject *must not* contain newlines
+            # Email subject *must not* contain newlines.
             subject = ''.join(subject.splitlines())
             email = loader.render_to_string(
                 self.email_template_name, user_email_context)
@@ -472,7 +477,7 @@ class UserDenialView(TemplateView):
 
     template_name = "registration/register_denied.html"
     template_name_no_uid = "registration/register_denied_no_uid.html"
-    # Email and subject line for denial message
+    # Email and subject line for denial message.
     subject_template_name = 'registration/register_denied_subject.txt'
     email_template_name = 'registration/register_denied_email.html'
 
@@ -490,20 +495,20 @@ class UserDenialView(TemplateView):
             uid = urlsafe_base64_decode(uidb64)
             user = user_model._default_manager.get(pk=uid)
             username = user.username
-            # Notify the user of the denial
+            # Notify the user of the denial.
             context = {
                 'APP_NAME': settings.APP_NAME,
                 'username': username,
             }
             subject = loader.render_to_string(
                 self.subject_template_name, context)
-            # Email subject *must not* contain newlines
+            # Email subject *must not* contain newlines.
             subject = ''.join(subject.splitlines())
             email = loader.render_to_string(self.email_template_name, context)
             send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
                       [user.email], fail_silently=False)
 
-            # Delete the account
+            # Delete the account.
             user.delete()
             return render(request, self.template_name, locals())
 

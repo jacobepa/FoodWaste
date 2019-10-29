@@ -11,7 +11,7 @@ Available functions:
 """
 
 # TODO Test Email sender:
-# https://stackoverflow.com/questions/3728528/testing-email-sending
+# https://stackoverflow.com/questions/3728528/testing-email-sending.
 
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
@@ -31,7 +31,7 @@ class TestSupport(TestCase):
 
     def test_home(self):
         """Tests the home page."""
-        # Response = self.client.get('/support/index')
+        # Response = self.client.get('/support/index').
         response = self.client.get('/support/index/')
         self.assertContains(response, 'Help/Suggestions', 0, 200)
 
@@ -132,82 +132,7 @@ class TestSupport(TestCase):
         response = self.client.post('/support/type/create/', SUPPORT_FORM)
         self.assertContains(response, 'id', 0, 302)
 
-    # def test_list_support_types_get(self):
-    #     """Tests the list support types get."""
-    #     response = self.client.get('/support/type/list/', SUPPORT_FORM)
-    #     self.assertContains(response, 'id', 2, 200)
-
-    # def test_list_support_types_post(self):
-    #     """Tests the list support types post."""
-    #     response = self.client.post('/support/type/list/', SUPPORT_FORM)
-    #     self.assertContains(response, 'id', 2, 200)
-
-    # def test_search_support_type_get(self):
-    #     """Tests the search support type get."""
-    #     response = self.client.get('/support/type/search/', SUPPORT_FORM)
-    #     self.assertContains(response, 'id', 2, 200)
-
-    # def test_search_support_type_post(self):
-    #     """Tests the search support type post."""
-    #     response = self.client.post('/support/type/search/', SUPPORT_FORM)
-    #     self.assertContains(response, 'id', 2, 200)
-
-    # def test_create_priority_get(self):
-    #     """Tests the create priority get."""
-    #     response = self.client.get('/support/priority/create/', SUPPORT_FORM)
-    #     self.assertContains(response, 'id', 2, 200)
-
     def test_create_priority_post(self):
         """Tests the create priority post."""
         response = self.client.post('/support/priority/create/', SUPPORT_FORM)
         self.assertContains(response, 'id', 0, 302)
-
-    # def test_list_priorities_get(self):
-    #     """Tests the list priorities get."""
-    #     response = self.client.get('/support/priority/list/', SUPPORT_FORM)
-    #     self.assertContains(response, 'id', 2, 200)
-
-    # def test_list_priorities_post(self):
-    #     """Tests the list priorities post."""
-    #     response = self.client.post('/support/priority/list/', SUPPORT_FORM)
-    #     self.assertContains(response, 'id', 2, 200)
-
-    # def test_search_priority_get(self):
-    #     """Tests the search priority get."""
-    #     response = self.client.get('/support/priority/search/', SUPPORT_FORM)
-    #     self.assertContains(response, 'id', 2, 200)
-
-    # def test_search_priority_post(self):
-    #     """Tests the search priority post."""
-    #     response = self.client.post('/support/priority/search/', SUPPORT_FORM)
-    #     self.assertContains(response, 'id', 2, 200)
-
-    # def test_support_ticket_create_one(self):
-    #     """Test the support ticket form when you use suggestion."""
-    #     # create/(?P<support_type_name>\w+)
-    #     response = self.client.get('/support/create/suggestion/')
-    #     self.assertContains(response, 'Describe your suggestion for Food Waste below.', 1, 200)
-
-    # def test_support_ticket_create_two(self):
-    #     """Test the support ticket form when you do not use suggestion."""
-    #     # create/(?P<support_type_name>\w+)
-    #     response = self.client.get('/support/create/OtherWordsHERE/')
-    #     self.assertContains(response, 'Describe the problem you encountered with Food Waste below.', 1, 200)
-
-    # def test_support_post_one(self):
-    #    """Tests the support ticket post method on an invalid form."""
-    #    response = self.client.post("/support/create/suggestion/", {})
-    #    # self.assertContains(response, 'This field is required.', 7, 200)
-    #    # self.assertContains(response, 'Temperature values are required and
-    #    # must be greater than 0!', 1, 200)
-
-    # def test_support_post_two(self):
-    #    """Tests the support ticket post method on an Valid form."""
-    #    data = SUPPORT_PASS_ONE.__dict__
-    #    response = self.client.post("/support/create/suggestion/", data)
-
-    # def test_support_ticket_edit_one(self):
-    #     """Test the support ticket edit form when you use suggestion."""
-    #     # edit/(?P<support_type_name>\w+)/(?P<obj_id>\d+)/$'
-    #     response = self.client.get('/support/edit/suggestion/1/')
-    #     self.assertContains(response, 'Describe your suggestion for Food Waste below.', 1, 404)

@@ -110,12 +110,12 @@ class TestUtils(TestCase):
         """Test the is float method with a float."""
         val_str = "1.2"
         results = is_float(val_str)
-        # print(results)
+        # Print(results).
         self.assertEqual(results, True)
 
     def test_is_float_two(self):
         """Test the is float method with a char string."""
         val_str = "notAFloat"
         results = is_float(val_str)
-        # print(results)
+        # Print(results).
         self.assertEqual(results, False)

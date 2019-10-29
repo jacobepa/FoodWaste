@@ -35,7 +35,7 @@ def test_is_interactive_crippled_stdout(monkeypatch):
         monkeypatch.setattr(sys, 'std%s' % inout, MockedOut())
         assert not is_interactive()
 
-    # just for paranoids
+    # Just for paranoids.
     for inout in ('in', 'out', 'err'):
         monkeypatch.setattr(sys, 'std%s' % inout, MockedIsaTTY())
     assert is_interactive()

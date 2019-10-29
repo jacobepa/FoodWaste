@@ -218,7 +218,7 @@ class ProfileUpdateForm(forms.ModelForm):
         user.userprofile.state = self.cleaned_data["state"]
         user.userprofile.country = self.cleaned_data["country"]
         user.userprofile.zipcode = self.cleaned_data["zipcode"]
-        # reset the passwords if specified
+        # Reset the passwords if specified
         new_password = self.cleaned_data["password2"]
         if new_password:
             user.password = make_password(new_password)

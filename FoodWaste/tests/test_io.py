@@ -46,7 +46,7 @@ try:
         assert isinstance(import_doi(doi_zenodo, **kw), text_type)
 
 except ImportError:
-    # no vcr, and that is in 2015!
+    # No vcr, and that is in 2015!
     pass
 
 
@@ -68,7 +68,7 @@ def test_pickleoutput(tmpdir):
     collector_.add(entry)
     collector_.cite(entry, path='module')
 
-    # test it doesn't puke with an empty collector
+    # Test it does not puke with an empty collector.
     collectors = [collector_, DueCreditCollector()]
 
     tempfile = str(tmpdir.mkdir("sub").join("tempfile.txt"))
@@ -92,7 +92,7 @@ def test_output():
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
-    # normal use
+    # Normal use.
     collector = DueCreditCollector()
     collector.cite(entry, path='package')
     collector.cite(entry, path='package.module')
@@ -108,7 +108,7 @@ def test_output():
     assert packages['package'][0] == collector.citations[('package', entry.get_key())]
     assert modules['package.module'][0] == collector.citations[('package.module', entry.get_key())]
 
-    # no toppackage
+    # No toppackage.
     collector = DueCreditCollector()
     collector.cite(entry, path='package')
     collector.cite(entry, path='package2.module')
@@ -123,7 +123,7 @@ def test_output():
 
     assert modules['package2.module'][0] == collector.citations[('package2.module', entry.get_key())]
 
-    # toppackage because required
+    # toppackage because required.
     collector = DueCreditCollector()
     collector.cite(entry, path='package', cite_module=True)
     collector.cite(entry, path='package2.module')
@@ -139,7 +139,7 @@ def test_output():
     assert packages['package'][0] == collector.citations[('package', entry.get_key())]
     assert modules['package2.module'][0] == collector.citations[('package2.module', entry.get_key())]
 
-    # check it returns multiple entries
+    # Check it returns multiple entries.
     collector = DueCreditCollector()
     collector.cite(entry, path='package')
     collector.cite(entry2, path='package')
@@ -154,7 +154,7 @@ def test_output():
     assert len(modules) == 1
     assert len(objects) == 0
 
-    # sort them in order so we know who is who
+    # Sort them in order so we know who is who.
     # entry2 key is Atk...
     # entry key is XX..
     packs = sorted(packages['package'], key=lambda x: x.entry.key)
@@ -163,7 +163,7 @@ def test_output():
     assert packs[1] == collector.citations[('package', entry.get_key())]
     assert modules['package.module'][0] == collector.citations[('package.module', entry.get_key())]
 
-    # check that filtering works
+    # Check that filtering works.
     collector = DueCreditCollector()
     collector.cite(entry, path='package', tags=['edu'])
     collector.cite(entry2, path='package')
@@ -201,12 +201,12 @@ def test_output_return_all(monkeypatch):
 
     for flag in ['1', 'True', 'TRUE', 'true', 'on', 'yes']:
         monkeypatch.setitem(os.environ, 'DUECREDIT_REPORT_ALL', flag)
-        # if _all is None then get the environment
+        # If _all is None then get the environment.
         packages, modules, objects = output._get_collated_citations(tags=['*'])
         assert len(packages) == 2
         assert not modules
         assert not objects
-        # however if _all is set it should not work
+        # However if _all is set it should not work.
         packages, modules, objects = output._get_collated_citations(tags=['*'], all_=False)
         assert not packages
         assert not modules
@@ -218,7 +218,7 @@ def test_output_tags(monkeypatch):
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
-    # normal use
+    # Normal use.
     collector = DueCreditCollector()
     collector.cite(entry, path='package', cite_module=True, tags=['edu'])
     collector.cite(entry2, path='package.module', tags=['wip'])
@@ -237,12 +237,12 @@ def test_output_tags(monkeypatch):
 
     for tags in ['edu', 'wip', 'edu,wip']:
         monkeypatch.setitem(os.environ, 'DUECREDIT_REPORT_TAGS', tags)
-        # if tags is None then get the environment
+        # If tags is None then get the environment.
         packages, modules, objects = output._get_collated_citations()
         assert len(packages) == (1 if 'edu' in tags else 0)
         assert len(modules) == (1 if 'wip' in tags else 0)
         assert not objects
-        # however if tags is set it should not work
+        # However if tags is set it should not work.
         packages, modules, objects = output._get_collated_citations(tags=['implementation'])
         assert not packages
         assert not modules
@@ -254,8 +254,8 @@ def test_text_output():
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
-    # in this case, since we're not citing any module or method, we should not
-    # output anything
+    # In this case, since we're not citing any module or method, we should not
+    # output anything.
     collector = DueCreditCollector()
     collector.cite(entry, path='package')
 
@@ -266,7 +266,7 @@ def test_text_output():
     assert "0 modules cited" in value, "value was %s" % value
     assert "0 functions cited" in value, "value was %s" % value
 
-    # but it should be cited if cite_module=True
+    # But it should be cited if cite_module=True.
     collector = DueCreditCollector()
     collector.cite(entry, path='package', cite_module=True)
 
@@ -277,8 +277,8 @@ def test_text_output():
     assert "0 modules cited" in value, "value was %s" % value
     assert "0 functions cited" in value, "value was %s" % value
 
-    # in this case, we should be citing the package since we are also citing a
-    # submodule
+    # In this case, we should be citing the package since we are also citing a
+    # submodule.
     collector = DueCreditCollector()
     collector.cite(entry, path='package')
     collector.cite(entry, path='package.module')
@@ -292,8 +292,8 @@ def test_text_output():
     assert "Halchenko, Y.O." in value, "value was %s" % value
     assert value.strip().endswith("Frontiers in Neuroinformatics, 6(22).")
 
-    # in this case, we should be citing the package since we are also citing a
-    # submodule
+    # In this case, we should be citing the package since we are also citing a
+    # submodule.
     collector = DueCreditCollector()
     collector.cite(entry, path='package')
     collector.cite(entry2, path='package')
@@ -314,7 +314,7 @@ def test_text_output_dump_formatting():
     """TODO: Add function docstring."""
     due = DueCreditCollector()
 
-    # Note: XXX atm just to see if it spits out stuff
+    # Note: XXX atm just to see if it spits out stuff.
     @due.dcite(BibTeX(_sample_bibtex), description='solution to life',
                path='mymodule', version='0.0.16')
     def mymodule(arg1, kwarg2="blah"):
@@ -330,14 +330,14 @@ def test_text_output_dump_formatting():
         myfunction('argh')
         return "load"
 
-    # check we do not have anything output
+    # Check we do not have anything output.
     strio = StringIO()
     TextOutput(strio, due).dump(tags=['*'])
     value = strio.getvalue()
     assert '0 modules cited' in value, 'value was {0}'.format(value)
     assert '0 functions cited' in value, 'value was {0}'.format(value)
 
-    # now we call it -- check it prints stuff
+    # Now we call it -- check it prints stuff.
     strio = StringIO()
     mymodule('magical', kwarg2=1)
     TextOutput(strio, due).dump(tags=['*'])
@@ -347,10 +347,10 @@ def test_text_output_dump_formatting():
     assert '(v 0.0.16)' in value, 'value was {0}'.format(value)
     assert len(value.split('\n')) == 16, 'value was {0}'.format(len(value.split('\n')))
 
-    # test we get the reference numbering right
+    # Test we get the reference numbering right.
     samples_bibtex = [_generate_sample_bibtex() for x in range(6)]
-    # this sucks but at the moment it's the only way to have multiple
-    # references for a function
+    # This at the moment is the only way to have multiple references for a
+    # function.
 
     @due.dcite(BibTeX(samples_bibtex[0]), description='another solution',
                path='myothermodule', version='0.0.666')
@@ -396,7 +396,7 @@ def test_text_output_dump_formatting():
     assert set(citation_numbers) == set(reference_numbers)
     assert len(set(references)) == len(set(citation_numbers))
     assert len(citation_numbers) == 8
-    # verify that we have returned to previous state of filters
+    # Verify that we have returned to previous state of filters.
     import warnings
     assert ('ignore', None, UserWarning, None, 0) not in warnings.filters
 
@@ -406,8 +406,8 @@ def test_bibtex_output():
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
-    # in this case, since we're not citing any module or method, we should not
-    # output anything
+    # In this case, since we're not citing any module or method, we should not
+    # output anything.
     collector = DueCreditCollector()
     collector.cite(entry, path='package')
 
@@ -416,7 +416,7 @@ def test_bibtex_output():
     value = strio.getvalue()
     assert value == '', 'Value was {0}'.format(value)
 
-    # impose citing
+    # Impose citing.
     collector = DueCreditCollector()
     collector.cite(entry, path='package', cite_module=True)
 
@@ -425,7 +425,7 @@ def test_bibtex_output():
     value = strio.getvalue()
     assert value.strip() == _sample_bibtex.strip(), 'Value was {0}'.format(value)
 
-    # impose filtering
+    # Impose filtering.
     collector = DueCreditCollector()
     collector.cite(entry, path='package', cite_module=True, tags=['edu'])
     collector.cite(entry2, path='package.module')
@@ -435,13 +435,13 @@ def test_bibtex_output():
     value = strio.getvalue()
     assert value.strip() == _sample_bibtex.strip(), 'Value was {0}'.format(value)
 
-    # no filtering
+    # No filtering.
     strio = StringIO()
     BibTeXOutput(strio, collector).dump(tags=['*'])
     value = strio.getvalue()
     assert value.strip() == _sample_bibtex.strip() + _sample_bibtex2.rstrip(), 'Value was {0}'.format(value)
 
-    # check the we output only unique bibtex entries
+    # Check the we output only unique bibtex entries.
     collector.cite(entry2, path='package')
     strio = StringIO()
     BibTeXOutput(strio, collector).dump(tags=['*'])
@@ -450,8 +450,8 @@ def test_bibtex_output():
     bibtex = sorted((_sample_bibtex.strip() + _sample_bibtex2.rstrip()).split('\n'))
     assert value_ == bibtex, 'Value was {0}'.format(value_, bibtex)
 
-    # assert_equal(value_, bibtex,
-    #              msg='Value was {0}'.format(value_, bibtex))
+    # Assert_equal(value_, bibtex,
+    # msg='Value was {0}'.format(value_, bibtex))
 
 
 def _generate_sample_bibtex():
@@ -491,7 +491,7 @@ def test_get_text_rendering(monkeypatch):
 
     monkeypatch.setattr(duecredit.io, 'get_bibtex_rendering', get_bibtex_rendering)
 
-    # Patch format_bibtex
+    # Patch format_bibtex.
     fmt_args = {}
 
     def format_bibtex(entry, style):
@@ -500,14 +500,14 @@ def test_get_text_rendering(monkeypatch):
 
     monkeypatch.setattr(duecredit.io, 'format_bibtex', format_bibtex)
 
-    # test if bibtex type is passed
+    # Test if bibtex type is passed.
     citation_bibtex = Citation(sample_bibtex, path='mypath')
     bibtex_output = get_text_rendering(citation_bibtex)
     assert fmt_args["entry"] == citation_bibtex.entry
     assert fmt_args["style"] == 'harvard1'
     fmt_args.clear()
 
-    # test if doi type is passed
+    # Test if doi type is passed.
     citation_doi = Citation(Doi(_sample_doi), path='mypath')
     doi_output = get_text_rendering(citation_doi)
     assert fmt_args["entry"] == citation_bibtex.entry
@@ -557,8 +557,9 @@ def test_format_bibtex_with_utf_characters():
     """
     test that we can correctly parse bibtex entry if it contains utf-8 characters
     """
-    # this was fetched on 2017-08-16
-    # replaced Brett with Brótt to have utf-8 characters in first author's name as well
+    # This was fetched on 2017-08-16.
+    # Replaced Brett with Brótt to have utf-8 characters in first author's
+    # name as well.
     bibtex_utf8 = u"@misc{https://doi.org/10.5281/zenodo.60847,\n  doi = {10.5281/zenodo.60847},\n  url = {" \
                   u"http://zenodo.org/record/60847},\n  author = {Brótt, Matthew and Hanke, Michael and Cipollini, " \
                   u"Ben and {Marc-Alexandre Côté} and Markiewicz, Chris and Gerhard, Stephan and Larson, " \
