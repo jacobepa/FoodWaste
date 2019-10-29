@@ -2,6 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
+# pylint: disable=E1101,R0903
 
 """
 Models related to users and profiles.

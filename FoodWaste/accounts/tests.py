@@ -3,7 +3,7 @@
 # coding=utf-8
 # pylint: skip-file
 # We skip this file because it wasn't written by/for EPA.
-# pylint: disable=line-too-long
+# pylint: disable=C0301
 
 """
 Module related to tests for user accounts.
