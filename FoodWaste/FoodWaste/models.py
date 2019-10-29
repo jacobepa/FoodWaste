@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301
+# pylint: disable=C0301,E1101,W0611,C0411
 
 
 """Definition of models."""

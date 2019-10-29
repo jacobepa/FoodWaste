@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=line-too-long
+# pylint: disable=W0613,E1101,R0903,W0611,C0411
 
 """Definition of forms."""
 

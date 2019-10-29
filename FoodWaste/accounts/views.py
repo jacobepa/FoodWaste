@@ -3,7 +3,7 @@
 # coding=utf-8
 # young.daniel@epa.gov
 # pylint: disable=line-too-long
-# pylint: disable=E0012,E1101,R0901,W0703,W0221,W0212,W0613
+# pylint: disable=E0012,E1101,R0901,W0703,W0221,W0212,W0613,R0913
 
 """
 Views for managing user accounts and profiles.

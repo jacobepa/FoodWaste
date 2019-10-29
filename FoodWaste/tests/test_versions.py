@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301
+# pylint: disable=C0301,C0103,W0212,C0415
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-

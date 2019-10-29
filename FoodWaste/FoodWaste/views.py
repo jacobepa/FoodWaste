@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301
+# pylint: disable=C0301,E1101,R0901,W0613,W0622,C0411
 
 
 """Definition of views."""

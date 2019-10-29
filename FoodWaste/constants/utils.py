@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301
+# pylint: disable=C0301,R0913
 
 """
 Utility methods for the entire project.

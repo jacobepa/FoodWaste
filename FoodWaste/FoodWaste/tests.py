@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-
+# pylint: disable=W0511,R0904
 
 """
 This file demonstrates writing tests using the unittest module.
