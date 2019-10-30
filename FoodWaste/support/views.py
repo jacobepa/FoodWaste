@@ -14,14 +14,16 @@ Available functions:
 
 from datetime import datetime, timedelta
 from decimal import getcontext
+from os.path import join
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import never_cache
 from django.views.generic import FormView, TemplateView
 from django.shortcuts import render
+from FoodWaste.settings import DOWNLOADS_DIR, MANUAL_NAME
 from support.forms import InformationRequestForm, SupportForm, \
     SupportAdminForm, SupportTypeForm, PriorityForm
 from support.models import Support, Priority, SupportType
@@ -85,6 +87,42 @@ class EventsView(TemplateView):
         """
         return render(request, "main/events.html", {})
 
+@login_required
+def download_manual(request):
+    """Download the user manual."""
+    return download_file(request, MANUAL_NAME)
+
+
+def download_file(request, name):
+    """Receives the path, name, extension of a file to be returned to user."""
+    name_split = name.split('.')
+    ext = name_split[len(name_split) - 1]
+    file = join(DOWNLOADS_DIR, name)
+
+    if ext == 'pdf':
+        with open(file, 'rb') as pdf:
+            response = HttpResponse(pdf)
+            con_disp = 'attachment; filename="' + name + '"'
+            response['Content-Disposition'] = con_disp
+            return response
+
+    elif ext == 'docx':
+        with open(file, 'rb') as doc:
+            response = HttpResponse(doc)
+            con_disp = 'attachment; filename="' + name + '"'
+            response['Content-Disposition'] = con_disp
+            return response
+
+    elif 'xls' in ext:
+        with open(file, 'rb') as xls:
+            con_type = '''application/vnd.vnd.openxmlformats-officedocument.
+                          spreadsheetml.sheet'''
+            response = HttpResponse(xls, con_type)
+            con_disp = 'attachment; filename="' + name + '"'
+            response['Content-Disposition'] = con_disp
+            return response
+
+    return HttpResponse()
 
 @login_required
 def index(request):

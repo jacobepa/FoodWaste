@@ -56,7 +56,11 @@ class ExistingData(models.Model):
     # this data.
     disclaimer_req = models.BooleanField(blank=False)
 
+    # TODO: Consider using this tool to auto-generate a basic citation.
+    # https://github.com/thenaterhood/python-autocite
+    # Require users to double-check the generated citation before continuing
     citation = models.CharField(blank=False, null=False, max_length=2048)
+
     date_accessed = models.DateTimeField(blank=False, null=False, default=timezone.now)
     comments = models.CharField(blank=True, null=True, max_length=2048)
     created_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)

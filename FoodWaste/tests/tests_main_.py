@@ -2,6 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
+# Pylint skip this file because it wasn't created by EPA:
+# pylint: skip-file
 # pylint: disable=C0301,C0103,W0613
 
 """

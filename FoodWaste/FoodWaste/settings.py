@@ -23,6 +23,10 @@ import posixpath
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+EMAIL_DISCLAIMER = '<p style="font-weight:bold;color:red">Please do not reply to this email. Thank you.</p>'
+EMAIL_DISCLAIMER_PLAIN = 'Please do not reply to this email. Thank you.'
+BCC_EMAIL = ''
+
 WKHTMLTOPDF_CMD_OPTIONS = {
     'quiet': True,
 }
@@ -118,7 +122,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization.
 # https://docs.djangoproject.com/en/2.1/topics/i18n/.
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+# TODO: Update time zone in all other Django applications. They are set to UTC.
+TIME_ZONE = 'America/New_York'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -128,7 +133,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'FoodWaste', 'static')
 
-DOWNLOADS_DIR = os.path.join("..", "DOCS")
+DOWNLOADS_DIR = os.path.join("..", "docs")
+MANUAL_NAME = 'K-LRTD-0032360-QM-1-0.docx'
+# EXCEL_TOOL = ''
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "FoodWaste/media")
 MEDIA_URL = "/media/"

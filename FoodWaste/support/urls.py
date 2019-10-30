@@ -14,13 +14,15 @@ Available functions:
 """
 
 from django.conf.urls import url
-from support.views import RequestInformationView, UserManualView, create_support, EventsView, \
-  edit_support, edit_support_admin, delete_support, list_supports, search_support, \
-  show_support, create_support_type, edit_support_type, \
-  delete_support_type, list_support_types, search_support_type, \
-  show_support_type, create_priority, edit_priority, delete_priority, list_priorities, \
-  search_priority, show_priority, search_support_for_last_30, \
-  search_support_for_last_60, search_support_for_last_90, search_support_for_last_180, index
+from support.views import RequestInformationView, UserManualView, \
+    create_support, EventsView, edit_support, edit_support_admin, \
+    delete_support, list_supports, search_support, show_support, \
+    create_support_type, edit_support_type, delete_support_type, \
+    list_support_types, search_support_type, show_support_type, \
+    create_priority, edit_priority, delete_priority, list_priorities, \
+    search_priority, show_priority, search_support_for_last_30, \
+    search_support_for_last_60, search_support_for_last_90, \
+    search_support_for_last_180, index, download_manual
 
 urlpatterns = [
     url(r'^$', index),
@@ -29,6 +31,7 @@ urlpatterns = [
         name="request_info"),
 
     url(r'^documentation/$', UserManualView.as_view(), name="documentation"),
+    url(r'^download_manual/$', download_manual, name="download_manual"),
     url(r'events/', EventsView.as_view(), name='events'),
 
     url(r'^create/$', create_support, name='create_support'),

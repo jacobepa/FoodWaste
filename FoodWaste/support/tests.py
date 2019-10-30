@@ -39,17 +39,17 @@ class TestSupport(TestCase):
     def test_request_information_view_get(self):
         """Tests the Request Information View get page."""
         response = self.client.get('/support/request_info/', SUPPORT_ONE)
-        self.assertContains(response, 'information', 3, 200)
+        self.assertContains(response, 'information', 6, 200)
 
     def test_request_information_view_post(self):
         """Tests the Request Information View post page."""
         response = self.client.post('/support/request_info/', SUPPORT_ONE)
-        self.assertContains(response, 'information', 1, 200)
+        self.assertContains(response, 'information', 4, 200)
 
     def test_user_manual_view_get(self):
-        """Tests the User Manual View get page."""
-        response = self.client.get('/support/manual/', SUPPORT_ONE)
-        self.assertContains(response, 'manual', 5, 200)
+        """Tests the Documentation (User Manual) View get page."""
+        response = self.client.get('/support/documentation/', SUPPORT_ONE)
+        self.assertContains(response, 'manual', 2, 200)
 
     def test_user_create_get(self):
         """Tests the create get page."""
@@ -66,67 +66,67 @@ class TestSupport(TestCase):
     def test_list_supports_get(self):
         """Tests the list supports get."""
         response = self.client.get('/support/list/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_list_supports_post(self):
         """Tests the list supports post."""
         response = self.client.post('/support/list/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_get(self):
         """Tests the search support get."""
         response = self.client.get('/support/search/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_post(self):
         """Tests the search support post."""
         response = self.client.post('/support/search/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_for_last_30_get(self):
         """Tests the search support for last30 get."""
         response = self.client.get('/support/support/search/result/thirty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_for_last_30_post(self):
         """Tests the search support for last30 post."""
         response = self.client.post('/support/support/search/result/thirty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_for_last_60_get(self):
         """Tests the search support for last60 get."""
         response = self.client.get('/support/support/search/result/sixty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_for_last_60_post(self):
         """Tests the search support for last60 post."""
         response = self.client.post('/support/support/search/result/sixty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_for_last_90_get(self):
         """Tests the search support for last90 get."""
         response = self.client.get('/support/support/search/result/ninety/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_for_last_90_post(self):
         """Tests the search support for last90 post."""
         response = self.client.post('/support/support/search/result/ninety/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_for_last_180_get(self):
         """Tests the search support for last180 get."""
         response = self.client.get('/support/support/search/result/one_eighty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_search_support_for_last_180_post(self):
         """Tests the search support for last180 post."""
         response = self.client.post('/support/support/search/result/one_eighty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 25, 200)
+        self.assertContains(response, 'id', 17, 200)
 
     def test_create_support_type_get(self):
         """Tests the create support type get."""
         response = self.client.get('/support/type/create/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 30, 200)
+        self.assertContains(response, 'id', 22, 200)
 
     def test_create_support_type_post(self):
         """Tests the create support type post."""

@@ -7,28 +7,28 @@
 
 """Definition of views."""
 
-from constants.widgets import strip_non_numerals
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from django.core.files.storage import FileSystemStorage
-from django.db.models import Q
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView
 from FoodWaste.forms import ExistingDataForm
 from FoodWaste.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
 from FoodWaste.settings import APP_DISCLAIMER
-from teams.models import TeamMembership, Team
+from teams.models import TeamMembership
+from openpyxl import Workbook
 from wkhtmltopdf.views import PDFTemplateResponse
 
 
 def get_existing_data_for_user(user):
-    """ """
-    # Instead of querying for member teams, filter on
-    # non-member teams and do EXCLUDE.
+    """
+    Method to get all data belonging to a team of which the provided user
+    is a member. The logic filters for the user's non-member teams,
+    then excludes those teams from the data results.
+    """
     include_teams = TeamMembership.objects.filter(
         member=user).values_list('team', flat=True)
     exclude_teams = TeamMembership.objects.exclude(
@@ -183,7 +183,6 @@ def export_excel(request, *args, **kwargs):
         data = [ExistingData.objects.get(id=data_id)]
         filename = 'export_%s.xlsx' % data[0].article_title
 
-    from openpyxl import Workbook
     workbook = Workbook()
     sheet = workbook.active
     row = 1

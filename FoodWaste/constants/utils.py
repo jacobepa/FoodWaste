@@ -71,11 +71,11 @@ def create_qt_email_message(email_subject, text_content, from_email, to_emails,
     for monitoring that email functionality is working. Returns
     EmailMultiAlternatives object.
     """
-    if settings.BCC_GSC_EMAIL:
+    if settings.BCC_EMAIL:
         if blind_carbon_copy:
-            blind_carbon_copy.append(settings.BCC_GSC_EMAIL)
+            blind_carbon_copy.append(settings.BCC_EMAIL)
         else:
-            blind_carbon_copy = [settings.BCC_GSC_EMAIL]
+            blind_carbon_copy = [settings.BCC_EMAIL]
 
     html_content = settings.EMAIL_DISCLAIMER + text_content.replace("\r\n", "<br>").replace("\n", "<br>")
     text_content_modified = settings.EMAIL_DISCLAIMER_PLAIN + "\r\n\r\n" + text_content

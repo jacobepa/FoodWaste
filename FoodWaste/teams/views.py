@@ -230,11 +230,11 @@ class APITeamListView(APIView):
 
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self, request, exclude=None, format=None):
+    def get(self, request, *args, **kwargs):
         """Return all teams the current user is a member of."""
         user = self.request.user
         # Get the list of teams to exclude.
-        exclude = self.kwargs.get('exclude', None) if exclude is None else exclude
+        exclude = kwargs.get('exclude', None)
         if exclude is None:
             exclude_json = self.request.query_params.get('exclude', None)
             if exclude_json is not None:
@@ -258,7 +258,7 @@ class APITeamListView(APIView):
         serializer = TeamSerializer(teams, many=True)
         return Response(serializer.data)
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         """Create a new team."""
         serializer = TeamSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
@@ -298,13 +298,13 @@ class APITeamDetailView(APIView):
         except Team.DoesNotExist:
             raise Http404
 
-    def get(self, request, team_id, format=None):
+    def get(self, request, team_id, *args, **kwargs):
         """Get details for the specified team."""
         (team, _membership) = self.get_object(team_id, request.user)
         serializer = TeamSerializer(team)
         return Response(serializer.data)
 
-    def put(self, request, team_id, format=None):
+    def put(self, request, team_id, *args, **kwargs):
         """Update an existing team. :param request: :param team_id: :param format: :return:."""
         (team, membership) = self.get_object(team_id, request.user)
         if not membership.can_edit:
@@ -316,7 +316,7 @@ class APITeamDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, team_id, format=None):
+    def delete(self, request, team_id, *args, **kwargs):
         """
         Delete a team.
 
@@ -355,9 +355,10 @@ class APITeamMembershipListView(APIView):
         except Team.DoesNotExist:
             raise Http404
 
-    def get(self, request, team_id, nonmember=None, format=None):
+    def get(self, request, team_id, *args, **kwargs):
         """Get the membership information for the specified team."""
         # If query param "nonmember" is set, returns users not on this team.
+        nonmember = kwargs.get('nonmember', None)
         nonmember = request.query_params.get('nonmember', None) if nonmember is None else nonmember
         if nonmember is not None:
             users = User.objects.exclude(member_memberships__team_id=team_id).order_by('last_name').all()
@@ -367,7 +368,7 @@ class APITeamMembershipListView(APIView):
         serializer = TeamMembershipSerializer(team_memberships, many=True)
         return Response(serializer.data)
 
-    def post(self, request, team_id, format=None):
+    def post(self, request, team_id, *args, **kwargs):
         """Add a new membership for a user."""
         # Add the team info to the data.
         request.data["team"] = team_id
@@ -406,13 +407,13 @@ class APITeamMembershipDetailView(APIView):
         except Team.DoesNotExist:
             raise Http404
 
-    def get(self, request, team_id, membership_id, format=None):
+    def get(self, request, team_id, membership_id, *args, **kwargs):
         """Get details for the specified team."""
         (membership, _current_user_can_edit) = self.get_object(membership_id, request.user)
         serializer = TeamMembershipSerializer(instance=membership)
         return Response(serializer.data)
 
-    def put(self, request, team_id, membership_id, format=None):
+    def put(self, request, team_id, membership_id, *args, **kwargs):
         """
         Update an existing team.
 
@@ -434,7 +435,7 @@ class APITeamMembershipDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, team_id, membership_id, format=None):
+    def delete(self, request, team_id, membership_id, *args, **kwargs):
         """Delete the specified team membership."""
         (membership, current_user_can_edit) = self.get_object(membership_id, request.user)
         if not current_user_can_edit:

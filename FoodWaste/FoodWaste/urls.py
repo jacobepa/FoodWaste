@@ -6,7 +6,6 @@
 
 """Definition of urls for FoodWaste."""
 
-from datetime import datetime
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
