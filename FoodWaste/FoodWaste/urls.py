@@ -31,6 +31,10 @@ urlpatterns = [
         export_pdf, name='existing_data_pdf'),
     url(r'^existingdata/exportexcel/(?P<pk>\d+)/?$',
         export_excel, name='existing_data_excel'),
+    url(r'^existingdata/exportpdf/?$',
+        export_pdf, name='existing_data_pdf'),
+    url(r'^existingdata/exportexcel/?$',
+        export_excel, name='existing_data_excel'),
 
     url(r'^existingdata/create/?$',
         ExistingDataCreate.as_view(),

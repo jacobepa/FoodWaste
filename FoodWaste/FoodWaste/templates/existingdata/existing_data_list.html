@@ -40,9 +40,19 @@
         </table>
 
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <i class="btn btn-info btn-md" onclick="viewEditExistingData(this)" disabled>
                     View or Edit Existing Data
+                </i>
+            </div>
+            <div class="col-sm-4">
+                <i class="btn btn-info btn-md" onclick="exportAllData('pdf')">
+                    Export All Data to PDF
+                </i>
+            </div>
+            <div class="col-sm-4">
+                <i class="btn btn-info btn-md" onclick="exportAllData('excel')">
+                    Export All Data to Excel
                 </i>
             </div>
         </div>
@@ -60,6 +70,12 @@
         function viewEditExistingData(btn) {
             if ($(btn).attr('disabled')) return;
             window.location.href = '/existingdata/detail/' + $(btn).attr('id');
+        }
+        function exportAllData(exportType) {
+            if (exportType === 'pdf')
+                window.location.href = '/existingdata/exportpdf/';
+            else
+                window.location.href = '/existingdata/exportexcel/';
         }
     </script>
 {% endblock %}

@@ -25,6 +25,20 @@ from teams.models import TeamMembership, Team
 from wkhtmltopdf.views import PDFTemplateResponse
 
 
+def get_existing_data_for_user(user):
+    """ """
+    # Instead of querying for member teams, filter on
+    # non-member teams and do EXCLUDE.
+    include_teams = TeamMembership.objects.filter(
+        member=user).values_list('team', flat=True)
+    exclude_teams = TeamMembership.objects.exclude(
+        team__in=include_teams).distinct().values_list('team', flat=True)
+    exclude_data = ExistingDataSharingTeamMap.objects.filter(
+        team__in=exclude_teams).values_list('data', flat=True)
+    queryset = ExistingData.objects.exclude(id__in=exclude_data)
+    return queryset
+
+
 class ExistingDataList(ListView):
     """View for Existing Data Tracking Tool."""
 
@@ -33,16 +47,7 @@ class ExistingDataList(ListView):
     template_name = 'existingdata/existing_data_list.html'
 
     def get_queryset(self):
-        # Instead of querying for member teams, filter on non-member teams and
-        # do EXCLUDE.
-        include_teams = TeamMembership.objects.filter(
-            member=self.request.user).values_list('team', flat=True)
-        exclude_teams = TeamMembership.objects.exclude(
-            team__in=include_teams).distinct().values_list('team', flat=True)
-        exclude_data = ExistingDataSharingTeamMap.objects.filter(
-            team__in=exclude_teams).values_list('data', flat=True)
-        queryset = ExistingData.objects.exclude(id__in=exclude_data)
-        return queryset
+        return get_existing_data_for_user(self.request.user)
 
 
 class ExistingDataDetail(DetailView):
@@ -144,12 +149,21 @@ def about(request):
 
 def export_pdf(request, *args, **kwargs):
     """Function to export Existing Existing Data as a PDF document."""
-    data_id = kwargs['pk']
-    data = ExistingData.objects.get(id=data_id)
-    filename = 'export_%s.pdf' % data.article_title
+
+    data_id = kwargs.get('pk', None)
+    if data_id is None:
+        # Export ALL ExistingData available for this user to PDF.
+        data = get_existing_data_for_user(request.user)
+        template = get_template('existingdata/existing_data_pdf_multi.html')
+        filename = 'export_existingdata_%s.pdf' % request.user.username
+    else:
+        data = ExistingData.objects.get(id=data_id)
+        template = get_template('existingdata/existing_data_pdf.html')
+        filename = 'export_%s.pdf' % data.article_title
+
     resp = PDFTemplateResponse(
         request=request,
-        template=get_template('existingdata/existing_data_pdf.html'),
+        template=template,
         filename=filename,
         context={'object': data},
         show_content_in_browser=False,
@@ -160,32 +174,37 @@ def export_pdf(request, *args, **kwargs):
 
 def export_excel(request, *args, **kwargs):
     """Function to export Existing Existing Data as an Excel sheet."""
-    data_id = kwargs['pk']
-    data = ExistingData.objects.get(id=data_id)
-    filename = 'export_%s.xlsx' % data.article_title
-    from openpyxl import Workbook
+    data_id = kwargs.get('pk', None)
+    if data_id is None:
+        # Export ALL ExistingData available for this user to Excel.
+        breakhere = true
 
-    workbook = Workbook()
-    sheet = workbook.active
-    row = 1
+    else:
+        data = ExistingData.objects.get(id=data_id)
+        filename = 'export_%s.xlsx' % data.article_title
+        from openpyxl import Workbook
 
-    # Optionally add colors formatting before writing to cells.
-    # Programmatically write results to the PDF.
-    for name, value in data.get_fields():
-        sheet.cell(row=row, column=1).value = name
-        sheet.cell(row=row, column=2).value = value
-        row += 1
+        workbook = Workbook()
+        sheet = workbook.active
+        row = 1
 
-    if data.disclaimer_req:
-        sheet.cell(row=row, column=1).value = 'Disclaimer'
-        repl_str = '\n                    '
-        # Replace '\n                    ' with ' ' in the disclaimer
-        sheet.cell(row=row, column=2).value = APP_DISCLAIMER.replace(repl_str, ' ')
+        # Optionally add colors formatting before writing to cells.
+        # Programmatically write results to the PDF.
+        for name, value in data.get_fields():
+            sheet.cell(row=row, column=1).value = name
+            sheet.cell(row=row, column=2).value = value
+            row += 1
 
-    # Now return the generated excel sheet to be downloaded.
-    type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    response = HttpResponse(content_type=type)
-    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-    sheet.title = filename.split('.')[0]
-    workbook.save(response)
-    return response
+        if data.disclaimer_req:
+            sheet.cell(row=row, column=1).value = 'Disclaimer'
+            repl_str = '\n                    '
+            # Replace '\n                    ' with ' ' in the disclaimer
+            sheet.cell(row=row, column=2).value = APP_DISCLAIMER.replace(repl_str, ' ')
+
+        # Now return the generated excel sheet to be downloaded.
+        type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        response = HttpResponse(content_type=type)
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        sheet.title = filename.split('.')[0]
+        workbook.save(response)
+        return response

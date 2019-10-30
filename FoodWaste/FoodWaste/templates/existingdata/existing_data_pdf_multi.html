@@ -1,0 +1,19 @@
+﻿{% extends "main/base.html" %}
+
+{% block content %}
+    <div class="container">
+        {% for obj in object %}
+            <div class="row">
+            {% for name, value in obj.get_fields %}
+                {% if value %}
+                <div class="col-sm-12">
+                    <label class="col-sm-3">{{name}}</label>
+                    <div class="col-sm-9">{{value}}</div>
+                </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <hr />
+        {% endfor %}
+    </div>
+{% endblock %}

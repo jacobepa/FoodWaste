@@ -21,6 +21,7 @@ Databases/
 foodwaste_data/
 data_import/
 local/
+media/
 media/uploads/
 media/*/attachments/
 
