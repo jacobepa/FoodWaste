@@ -10,10 +10,11 @@ from accounts.models import User
 from constants.models import YES_OR_NO
 from django.forms import CharField, ModelForm, TextInput, Textarea, \
     PasswordInput, ModelMultipleChoiceField, SelectMultiple, BooleanField, \
-    RadioSelect, FileField, ClearableFileInput
+    RadioSelect, FileField, ClearableFileInput, ModelChoiceField, \
+    Select
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
-from FoodWaste.models import ExistingData
+from FoodWaste.models import ExistingData, ExistingDataSource
 from teams.models import TeamMembership, Team
 
 
@@ -63,11 +64,15 @@ class ExistingDataForm(ModelForm):
                           'placeholder': 'Search Term'}),
         label=_("Search for Existing Data"), required=True)
 
-    article_title = CharField(
-        max_length=255,
-        widget=TextInput({'class': 'form-control mb-2',
-                          'placeholder': 'Paste Article Title Here'}),
-        label=_("Article Title"), required=True)
+    #article_title = CharField(
+    #    max_length=255,
+    #    widget=TextInput({'class': 'form-control mb-2',
+    #                      'placeholder': 'Paste Article Title Here'}),
+    #    label=_("Article Title"), required=True)
+
+    article_title = ModelChoiceField(
+        label=_("Source"), queryset=ExistingDataSource.objects.all(),
+        widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
 
     disclaimer_req = BooleanField(label=_("EPA Discaimer Required"),
                                   required=False,
@@ -75,13 +80,13 @@ class ExistingDataForm(ModelForm):
                                   widget=RadioSelect(choices=YES_OR_NO))
 
     citation = CharField(
-        max_length=255,
-        widget=Textarea({'rows': 2, 'class': 'form-control mb-2',
+        max_length=2048,
+        widget=Textarea({'rows': 3, 'class': 'form-control mb-2',
                          'placeholder': 'APA Citation'}),
         label=_("APA Citation"), required=True)
 
     comments = CharField(
-        max_length=1024,
+        max_length=2048,
         widget=Textarea({'rows': 3, 'class': 'form-control mb-2',
                          'placeholder': 'Comments'}),
         label=_("Comments"), required=False)

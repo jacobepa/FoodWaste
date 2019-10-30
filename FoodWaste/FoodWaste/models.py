@@ -26,6 +26,17 @@ class Attachment(models.Model):
     uploaded_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
 
 
+
+class ExistingDataSource(models.Model):
+    """Model containing options for the data source dropdown"""
+
+    name = models.CharField(blank=False, null=False, max_length=255)
+
+    def __str__(self):
+        """Override str method to display name instead of stringified obj"""
+        return self.name
+
+
 class ExistingData(models.Model):
     """Class representing an instance of Existing Data Tracking Tool."""
 
@@ -33,15 +44,21 @@ class ExistingData(models.Model):
     email = models.CharField(blank=False, null=False, max_length=255)
     phone = models.CharField(blank=False, null=False, max_length=32)
     search = models.CharField(blank=False, null=False, max_length=255)
-    article_title = models.CharField(blank=False, null=False, max_length=255)
+
+    #article_title = models.CharField(blank=True, null=True, max_length=255)
+
+    article_title = models.ForeignKey(ExistingDataSource,
+                                      blank=False, null=False,
+                                      related_name='existing_data_sources',
+                                      on_delete=models.CASCADE)
 
     # Indicates if EPA disclaimer should be included when printing/exporting
     # this data.
     disclaimer_req = models.BooleanField(blank=False)
 
-    citation = models.CharField(blank=False, null=False, max_length=512)
+    citation = models.CharField(blank=False, null=False, max_length=2048)
     date_accessed = models.DateTimeField(blank=False, null=False, default=timezone.now)
-    comments = models.CharField(blank=True, null=True, max_length=1024)
+    comments = models.CharField(blank=True, null=True, max_length=2048)
     created_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
     # List of teams with which the Existing Data is shared.
     teams = models.ManyToManyField(Team, through='ExistingDataSharingTeamMap')
