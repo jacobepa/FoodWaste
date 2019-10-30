@@ -41,7 +41,7 @@ def get_instruction_storage_path(instance, filename):
 
 
 class SupportType(models.Model):
-    """TODO Add docstring."""
+    """Model representing a Support request Type."""
 
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified = models.DateTimeField(auto_now=True, null=True, blank=True)
@@ -60,17 +60,18 @@ class SupportType(models.Model):
                                    decimal_places=1)
 
     class Meta:
-        """TODO Add docstring."""
-
+        """Metadata that defines the ordering for SupportType model."""
         ordering = ["ordering", ]
 
     def __str__(self):
-        """TODO Add docstring."""
+        """
+        Stringify method to return object name instead of default object view
+        """
         return self.name
 
 
 class Priority(models.Model):
-    """TODO Add docstring."""
+    """Model representing the priority of a Support request."""
 
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified = models.DateTimeField(auto_now=True, null=True, blank=True)
@@ -89,17 +90,18 @@ class Priority(models.Model):
                                    decimal_places=1)
 
     class Meta:
-        """TODO Add docstring."""
-
+        """Metadata that defines the ordering for Priority model."""
         ordering = ["ordering", ]
 
     def __str__(self):
-        """TODO Add docstring."""
+        """
+        Stringify method to return object name instead of default object view
+        """
         return self.name
 
 
 class Support(models.Model):
-    """TODO Add docstring."""
+    """Model representing a Support request for this software."""
 
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified = models.DateTimeField(auto_now=True, null=True, blank=True)
@@ -138,12 +140,13 @@ class Support(models.Model):
     date_resolved = models.DateField(blank=True, null=True)
 
     class Meta:
-        """TODO Add docstring."""
-
+        """Metadata that defines the ordering for Support model."""
         ordering = ["ordering", ]
 
     def __str__(self):
-        """TODO Add docstring."""
+        """
+        Stringify method to return object name instead of default object view
+        """
         return self.name
 
 

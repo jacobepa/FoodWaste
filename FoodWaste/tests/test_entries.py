@@ -2,7 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,W0611
+# Also disabling docstrings since this is not an EPA file
+# pylint: disable=C0301,W0611,R0903,C0103,C0114,C0115,C0116
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil; coding: utf-8 -*-
@@ -28,7 +29,7 @@ from ..entries import BibTeX, Doi, Text, Url
 
 
 def test_comparison():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     assert Text("123") == Text("123")
     assert Text("123") != Text("124")
     assert Text("123", 'key') == Text("123", 'key')
@@ -40,6 +41,6 @@ def test_comparison():
 
 
 def test_sugaring_api():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     assert Url("http://1.com").url == "http://1.com"
     assert Doi("1.com").doi == "1.com"

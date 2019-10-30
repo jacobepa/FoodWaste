@@ -76,10 +76,8 @@ class ExistingDataCreate(CreateView):
             obj.created_by = request.user
             obj.disclaimer_req = form.cleaned_data['disclaimer_req']
             obj.save()
-            # TODO Parse and insert attached files:
             for field in request.FILES:
                 file = request.FILES[field]
-                # fs = FileSystemStorage().
                 # filename = fs.save(file.name, file).
                 # uploaded_file_url = fs.url(filename).
                 # Insert the attachment.

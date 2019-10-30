@@ -98,7 +98,7 @@ def assert_and_parse_html(self, html, user_msg, msg):
 
 
 class _AssertNumQueriesContext(CaptureQueriesContext):
-    """Add docstring."""  # TODO add docstring.
+    """Add docstring."""  # Not Necessary in this File.
 
     def __init__(self, test_case, num, conn):
         self.test_case = test_case
@@ -123,7 +123,7 @@ class _AssertNumQueriesContext(CaptureQueriesContext):
 
 
 class _AssertTemplateUsedContext:
-    """Add docstring."""  # TODO add docstring.
+    """Add docstring."""  # Not Necessary in this File.
 
     def __init__(self, test_case, template_name):
         self.test_case = test_case
@@ -174,14 +174,14 @@ class _AssertTemplateUsedContext:
 
 
 class _AssertTemplateNotUsedContext(_AssertTemplateUsedContext):
-    """Add docstring."""  # TODO add docstring.
+    """Add docstring."""  # Not Necessary in this File.
 
     def test(self):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         return self.template_name not in self.rendered_template_names
 
     def message(self):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         return '%s was rendered.' % self.template_name
 
 
@@ -230,7 +230,7 @@ class SimpleTestCase(unittest.TestCase):
 
 
 def teardownclass(cls):
-    """Add docstring."""  # TODO add docstring.
+    """Add docstring."""  # Not Necessary in this File.
     if not cls.allow_database_queries:
         for alias in connections:
             conn = connections[alias]
@@ -812,7 +812,7 @@ def asserthtmlnotequal(self, html1, html2, msg=None):
 
 
 def assertinhtml(self, needle, haystack, count=None, msg_prefix=''):
-    """Add docstring."""  # TODO add docstring.
+    """Add docstring."""  # Not Necessary in this File.
     needle = assert_and_parse_html(self, needle, None, 'First argument is not valid HTML:')
     haystack = assert_and_parse_html(self, haystack, None, 'Second argument is not valid HTML:')
     real_count = haystack.count(needle)
@@ -1075,7 +1075,7 @@ class TransactionTestCase(SimpleTestCase):
                          inhibit_post_migrate=inhibit_post_migrate)
 
     def assert_queryset_equal(self, queryset, values, transform=repr, ordered=True, msg=None):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         items = map(transform, queryset)
         if not ordered:
             return self.assertEqual(Counter(items), Counter(values), msg=msg)
@@ -1088,7 +1088,7 @@ class TransactionTestCase(SimpleTestCase):
         return self.assertEqual(list(items), values, msg=msg)
 
     def assert_num_queries(self, num, func=None, *args, using=DEFAULT_DB_ALIAS, **kwargs):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         conn = connections[using]
 
         context = _AssertNumQueriesContext(self, num, conn)
@@ -1135,7 +1135,7 @@ class TestCase(TransactionTestCase):
 
     @classmethod
     def setupclass(cls):
-        """Add docstring."""  # TODO
+        """Add docstring.""" # Not Necessary
         super().setupclass()
         if not conns_support_trans():
             return
@@ -1157,7 +1157,7 @@ class TestCase(TransactionTestCase):
 
     @classmethod
     def teardownclass(cls):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         if conns_support_trans():
             cls._rollback_atomics(cls.cls_atomics)
             for conn in connections.all():
@@ -1209,7 +1209,7 @@ class CheckCondition:
         self.conditions = conditions
 
     def add_condition(self, condition, reason):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         return self.__class__(*self.conditions + ((condition, reason),))
 
     def __get__(self, instance, cls=None):
@@ -1227,14 +1227,14 @@ class CheckCondition:
 
 
 def _deferredskip(condition, reason):
-    """Add docstring."""  # TODO add docstring.
+    """Add docstring."""  # Not Necessary in this File.
     def decorator(test_func):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         if not (isinstance(test_func, type) and
                 issubclass(test_func, unittest.TestCase)):
             @wraps(test_func)
             def skip_wrapper(*args, **kwargs):
-                """Add docstring."""  # TODO add docstring.
+                """Add docstring."""  # Not Necessary in this File.
                 if condition():
                     raise unittest.SkipTest(reason)
                 return test_func(*args, **kwargs)
@@ -1329,7 +1329,7 @@ class FSFilesHandler(WSGIHandler):
         return super().get_response(request)
 
     def serve(self, request):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         os_rel_path = self.file_path(request.path)
         os_rel_path = posixpath.normpath(unquote(os_rel_path))
         # Emulate behavior of django.contrib.staticfiles.views.serve() when it
@@ -1355,12 +1355,12 @@ class _StaticFilesHandler(FSFilesHandler):
 
     @staticmethod
     def get_base_dir():
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         return settings.STATIC_ROOT
 
     @staticmethod
     def get_base_url():
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         return settings.STATIC_URL
 
 
@@ -1374,12 +1374,12 @@ class _MediaFilesHandler(FSFilesHandler):
 
     @staticmethod
     def get_base_dir():
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         return settings.MEDIA_ROOT
 
     @staticmethod
     def get_base_url():
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         return settings.MEDIA_URL
 
 
@@ -1424,7 +1424,7 @@ class LiveServerThread(threading.Thread):
                                   allow_reuse_address=False)
 
     def terminate(self):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         if hasattr(self, 'httpd'):
             # Stop the WSGI server.
             self.httpd.shutdown()
@@ -1451,7 +1451,7 @@ class LiveServerTestCase(TransactionTestCase):
 
     @classproperty
     def live_server_url(self):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         return 'http://%s:%s' % (self.host, self.server_thread.port)
 
     @classmethod
@@ -1494,7 +1494,7 @@ class LiveServerTestCase(TransactionTestCase):
 
     @classmethod
     def teardownclass(cls):
-        """Add docstring."""  # TODO add docstring.
+        """Add docstring."""  # Not Necessary in this File.
         cls._teardownclass()
         cls._live_server_modified_settings.disable()
         super().teardownclass()

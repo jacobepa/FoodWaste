@@ -2,7 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,W0611,R0903,C0103
+# Also disabling docstrings since this is not an EPA file
+# pylint: disable=C0301,W0611,R0903,C0103,C0114,C0115,C0116
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
@@ -69,7 +70,6 @@ print("done123")
     'collector_class', [DueCreditCollector, InactiveDueCreditCollector]
 )
 def test_api(collector_class):
-    """Add docstring."""  # TODO add docstring.
     due = collector_class()
     # Add references.
     due.add(BibTeX('@article{XXX00, ...}'))
@@ -92,7 +92,6 @@ def test_api(collector_class):
         return None
 
     class Child(object):
-        """TODO: Add docstring."""
 
         # Conception process is usually way too easy to be referenced.
         def __init__(self):

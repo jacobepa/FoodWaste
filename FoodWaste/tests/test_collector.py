@@ -2,7 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,W0212,R0903,R0124
+# Also disabling docstrings since this is not an EPA file
+# pylint: disable=C0301,W0611,R0903,C0103,C0114,C0115,C0116
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
@@ -58,7 +59,7 @@ _sample_doi = "10.3389/fninf.2012.00022"
 
 
 def test_citation_paths():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     entry = BibTeX(_sample_bibtex)
 
     cit1 = Citation(entry, path="somemodule")
@@ -91,7 +92,7 @@ def test_citation_paths():
 
 
 def test_entry():
-    """Add docstring."""  # TODO add docstring.
+    """Not an EPA File, Skipping Doc."""
     entry = BibTeX(_sample_bibtex)
     _test_entry(DueCreditCollector(), entry)
 
@@ -115,13 +116,13 @@ def test_dcite_method():
 
         @due.dcite("XXX0", path='method')
         def method(arg1, kwarg2="blah"):
-            """TODO: Add function docstring."""
+            """Not an EPA File, Skipping Doc."""
             assert arg1 == "magical"
             assert kwarg2 == 1
             return "load"
 
         class SomeClass(object):
-            """TODO: Add docstring."""
+            """Not an EPA File, Skipping Doc."""
 
             @due.dcite("XXX0", path='someclass:method')
             def method(self, arg1, kwarg2="blah"):
@@ -164,7 +165,7 @@ def test_dcite_method():
 
             @due.dcite("XXX0", path="some.module.without.method")
             def method2(self, arg1, kwarg2="blah"):
-                """TODO: Add function docstring."""
+                """Not an EPA File, Skipping Doc."""
                 assert arg1 == "magical"
                 return "load"
 
@@ -205,7 +206,7 @@ def _test_args_match_conditions(conds):
 
 
 def test_args_match_conditions():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     _test_args_match_conditions({(1, 'method'): {'purge', 'fullpurge', 'DC_DEFAULT'}})
     _test_args_match_conditions({(1, 'method'): {'purge', 'fullpurge', 'DC_DEFAULT'},
                                  (2, 'scope'): {'life', 'DC_DEFAULT'}})
@@ -242,7 +243,7 @@ def _test_dcite_match_conditions(due, callable, path):
 
 
 def test_dcite_match_conditions_function():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     due = DueCreditCollector()
     due.add(BibTeX(_sample_bibtex))
 
@@ -259,12 +260,12 @@ def test_dcite_match_conditions_function():
 
 
 def test_dcite_match_conditions_method():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     due = DueCreditCollector()
     due.add(BibTeX(_sample_bibtex))
 
     class Citeable(object):
-        """Add docstring."""  # TODO add docstring.
+        """Not an EPA File, Skipping Doc."""
 
         def __init__(self, param=None):
             self.param = param
@@ -287,7 +288,7 @@ def test_dcite_match_conditions_method():
 
 
 def test_get_output_handler_method(tmpdir, monkeypatch):
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     tempfile = str(tmpdir.mkdir("sub").join("tempfile.txt"))
     monkeypatch.setitem(os.environ, 'DUECREDIT_OUTPUTS', 'pickle')
     entry = BibTeX(_sample_bibtex)
@@ -306,7 +307,7 @@ def test_get_output_handler_method(tmpdir, monkeypatch):
 
 
 def test_collectors_uniform_api():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     get_api = lambda objs: [x for x in sorted(sum((dir(obj) for obj in objs), []))
                             if not x.startswith('_') or x in '__call__']
     assert get_api([DueCreditCollector, DueSwitch]) == get_api([InactiveDueCreditCollector])
@@ -318,7 +319,7 @@ def _test__docs__(method):
 
 
 def test__docs__():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     _test__docs__(DueCreditCollector.cite)
     _test__docs__(DueCreditCollector.dcite)
     _test__docs__(Citation.__init__)

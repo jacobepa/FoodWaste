@@ -2,7 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,W0212,R0915,E1305,C0103
+# Also disabling docstrings since this is not an EPA file
+# pylint: disable=C0301,W0212,R0915,E1305,C0103,R0903,C0103,C0114,C0115,C0116
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil; coding: utf-8 -*-
@@ -34,7 +35,7 @@ try:
 
     @vcr.use_cassette()
     def test_import_doi():
-        """TODO: Add function docstring."""
+        """Not an EPA File, Skipping Doc."""
         doi_good = '10.1038/nrd842'
         kw = dict(sleep=0.00001, retries=2)
         assert isinstance(import_doi(doi_good, **kw), text_type)
@@ -52,7 +53,7 @@ except ImportError:
 
 
 def test_pickleoutput(tmpdir):
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     entry = BibTeX("@article{Atkins_2002,\n"
                    "title=title,\n"
                    "volume=1, \n"
@@ -89,7 +90,7 @@ def test_pickleoutput(tmpdir):
 
 
 def test_output():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -184,7 +185,7 @@ def test_output():
 
 
 def test_output_return_all(monkeypatch):
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -215,7 +216,7 @@ def test_output_return_all(monkeypatch):
 
 
 def test_output_tags(monkeypatch):
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -251,7 +252,7 @@ def test_output_tags(monkeypatch):
 
 
 def test_text_output():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -312,7 +313,7 @@ def test_text_output():
 
 
 def test_text_output_dump_formatting():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     due = DueCreditCollector()
 
     # Note: XXX atm just to see if it spits out stuff.
@@ -403,7 +404,7 @@ def test_text_output_dump_formatting():
 
 
 def test_bibtex_output():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     entry = BibTeX(_sample_bibtex)
     entry2 = BibTeX(_sample_bibtex2)
 
@@ -518,14 +519,14 @@ def test_get_text_rendering(monkeypatch):
 
 
 def test_text_text_rendering():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     text = "I am so free"
     citation = Citation(Text(text), path='mypath')
     assert get_text_rendering(citation) == text
 
 
 def test_url_text_rendering():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     url = "http://example.com"
     citation = Citation(Url(url), path='mypath')
     assert get_text_rendering(citation) == "URL: " + url
@@ -574,7 +575,7 @@ def test_format_bibtex_with_utf_characters():
 
 
 def test_is_contained():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     toppath = 'package'
     assert _is_contained(toppath, 'package.module')
     assert _is_contained(toppath, 'package.module.submodule')

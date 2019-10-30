@@ -91,7 +91,6 @@ class ExistingDataForm(ModelForm):
                          'placeholder': 'Comments'}),
         label=_("Comments"), required=False)
 
-    # TODO File Upload
     attachments = FileField(label=_("Upload File Attachments"), required=False,
                             widget=ClearableFileInput(
                                 attrs={'multiple': False,

@@ -2,7 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,C0103,W0212,C0415,E0602,W0703,W0122,C0122,E0602,R0801
+# Also disabling docstrings since this is not an EPA file
+# pylint: disable=C0301,C0103,W0212,C0415,E0602,W0703,W0122,C0122,E0602,R0801,C0114,C0115,C0116
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
@@ -20,12 +21,12 @@ from six import PY3
 if PY3:
     # Just to ease testing.
     def cmp(a, b):
-        """TODO: Add function docstring."""
+        """Not an EPA File, Skipping Doc."""
         return (a > b) - (a < b)
 
 
 def test_external_versions_basic():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     ev = ExternalVersions()
     assert ev._versions == {}
     assert ev['duecredit'] == __version__
@@ -72,7 +73,7 @@ def test_external_versions_basic():
 
 
 def test_external_versions_unknown():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     assert str(ExternalVersions.UNKNOWN) == 'UNKNOWN'
 
 
@@ -91,7 +92,7 @@ def _test_external(ev, modname):
 @pytest.mark.parametrize("modname", ['scipy', 'numpy', 'mvpa2', 'sklearn', 'statsmodels',
                                      'pandas', 'matplotlib', 'psychopy'])
 def test_external_versions_popular_packages(modname):
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     ev = ExternalVersions()
 
     _test_external(ev, modname)

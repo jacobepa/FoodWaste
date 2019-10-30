@@ -2,7 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,W0611,W0212,C0103
+# Also disabling docstrings since this is not an EPA file
+# pylint: disable=C0301,W0611,W0211,R0903,C0103,C0114,C0115,C0116
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
@@ -43,10 +44,10 @@ lgr = getLogger('duecredit.tests.injector')
 
 
 class TestActiveInjector(object):
-    """Add docstring."""  # TODO add docstring.
+    """Not an EPA File, Skipping Doc."""
 
     def setup(self):
-        """TODO: Add function docstring."""
+        """Not an EPA File, Skipping Doc."""
         lgr.log(5, "Setting up for a TestActiveInjector test")
         self._cleanup_modules()
         self.due = DueCreditCollector()
@@ -55,7 +56,7 @@ class TestActiveInjector(object):
         # numpy may already be loaded.
 
     def teardown(self):
-        """TODO: Add function docstring."""
+        """Not an EPA File, Skipping Doc."""
         lgr.log(5, "Tearing down after a TestActiveInjector test")
         # gc might not pick up inj after some tests complete.
         # So we will always deactivate explicitly.
@@ -163,12 +164,12 @@ class TestActiveInjector(object):
 
     @pytest.mark.parametrize("func, import_stmt, func_call", [test1, test2, test3])
     def test_simple_injection(self, func, import_stmt, func_call):
-        """TODO: Add function docstring."""
+        """Not an EPA File, Skipping Doc."""
         self._test_simple_injection(func, import_stmt, func_call)
 
     @pytest.mark.parametrize("func, import_stmt, func_call", [test1, test2, test3])
     def test_double_injection(self, func, import_stmt, func_call):
-        """TODO: Add function docstring."""
+        """Not an EPA File, Skipping Doc."""
         self._test_double_injection(func, import_stmt, func_call)
 
     def test_delayed_entries(self):
@@ -198,12 +199,12 @@ class TestActiveInjector(object):
                                           ("duecredit.tests.mod", "nonexisting"),
                                           ("duecredit.tests.mod", "nonexisting.whocares")])
     def test_incorrect_path(self, mod, obj):
-        """TODO: Add function docstring."""
+        """Not an EPA File, Skipping Doc."""
         self._test_incorrect_path(mod, obj)
 
 
 def test_find_iobject():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     assert find_object(mod, 'testfunc1') == (mod, 'testfunc1', mod.testfunc1)
     assert find_object(mod, 'TestClass1') == (mod, 'TestClass1', mod.TestClass1)
     assert find_object(mod, 'TestClass1.testmeth1') == (mod.TestClass1, 'testmeth1', mod.TestClass1.testmeth1)
@@ -212,7 +213,7 @@ def test_find_iobject():
 
 
 def test_no_double_activation():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     orig__import__ = __builtin__.__import__
     try:
         due = DueCreditCollector()
@@ -230,7 +231,7 @@ def test_no_double_activation():
 
 
 def test_get_modules_for_injection():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     assert get_modules_for_injection() == ['mod_biosig',
                                            'mod_dipy',
                                            'mod_mdp',
@@ -256,14 +257,14 @@ def test_cover_our_injections():
 
 
 def test_no_harm_from_deactivate():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     # If we have not activated one -- should not blow if we deactivate it.
     # TODO: catch warning being spitted out
     DueCreditInjector().deactivate()
 
 
 def test_injector_del():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     orig__import__ = __builtin__.__import__
     try:
         due = DueCreditCollector()
@@ -285,7 +286,7 @@ def test_injector_del():
 
 
 def test_injector_delayed_del():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     # interesting case -- if we still have an instance of injector hanging
     # around and then create a new one, activate it but then finally delete/gc
     # old one it would (currently) reset import back (because atm defined as

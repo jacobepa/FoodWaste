@@ -2,7 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,R0903,R0201
+# Also disabling docstrings since this is not an EPA file
+# pylint: disable=C0301,W0212,R0915,E1305,C0103,R0903,C0103,C0114,C0115,C0116
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
@@ -18,18 +19,18 @@ from ..utils import is_interactive
 
 
 def test_is_interactive_crippled_stdout(monkeypatch):
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     class MockedOut(object):
         """The one which has no isatty.        """
 
         def write(self, *args, **kwargs):
-            """TODO: Add function docstring."""
+            """Not an EPA File, Skipping Doc."""
 
     class MockedIsaTTY(MockedOut):
-        """Add docstring."""  # TODO add docstring.
+        """Not an EPA File, Skipping Doc."""
 
         def isatty(self):
-            """TODO: Add function docstring."""
+            """Not an EPA File, Skipping Doc."""
             return True
 
     for inout in ('in', 'out', 'err'):

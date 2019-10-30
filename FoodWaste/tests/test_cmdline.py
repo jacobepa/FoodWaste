@@ -2,7 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,W0611
+# Also disabling docstrings since this is not an EPA file
+# pylint: disable=C0301,W0611,R0903,C0103,C0114,C0115,C0116
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
@@ -22,7 +23,7 @@ from ..cmdline import main
 
 
 def test_import():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     import duecredit.cmdline
     import duecredit.cmdline.main
 
@@ -50,7 +51,7 @@ def test_main_version(monkeypatch):
 # TODO: carry sample .duecredit.p, point to that file, monkeypatch
 # TextOutput and BibTeXOutput .dumps.
 def test_smoke_cmd_summary():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     main.main(['summary'])
 
 

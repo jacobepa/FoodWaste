@@ -2,9 +2,10 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,W0613
+# Also disabling docstrings since this is not an EPA file
+# pylint: disable=C0301,W0611,R0903,C0103,C0114,C0115,C0116
 
-"""TODO: Add module docstring."""
+"""Not an EPA File, Skipping Doc."""
 
 # emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-
 # ex: set sts=4 ts=4 sw=4 noet:
@@ -20,7 +21,7 @@ from ..dueswitch import DueSwitch, due
 
 
 def test_dueswitch_activate(monkeypatch):
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     if due.active:
         pytest.skip("due is already active, can't test more at this point")
 
@@ -48,7 +49,7 @@ def test_dueswitch_activate(monkeypatch):
 
 
 def test_a_bad_one():
-    """TODO: Add function docstring."""
+    """Not an EPA File, Skipping Doc."""
     # We might get neither of those and should fail.
     # see https://github.com/duecredit/duecredit/issues/142
     # So let us through ValueError right away.
