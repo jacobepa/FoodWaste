@@ -174,37 +174,42 @@ def export_pdf(request, *args, **kwargs):
 
 def export_excel(request, *args, **kwargs):
     """Function to export Existing Existing Data as an Excel sheet."""
+
     data_id = kwargs.get('pk', None)
     if data_id is None:
         # Export ALL ExistingData available for this user to Excel.
-        breakhere = true
+        data = get_existing_data_for_user(request.user)
+        filename = 'export_existingdata_%s.xlsx' % request.user.username
 
     else:
-        data = ExistingData.objects.get(id=data_id)
-        filename = 'export_%s.xlsx' % data.article_title
-        from openpyxl import Workbook
+        data = [ExistingData.objects.get(id=data_id)]
+        filename = 'export_%s.xlsx' % data[0].article_title
 
-        workbook = Workbook()
-        sheet = workbook.active
-        row = 1
+    from openpyxl import Workbook
+    workbook = Workbook()
+    sheet = workbook.active
+    row = 1
 
+    for datum in data:
         # Optionally add colors formatting before writing to cells.
         # Programmatically write results to the PDF.
-        for name, value in data.get_fields():
+        for name, value in datum.get_fields():
             sheet.cell(row=row, column=1).value = name
             sheet.cell(row=row, column=2).value = value
             row += 1
 
-        if data.disclaimer_req:
+        if datum.disclaimer_req:
             sheet.cell(row=row, column=1).value = 'Disclaimer'
             repl_str = '\n                    '
             # Replace '\n                    ' with ' ' in the disclaimer
             sheet.cell(row=row, column=2).value = APP_DISCLAIMER.replace(repl_str, ' ')
 
-        # Now return the generated excel sheet to be downloaded.
-        type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        response = HttpResponse(content_type=type)
-        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-        sheet.title = filename.split('.')[0]
-        workbook.save(response)
-        return response
+        row += 1 # Add a blank space between each individual Data set
+
+    # Now return the generated excel sheet to be downloaded.
+    type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response = HttpResponse(content_type=type)
+    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+    sheet.title = filename.split('.')[0]
+    workbook.save(response)
+    return response
