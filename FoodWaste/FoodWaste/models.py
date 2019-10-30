@@ -15,7 +15,7 @@ from teams.models import Team, User
 
 def get_attachment_storage_path(instance, filename):
     """Build the attachment storage path using username and filename."""
-    return '%s/attachments/%s' % (instance.uploaded_by.username, filename)
+    return 'uploads/%s/attachments/%s' % (instance.uploaded_by.username, filename)
 
 
 class Attachment(models.Model):

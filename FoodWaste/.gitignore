@@ -22,6 +22,7 @@ foodwaste_data/
 data_import/
 local/
 media/uploads/
+media/*/attachments/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
