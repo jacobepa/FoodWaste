@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,R0903,E1101,W0221,W0613
+# py-lint: disable=C0301,R0903,E1101,W0221,W0613
 
 """
 Team serializers.
@@ -51,7 +51,7 @@ class TeamMembershipModifySerializer(serializers.ModelSerializer):
                                         default=serializers.CreateOnlyDefault(
                                             True))
 
-    def validate(self, data, *args, **kwargs):
+    def validate(self, data):
         """Make sure we do not already have an owner."""
         if "is_owner" in data and data["is_owner"]:
             current_owner = TeamMembership.objects.filter(team=data["team"],

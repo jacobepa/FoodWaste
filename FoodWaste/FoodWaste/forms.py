@@ -2,18 +2,17 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=W0613,E1101,R0903,W0611,C0411
+# py-lint: disable=W0613,E1101,R0903,W0611,C0411
 
 """Definition of forms."""
 
-from accounts.models import User
-from constants.models import YES_OR_NO
 from django.forms import CharField, ModelForm, TextInput, Textarea, \
     PasswordInput, ModelMultipleChoiceField, SelectMultiple, BooleanField, \
     RadioSelect, FileField, ClearableFileInput, ModelChoiceField, \
     Select
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
+from constants.models import YES_OR_NO
 from FoodWaste.models import ExistingData, ExistingDataSource
 from teams.models import TeamMembership, Team
 

@@ -5,7 +5,7 @@
 # Pylint skip this file because it wasn't created by EPA:
 # pylint: skip-file
 # Also disabling docstrings since this is not an EPA file
-# pylint: disable=C0301,W0611,W0211,R0903,C0103,C0114,C0115,C0116
+# py-lint: disable=C0301,W0611,W0211,R0903,C0103,C0114,C0115,C0116
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-

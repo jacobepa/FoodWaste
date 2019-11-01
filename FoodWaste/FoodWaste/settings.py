@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,E0012,W0401,W0611,W0614
+# pylint: disable=unused-wildcard-import
 
 
 """
@@ -18,7 +18,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-import posixpath
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -122,7 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization.
 # https://docs.djangoproject.com/en/2.1/topics/i18n/.
 LANGUAGE_CODE = 'en-us'
-# TODO: Update time zone in all other Django applications. They are set to UTC.
 TIME_ZONE = 'America/New_York'
 USE_I18N = True
 USE_L10N = True
@@ -149,6 +147,6 @@ APP_DISCLAIMER = '''The information and data presented in this product were obta
 
 try:
     from .local_settings import *
-    # pylint: disable=E0012
+    # py-lint: disable=E0012
 except ImportError:
     pass

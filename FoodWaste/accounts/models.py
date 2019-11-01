@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=E1101,R0903
+# py-lint: disable=E1101,R0903
 
 """
 Models related to users and profiles.
@@ -139,8 +139,8 @@ class UserProfile(models.Model):
 
 
 # These calls create a user profile object whenever a user is created
-def create_user_profile(sender, instance, created, **kwargs):
-    # pylint: disable=unused-argument
+def create_user_profile(_sender, instance, created):
+    # py-lint: disable=unused-argument
     """
     Function to create associated user profile whenever a new user is created.
 

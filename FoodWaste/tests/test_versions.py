@@ -2,8 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# Also disabling docstrings since this is not an EPA file
-# pylint: disable=C0301,C0103,W0212,C0415,E0602,W0703,W0122,C0122,E0602,R0801,C0114,C0115,C0116
+# Skipping pylint since this is not an EPA file
+# pylint: skip-file
 
 """
 emacs: -*- mode: python; py-indent-offset: 4; tab-width: 4; indent-tabs-mode: nil -*-

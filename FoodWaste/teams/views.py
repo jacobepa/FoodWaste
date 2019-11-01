@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,R0901,E1101,R0912
+# py-lint: disable=C0301,R0901,E1101,R0912
 
 """
 Team management views.

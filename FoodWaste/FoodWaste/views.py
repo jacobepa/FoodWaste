@@ -2,12 +2,14 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,E1101,R0901,W0613,W0622,C0411
+# py-lint: disable=C0301,E1101,R0901,W0613,W0622,C0411
 
 
 """Definition of views."""
 
 from datetime import datetime
+from openpyxl import Workbook
+from wkhtmltopdf.views import PDFTemplateResponse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -19,8 +21,6 @@ from FoodWaste.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
 from FoodWaste.settings import APP_DISCLAIMER
 from teams.models import TeamMembership
-from openpyxl import Workbook
-from wkhtmltopdf.views import PDFTemplateResponse
 
 
 def get_existing_data_for_user(user):
@@ -204,8 +204,8 @@ def export_excel(request, *args, **kwargs):
         row += 1 # Add a blank space between each individual Data set
 
     # Now return the generated excel sheet to be downloaded.
-    type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    response = HttpResponse(content_type=type)
+    content_type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response = HttpResponse(content_type=content_type)
     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
     sheet.title = filename.split('.')[0]
     workbook.save(response)

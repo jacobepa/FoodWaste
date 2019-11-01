@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301
+# py-lint: disable=C0301
 
 """
 Defines custom widgets to be shared across any EPA Django apps.

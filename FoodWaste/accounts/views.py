@@ -2,8 +2,8 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=line-too-long
-# pylint: disable=E0012,E1101,R0901,W0703,W0221,W0212,W0613,R0913
+# py-lint: disable=line-too-long
+# py-lint: disable=E0012,E1101,R0901,W0703,W0221,W0212,W0613,R0913
 
 """
 Views for managing user accounts and profiles.
@@ -260,18 +260,17 @@ class PasswordResetConfirmView(FormView):
         return render(request, 'registration/password_reset.html',
                       {'form': form, 'usermodel': usermodel, 'uid': uid, 'user': user})
 
-    def post(self, request, uidb64=None, token=None, *arg, **kwargs):
-        # pylint: disable=keyword-arg-before-vararg
+    def post(self, request, *arg, **kwargs):
+        # py-lint: disable=keyword-arg-before-vararg
         """
         :param request:
-        :param uidb64:
-        :param token:
         :param arg:
         :param kwargs:
         :return:
         """
         form = self.form_class(request.POST)
-
+        uuidb64 = kwargs.get('uuidb64', None)
+        token = kwargs.get('token', None)
         usermodel = get_user_model()
         assert uidb64 is not None and token is not None
         try:
@@ -408,7 +407,7 @@ class UserRegistrationView(FormView):
 
             # Render the activation needed template.
             return render(request, self.template_register_inactive, locals())
-            # pylint: disable=E1101
+            # py-lint: disable=E1101
         return render(request, self.template_register, locals())
 
 

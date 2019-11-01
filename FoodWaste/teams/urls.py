@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=invalid-name
+# py-lint: disable=invalid-name
 # We disable the invalid name because urlpatterns is the Django default
 
 """

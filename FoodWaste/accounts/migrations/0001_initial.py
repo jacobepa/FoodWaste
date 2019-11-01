@@ -6,7 +6,7 @@ This file is the initial migration file for the accounts project
 # !/usr/bin/env python
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: C0301
+# pylint: skip-file
 
 from __future__ import unicode_literals
 from django.db import models, migrations

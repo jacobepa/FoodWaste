@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=E1101,R0903
+# py-lint: disable=E1101,R0903
 
 """
 Form used to manage user accounts.

@@ -2,12 +2,11 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301,E1101,W0611,C0411
+# py-lint: disable=C0301,E1101,W0611,C0411
 
 
 """Definition of models."""
 
-from constants.models import YES_OR_NO
 from django.db import models
 from django.utils import timezone
 from teams.models import Team, User
@@ -49,10 +48,10 @@ class ExistingData(models.Model):
     phone = models.CharField(blank=False, null=False, max_length=32)
     search = models.CharField(blank=False, null=False, max_length=255)
 
-    source= models.ForeignKey(ExistingDataSource,
-                              blank=False, null=False,
-                              related_name='existing_data_sources',
-                              on_delete=models.CASCADE)
+    source = models.ForeignKey(ExistingDataSource,
+                               blank=False, null=False,
+                               related_name='existing_data_sources',
+                               on_delete=models.CASCADE)
 
     source_title = models.CharField(blank=True, null=True, max_length=255)
     keywords = models.CharField(blank=True, null=True, max_length=1024)

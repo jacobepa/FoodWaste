@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=C0301
+# py-lint: disable=C0301
 
 """
 This file houses test cases for the Support module.

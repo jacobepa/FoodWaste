@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# pylint: disable=R0903
+# py-lint: disable=R0903
 
 """
 Forms for managing teams.
