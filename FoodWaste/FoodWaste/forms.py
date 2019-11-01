@@ -64,15 +64,27 @@ class ExistingDataForm(ModelForm):
                           'placeholder': 'Search Term'}),
         label=_("Search for Existing Data"), required=True)
 
-    #article_title = CharField(
-    #    max_length=255,
-    #    widget=TextInput({'class': 'form-control mb-2',
-    #                      'placeholder': 'Paste Article Title Here'}),
-    #    label=_("Article Title"), required=True)
-
-    article_title = ModelChoiceField(
+    source = ModelChoiceField(
         label=_("Source"), queryset=ExistingDataSource.objects.all(),
         widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
+
+    source_title = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2',
+                          'placeholder': 'Source Title'}),
+        label=_("Source Title"), required=True)
+
+    keywords = CharField(
+        max_length=1024,
+        widget=Textarea({'rows': 2, 'class': 'form-control mb-2',
+                         'placeholder': 'Keywords, Comma Seperated'}),
+        label=_("Keywords"), required=False)
+
+    url = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2',
+                          'placeholder': 'https://www.epa.gov/'}),
+        label=_("Source URL Link"), required=True)
 
     disclaimer_req = BooleanField(label=_("EPA Discaimer Required"),
                                   required=False,
@@ -100,7 +112,8 @@ class ExistingDataForm(ModelForm):
         """Override default init to add custom queryset for teams."""
         current_user = kwargs.pop('user')
         super(ExistingDataForm, self).__init__(*args, **kwargs)
-        team_ids = TeamMembership.objects.filter(member=current_user).values_list('team', flat=True)
+        team_ids = TeamMembership.objects.filter(
+            member=current_user).values_list('team', flat=True)
         self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
         self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
 
@@ -108,5 +121,6 @@ class ExistingDataForm(ModelForm):
         """Meta data for Existing Data Tracking."""
 
         model = ExistingData
-        fields = ('work', 'email', 'phone', 'search', 'article_title',
+        fields = ('work', 'email', 'phone', 'search', 'source',
+                  'source_title', 'keywords', 'url',
                   'citation', 'comments')

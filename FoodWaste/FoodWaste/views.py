@@ -157,7 +157,7 @@ def export_pdf(request, *args, **kwargs):
     else:
         data = ExistingData.objects.get(id=data_id)
         template = get_template('existingdata/existing_data_pdf.html')
-        filename = 'export_%s.pdf' % data.article_title
+        filename = 'export_%s.pdf' % data.source_title
 
     resp = PDFTemplateResponse(
         request=request,
@@ -181,7 +181,7 @@ def export_excel(request, *args, **kwargs):
 
     else:
         data = [ExistingData.objects.get(id=data_id)]
-        filename = 'export_%s.xlsx' % data[0].article_title
+        filename = 'export_%s.xlsx' % data[0].source_title
 
     workbook = Workbook()
     sheet = workbook.active

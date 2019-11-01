@@ -25,6 +25,10 @@ class Attachment(models.Model):
     file = models.FileField(null=True, blank=True, upload_to=get_attachment_storage_path)
     uploaded_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
 
+    def __str__(self):
+        """Override str method to display name instead of stringified obj"""
+        return self.name
+
 
 
 class ExistingDataSource(models.Model):
@@ -45,12 +49,14 @@ class ExistingData(models.Model):
     phone = models.CharField(blank=False, null=False, max_length=32)
     search = models.CharField(blank=False, null=False, max_length=255)
 
-    #article_title = models.CharField(blank=True, null=True, max_length=255)
+    source= models.ForeignKey(ExistingDataSource,
+                              blank=False, null=False,
+                              related_name='existing_data_sources',
+                              on_delete=models.CASCADE)
 
-    article_title = models.ForeignKey(ExistingDataSource,
-                                      blank=False, null=False,
-                                      related_name='existing_data_sources',
-                                      on_delete=models.CASCADE)
+    source_title = models.CharField(blank=True, null=True, max_length=255)
+    keywords = models.CharField(blank=True, null=True, max_length=1024)
+    url = models.CharField(blank=True, null=True, max_length=255)
 
     # Indicates if EPA disclaimer should be included when printing/exporting
     # this data.
@@ -71,6 +77,10 @@ class ExistingData(models.Model):
     def get_fields(self):
         """Method used in the template to iterate and display all fields."""
         return [(field.name, field.value_to_string(self)) for field in ExistingData._meta.fields]
+
+    def __str__(self):
+        """Override str method to display source instead of stringified obj"""
+        return self.source_title
 
 
 class DataAttachmentMap(models.Model):
