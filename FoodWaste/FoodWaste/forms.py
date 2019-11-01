@@ -82,8 +82,8 @@ class ExistingDataForm(ModelForm):
     citation = CharField(
         max_length=2048,
         widget=Textarea({'rows': 3, 'class': 'form-control mb-2',
-                         'placeholder': 'APA Citation'}),
-        label=_("APA Citation"), required=True)
+                         'placeholder': 'Citation'}),
+        label=_("Citation"), required=True)
 
     comments = CharField(
         max_length=2048,
