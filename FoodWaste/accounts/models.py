@@ -139,7 +139,7 @@ class UserProfile(models.Model):
 
 
 # These calls create a user profile object whenever a user is created
-def create_user_profile(_sender, instance, created):
+def create_user_profile(_sender, instance, created, **kwargs):
     # py-lint: disable=unused-argument
     """
     Function to create associated user profile whenever a new user is created.
