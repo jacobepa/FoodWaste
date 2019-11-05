@@ -65,10 +65,10 @@ pycodestyle==2.5.0              # Tool to check your Python code against some of
 pydocstyle==4.0.1               # Static analysis tool for checking compliance with Python docstring conventions.
 pyflakes==2.1.1                 # Analyzes programs and detects various errors.
 Pygments==2.4.2                 # Syntax highlighting package written in Python.
-pylint_django==2.0.11           # pylint_django.checkers.db_performance looks for migrations which add new model fields and these fields have a default value.
+pylint_django==2.0.12           # pylint_django.checkers.db_performance looks for migrations which add new model fields and these fields have a default value.
 pylint-plugin-utils==0.6        # Utilities and helpers for writing Pylint plugins.
 pylint==2.4.3                   # Static code analysis tool which looks for programming errors, helps enforcing PEP 8 coding standard.
-pyparsing==2.4.2                # Python parsing module.
+pyparsing==2.4.3                # Python parsing module.
 PyPDF2==1.26.0                  # Pure-Python library built as a PDF toolkit.
 pyPdf==1.13                     # PDF toolkit.
 pytest==5.2.2                   # Framework to write small tests, yet scales to support complex functional testing for apps/lib.
@@ -82,7 +82,7 @@ six==1.12.0                     # Python 2 and 3 compatibility utilities.
 sklearn==0.0                    # Small scikit-learn extension.
 statsmodels==0.10.1             # Statistical computations and models for Python.
                                 # style is a dependency of another package (update) so we do not need to list it here:
-# style==1.1.0                  # Terminal string styling.
+# style==1.1.6                  # Terminal string styling.
 update==0.0.1                   # Python package update.
                                 # urllib3 is a dependency of another package (requests) so we do not need to list it here:
 # urllib3==1.25.6               # HTTP library with thread-safe connection pooling, file post, and more.
