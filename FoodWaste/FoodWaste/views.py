@@ -8,8 +8,13 @@
 """Definition of views."""
 
 from datetime import datetime
+from io import BytesIO
 from openpyxl import Workbook
+from os import path
+from tempfile import TemporaryFile
 from wkhtmltopdf.views import PDFTemplateResponse
+from xhtml2pdf import pisa
+from zipfile import ZipFile, ZIP_DEFLATED
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
@@ -202,7 +207,6 @@ def about(request):
     )
 
 
-# TODO Also download/export any attachments for a given existing data instance
 def export_pdf(request, *args, **kwargs):
     """Function to export Existing Existing Data as a PDF document."""
 
@@ -218,15 +222,57 @@ def export_pdf(request, *args, **kwargs):
         template = get_template('existingdata/existing_data_pdf.html')
         filename = 'export_%s.pdf' % data.source_title
 
+    context_dict = {'object': data}
+    # TODO Also download/export any attachments for this data_id
+    # if should download attachments
+    attachment_ids = DataAttachmentMap.objects.filter(
+        data_id=data_id).values_list('attachment', flat=True)
+
+    # NOTE: If returning attachments alongside the PDF, we will need to
+    # redesign the PDF downloader. As it stands, the PDF is downloaded with
+    # each response. We need a way to create the PDF before sending the
+    # response, then we can combine all files (PDF and attachments), then
+    # return them all at once.
     resp = PDFTemplateResponse(
         request=request,
         template=template,
         filename=filename,
-        context={'object': data},
+        context=context_dict,
         show_content_in_browser=False,
         cmd_options={},
     )
-    return resp
+    if not attachment_ids or len(attachment_ids) == 0:
+        return resp
+
+    # Else we need to create a PDF from template without sending response
+    html = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode('utf-8')), result)
+    if pdf.err:
+        return resp
+
+    # What would be the best way to return all attachments to the user, Zip?
+    temp_file = TemporaryFile()
+    archive = ZipFile(temp_file, 'w', ZIP_DEFLATED)
+    # Always add the generated PDF from above first:
+    archive.write(result.getvalue(), filename)
+    # Then add all attachments
+    for a_id in attachment_ids:
+        # Get the actual file from server file system
+        attachment = Attachment.objects.get(id=a_id)
+        # attachment.filefield.file
+        try:
+            file = attachment.file.file
+            # Zip attachment:
+            archive.write(file.name, path.basename(file.name))
+            temp_do_something = true
+        except FileNotFoundError:
+            print('Attachment File Not Found!')
+
+    archive.close()
+    response = HttpResponse(archive, content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename="export_%s.zip"' % data.source_title
+    return response
 
 
 def export_excel(request, *args, **kwargs):

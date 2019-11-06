@@ -90,4 +90,5 @@ wrapt==1.11.2                   # Transparent object proxy for Python, can be us
 webencodings==0.5.1             # Character encoding aliases for legacy web content.
 wheel==0.33.6                   # Not necessary, but installed with another required package.
 wrapt==1.11.2                   # Module for decorators, wrappers and monkey patching.
+xhtml2pdf==0.2.3                # Package for saving html templates as PDF files. Used to return multiple files instead of a single PDF Template Response (as in wkhtmltopdf).
 zipp==0.6.0                     # A pathlib-compatible Zipfile object wrapper. A backport of the Path object.
