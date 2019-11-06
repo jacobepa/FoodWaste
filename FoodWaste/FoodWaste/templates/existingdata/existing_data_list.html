@@ -1,62 +1,69 @@
 ﻿{% extends "main/base.html" %}
 
 {% block content %}
-    <div class="container">
+<div class="container">
+    <div class="row">
+        <h3 class="col-sm-9">Existing Data Tracking Tool</h3>
+    </div>
 
-        <div class="mb-3 row">
-            <h3 class="col-sm-9">Existing Data Tracking Tool</h3>
-            <div class="col-sm-3">
-                <button class="col-sm-12 btn btn-md btn-info" onclick="window.location.href='/existingdata/create/'">
-                    Add Existing Data
-                </button>
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            {% if team %}
+            <h4>Team: {{team.name}}</h4>
+            {% elif user %}
+            <h4>{{user.username}} ({{user.first_name}} {{user.last_name}})</h4>
+            {% endif %}
+            <button class="col-sm-12 btn btn-md btn-info" onclick="window.location.href='/existingdata/create/'">
+                Add source and/or attach 'Existing Data.'
+            </button>
             </div>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-secondary">
+            <tr>
+                <th scope="col">User Email</th>
+                <th scope="col">User Office/Lab</th>
+                <th scope="col">Source</th>
+                <th scope="col">Date Accessed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if existing_data_list %}
+            {% for data in existing_data_list %}
+            <tr id="{{data.id}}" onclick="rowClick('{{data.id}}')">
+                <td scope="row">{{data.email}}</td>
+                <td>{{data.work}}</td>
+                <td>{{data.source_title}}</td>
+                <td>{{data.date_accessed}}</td>
+            </tr>
+
+            {% endfor %}
+            {% else %}
+            <tr><td colspan="4">No Existing Data exist!</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <i class="btn btn-info btn-md" onclick="viewEditExistingData(this)" disabled>
+                View or Edit Existing Data
+            </i>
         </div>
-
-        <table class="table table-bordered table-hover">
-            <thead class="table-secondary">
-                <tr>
-                    <th scope="col">User Email</th>
-                    <th scope="col">User Office/Lab</th>
-                    <th scope="col">Source</th>
-                    <th scope="col">Date Accessed</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if existing_data_list %}
-                {% for data in existing_data_list %}
-                <tr id="{{data.id}}" onclick="rowClick('{{data.id}}')">
-                    <td scope="row">{{data.email}}</td>
-                    <td>{{data.work}}</td>
-                    <td>{{data.source_title}}</td>
-                    <td>{{data.date_accessed}}</td>
-                </tr>
-
-                {% endfor %}
-                {% else %}
-                <tr><td colspan="4">No Existing Data exist!</td></tr>
-                {% endif %}
-            </tbody>
-            <!--{#<caption>List of Existing Data</caption>#}-->
-        </table>
-
-        <div class="row">
-            <div class="col-sm-4">
-                <i class="btn btn-info btn-md" onclick="viewEditExistingData(this)" disabled>
-                    View or Edit Existing Data
-                </i>
-            </div>
-            <div class="col-sm-4">
-                <i class="btn btn-info btn-md" onclick="exportAllData('pdf')">
-                    Export All Data to PDF
-                </i>
-            </div>
-            <div class="col-sm-4">
-                <i class="btn btn-info btn-md" onclick="exportAllData('excel')">
-                    Export All Data to Excel
-                </i>
-            </div>
+        <div class="col-sm-4">
+            <i class="btn btn-info btn-md" onclick="exportAllData('pdf')">
+                Export All Data to PDF
+            </i>
+        </div>
+        <div class="col-sm-4">
+            <i class="btn btn-info btn-md" onclick="exportAllData('excel')">
+                Export All Data to Excel
+            </i>
         </div>
     </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}

@@ -1,0 +1,95 @@
+﻿{% extends "main/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="mb-3 row">
+            <h3 class="col-sm-9">Existing Data Tracking Tool</h3>
+        </div>
+        <p>
+            This tool has been developed to track existing data for 'Plastics Projects' under the new StRAP's
+            assigned to the EDAB branch. Guidance for using data from other sources is available from your Division
+            Quality Assurance Manager (QAM) or from your laboratory Director of Quality Assurance (DQA). Guidance for
+            Quality Assurance Project Plans (G-5) identifies elements to consider when planning projects that use
+            existing data.
+        </p>
+        <div class="row">
+            <div class="col-sm-4">
+                <a class="btn btn-default" href="https://www.epa.gov/sites/production/files/2015-07/documents/cklist-secondary.pdf">
+                    Checklist for use of Existing Data&raquo;
+                </a>
+            </div>
+            <div class="col-sm-4 offset-sm-1">
+                <a class="btn btn-default" href="https://www.epa.gov/sites/production/files/2015-06/documents/g5-final.pdf">
+                    See Chapter 3 (G-5) &raquo;
+                </a>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <label>Existing / Secondary Data Research Projects</label>
+            <div class="col-sm-12">
+                <p class="row">
+                    An existing / secondary data research project involves the
+                    gathering and/or use of existing environmental data for purposes
+                    other than those for which they were originally collected.
+                    These existing / secondary data may be obtained from many sources,
+                    including literature, industry surveys, compilations from computerized databases and
+                    information systems, and computerized or mathematical models of
+                    environmental processes. If primary data will be generated as part of the
+                    project, then the information collected can be incorporated into the associated
+                    QMP or QAPP to address the existing / secondary data.
+                </p>
+                <p class="row">
+                    Please click one of the buttons below to begin searching
+                    for existing / secondary data. You can create and track
+                    data either as a team or individual user.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <label class="col-sm-12">View existing entries for...</label>
+                <div class="col-sm-5">
+                    <button class="btn btn-info dropdown-toggle col-sm-12" type="button"
+                            id="dropdownUserButton" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Users
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownUserButton">
+                        {% for user in users %}
+                        <a class="dropdown-item" href="existingdata/list/user/{{user.id}}">
+                            {{user.username}} ({{user.first_name}} {{user.last_name}})
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-sm-5 offset-sm-1">
+                    <button class="btn btn-info dropdown-toggle col-sm-12" type="button"
+                            id="dropdownTeamButton" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Teams
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownTeamButton">
+                        {% for team in teams %}
+                        <a class="dropdown-item" href="existingdata/list/team/{{team.id}}">
+                            {{team.name}}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label class="col-sm-12">or create...</label>
+                <a href="{% url 'team_create' %}" class="col-sm-5 btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    New Team
+                </a>
+                <a href="existingdata/create/" class="col-sm-5 offset-sm-1 btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    New Data Entry
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

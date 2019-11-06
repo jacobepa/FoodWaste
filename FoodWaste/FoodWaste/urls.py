@@ -10,8 +10,8 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
-from FoodWaste.views import home, contact, about, ExistingDataList, \
-    ExistingDataCreate, ExistingDataDetail, \
+from FoodWaste.views import home, contact, about, ExistingDataIndex, \
+    ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
     export_pdf, export_excel
 from FoodWaste.settings import MEDIA_ROOT, MEDIA_URL
 
@@ -44,7 +44,19 @@ urlpatterns = [
         name='existing_data_detail'),
 
     # This should be the last existingdata URL.
-    url(r'^existingdata/?', ExistingDataList.as_view(), name='tracking_tool'),
+    url(r'^existingdata/list/?',
+        ExistingDataList.as_view(),
+        name='tracking_tool_list'),
+    url(r'^existingdata/list/user/(?P<pk>\d+)?',
+        ExistingDataList.as_view(),
+        name='tracking_tool_list'),
+    url(r'^existingdata/list/team/(?P<pk>\d+)?',
+        ExistingDataList.as_view(),
+        name='tracking_tool_list'),
+
+    url(r'^existingdata/?',
+        ExistingDataIndex.as_view(),
+        name='tracking_tool'),
 
     # Begin other module import URLs.
     url(r'^accounts/', include('accounts.urls')),

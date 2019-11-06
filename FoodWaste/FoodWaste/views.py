@@ -11,24 +11,34 @@ from datetime import datetime
 from openpyxl import Workbook
 from wkhtmltopdf.views import PDFTemplateResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView
 from FoodWaste.forms import ExistingDataForm
 from FoodWaste.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
 from FoodWaste.settings import APP_DISCLAIMER
-from teams.models import TeamMembership
+from teams.models import Team, TeamMembership
 
 
-def get_existing_data_for_user(user):
+def get_existing_data_all():
+    """Method to get all data regardless of user or team"""
+    return ExistingData.objects.all()
+
+
+def get_existing_data_user(user_id):
     """
     Method to get all data belonging to a team of which the provided user
     is a member. The logic filters for the user's non-member teams,
     then excludes those teams from the data results.
+    This is necessary because there is no direct connection between data
+    model users and existing data instances. The relation here is through
+    the teams model.
     """
+    user = User.objects.get(id=user_id)
     include_teams = TeamMembership.objects.filter(
         member=user).values_list('team', flat=True)
     exclude_teams = TeamMembership.objects.exclude(
@@ -39,15 +49,62 @@ def get_existing_data_for_user(user):
     return queryset
 
 
+def get_existing_data_team(team_id):
+    """Method to get all data belonging to a team."""
+    team = Team.objects.get(id=team_id)
+    include_data = ExistingDataSharingTeamMap.objects.filter(
+        team=team).values_list('data', flat=True)
+    queryset = ExistingData.objects.filter(id__in=include_data)
+    return queryset
+
+
+class ExistingDataIndex(TemplateView):
+    """Class to return the first page of the Existing Data flow"""
+
+    template_name = 'existingdata/existing_data_index.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Custom method override to send data to the template. Specifically,
+        we want to send a list of users and teams to select from.
+        """
+        context = super().get_context_data(**kwargs)
+        context['users'] = User.objects.all()
+        context['teams'] = Team.objects.all()
+        return context
+
+
 class ExistingDataList(ListView):
     """View for Existing Data Tracking Tool."""
 
     model = ExistingData
     context_object_name = 'existing_data_list'
     template_name = 'existingdata/existing_data_list.html'
+    
+    def get_context_data(self, **kwargs):
+        """
+        Custom method override to send data to the template. Specifically,
+        we want to send the user or team information for this list of data.
+        """
+        context = super().get_context_data(**kwargs)
+        path = self.request.path.split('/')
+        p_id = path[len(path) - 1]
+        type = path[len(path) - 2]
+        if type == 'user':
+            context['user'] = User.objects.get(id=p_id)
+        elif type == 'team':
+            context['team'] = Team.objects.get(id=p_id)
+        return context
 
     def get_queryset(self):
-        return get_existing_data_for_user(self.request.user)
+        path = self.request.path.split('/')
+        p_id = path[len(path) - 1]
+        type = path[len(path) - 2]
+        if type == 'user':
+            return get_existing_data_user(p_id)
+        if type == 'team':
+            return get_existing_data_team(p_id)
+        return get_existing_data_all()
 
 
 class ExistingDataDetail(DetailView):
@@ -145,13 +202,15 @@ def about(request):
     )
 
 
+# TODO Also download/export any attachments for a given existing data instance
 def export_pdf(request, *args, **kwargs):
     """Function to export Existing Existing Data as a PDF document."""
 
     data_id = kwargs.get('pk', None)
     if data_id is None:
         # Export ALL ExistingData available for this user to PDF.
-        data = get_existing_data_for_user(request.user)
+        #data = get_existing_data_user(request.user)
+        data = get_existing_data_all()
         template = get_template('existingdata/existing_data_pdf_multi.html')
         filename = 'export_existingdata_%s.pdf' % request.user.username
     else:
@@ -176,7 +235,8 @@ def export_excel(request, *args, **kwargs):
     data_id = kwargs.get('pk', None)
     if data_id is None:
         # Export ALL ExistingData available for this user to Excel.
-        data = get_existing_data_for_user(request.user)
+        #data = get_existing_data_user(request.user)
+        data = get_existing_data_all()
         filename = 'export_existingdata_%s.xlsx' % request.user.username
 
     else:
