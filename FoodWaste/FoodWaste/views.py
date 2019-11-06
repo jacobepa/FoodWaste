@@ -247,15 +247,33 @@ def export_pdf(request, *args, **kwargs):
     # Else we need to create a PDF from template without sending response
     html = template.render(context_dict)
     result = BytesIO()
-    pdf = pisa.pisaDocument(BytesIO(html.encode('utf-8')), result)
+    #content = BytesIO(html.encode('utf-8'))
+    content = BytesIO(html.encode('ISO-8859-1'))
+    # HTTPS://STACKOVERFLOW.COM/QUESTIONS/3942888/UNICODEENCODEERROR-LATIN-1-CODEC-CANT-ENCODE-CHARACTER
+    #content = BytesIO(html.encode('cp1252'))
+    pdf = pisa.pisaDocument(content, result)
     if pdf.err:
         return resp
 
     # What would be the best way to return all attachments to the user, Zip?
     temp_file = TemporaryFile()
     archive = ZipFile(temp_file, 'w', ZIP_DEFLATED)
+
     # Always add the generated PDF from above first:
-    archive.write(result.getvalue(), filename)
+    # Try byte(utf-16) to unicode to byte(utf-8)
+    uni_str = result.getvalue().decode('utf-16')
+    utf8_str = uni_str.encode('utf-8')
+    # Having trouble writing the PDF to archive due to bad encoding.
+    # Possible solution is to manually write byte string to a temporary
+    # file location, write that file to archive, then delete temp file.
+    temp_file_name = "temp_%s.pdf" % filename
+    with open(temp_file_name, 'wb') as temp_file:
+        temp_file.write(result.getvalue())
+        archive.write(temp_file_name)
+
+    # Delete the tempfile after creating/writing/zipping it.
+    # archive.write(utf8_str)
+
     # Then add all attachments
     for a_id in attachment_ids:
         # Get the actual file from server file system
