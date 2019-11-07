@@ -94,20 +94,20 @@ class ExistingDataList(ListView):
         context = super().get_context_data(**kwargs)
         path = self.request.path.split('/')
         p_id = path[len(path) - 1]
-        type = path[len(path) - 2]
-        if type == 'user':
-            context['user'] = User.objects.get(id=p_id)
-        elif type == 'team':
+        p_type = path[len(path) - 2]
+        if p_type == 'user':
+            context['p_user'] = User.objects.get(id=p_id)
+        elif p_type == 'team':
             context['team'] = Team.objects.get(id=p_id)
         return context
 
     def get_queryset(self):
         path = self.request.path.split('/')
         p_id = path[len(path) - 1]
-        type = path[len(path) - 2]
-        if type == 'user':
+        p_type = path[len(path) - 2]
+        if p_type == 'user':
             return get_existing_data_user(p_id)
-        if type == 'team':
+        if p_type == 'team':
             return get_existing_data_team(p_id)
         return get_existing_data_all()
 
@@ -116,6 +116,21 @@ class ExistingDataDetail(DetailView):
     """View for viewing the details of a Existing data instance"""
     model = ExistingData
     template_name = 'existingdata/existing_data_detail.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Custom method override to send data to the template. Specifically,
+        we want to send the user or team information for this list of data.
+        """
+        context = super().get_context_data(**kwargs)
+        referer = self.request.META['HTTP_REFERER'].split('/')
+        p_id = referer[len(referer) - 1]
+        p_type = referer[len(referer) - 2]
+        if p_type == 'user':
+            context['p_user'] = User.objects.get(id=p_id)
+        elif p_type == 'team':
+            context['team'] = Team.objects.get(id=p_id)
+        return context
 
 
 class ExistingDataCreate(CreateView):

@@ -10,8 +10,8 @@
         <div class="col-sm-12">
             {% if team %}
             <h4>Team: {{team.name}}</h4>
-            {% elif user %}
-            <h4>{{user.username}} ({{user.first_name}} {{user.last_name}})</h4>
+            {% elif p_user %}
+            <h4>{{p_user.username}} ({{p_user.first_name}} {{p_user.last_name}})</h4>
             {% endif %}
             <button class="col-sm-12 btn btn-md btn-info" onclick="window.location.href='/existingdata/create/'">
                 Add source and/or attach 'Existing Data.'
