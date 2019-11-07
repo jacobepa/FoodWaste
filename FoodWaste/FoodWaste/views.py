@@ -252,15 +252,17 @@ def export_pdf(request, *args, **kwargs):
     if pdf.err:
         return resp
 
-    # What would be the best way to return all attachments to the user, Zip?
-    temp_file = TemporaryFile()
-    archive = ZipFile(temp_file, 'w', ZIP_DEFLATED)
+    # Create a zip archive to return multiple files: PDF, n attachments.
+    #temp_file = TemporaryFile()
+    #archive = ZipFile(temp_file, 'w', ZIP_DEFLATED)
+    zip_mem = BytesIO()
+    archive = ZipFile(zip_mem, 'w')
 
     # Always add the generated PDF from above first:
     # Having trouble writing the PDF to archive due to bad encoding.
     # Possible solution is to manually write byte string to a temporary
     # file location, write that file to archive, then delete temp file.
-    temp_file_name = path.join("temp_files", "temp_%s.pdf" % filename)
+    temp_file_name = path.join("report_attachments", "temp_%s.pdf" % filename)
     with open(temp_file_name, 'wb') as temp_file:
         temp_file.write(result.getvalue())
         archive.write(temp_file_name)
@@ -282,8 +284,9 @@ def export_pdf(request, *args, **kwargs):
             print('Attachment File Not Found!')
 
     archive.close()
-    response = HttpResponse(archive, content_type='application/force-download')
+    response = HttpResponse(zip_mem.getvalue(), content_type='application/force-download')
     response['Content-Disposition'] = 'attachment; filename="export_%s.zip"' % data.source_title
+    response['Content-length'] = zip_mem.tell()
     return response
 
 

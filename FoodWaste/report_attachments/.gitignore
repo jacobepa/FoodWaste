@@ -1,0 +1,8 @@
+# We want to keep this folder in the repo, but not push any contents to the repo.
+# This directory is used as a temporary placeholder for people downloading attachments.
+
+# Ignore all files in this dir
+*
+
+# Except for this one.
+!.gitignore
