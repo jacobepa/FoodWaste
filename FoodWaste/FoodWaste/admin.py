@@ -12,12 +12,14 @@ Available functions:
 """
 
 from django.contrib import admin
-from FoodWaste.models import Attachment, ExistingData, DataAttachmentMap, \
-    ExistingDataSharingTeamMap
+from FoodWaste.models import Attachment, ExistingData, ExistingDataSource, \
+    DataAttachmentMap, ExistingDataSharingTeamMap
 
 admin.site.register(Attachment)
 
 admin.site.register(ExistingData)
+
+admin.site.register(ExistingDataSource)
 
 admin.site.register(DataAttachmentMap)
 

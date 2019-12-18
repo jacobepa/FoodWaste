@@ -10,21 +10,19 @@
 #---------------------------------------------------------------------------------------#
 # All of these packages appear to be necessary for both Windows and Linux environments. #
 #---------------------------------------------------------------------------------------#
+# NOTE: 12/18/2019 - Cleaned out some unecessary packages. If something is broken or missing, look at this file to see if an important package is missing.
+# Removed list: decorator, django-jet, matplotlib, mypy, mypy-extensions, phonenumbers, pyasn1, py, pycodestyle, pydocstyle, pyparsing,
+#               python-dateutil, pytz, reportlab, requests, setuptools, six, sklearn, statsmodels, update, wrapt, webencodings, wrapt
 
 astroid==2.3.3                  # Currently the library powering pylints capabilities.
 autopep8==1.4.4                 # Automatically formats Python code to conform to the PEP 8 style guide.
-Babel==2.7.0                    # Collection of tools for internationalizing Python applications.
 bcrypt==3.1.7                   # Modern password hashing for your software and your servers. *May be required for RTP RHEL server
 certifi==2019.9.11              # Collection of Root Certificates for validating trustworthiness of SSL certificates while verifying identity TLS hosts.
                                 # chardet is a dependency of another package (requests) so we do not need to list it here:
-# chardet==3.0.4                # Universal encoding detector for Python 2 and 3.
-colorama==0.4.1                 # Cross-platform colored terminal text.
 coverage==4.5.4                 # Measures code coverage, typically during test execution.
-decorator==4.4.1                # Decorators for Humans.
 django-docs==0.3.1              # Allows to serve Sphinx generated docs directly from Django.
 django-filter==2.2.0            # Reusable Django application allows users to filter querysets dynamically.
 django-grappelli==2.13.2        # A jazzy skin for the Django Admin-Interface.
-django-jet==1.0.8               # Modern template for Django admin interface with improved functionality.
 django-session-security==2.6.5  # Provides a mechanism to logout inactive authenticated users.
 Django==2.2.7                   # Python Modules.
 django-phonenumber-field==3.0.1 # An international phone number field for django models.
@@ -32,65 +30,20 @@ djangorestframework==3.10.3     # Powerful and flexible toolkit for building Web
 django-wkhtmltopdf==3.2.0       # Allows a Django site to output dynamic PDFs.
 docutils==0.15.2                # Modular system for processing documentation into formats such as HTML, XML, and LaTeX.
 duecredit==0.7.0                # Citation of scientific software and methods, and limited visibility of donation requests for open-source software.
-et-xmlfile==1.0.1               # Low memory library for creating large XML files.
-ez-setup==0.9                   # Include as installable Python package as a workaround to distribute_setup.py.
-html5lib==1.0.1                 # HTML parser based on the WHATWG HTML specification.
-httplib2==0.14.0                # A comprehensive HTTP client library.
-idna==2.8                       # Internationalized Domain Names in Applications (IDNA).
-isort==4.3.21                   # A Python utility / library to sort Python imports.
-entrypoints==0.3                # Discover and load entry points from installed packages.
 flake8==3.7.9                   # Flake8 is a wrapper around these tools: PyFlakes; pycodestyle; Ned Batchelder's McCabe script.
-jdcal==1.4.1                    # Julian dates from proleptic Gregorian and Julian calendars.
-Jinja2==2.10.3                  # Sandboxed template execution environment.
-lazy-object-proxy==1.4.3        # A fast and thorough lazy object proxy.
-lxml==4.4.1                     # Extends the ElementTree API significantly to offer support for XPath, RelaxNG, XML Schema, XSLT, C14N.
-MarkupSafe==1.1.1               # Implements a XML/HTML/XHTML Markup safe string for Python.
-matplotlib==3.1.2               # Python plotting package.
 mccabe==0.6.1                   # McCabe checker, plugin for flake8.
-mypy-extensions==0.4.3          # Defines experimental extensions to the standard typing module that are supported by the mypy typechecker.
-mypy==0.740                     # Add type annotations to your Python programs, and use mypy to type check them.
 numpy==1.17.4                   # NumPy: array processing for numbers, strings, records, and objects.
-olefile==0.46                   # Python package to parse, read and write Microsoft OLE2 files.
 openpyxl==3.0.1                 # Python library to read/write Excel 2010 xlsx/xlsm/xltx/xltm files.
-packaging==19.2                 # Core utilities for Python packages.
 pep8==1.7.1                     # Tool to check your Python code against some of the style conventions in PEP 8.
-phonenumbers==8.10.23           # Python version of Google's common library for parsing, formatting, storing and validating international phone numbers.
-pip==19.3.1                     # The PyPA recommended tool for installing Python packages.
 pisa==3.0.33                    # PDF generator using HTML and CSS.
-pluggy==0.13.1                  # Core framework used by the pytest, tox, and devpi projects.
-                                # portray installs several additional packages.
-portray==1.1.3..................# Command line tool/library create documentation Python projects. https://timothycrosley.github.io/portray/
 psycopg2==2.8.4                 # Python-PostgreSQL Database Adapter.
-pyasn1==0.4.8                   # Pure-Python package with no external dependencies. *Believe this added to help issues RHEL RTP server?
-py==1.8.0                       # Python development support library.
-pycodestyle==2.5.0              # Tool to check your Python code against some of the style conventions in PEP 8 & PEP 257.
-pydocstyle==4.0.1               # Static analysis tool for checking compliance with Python docstring conventions.
 pyflakes==2.1.1                 # Analyzes programs and detects various errors.
-Pygments==2.4.2                 # Syntax highlighting package written in Python.
 pylint_django==2.0.13           # pylint_django.checkers.db_performance looks for migrations which add new model fields and these fields have a default value.
 pylint-plugin-utils==0.6        # Utilities and helpers for writing Pylint plugins.
 pylint==2.4.4                   # Static code analysis tool which looks for programming errors, helps enforcing PEP 8 coding standard.
-pyparsing==2.4.5                # Python parsing module.
 PyPDF2==1.26.0                  # Pure-Python library built as a PDF toolkit.
 pyPdf==1.13                     # PDF toolkit.
 pytest==5.3.0                   # Framework to write small tests, yet scales to support complex functional testing for apps/lib.
-python-dateutil==2.8.1          # Extensions to the standard Python datetime module.
-pytz==2019.3                    # UTC is pytz.timezone('UTC') True.
-reportlab==3.5.32               # PDF library.
-requests==2.22.0                # Automatically decompresses gzip-encoded responses, decodes response content to unicode when possible.
 scipy==1.3.3                    # Scientific Library for Python.
-setuptools==42.0.0              # Easily download, build, install, upgrade, and uninstall Python packages.
-six==1.13.0                     # Python 2 and 3 compatibility utilities.
-sklearn==0.0                    # Small scikit-learn extension.
-statsmodels==0.10.2             # Statistical computations and models for Python.
-                                # style is a dependency of another package (update) so we do not need to list it here:
-# style==1.1.6                  # Terminal string styling.
-update==0.0.1                   # Python package update.
-                                # urllib3 is a dependency of another package (requests) so we do not need to list it here:
-# urllib3==1.25.7               # HTTP library with thread-safe connection pooling, file post, and more.
-wrapt==1.11.2                   # Transparent object proxy for Python, can be used as basis for construction of function wrappers and decorator functions.
-webencodings==0.5.1             # Character encoding aliases for legacy web content.
-wheel==0.33.6                   # Not necessary, but installed with another required package.
-wrapt==1.11.2                   # Module for decorators, wrappers and monkey patching.
-xhtml2pdf==0.2.3                # Package for saving html templates as PDF files. Used to return multiple files instead of a single PDF Template Response (as in wkhtmltopdf).
-zipp==0.6.0                     # A pathlib-compatible Zipfile object wrapper. A backport of the Path object.
+xhtml2pdf==0.2.3                # Package for saving html templates as PDF files. Used to return multiple files instead of a
+                                # single PDF Template Response (as in wkhtmltopdf).
