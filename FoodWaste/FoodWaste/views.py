@@ -223,7 +223,7 @@ def about(request):
 
 
 def export_pdf(request, *args, **kwargs):
-    """Function to export Existing Existing Data as a PDF document."""
+    """Function to export Existing  Data as a PDF document."""
 
     data_id = kwargs.get('pk', None)
     if data_id is None:
