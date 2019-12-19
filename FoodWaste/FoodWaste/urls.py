@@ -12,7 +12,7 @@ from django.contrib import admin
 from django.urls import include
 from FoodWaste.views import home, contact, about, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
-    download_attachments, export_pdf, export_excel
+    export_pdf, export_excel
 from FoodWaste.settings import MEDIA_ROOT, MEDIA_URL
 
 
