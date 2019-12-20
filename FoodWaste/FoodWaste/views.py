@@ -277,7 +277,7 @@ def export_pdf(request, *args, **kwargs):
     # Having trouble writing the PDF to archive due to bad encoding.
     # Possible solution is to manually write byte string to a temporary
     # file location, write that file to archive, then delete temp file.
-    temp_file_name = "temp_%s.pdf" % filename
+    temp_file_name = "/tmp/temp_%s.pdf" % filename
     with open(temp_file_name, 'wb') as temp_file:
         temp_file.write(result.getvalue())
 
