@@ -232,16 +232,18 @@ def export_pdf(request, *args, **kwargs):
         data = get_existing_data_all()
         template = get_template('existingdata/existing_data_pdf_multi.html')
         filename = 'export_existingdata_%s.pdf' % request.user.username
+        # TODO get all attachment_ids
+        attachment_ids = DataAttachmentMap.objects.all().values_list(
+            'attachment', flat=True)
     else:
         data = ExistingData.objects.get(id=data_id)
         template = get_template('existingdata/existing_data_pdf.html')
         filename = 'export_%s.pdf' % data.source_title
+        # get attachment_ids related to just this data id
+        attachment_ids = DataAttachmentMap.objects.filter(
+            data_id=data_id).values_list('attachment', flat=True)
 
     context_dict = {'object': data}
-    # TODO Also download/export any attachments for this data_id
-    # if should download attachments
-    attachment_ids = DataAttachmentMap.objects.filter(
-        data_id=data_id).values_list('attachment', flat=True)
 
     # NOTE: If returning attachments alongside the PDF, we will need to
     # redesign the PDF downloader. As it stands, the PDF is downloaded with
@@ -299,7 +301,7 @@ def export_pdf(request, *args, **kwargs):
 
     archive.close()
     response = HttpResponse(zip_mem.getvalue(), content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="export_%s.zip"' % data.source_title
+    response['Content-Disposition'] = 'attachment; filename="%s.zip"' % filename
     response['Content-length'] = zip_mem.tell()
     return response
 
