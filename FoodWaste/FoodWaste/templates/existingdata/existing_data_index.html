@@ -52,7 +52,7 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownUserButton">
                         {% for user in users %}
-                        <a class="dropdown-item" href="existingdata/list/user/{{user.id}}">
+                        <a class="dropdown-item" href="/existingdata/list/user/{{user.id}}">
                             {{user.username}} ({{user.first_name}} {{user.last_name}})
                         </a>
                         {% endfor %}
@@ -67,7 +67,7 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownTeamButton">
                         {% for team in teams %}
-                        <a class="dropdown-item" href="existingdata/list/team/{{team.id}}">
+                        <a class="dropdown-item" href="/existingdata/list/team/{{team.id}}">
                             {{team.name}}
                         </a>
                         {% endfor %}
@@ -80,7 +80,7 @@
                     <span class="glyphicon glyphicon-plus"></span>
                     New Team
                 </a>
-                <a href="existingdata/create/" class="col-sm-5 offset-sm-1 btn btn-success">
+                <a href="/existingdata/create/" class="col-sm-5 offset-sm-1 btn btn-success">
                     <span class="glyphicon glyphicon-plus"></span>
                     New Data Entry
                 </a>

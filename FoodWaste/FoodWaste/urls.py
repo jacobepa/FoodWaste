@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^existingdata/exportexcel$',
         export_excel, name='existing_data_excel'),
 
-    url(r'^existingdata/create$',
+    url(r'^existingdata/create',
         ExistingDataCreate.as_view(),
         name='existing_data_create'),
 
