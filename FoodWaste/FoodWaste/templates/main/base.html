@@ -108,9 +108,12 @@
                         Help
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'go_to_support' %}">Suggestions</a></li>
-                        <li><a href="{% url 'documentation' %}">User Documentation</a></li>
-                        <li><a href="{% url 'events' %}">Upcoming Events</a></li>
+                        {% url 'support:go_to_support' as go_to_support_url %}
+                        <li><a href="{{go_to_support_url}}">Suggestions</a></li>
+                        {% url 'support:documentation' as documentation_url %}
+                        <li><a href="{{documentation_url}}">User Documentation</a></li>
+                        {% url 'support:events' as events_url %}
+                        <li><a href="{{events_url}}">Upcoming Events</a></li>
                     </ul>
                 </li>
 

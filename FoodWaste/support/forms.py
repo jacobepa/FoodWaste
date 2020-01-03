@@ -2,171 +2,119 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# py-lint: disable=C0301
+# pylint: skip-file
 
 """
-Form used to manage support.
+Form used to manage support issues.
 
 Available functions:
-- Form For Creating a Support Issue.
-- Form For Responding To a Support Issue.
-- Form For listing Support type requested.
-- Form for creating an information request.
 """
 
 from django import forms
-from django.db import models
+from django.forms import widgets, ModelForm, ValidationError
+from django.forms.models import inlineformset_factory
+from django.forms.widgets import SelectDateWidget
+
+from constants.models import *
+
+from support.models import *
+
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.contrib.auth.tokens import default_token_generator
+from django.template import Context, loader
 from django.utils.translation import ugettext_lazy as _
-from FoodWaste.settings import DEFAULT_FROM_EMAIL
-from constants.models import YN_CHOICES
-from support.models import SupportType, Support, Priority, InformationRequest
+from django.utils.http import int_to_base36
 
 
 class SupportForm(forms.ModelForm):
     """A Form For Creating a Support Issue."""
 
     def __init__(self, *args, **kwargs):
-        """Override init method."""
+        """Support form to send to Django Admin."""
         super(SupportForm, self).__init__(*args, **kwargs)
 
-    name = forms.CharField(label=_("Issue"), widget=forms.TextInput(
-        attrs={'class': 'form-control'}), required=False)
-    subject = forms.CharField(label=_("Subject"), widget=forms.TextInput(
-        attrs={'class': 'form-control'}), required=False)
-    support_type = forms.ModelChoiceField(label=_("Type of Inquiry"),
-                                          queryset=SupportType.objects.all(),
-                                          widget=forms.Select(
-                                              attrs={'class': 'form-control'}),
-                                          required=False)
+    required_css_class = 'required'
 
-    the_description = forms.CharField(label=_("Problem Description"),
-                                      widget=forms.Textarea(
-                                          attrs={'class': 'form-control'}),
-                                      required=False)
-    weblink = forms.CharField(label=_("Email Address"), widget=forms.TextInput(
-        attrs={'class': 'form-control'}), required=False,
-                              help_text="Please Submit Your Return Email Address")
+    id = forms.CharField(label=_("Reference Num"),
+                         widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+                         required=False)
+    subject = forms.CharField(label=_("Subject"), widget=forms.TextInput(attrs={'class': 'form-control'}),
+                              required=True)
+
+    the_description = forms.CharField(label=_("Description"), widget=forms.Textarea(attrs={'class': 'form-control'}),
+                                      required=True)
+    weblink = forms.CharField(label=_("Email Address"), widget=forms.TextInput(attrs={'class': 'form-control'}),
+                              required=True)
 
     class Meta:
-        """Metadata for the Support model."""
+        """Support link."""
 
         model = Support
-        fields = ("name", "subject", "support_type",
-                  "the_description", "weblink",)
+        fields = ("id", "subject", "the_description", "weblink",)
 
 
 class SupportAdminForm(forms.ModelForm):
     """A Form For Responding To a Support Issue."""
 
     def __init__(self, *args, **kwargs):
-        """Override init method."""
+        """Support Django Admin form."""
         super(SupportAdminForm, self).__init__(*args, **kwargs)
 
-    name = forms.CharField(label=_("Issue"), widget=forms.TextInput(
-        attrs={'class': 'form-control'}), required=False)
-    subject = forms.CharField(label=_("Subject"), widget=forms.TextInput(
-        attrs={'class': 'form-control'}), required=False)
-    support_type = forms.ModelChoiceField(label=_("Type of Support"),
-                                          queryset=SupportType.objects.all(),
-                                          widget=forms.Select(
-                                              attrs={'class': 'form-control'}),
-                                          required=False)
-    resolution = forms.CharField(label=_("Resolution"), widget=forms.Textarea(
-        attrs={'class': 'form-control'}), required=False)
-    is_closed = forms.ChoiceField(label=_("Closed ?"), choices=YN_CHOICES,
-                                  widget=forms.Select(
-                                      attrs={'class': 'form-control'}),
-                                  required=False)
+    required_css_class = 'required'
 
+    id = forms.CharField(label=_("Reference Num"),
+                         widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+                         required=False)
+    subject = forms.CharField(label=_("Subject"), widget=forms.TextInput(attrs={'class': 'form-control'}),
+                              required=True)
     date_resolved = forms.DateField(label=_("Date Resolved"),
-                                    widget=forms.SelectDateWidget(
-                                        attrs={'class': 'form-control'}),
+                                    widget=forms.TextInput(attrs={'class': 'form-control date-control'}),
                                     required=False)
-
-    the_description = forms.CharField(label=_("Problem Description"),
-                                      widget=forms.Textarea(
-                                          attrs={'class': 'form-control'}),
-                                      required=False)
-    weblink = forms.CharField(label=_("Website Reference"),
-                              widget=forms.TextInput(
-                                  attrs={'class': 'form-control'}),
-                              required=False)
+    the_description = forms.CharField(label=_("Description"), widget=forms.Textarea(attrs={'class': 'form-control'}),
+                                      required=True)
+    weblink = forms.CharField(label=_("Email Address"), widget=forms.TextInput(attrs={'class': 'form-control'}),
+                              required=True)
+    review_notes = forms.CharField(label=_("Review Notes"), widget=forms.Textarea(attrs={'class': 'form-control'}),
+                                   help_text="Notes from review of suggestion", required=False)
 
     class Meta:
-        """Metadata for the Support model."""
+        """All fields to complete support form."""
 
         model = Support
-        fields = ("name", "subject", "support_type", "the_description",
-                  "weblink", "resolution", "is_closed", "date_resolved",)
+        fields = ("id", "subject", "the_description", "weblink", "date_resolved", "review_notes",)
 
 
 class SupportTypeForm(forms.ModelForm):
-    """Form For listing Support type requested."""
+    """A Form For Creating a Support Issue."""
 
     def __init__(self, *args, **kwargs):
-        """Override init method."""
+        """Form type."""
         super(SupportTypeForm, self).__init__(*args, **kwargs)
 
-    name = forms.CharField(label=_("Support Type"), widget=forms.TextInput(
-        attrs={'class': 'form-control'}), required=False)
+    required_css_class = 'required'
+    the_name = forms.CharField(label=_("Support Type"), widget=forms.TextInput(attrs={'class': 'form-control'}),
+                               required=False)
 
     class Meta:
-        """Metadata for the SupportType model."""
+        """Name form."""
 
         model = SupportType
-        fields = ("name",)
+        fields = ("the_name",)
 
 
 class PriorityForm(forms.ModelForm):
     """A Form For Creating a Support Issue."""
 
     def __init__(self, *args, **kwargs):
-        """Override init method."""
+        """Form priority."""
         super(PriorityForm, self).__init__(*args, **kwargs)
 
-    name = forms.CharField(label=_("Priority"), widget=forms.TextInput(
-        attrs={'class': 'form-control'}), required=False)
+    the_name = forms.CharField(label=_("Priority"), widget=forms.TextInput(attrs={'class': 'form-control'}),
+                               required=False)
 
     class Meta:
-        """Metadata for the Priority model."""
+        """Form priority.."""
 
         model = Priority
-        fields = ("name",)
-
-
-class InformationRequestForm(forms.ModelForm):
-    """Form for creating an information request."""
-
-    created_date = models.DateTimeField(auto_now_add=True, blank=False)
-    # Email to which the request was forwarded upon submission.
-    sent_to_email = DEFAULT_FROM_EMAIL
-    # Contact info for the person submitting the request.
-    requestor_first_name = forms.CharField(label=_("First"),
-                                           widget=forms.TextInput(attrs={
-                                               'class': 'form-control'}),
-                                           required=True, max_length=255)
-    requestor_last_name = forms.CharField(label=_("Last"),
-                                          widget=forms.TextInput(
-                                              attrs={'class': 'form-control'}),
-                                          required=True, max_length=255)
-    requestor_email_address = forms.CharField(label=_("Return Email Address"),
-                                              widget=forms.TextInput(attrs={
-                                                  'class': 'form-control'}),
-                                              required=True, max_length=255)
-    # Request details
-    request_subject = forms.CharField(label=_("Subject"),
-                                      widget=forms.TextInput(
-                                          attrs={'class': 'form-control'}),
-                                      required=True, max_length=255)
-    request_details = forms.CharField(label=_("Details"),
-                                      widget=forms.Textarea(
-                                          attrs={'class': 'form-control'}),
-                                      required=True, max_length=255)
-
-    class Meta:
-        """Metadata for the InformationRequest model."""
-
-        model = InformationRequest
-        fields = ("requestor_first_name", "requestor_last_name",
-                  "requestor_email_address",
-                  "request_subject", "request_details")
+        fields = ("the_name",)

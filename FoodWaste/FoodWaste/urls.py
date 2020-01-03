@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^admin', admin.site.urls),
 
     url(r'^$', home, name='home'),
-    url(r'^dashboard$', home, name='dashboard'),
+    url(r'^dashboard', home, name='dashboard'),
     url(r'^contact', contact, name='contact'),
     url(r'^about', about, name='about'),
 

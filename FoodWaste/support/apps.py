@@ -7,10 +7,10 @@
 """
 Application configuration objects store metadata for an application.
 
-Some attributes can be configured in AppConfig subclasses. Others are set by
-Django and read-only. This file is created to include any application
-configuration for the app. Using this, you can configure some of the attributes
-of the application.
+Some attributes can be configured in AppConfig subclasses. Others are
+set by Django and read-only.
+This file is created to include any application configuration for the app.
+Using this, you can configure some of the attributes of the application.
 
 Available functions:
 It is the recommended best practice to place your application configuration

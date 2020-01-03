@@ -2,167 +2,188 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# py-lint: disable=C0301
+# pylint: skip-file
 
 """
-Models related to support functions.
+Models related to app support.
 
 Available functions:
-- Class describing information requests.
 """
 
-from django.contrib.auth.models import User
+from decimal import *
+from constants.models import *
+from django.contrib.auth.models import User, AnonymousUser
+from django.urls import reverse
 from django.db import models
-from constants.models import YN_CHOICES
+# from django.apps import get_model
+from django.db.models import Q, Avg, Max, Min, Count, Sum
 
-
-# https://stackoverflow.com/questions/38443628/import-error-cannot-import-name-get-model
 
 def get_support_storage_path(instance, filename):
-    """
-    Get the 'support' file path given a user and filename.
-
-    :param instance: an object that contains the user information
-    :param filename: a string representing the filename
-    :return: a string representing a file path
-    """
+    """Add docstring."""  # TODO add docstring.
     return '%s/support/%s' % (instance.user.username, filename)
 
 
 def get_instruction_storage_path(instance, filename):
-    """
-    Get the 'instructions' file path given a user and filename.
-
-    :param instance: an object that contains the user information
-    :param filename: a string representing the filename
-    :return: a string representing a file path
-    """
+    """Add docstring."""  # TODO add docstring.
     return '%s/instructions/%s' % (instance.user.username, filename)
 
 
+def get_support_attachment_storage_path(instance, filename):
+    """Add docstring."""  # TODO add docstring.
+    return 'support/%s/%s' % (instance.support_id, filename)
+
+
 class SupportType(models.Model):
-    """Model representing a Support request Type."""
+    """Add docstring."""  # TODO add docstring.
 
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified = models.DateTimeField(auto_now=True, null=True, blank=True)
     created_by = models.CharField(blank=True, null=True, max_length=255)
     last_modified_by = models.CharField(blank=True, null=True, max_length=255)
 
-    user = models.ForeignKey(User, null=True, blank=True,
-                             on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
-    name = models.CharField(blank=True, null=True, max_length=255)
+    the_name = models.CharField(blank=True, null=True, max_length=255)
 
     the_description = models.TextField(null=True, blank=True)
 
     weblink = models.CharField(blank=True, null=True, max_length=255)
-    ordering = models.DecimalField(null=True, blank=True, max_digits=10,
-                                   decimal_places=1)
+    ordering = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=1)
 
     class Meta:
-        """Metadata that defines the ordering for SupportType model."""
+        """Add docstring."""  # TODO add docstring.
+
         ordering = ["ordering", ]
 
     def __str__(self):
-        """
-        Stringify method to return object name instead of default object view
-        """
-        return self.name
+        """Add docstring."""  # TODO add docstring.
+        return self.the_name or ''
 
 
 class Priority(models.Model):
-    """Model representing the priority of a Support request."""
+    """Add docstring."""  # TODO add docstring.
 
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified = models.DateTimeField(auto_now=True, null=True, blank=True)
     created_by = models.CharField(blank=True, null=True, max_length=255)
     last_modified_by = models.CharField(blank=True, null=True, max_length=255)
 
-    user = models.ForeignKey(User, null=True, blank=True,
-                             on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
-    name = models.CharField(blank=True, null=True, max_length=255)
+    the_name = models.CharField(blank=True, null=True, max_length=255)
 
     the_description = models.TextField(null=True, blank=True)
 
     weblink = models.CharField(blank=True, null=True, max_length=255)
-    ordering = models.DecimalField(null=True, blank=True, max_digits=10,
-                                   decimal_places=1)
+    ordering = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=1)
 
     class Meta:
-        """Metadata that defines the ordering for Priority model."""
+        """Add docstring."""  # TODO add docstring.
+
         ordering = ["ordering", ]
 
     def __str__(self):
-        """
-        Stringify method to return object name instead of default object view
-        """
-        return self.name
+        """Add docstring."""  # TODO add docstring.
+        return self.the_name or ''
 
 
 class Support(models.Model):
-    """Model representing a Support request for this software."""
+    """Add docstring."""  # TODO add docstring.
 
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified = models.DateTimeField(auto_now=True, null=True, blank=True)
-    created_by = models.CharField(blank=True, null=True, max_length=255)
-    last_modified_by = models.CharField(blank=True, null=True, max_length=255)
-    make_public = models.CharField(blank=True, null=True, max_length=5,
-                                   choices=YN_CHOICES)
-    share_with_user_group = models.CharField(blank=True, null=True,
-                                             max_length=5, choices=YN_CHOICES)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,
+                                   related_name="support_created_by")
+    last_modified_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,
+                                         related_name="support_last_modified_by")
+    make_public = models.BooleanField(blank=False, default=False)
+    share_with_user_group = models.BooleanField(blank=False, default=False)
 
-    attachment = models.FileField(null=True, blank=True,
-                                  upload_to=get_support_storage_path)
+    attachment = models.FileField(null=True, blank=True, upload_to=get_support_storage_path)
 
-    user = models.ForeignKey(User, null=True, blank=True,
-                             on_delete=models.SET_NULL)
-    support_type = models.ForeignKey(SupportType, null=True, blank=True,
-                                     on_delete=models.SET_NULL)
-    priority = models.ForeignKey(Priority, null=True, blank=True,
-                                 on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    support_type = models.ForeignKey(SupportType, on_delete=models.CASCADE, null=True, blank=True)
+    priority = models.ForeignKey(Priority, on_delete=models.CASCADE, null=True, blank=True)
 
-    name = models.CharField(blank=True, null=True, max_length=255)
+    the_name = models.CharField(blank=True, null=True, max_length=255)
     subject = models.CharField(blank=True, null=True, max_length=255)
-    length_of_reference = models.CharField(blank=True, null=True,
-                                           max_length=255)
+    length_of_reference = models.CharField(blank=True, null=True, max_length=255)
     author = models.CharField(blank=True, null=True, max_length=255)
 
-    is_closed = models.CharField(blank=True, null=True, max_length=5,
-                                 choices=YN_CHOICES)
+    is_closed = models.BooleanField(blank=False, default=False)
 
     the_description = models.TextField(null=True, blank=True)
     resolution = models.TextField(null=True, blank=True)
 
     weblink = models.CharField(blank=True, null=True, max_length=255)
-    ordering = models.DecimalField(null=True, blank=True, max_digits=10,
-                                   decimal_places=1)
+    ordering = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=1)
     date_resolved = models.DateField(blank=True, null=True)
 
+    STATUSES = (
+        ('To Do', 'To Do'),
+        ('In Progress', 'In Progress'),
+        ('Done', 'Done'),
+    )
+
+    status = models.CharField(max_length=25, choices=STATUSES, default='To Do')
+
+    review_notes = models.TextField(null=True, blank=True)
+
     class Meta:
-        """Metadata that defines the ordering for Support model."""
+        """Add docstring."""  # TODO add docstring.
+
         ordering = ["ordering", ]
 
     def __str__(self):
-        """
-        Stringify method to return object name instead of default object view
-        """
-        return self.name
+        """Add docstring."""  # TODO add docstring.
+        return self.the_name or ''
 
 
-class InformationRequest(models.Model):
-    """Class describing information requests."""
+class SupportAttachment(models.Model):
+    """Add docstring."""  # TODO add docstring.
 
-    created_date = models.DateTimeField(auto_now_add=True, blank=False)
-    # Email to which the request was forwarded upon submission.
-    sent_to_email = models.CharField(null=True, blank=True, max_length=255)
-    # Contact info for the person submitting the request.
-    requestor_first_name = models.CharField(max_length=255, blank=True)
-    requestor_last_name = models.CharField(max_length=255, blank=True)
-    requestor_email_address = models.EmailField(blank=False, max_length=255)
-    # Request details.
-    request_subject = models.CharField(max_length=255, blank=False)
-    request_details = models.TextField(blank=False)
-    # Response from.
-    response = models.TextField(null=True, blank=True)
-    response_date = models.DateField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    modified = models.DateTimeField(auto_now=True, null=True, blank=True)
+    created_by = models.CharField(blank=True, null=True, max_length=255)
+    last_modified_by = models.CharField(blank=True, null=True, max_length=255)
+
+    attachment = models.FileField(null=True, blank=True, max_length=255, upload_to=get_support_attachment_storage_path)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    support = models.ForeignKey(Support, on_delete=models.CASCADE, null=True, blank=True,
+                                related_name="support_attachments")
+
+    the_name = models.CharField(blank=True, null=True, max_length=255)
+    the_size = models.CharField(blank=True, null=True, max_length=255)
+
+    class Meta:
+        """Add docstring."""  # TODO add docstring.
+
+        ordering = ['the_name', ]
+
+    def icon_to_use(self):
+        """Add docstring."""  # TODO add docstring.
+        if str(self.attachment).endswith('pdf'):
+            icon_src = settings.STATIC_URL + "img/pdf-icon.jpg"
+        elif str(self.attachment).endswith('xls'):
+            icon_src = settings.STATIC_URL + "img/xlsx.jpg"
+        elif str(self.attachment).endswith('xlsx'):
+            icon_src = settings.STATIC_URL + "img/xlsx.jpg"
+        elif str(self.attachment).endswith('doc'):
+            icon_src = settings.STATIC_URL + "img/word.png"
+        elif str(self.attachment).endswith('docx'):
+            icon_src = settings.STATIC_URL + "img/docx.png"
+        elif str(self.attachment).endswith('doc'):
+            icon_src = settings.STATIC_URL + "img/docx.png"
+        elif str(self.attachment).endswith('html'):
+            icon_src = settings.STATIC_URL + "img/html.png"
+        elif str(self.attachment).endswith('txt'):
+            icon_src = settings.STATIC_URL + "img/txt.jpg"
+        elif str(self.attachment).endswith('csv'):
+            icon_src = settings.STATIC_URL + "img/csv.png"
+        elif str(self.attachment).endswith('psd'):
+            icon_src = settings.STATIC_URL + "img/psd.jpg"
+        else:
+            icon_src = settings.STATIC_URL + "uploads/" + str(self.attachment)
+        return icon_src

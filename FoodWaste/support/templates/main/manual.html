@@ -12,7 +12,7 @@
         <div class="well">
             <h4>Quick links</h4>
             {#<div><a href="{% url 'citation' %}">Download Citations (txt)</a></div>#}
-            <div><a href="{% url 'download_manual' %}">View the Food Waste user manual</a></div>
+            <div><a href="{% url 'support:download_manual' %}">View the Food Waste user manual</a></div>
             <div><a href="{% url 'dashboard' %}">Access the main dashboard</a></div>
             {% if request.user.is_superuser %}
             <div>

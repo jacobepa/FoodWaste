@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
-# py-lint: disable=C0301
+# pylint: skip-file
 
 """
 This file houses test cases for the Support module.
@@ -12,128 +12,102 @@ Available functions:
 """
 
 # TODO Test Email sender:
-# https://stackoverflow.com/questions/3728528/testing-email-sending.
+# https://stackoverflow.com/questions/3728528/testing-email-sending
 
+# from GSC_SSSENR.calculate import calculate_bredehoeft, calculate_schmidt,
+# calculate_hatch, calculate_mccallum, sub_datetime_strings
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 from django.test.client import RequestFactory
-from support.test_data.support_data import SUPPORT_ONE, data, files, SUPPORT_FORM
+from django.core.mail import EmailMultiAlternatives
+from GSC_SSSENR.utils import replace_none_empty_str
+from support.views import index, SuggestionEditView, create_help_request
+from support.forms import SupportForm
+from support.test_data.support_forms import SUPPORT_PASS_ONE
 
 
 class TestSupport(TestCase):
-    """Test the functions related to Support module."""
+    """Test the functions related to UsernameReminderRequestView."""
 
     def setUp(self):
-        """Prepare necessary objects for testing the Support module."""
+        """Add docstring."""  # TODO add docstring.
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='12345')
         self.client.login(username='testuser', password='12345')
         self.factory = RequestFactory()
 
     def test_home(self):
-        """Tests the home page."""
-        # Response = self.client.get('/support/index').
+        """Test the home page."""
+        # response = self.client.get('/support/index')
         response = self.client.get('/support/index/')
-        self.assertContains(response, 'Help/Suggestions', 0, 200)
+        self.assertContains(response, 'Help/Suggestions', 2, 200)
 
-    def test_request_information_view_get(self):
-        """Tests the Request Information View get page."""
-        response = self.client.get('/support/request_info/', SUPPORT_ONE)
-        self.assertContains(response, 'information', 6, 200)
+    def test_support_ticket_create_one(self):
+        """Test the support ticket form when you use suggestion."""
+        # create/(?P<support_type_name>\w+)
+        response = self.client.get('/support/create/suggestion/')
+        self.assertContains(response, 'Describe your suggestion for GWSC below.', 1, 200)
 
-    def test_request_information_view_post(self):
-        """Tests the Request Information View post page."""
-        response = self.client.post('/support/request_info/', SUPPORT_ONE)
-        self.assertContains(response, 'information', 4, 200)
+    def test_support_ticket_create_two(self):
+        """Test the support ticket form when you do not use suggestion."""
+        # create/(?P<support_type_name>\w+)
+        response = self.client.get('/support/create/OtherWordsHERE/')
+        self.assertContains(response, 'Describe the problem you encountered with GWSC below.', 1, 200)
 
-    def test_user_manual_view_get(self):
-        """Tests the Documentation (User Manual) View get page."""
-        response = self.client.get('/support/documentation/', SUPPORT_ONE)
-        self.assertContains(response, 'manual', 2, 200)
+    def test_support_post_one(self):
+        """Tests the support ticket post method on an invalid form."""
+        response = self.client.post("/support/create/suggestion/", {})
 
-    def test_user_create_get(self):
-        """Tests the create get page."""
-        response = self.client.get('/support/create/', data, files)
-        print(response)
-        self.assertContains(response, 'create', 2, 200)
+    def test_support_post_two(self):
+        """Tests the support ticket post method on an Valid form."""
+        data = SUPPORT_PASS_ONE.__dict__
+        data = replace_none_empty_str(data)
+        response = self.client.post("/support/create/suggestion/", data)
 
-    def test_user_create_post(self):
-        """Tests the create post page."""
-        response = self.client.post('/support/create/', data)
-        print(response)
-        self.assertContains(response, 'create', 2, 200)
+    def test_Support_Sudggestion_Edit_View_two(self):
+        """Test the view for the Sudggestion Edit view."""
+        data = SUPPORT_PASS_ONE.__dict__
+        data = replace_none_empty_str(data)
+        response = self.client.get("/support/edit/suggestion/1/", data)
 
-    def test_list_supports_get(self):
-        """Tests the list supports get."""
-        response = self.client.get('/support/list/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
+    # self.assertContains(response, 'Suggestions', 2, 200)
 
-    def test_list_supports_post(self):
-        """Tests the list supports post."""
-        response = self.client.post('/support/list/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
+    def test_Support_Sudggestion_Edit_View_one(self):
+        """Test the view for the Sudggestion Edit view."""
+        data = SUPPORT_PASS_ONE.__dict__
+        data = replace_none_empty_str(data)
+        response = self.client.post("/support/edit/suggestion/1/", data)
 
-    def test_search_support_get(self):
-        """Tests the search support get."""
-        response = self.client.get('/support/search/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
+    def test_model_environment_with_environment(self):
+        """Tests the environment of model if it has a environment."""
+        results = self.client.post(create_help_request)
 
-    def test_search_support_post(self):
-        """Tests the search support post."""
-        response = self.client.post('/support/search/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
+    # def test_suggestion_edit_view(self):
+    #     """Tests the view for suggestion edit"""
 
-    def test_search_support_for_last_30_get(self):
-        """Tests the search support for last30 get."""
-        response = self.client.get('/support/support/search/result/thirty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
+# url(r'^edit/(?P<support_type_name>\w+)/(?P<obj_id>\d+)/$', SuggestionEditView.as_view(), name='edit_support'),
+# GET VIEWS
+# def test_support_ticket_create_one(self):
+#     """Test the support ticket form when you use suggestion"""
+#     # create/(?P<support_type_name>\w+)
+#     results = self.client.get('/support/create/suggestion/')
+#     response = self.client.get('/support/edit/suggestion/')
+#     print(response)
+#     self.assertContains(response, "id", 5, 200)
 
-    def test_search_support_for_last_30_post(self):
-        """Tests the search support for last30 post."""
-        response = self.client.post('/support/support/search/result/thirty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
+# def test_show_support(self):
+#     """Test the show support method"""
+#     #show/(?P<support_type_name>\w+)/(?P<obj_id>\d+)/$'
+#     response = self.client.post("/support/show/suggestion/1")
+#     self.assertContains(response, 'Show Support', 1, 301)
 
-    def test_search_support_for_last_60_get(self):
-        """Tests the search support for last60 get."""
-        response = self.client.get('/support/support/search/result/sixty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
+# def test_Support_Sudggestion_Edit_View_three(self):
+#     """Test the view for the Sudggestion Edit view"""
+#     results = Sediment.__str__(self)
 
-    def test_search_support_for_last_60_post(self):
-        """Tests the search support for last60 post."""
-        response = self.client.post('/support/support/search/result/sixty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
-
-    def test_search_support_for_last_90_get(self):
-        """Tests the search support for last90 get."""
-        response = self.client.get('/support/support/search/result/ninety/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
-
-    def test_search_support_for_last_90_post(self):
-        """Tests the search support for last90 post."""
-        response = self.client.post('/support/support/search/result/ninety/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
-
-    def test_search_support_for_last_180_get(self):
-        """Tests the search support for last180 get."""
-        response = self.client.get('/support/support/search/result/one_eighty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
-
-    def test_search_support_for_last_180_post(self):
-        """Tests the search support for last180 post."""
-        response = self.client.post('/support/support/search/result/one_eighty/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 17, 200)
-
-    def test_create_support_type_get(self):
-        """Tests the create support type get."""
-        response = self.client.get('/support/type/create/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 22, 200)
-
-    def test_create_support_type_post(self):
-        """Tests the create support type post."""
-        response = self.client.post('/support/type/create/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 0, 302)
-
-    def test_create_priority_post(self):
-        """Tests the create priority post."""
-        response = self.client.post('/support/priority/create/', SUPPORT_FORM)
-        self.assertContains(response, 'id', 0, 302)
+# def test_model_environment_with_environment(self):
+#     """Tests the environment of model if it has a environment"""
+#     self.environment = "1"
+#     RequestFactory.request.user = User.objects.create_user(username='testuser2', password='12345')
+#     results = SuggestionEditView.get(self, RequestFactory.request, "suggestion", 1)
+#     self.assertEqual(results, "1 - 1")
