@@ -12,20 +12,24 @@ Available functions:
 - Save changes to support form.
 """
 
-import datetime
+from decimal import getcontext
 from datetime import datetime, timedelta
 from math import *
+from os.path import join
+
 from constants.models import *
 from constants.utils import *
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import FormView, TemplateView
+
+from FoodWaste.settings import MANUAL_NAME, DOWNLOADS_DIR
 from .forms import *
 from .models import *
 
