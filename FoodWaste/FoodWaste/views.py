@@ -21,7 +21,8 @@ from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, ListView, CreateView, DetailView
+from django.views.generic import TemplateView, ListView, CreateView, \
+    DetailView, UpdateView
 from FoodWaste.forms import ExistingDataForm
 from FoodWaste.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
@@ -131,6 +132,18 @@ class ExistingDataDetail(DetailView):
         elif p_type == 'team':
             context['team'] = Team.objects.get(id=p_id)
         return context
+
+class ExistingDataEdit(UpdateView):
+    """View for editing the details of a Existing data instance"""
+    model = ExistingData
+    form_class = ExistingDataForm
+    template_name = 'existingdata/existing_data_edit.html'
+
+    def form_valid(self, form):
+        """Existing Data Edit Form validation and redirect."""
+        self.object = form.save(commit=False)
+        self.object.save()
+        return HttpResponseRedirect('/existingdata/detail/' + str(self.object.id))
 
 
 class ExistingDataCreate(CreateView):

@@ -12,7 +12,7 @@ from django.contrib import admin
 from django.urls import include
 from FoodWaste.views import home, contact, about, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
-    export_pdf, export_excel
+    ExistingDataEdit, export_pdf, export_excel
 from FoodWaste.settings import MEDIA_ROOT, MEDIA_URL
 
 
@@ -43,6 +43,10 @@ urlpatterns = [
     url(r'^existingdata/detail/(?P<pk>\d+)?$',
         ExistingDataDetail.as_view(),
         name='existing_data_detail'),
+
+    url(r'^existingdata/edit/(?P<pk>\d+)?$',
+        ExistingDataEdit.as_view(),
+        name='existing_data_edit'),
 
     # This should be the last existingdata URL.
     url(r'^existingdata/list',

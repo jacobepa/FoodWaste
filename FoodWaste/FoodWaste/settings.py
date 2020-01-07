@@ -20,7 +20,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 EMAIL_DISCLAIMER = '<p style="font-weight:bold;color:red">Please do not reply to this email. Thank you.</p>'
 EMAIL_DISCLAIMER_PLAIN = 'Please do not reply to this email. Thank you.'

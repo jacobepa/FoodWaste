@@ -109,12 +109,15 @@ class ExistingDataForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         """Override default init to add custom queryset for teams."""
-        current_user = kwargs.pop('user')
-        super(ExistingDataForm, self).__init__(*args, **kwargs)
-        team_ids = TeamMembership.objects.filter(
-            member=current_user).values_list('team', flat=True)
-        self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
-        self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
+        try:
+            current_user = kwargs.pop('user')
+            super(ExistingDataForm, self).__init__(*args, **kwargs)
+            team_ids = TeamMembership.objects.filter(
+                member=current_user).values_list('team', flat=True)
+            self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
+            self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
+        except:
+            super(ExistingDataForm, self).__init__(*args, **kwargs)
 
     class Meta:
         """Meta data for Existing Data Tracking."""
