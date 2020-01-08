@@ -14,6 +14,7 @@ Available functions:
 from django.contrib import admin
 from teams.models import Team, TeamMembership
 
+
 class TeamAdmin(admin.ModelAdmin):
     """Custom Admin class for managing Teams"""
     model = Team
@@ -29,6 +30,7 @@ class TeamAdmin(admin.ModelAdmin):
             obj.created_by = request.user
         obj.last_modified_by = request.user
         obj.save()
+
 
 admin.site.register(Team, TeamAdmin)
 

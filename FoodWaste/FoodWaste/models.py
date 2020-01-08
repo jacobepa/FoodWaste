@@ -29,7 +29,6 @@ class Attachment(models.Model):
         return self.name
 
 
-
 class ExistingDataSource(models.Model):
     """Model containing options for the data source dropdown"""
 

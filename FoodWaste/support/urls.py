@@ -5,7 +5,7 @@
 # pylint: skip-file
 # We disable the invalid name because urlpatterns is the Django default
 
-"""Add docstring."""  #TODO add docstring.
+"""Add docstring."""  # TODO add docstring.
 
 from django.conf.urls import include, url
 from .views import *

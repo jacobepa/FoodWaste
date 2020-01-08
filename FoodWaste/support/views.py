@@ -35,6 +35,7 @@ from .models import *
 
 getcontext().prec = 9
 
+
 class UserManualView(TemplateView):
     """
     View to present and process the "request more info" form.
@@ -43,12 +44,12 @@ class UserManualView(TemplateView):
     :return:
     """
 
-    #form_class = InformationRequestForm
+    # form_class = InformationRequestForm
 
     def get(self, request, *args, **kwargs):
         """Present the request info form."""
-        #form = self.form_class()
-        #return render(request, 'main/manual.html', {'form': form})
+        # form = self.form_class()
+        # return render(request, 'main/manual.html', {'form': form})
         return render(request, 'main/manual.html', {})
 
 
@@ -64,6 +65,7 @@ class EventsView(TemplateView):
         :return:
         """
         return render(request, "main/events.html", {})
+
 
 @login_required
 def download_manual(request):

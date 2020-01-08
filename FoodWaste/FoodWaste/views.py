@@ -133,6 +133,7 @@ class ExistingDataDetail(DetailView):
             context['team'] = Team.objects.get(id=p_id)
         return context
 
+
 class ExistingDataEdit(UpdateView):
     """View for editing the details of a Existing data instance"""
     model = ExistingData
@@ -241,7 +242,7 @@ def export_pdf(request, *args, **kwargs):
     data_id = kwargs.get('pk', None)
     if data_id is None:
         # Export ALL ExistingData available for this user to PDF.
-        #data = get_existing_data_user(request.user)
+        # data = get_existing_data_user(request.user)
         data = get_existing_data_all()
         template = get_template('existingdata/existing_data_pdf_multi.html')
         filename = 'export_existingdata_%s.pdf' % request.user.username
@@ -325,7 +326,7 @@ def export_excel(request, *args, **kwargs):
     data_id = kwargs.get('pk', None)
     if data_id is None:
         # Export ALL ExistingData available for this user to Excel.
-        #data = get_existing_data_user(request.user)
+        # data = get_existing_data_user(request.user)
         data = get_existing_data_all()
         filename = 'export_existingdata_%s.xlsx' % request.user.username
 
@@ -351,7 +352,7 @@ def export_excel(request, *args, **kwargs):
             # Replace '\n                    ' with ' ' in the disclaimer
             sheet.cell(row=row, column=2).value = APP_DISCLAIMER.replace(repl_str, ' ')
 
-        row += 1 # Add a blank space between each individual Data set
+        row += 1  # Add a blank space between each individual Data set
 
     # Now return the generated excel sheet to be downloaded.
     content_type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
