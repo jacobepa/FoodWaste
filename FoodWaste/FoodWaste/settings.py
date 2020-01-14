@@ -140,7 +140,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "FoodWaste/media")
 MEDIA_URL = "/media/"
 
 APP_NAME = 'ExistingData'
-APP_VERSION = '0.0.1'
+APP_VERSION = '1.0.0'
 APP_DISCLAIMER = '''The information and data presented in this product were obtained
                     from sources that are believed to be reliable. However, in many
                     cases the quality of the information or data was not documented
