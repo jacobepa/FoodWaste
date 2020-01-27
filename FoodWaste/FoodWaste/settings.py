@@ -49,13 +49,6 @@ ALLOWED_HOSTS = []
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS
 INSTALLED_APPS = [
-    'accounts',
-    'constants',
-    'FoodWaste',
-    'support',
-    'teams',
-    'phonenumber_field',
-    # Add your apps here to enable them.
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,6 +56,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    # Add your apps here to enable them.
+    'accounts',
+    'constants',
+    'FoodWaste',
+    'support',
+    'teams',
+    'phonenumber_field',
 ]
 
 # Middleware framework.
