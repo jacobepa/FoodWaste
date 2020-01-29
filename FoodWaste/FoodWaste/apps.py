@@ -30,6 +30,6 @@ from django.apps import AppConfig
 class FoodWasteConfig(AppConfig):
     """FoodWaste configuration."""
 
-    name = 'FoodWaste'
-    verbose_name = "FoodWaste"
+    name = 'DataSearch'
+    verbose_name = 'DataSearch'
     default_app_config = 'FoodWaste.apps.FoodWasteConfig'
