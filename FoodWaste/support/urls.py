@@ -21,6 +21,8 @@ urlpatterns = [
     url(r'^download_manual/$', download_manual, name="download_manual"),
     url(r'events/', EventsView.as_view(), name='events'),
 
+    url(r'^files/(?P<file_name>.+)', event_file_download, name='event_file_download'),
+
     url(r'^create/(?P<support_type_name>\w+)/$', SuggestionCreateView.as_view(), name='create_support'),
     url(r'^edit/(?P<support_type_name>\w+)/(?P<obj_id>\d+)/$', SuggestionEditView.as_view(), name='edit_support'),
     url(r'^delete/(?P<support_type_name>\w+)/(?P<obj_id>\d+)/$', delete_support, name='delete_support'),
