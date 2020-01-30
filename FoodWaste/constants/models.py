@@ -25,3 +25,14 @@ WGK_CHOICES = (('', ''), ('0', 'nwg'), ('1', 'WGK 1'), ('2', 'WGK 2'), ('3', 'WG
 YN_CHOICES = (('', ''), ('Y', 'Yes'), ('N', 'No'))
 ONLY_YN_CHOICES = (('Y', 'Y'),)
 YES_OR_NO = ((True, 'Yes'), (False, "No"))
+
+DIVISION_CHOICES = ['Groundwater Characterization & Remediation Division',
+                    'Homeland Security & Materials Management Division',
+                    'Immediate Office', 'Land Remediation & Technology Division',
+                    'Technical Support & Coordination Division',
+                    'Water Infrastructure Division']
+
+QA_CATEGORY_CHOICES = (('QA Category A', 'QA Category A'),
+                       ('QA Category B', 'QA Category B'))
+
+XMURAL_CHOICES = (('Intramural', 'Intramural'), ('Extramural', 'Extramural'))

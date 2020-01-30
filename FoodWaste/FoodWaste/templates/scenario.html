@@ -1,0 +1,108 @@
+{% extends "main/base.html" %}
+{% block content %}
+{% load staticfiles %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <img src="{% static 'EPA_files/logo.png' %}" alt="">
+            <p class="float-right blue-box-with-shadow">QUALITY ASSURANCE PROJECT PLAN</p>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <h2>Office of Research and Development</h2>
+            <h3>Center for Environmental Solutions & Emergency Response</h3>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <h4>{{ error|escape }}</h4>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                        <h4>{{ error|escape }}</h4>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form enctype="multipart/form-data" action="/qapp/create/" method="post" role="form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.division.label}}</label>
+                    <div class="col-sm-9">{{form.division}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.input_1.label}}</label>
+                    <div class="col-sm-9">{{form.input_1}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.input_2.label}}</label>
+                    <div class="col-sm-9">{{form.input_2}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.epa_project_lead_1.label}}</label>
+                    <div class="col-sm-9">{{form.epa_project_lead_1}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.epa_project_lead_2.label}}</label>
+                    <div class="col-sm-9">{{form.epa_project_lead_2}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.qa_category.label}}</label>
+                    <div class="col-sm-9">{{form.qa_category}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.intra_extra.label}}</label>
+                    <div class="col-sm-9">{{form.intra_extra}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.revision_number.label}}</label>
+                    <div class="col-sm-9">{{form.revision_number}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.date.label}}</label>
+                    <div class="col-sm-9">{{form.date}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.prepared_by_1.label}}</label>
+                    <div class="col-sm-9">{{form.prepared_by_1}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.prepared_by_2.label}}</label>
+                    <div class="col-sm-9">{{form.prepared_by_2}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.input_3.label}}</label>
+                    <div class="col-sm-9">{{form.input_3}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.input_4.label}}</label>
+                    <div class="col-sm-9">{{form.input_4}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.input_5.label}}</label>
+                    <div class="col-sm-9">{{form.input_5}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">{{form.input_6.label}}</label>
+                    <div class="col-sm-9">{{form.input_6}}</div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+</script>
+{% endblock %}

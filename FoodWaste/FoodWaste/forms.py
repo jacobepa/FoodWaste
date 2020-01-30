@@ -6,14 +6,16 @@
 
 """Definition of forms."""
 
-from django.forms import CharField, ModelForm, TextInput, Textarea, \
-    PasswordInput, ModelMultipleChoiceField, SelectMultiple, BooleanField, \
-    RadioSelect, FileField, ClearableFileInput, ModelChoiceField, \
-    Select
+from django.forms import CharField, ChoiceField, ModelForm, TextInput, \
+    Textarea, PasswordInput, ModelMultipleChoiceField, SelectMultiple, \
+    BooleanField, RadioSelect, FileField, ClearableFileInput, \
+    ModelChoiceField, Select, DateTimeField
+from django.forms.widgets import DateTimeInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
-from constants.models import YES_OR_NO
-from FoodWaste.models import ExistingData, ExistingDataSource
+from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
+from FoodWaste.models import  Division, ExistingData, ExistingDataSource, \
+    QualityAssuranceProjectPlan
 from teams.models import TeamMembership, Team
 
 
@@ -28,6 +30,91 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                          widget=PasswordInput({
                              'class': 'form-control',
                              'placeholder': 'Password'}))
+
+
+class QualityAssuranceProjectPlanForm(ModelForm):
+    """Form for creating a new QAPP (Quality Assurance Project Plan)"""
+    
+    division = ModelChoiceField(
+        label=_("Source"), queryset=Division.objects.all(),
+        widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
+
+    input_1 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("TODO Label"), required=True)
+
+    input_2 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("TODO Label"), required=True)
+
+    epa_project_lead_1 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("EPA Project Lead"), required=True)
+
+    epa_project_lead_2 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("EPA Project Lead"), required=True)
+
+    qa_category = ChoiceField(
+        label=_("QA Category:"), choices=QA_CATEGORY_CHOICES,
+        widget=Select(attrs={'class': 'form-control mb-2'}), required=False)
+
+    intra_extra = ChoiceField(
+        label=_("Intra/Extramural:"), choices=XMURAL_CHOICES,
+        widget=Select(attrs={'class': 'form-control mb-2'}), required=False)
+
+    revision_number = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Revision Number"), required=True)
+
+    date = DateTimeField(
+        label=_("Time Period Starting Date:"),
+        required=False,
+        widget=DateTimeInput(attrs={'class': 'form-control mb-2'}))
+
+    prepared_by_1 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Prepared By"), required=True)
+
+    prepared_by_2 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Prepared By"), required=True)
+
+    input_3 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("TODO Label"), required=True)
+
+    input_4 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("TODO Label"), required=True)
+
+    input_5 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("TODO Label"), required=True)
+
+    input_6 = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("TODO Label"), required=True)
+
+    class Meta:
+        """Meta data for QAPP Form."""
+
+        model = QualityAssuranceProjectPlan
+        fields = ('division', 'input_1', 'input_2', 'epa_project_lead_1',
+                  'epa_project_lead_2', 'qa_category', 'intra_extra',
+                  'revision_number', 'date', 'prepared_by_1', 'prepared_by_2',
+                  'input_3', 'input_4', 'input_5', 'input_6')
 
 
 class ExistingDataForm(ModelForm):

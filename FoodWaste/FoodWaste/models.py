@@ -17,6 +17,62 @@ def get_attachment_storage_path(instance, filename):
     return 'uploads/%s/attachments/%s' % (instance.uploaded_by.username, filename)
 
 
+class Division(models.Model):
+    """Class representing EPA Divisions available to the QAPP."""
+    
+    name = models.CharField(blank=False, null=False, max_length=255)
+    
+
+class QualityAssuranceProjectPlan(models.Model):
+    """Class representing a QAPP. This allows users to easily generate new QAPPs"""
+    # Office of Research and Development
+    # Center for Environmental Solutions & Emergency Response
+    
+
+    division = models.ForeignKey(Division, blank=False, null=False,
+                                 related_name='divisions',
+                                 on_delete=models.CASCADE)
+    input_1 = models.CharField(blank=False, null=False, max_length=255)
+    input_2 = models.CharField(blank=False, null=False, max_length=255)
+    epa_project_lead_1 = models.CharField(blank=False, null=False, max_length=255)
+    epa_project_lead_2 = models.CharField(blank=False, null=False, max_length=255)
+    qa_category = models.CharField(blank=False, null=False, max_length=255) # choice
+    intra_extra = models.CharField(blank=False, null=False, max_length=64) # choice
+    revision_number = models.CharField(blank=False, null=False, max_length=255)
+    date = models.DateTimeField(blank=False, null=False, default=timezone.now)
+    prepared_by_1 = models.CharField(blank=False, null=False, max_length=255)
+    prepared_by_2 = models.CharField(blank=False, null=False, max_length=255)
+    input_3 = models.CharField(blank=False, null=False, max_length=255)
+    input_4 = models.CharField(blank=False, null=False, max_length=255)
+    input_5 = models.CharField(blank=False, null=False, max_length=255)
+    input_6 = models.CharField(blank=False, null=False, max_length=255)
+    # Approval Page
+
+
+class QappApproval(models.Model):
+    """Class representing the approval page of a QAPP document."""
+    project_plan_title = models.CharField(blank=False, null=False,
+                                          max_length=255)
+    activity_number = models.CharField(blank=False, null=False,
+                                       max_length=255)
+    qapp = models.ForeignKey(QualityAssuranceProjectPlan, blank=False,
+                             on_delete=models.CASCADE)
+    # Dynamic number of signatures:
+
+
+class QappApprovalSignature(models.Model):
+    """Class representing a single signature on a QAPP Approval Page."""
+    qapp_approval = models.ForeignKey(QappApproval, blank=False,
+                                      on_delete=models.CASCADE)
+    intramural = models.BooleanField(blank=False, null=False, default=True)
+    name = models.CharField(blank=False, null=False, max_length=255)
+    signature = models.CharField(blank=False, null=False, max_length=255)
+    date = models.CharField(blank=False, null=False, max_length=255)
+    # 6 EPA Project Approvals for Intramural or Extramural:
+    # TODO
+    # 4 Contractor Approvals for Extramural:
+    # TODO
+
 class Attachment(models.Model):
     """Class representing a file attachment to an Existing Data entry."""
 

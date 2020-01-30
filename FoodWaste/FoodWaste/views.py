@@ -23,12 +23,17 @@ from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView, \
     DetailView, UpdateView
-from FoodWaste.forms import ExistingDataForm
+from FoodWaste.forms import ExistingDataForm, QualityAssuranceProjectPlanForm
 from FoodWaste.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
 from FoodWaste.settings import APP_DISCLAIMER
 from teams.models import Team, TeamMembership
 
+
+def scenario(request):
+    """ """
+    form = QualityAssuranceProjectPlanForm()
+    return render(request, 'scenario.html', {'form': form})
 
 def get_existing_data_all():
     """Method to get all data regardless of user or team"""
