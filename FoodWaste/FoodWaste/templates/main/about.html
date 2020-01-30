@@ -2,25 +2,129 @@
 
 {% block content %}
 
-<h2>Resources for Planning Projects that Use Existing Data.</h2>
-<h3>Key words: Food waste, landfill diversion, waste management, sustainable materials management, plastics, food de-packaging.</h3>
+<h2>QUALITY ASSURANCE PROJECT PLAN.</h2>
+<h3>Office of Research and Development
+Center for Environmental Solutions & Emergency Response.</h3>
 
 <p>
-    This work is related to additional food waste research under SHC RA7, including life-cycle analyses of various
-    approaches to managing food waste. The findings of Product 4.2 will inform this product: Food Waste State of the
-    Science Report. The work on this project has been approved under the CESER QMP K-LRTD-0032360-QM-1-0 and QAPP 
-    K-LRTD-0032360-QP-1-0.
+    The following checklist summarizes QAPP requirements for projects involving
+    Secondary Data or Existing Data and     Information. More comprehensive
+    guidance on developing QAPPs for research projects is provided in the
+    EPA-240-R-02-009 report titled Guidance for Quality Assurance Project
+    Plans EPA QA G-5. The completed checklist     will be entered into QA
+    Track with the approved QAPP by the QA Manager when final. The work on
+    this project has been approved under the CESER QMP K-LRTD-0032360-QM-1-0
+    and QAPP K-LRTD-0032360-QP-1-0.
 </p>
 
+<!-- Create a button and DASHBOARD like GEMM to start QAPP input identified below -->
+
 <p>
-    Guidance for Data Quality Assessment Practical Methods for Data Analysis EPA QA/G-9. Demonstrates how to use data
-    quality assessment in evaluating environmental data sets and illustrates how to apply some graphical and statistical
-    tools for performing DQA.
+    <ul class="nav nav-tabs">
+        <li><a href={% url 'scenario' %}>Scenario</a></li>
+    </ul>
 </p>
+
 <p>
     <a class="btn btn-default" href="https://www.epa.gov/sites/production/files/2015-06/documents/g9-final.pdf">
         Learn more about USEPA Existing Data &raquo;
     </a>
+</p>
+
+<!--------------------------------------------------->
+<!-- Everything below will be a generated QAPP PDF -->
+
+<h3>QAPP Cover Page</h3>
+
+<h3>QAPP Signature Page</h3>
+
+<h3>B.1 Data Acquisition and Collection</h3>
+<p>
+    Identify the secondary data needed to meet the research objectives.
+</p>
+<p>
+    Describe how the existing data information will be used in the research
+    effort e.g. augment or replace existing data information, verify or
+    validate existing data information.
+</p>
+<p>
+    Specify requirements relating to the type of data, the age of data,
+    geographical representation, temporal representation, and technological
+    representation, as applicable.
+</p>
+<p>
+    Identify databases, maps and literature, and list as applicable to the
+    research effort
+       1 Information and data used to site or time sampling events meteorology,
+         geology, etc.
+       2 Anecdotal or other information triggering the study
+       3 Toxicity, exposure, and environmental fate data
+       4 Models and their output
+       5 Census data
+       6 GIS data.
+</p>
+<p>
+    Identify any non-quality constraints on the secondary data information that
+    affect its use in the research effort e.g., legal, programmatic, privacy
+    confidentiality i.e., is it proprietary or CBI. If supporting an office,
+    region or program check on applicability of the project decision, examples
+    may include: CAA Credible Evidence Revisions FR 62:36, Feb. 24, 1997 or
+    Federal Rule of Evidence 702.
+</p>
+<p>
+
+<h3>B.2 Data Collection and Evaluation</h3>
+<p>
+    Identify the sources for the secondary data.  Describe the planning process
+    for data gathering and how the project ensures that data or information
+    collected are of sufficient quality to satisfy the needs of the research
+    effort.
+</p>
+<p>
+    Describe the process for acceptance rejection and inclusion exclusion of
+    secondary data to support research objectives e.g., to exclude potential
+    bias.
+</p>
+<p>
+    Discuss the rationale for selecting the sources identified. If a hierarchy
+    of sources exists for the gathering of secondary data, specify that
+    hierarchy.
+</p>
+<p>
+    Describe the procedures for determining the quality of the secondary data.
+    Identify criteria for evaluating data or information quality e.g., using
+    EPAs five General Assessment Factors or using measurement data criteria
+    such as accuracy, precision, representativeness, completeness, and
+    comparability. Note: Existing published data from sources such as
+    governmental databases which have well-documented QA QC procedures may not
+    require additional evaluation for quality.
+</p>
+<p>
+    If the quality of the secondary data will not be evaluated by EPA, state
+    this in the QAPP and require one of the following disclaimer statements to
+    be added to any research product requiring clearance: EPA is distributing
+    this information solely as a public service. Insert name of information
+    source is responsible for the quality of this information. EPAs
+    distribution of this information does not represent or imply endorsement by
+    EPA. or The research presented was not performed or funded by EPA and was
+    not subject to EPAs quality system requirements. The views expressed in
+    this product are those of the authors and do not necessarily represent the
+    views or the policies of the U.S. Environmental Protection Agency.
+</p>
+
+<h3>B.3 Data Management and Documentation</h3>
+<p>
+    Describe the process for documenting and tracking sources used and the
+    information that will be recorded for the secondary data collected e.g.
+    data source, originating organization, report title, type of information,
+    date.
+</p>
+
+<h3>Existing Data Tracking</h3>
+<p>
+    Existing data sources are tracked and logged in CESER application Existing
+    Data Search Tool https://1344.67.216.106 under CESER 
+    QMP K-LRTD-0032360-QM-1-0 and QAPP K-LRTD-0032360-QP-1-0.
 </p>
 
 {% endblock %}
