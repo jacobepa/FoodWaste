@@ -3,8 +3,10 @@
 {% block content %}
 
 <h2>QUALITY ASSURANCE PROJECT PLAN.</h2>
-<h3>Office of Research and Development
-Center for Environmental Solutions & Emergency Response.</h3>
+<h3>
+    Office of Research and Development
+    Center for Environmental Solutions & Emergency Response.
+</h3>
 
 <p>
     The following checklist summarizes QAPP requirements for projects involving
@@ -24,6 +26,14 @@ Center for Environmental Solutions & Emergency Response.</h3>
         <li><a href={% url 'scenario' %}>Scenario</a></li>
     </ul>
 </p>
+
+<!-- navbar when user is logged in -->
+{% if user.is_authenticated %}
+{% url 'dashboard' as dashboard %}
+<li {% if self.path == dashboard or self.path == scenario %} class="expanded active-trail menu-item" {% else %} class="menu-item" {% endif %} role="presentation">
+    <a href="{{dashboard}}" {% if self.path == dashboard or self.path == scenario %} class="active-trail menu-link active" {% else %} class="menu-link" {% endif %} role="menuitem">Dashboard</a>
+    <!--{#<a href="{{scenario}}" {% if self.path == scenario %} class="active-trail menu-link active" {% else %} class="menu-link" {% endif %} role="menuitem">Dashboard</a>#}-->
+</li>
 
 <p>
     <a class="btn btn-default" href="https://www.epa.gov/sites/production/files/2015-06/documents/g9-final.pdf">
@@ -55,13 +65,13 @@ Center for Environmental Solutions & Emergency Response.</h3>
 <p>
     Identify databases, maps and literature, and list as applicable to the
     research effort
-       1 Information and data used to site or time sampling events meteorology,
-         geology, etc.
-       2 Anecdotal or other information triggering the study
-       3 Toxicity, exposure, and environmental fate data
-       4 Models and their output
-       5 Census data
-       6 GIS data.
+    1 Information and data used to site or time sampling events meteorology,
+    geology, etc.
+    2 Anecdotal or other information triggering the study
+    3 Toxicity, exposure, and environmental fate data
+    4 Models and their output
+    5 Census data
+    6 GIS data.
 </p>
 <p>
     Identify any non-quality constraints on the secondary data information that
@@ -73,7 +83,7 @@ Center for Environmental Solutions & Emergency Response.</h3>
 </p>
 <p>
 
-<h3>B.2 Data Collection and Evaluation</h3>
+    <h3>B.2 Data Collection and Evaluation</h3>
 <p>
     Identify the sources for the secondary data.  Describe the planning process
     for data gathering and how the project ensures that data or information
@@ -123,7 +133,7 @@ Center for Environmental Solutions & Emergency Response.</h3>
 <h3>Existing Data Tracking</h3>
 <p>
     Existing data sources are tracked and logged in CESER application Existing
-    Data Search Tool https://1344.67.216.106 under CESER 
+    Data Search Tool https://134.67.216.106 under CESER
     QMP K-LRTD-0032360-QM-1-0 and QAPP K-LRTD-0032360-QP-1-0.
 </p>
 
