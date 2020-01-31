@@ -31,26 +31,32 @@ class QualityAssuranceProjectPlan(models.Model):
     """Class representing a QAPP. This allows users to easily generate new QAPPs"""
     # Office of Research and Development
     # Center for Environmental Solutions & Emergency Response
-    
 
     division = models.ForeignKey(Division, blank=False, null=False,
                                  related_name='divisions',
                                  on_delete=models.CASCADE)
+    # Unlabeled input box:
     input_1 = models.CharField(blank=False, null=False, max_length=255)
+    # Unlabeled input box:
     input_2 = models.CharField(blank=False, null=False, max_length=255)
     epa_project_lead_1 = models.CharField(blank=False, null=False, max_length=255)
+    # Unlabeled input box:
     epa_project_lead_2 = models.CharField(blank=False, null=False, max_length=255)
     qa_category = models.CharField(blank=False, null=False, max_length=255) # choice
     intra_extra = models.CharField(blank=False, null=False, max_length=64) # choice
     revision_number = models.CharField(blank=False, null=False, max_length=255)
     date = models.DateTimeField(blank=False, null=False, default=timezone.now)
     prepared_by_1 = models.CharField(blank=False, null=False, max_length=255)
+    # Unlabeled input box:
     prepared_by_2 = models.CharField(blank=False, null=False, max_length=255)
+    # Unlabeled input box:
     input_3 = models.CharField(blank=False, null=False, max_length=255)
+    # Unlabeled input box:
     input_4 = models.CharField(blank=False, null=False, max_length=255)
+    # Unlabeled input box:
     input_5 = models.CharField(blank=False, null=False, max_length=255)
+    # Unlabeled input box:
     input_6 = models.CharField(blank=False, null=False, max_length=255)
-    # Approval Page
 
 
 class QappApproval(models.Model):
