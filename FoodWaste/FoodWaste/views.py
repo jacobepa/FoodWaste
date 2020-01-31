@@ -36,7 +36,7 @@ class QualityAssuranceProjectPlanCreate(CreateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
-        return render(request, "qapp/scenario.html",
+        return render(request, "qapp/qapp_create.html",
                       {'form': QualityAssuranceProjectPlanForm()})
 
 
@@ -50,7 +50,7 @@ class QualityAssuranceProjectPlanCreate(CreateView):
             form = QappApprovalForm()
             return render(request, "qapp/approval.html",
                           {'form': form, 'qapp_form': qapp_form})
-        return render(request, "qapp/scenario.html", {'form': qapp_form})
+        return render(request, "qapp/qapp_create.html", {'form': qapp_form})
 
 
 class QualityAssuranceProjectPlanApproval(CreateView):

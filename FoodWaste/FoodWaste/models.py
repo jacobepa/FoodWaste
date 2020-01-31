@@ -25,7 +25,7 @@ class Division(models.Model):
     def __str__(self):
         """Override str method to display name instead of stringified obj"""
         return self.name
-    
+
 
 class QualityAssuranceProjectPlan(models.Model):
     """Class representing a QAPP. This allows users to easily generate new QAPPs"""
@@ -35,28 +35,37 @@ class QualityAssuranceProjectPlan(models.Model):
     division = models.ForeignKey(Division, blank=False, null=False,
                                  related_name='divisions',
                                  on_delete=models.CASCADE)
-    # Unlabeled input box:
-    input_1 = models.CharField(blank=False, null=False, max_length=255)
-    # Unlabeled input box:
-    input_2 = models.CharField(blank=False, null=False, max_length=255)
-    epa_project_lead_1 = models.CharField(blank=False, null=False, max_length=255)
-    # Unlabeled input box:
-    epa_project_lead_2 = models.CharField(blank=False, null=False, max_length=255)
+    division_branch = models.CharField(blank=False, null=False, max_length=255)
+    title = models.CharField(blank=False, null=False, max_length=255)
+
+    # Dynamic number of project leads (project lead, co-leads) one-to-many
+    # epa_project_lead_1 = models.CharField(blank=False, null=False, max_length=255)
+    # epa_project_lead_2 = models.CharField(blank=False, null=False, max_length=255)
+
     qa_category = models.CharField(blank=False, null=False, max_length=255) # choice
     intra_extra = models.CharField(blank=False, null=False, max_length=64) # choice
     revision_number = models.CharField(blank=False, null=False, max_length=255)
     date = models.DateTimeField(blank=False, null=False, default=timezone.now)
-    prepared_by_1 = models.CharField(blank=False, null=False, max_length=255)
-    # Unlabeled input box:
-    prepared_by_2 = models.CharField(blank=False, null=False, max_length=255)
-    # Unlabeled input box:
-    input_3 = models.CharField(blank=False, null=False, max_length=255)
-    # Unlabeled input box:
-    input_4 = models.CharField(blank=False, null=False, max_length=255)
-    # Unlabeled input box:
-    input_5 = models.CharField(blank=False, null=False, max_length=255)
-    # Unlabeled input box:
-    input_6 = models.CharField(blank=False, null=False, max_length=255)
+    prepared_by = models.CharField(blank=False, null=False, max_length=255)
+    strap = models.CharField(blank=False, null=False, max_length=255)
+    tracking_id = models.CharField(blank=False, null=False, max_length=255)
+
+
+class QualityAssuranceProjectLead(models.Model):
+    """
+    Class representing a QAPP project lead. Project has a one-to-many
+    relationship with ProjectLead(s)
+    """
+    
+    project = models.ForeignKey(QualityAssuranceProjectPlan,
+                                blank=False, null=False,
+                                related_name='projects',
+                                on_delete=models.CASCADE)
+    name = models.CharField(blank=False, null=False, max_length=255)
+
+    def __str__(self):
+        """Override str method to display name instead of stringified obj"""
+        return self.name
 
 
 class QappApproval(models.Model):
@@ -67,7 +76,7 @@ class QappApproval(models.Model):
                                        max_length=255)
     qapp = models.ForeignKey(QualityAssuranceProjectPlan, blank=False,
                              on_delete=models.CASCADE)
-    # Dynamic number of signatures:
+    # Dynamic number of signatures, one-to-many:
 
 
 class QappApprovalSignature(models.Model):
@@ -79,9 +88,7 @@ class QappApprovalSignature(models.Model):
     signature = models.CharField(blank=False, null=False, max_length=255)
     date = models.CharField(blank=False, null=False, max_length=255)
     # 6 EPA Project Approvals for Intramural or Extramural:
-    # TODO
     # 4 Contractor Approvals for Extramural:
-    # TODO
 
 class Attachment(models.Model):
     """Class representing a file attachment to an Existing Data entry."""

@@ -36,28 +36,20 @@ class QualityAssuranceProjectPlanForm(ModelForm):
     """Form for creating a new QAPP (Quality Assurance Project Plan)"""
     
     division = ModelChoiceField(
-        label=_("Source"), queryset=Division.objects.all(),
+        label=_("Division:"), queryset=Division.objects.all(),
         widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
 
-    input_1 = CharField(
+    division_branch = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("TODO Label"), required=True)
+        label=_("Division Branch:"), required=True)
 
-    input_2 = CharField(
+    title = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("TODO Label"), required=True)
+        label=_("QAPP Title:"), required=True)
 
-    epa_project_lead_1 = CharField(
-        max_length=255,
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("EPA Project Lead"), required=True)
-
-    epa_project_lead_2 = CharField(
-        max_length=255,
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("EPA Project Lead"), required=True)
+    # Dynamic number of project leads
 
     qa_category = ChoiceField(
         label=_("QA Category:"), choices=QA_CATEGORY_CHOICES,
@@ -70,51 +62,35 @@ class QualityAssuranceProjectPlanForm(ModelForm):
     revision_number = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Revision Number"), required=True)
+        label=_("Revision Number:"), required=True)
 
     date = DateTimeField(
-        label=_("Time Period Starting Date:"),
+        label=_("Date:"),
         required=False,
         widget=DateTimeInput(attrs={'class': 'form-control mb-2'}))
 
-    prepared_by_1 = CharField(
+    prepared_by = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Prepared By"), required=True)
+        label=_("Prepared By:"), required=True)
 
-    prepared_by_2 = CharField(
+    strap = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Prepared By"), required=True)
+        label=_("StRAP:"), required=True)
 
-    input_3 = CharField(
+    tracking_id = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("TODO Label"), required=True)
-
-    input_4 = CharField(
-        max_length=255,
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("TODO Label"), required=True)
-
-    input_5 = CharField(
-        max_length=255,
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("TODO Label"), required=True)
-
-    input_6 = CharField(
-        max_length=255,
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("TODO Label"), required=True)
+        label=_("QA Tracking ID:"), required=True)
 
     class Meta:
         """Meta data for QAPP Form."""
 
         model = QualityAssuranceProjectPlan
-        fields = ('division', 'input_1', 'input_2', 'epa_project_lead_1',
-                  'epa_project_lead_2', 'qa_category', 'intra_extra',
-                  'revision_number', 'date', 'prepared_by_1', 'prepared_by_2',
-                  'input_3', 'input_4', 'input_5', 'input_6')
+        fields = ('division', 'division_branch', 'title', 'qa_category',
+                  'intra_extra', 'revision_number', 'date', 'prepared_by',
+                  'strap', 'tracking_id')
 
 
 class QappApprovalForm(ModelForm):

@@ -14,6 +14,10 @@
     vertical-align: middle;
 }
 
+.control-label {
+    text-align: right;
+}
+
 .blue-box-with-shadow {
     background-color: #00b0f0;
     font-family: Calibri;
