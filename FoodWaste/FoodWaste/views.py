@@ -23,17 +23,44 @@ from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView, \
     DetailView, UpdateView
-from FoodWaste.forms import ExistingDataForm, QualityAssuranceProjectPlanForm
+from FoodWaste.forms import ExistingDataForm, \
+    QualityAssuranceProjectPlanForm, QappApprovalForm
 from FoodWaste.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
 from FoodWaste.settings import APP_DISCLAIMER
 from teams.models import Team, TeamMembership
 
+class QualityAssuranceProjectPlanCreate(CreateView):
+    """Class for creating new QAPPs (Quality Assurance Project Plans)"""
+    
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return a view with an empty form for creating a new QAPP."""
+        return render(request, "qapp/scenario.html",
+                      {'form': QualityAssuranceProjectPlanForm()})
 
-def scenario(request):
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a new QAPP form filled out."""
+        qapp_form = QualityAssuranceProjectPlanForm(request.POST)
+        if qapp_form.is_valid():
+            obj = qapp_form.save(commit=True)
+            # Create and return an empty QappApproval form
+            form = QappApprovalForm()
+            return render(request, "qapp/approval.html",
+                          {'form': form, 'qapp_form': qapp_form})
+        return render(request, "qapp/scenario.html", {'form': qapp_form})
+
+
+class QualityAssuranceProjectPlanApproval(CreateView):
     """ """
-    form = QualityAssuranceProjectPlanForm()
-    return render(request, 'scenario.html', {'form': form})
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return a view with an empty form for creating a new QAPP."""
+        return render(request, "qapp/approval.html",
+                      {'form': QappApprovalForm(user=request.user)})
 
 def get_existing_data_all():
     """Method to get all data regardless of user or team"""

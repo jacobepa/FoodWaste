@@ -15,7 +15,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
 from FoodWaste.models import  Division, ExistingData, ExistingDataSource, \
-    QualityAssuranceProjectPlan
+    QualityAssuranceProjectPlan, QappApproval
 from teams.models import TeamMembership, Team
 
 
@@ -115,6 +115,34 @@ class QualityAssuranceProjectPlanForm(ModelForm):
                   'epa_project_lead_2', 'qa_category', 'intra_extra',
                   'revision_number', 'date', 'prepared_by_1', 'prepared_by_2',
                   'input_3', 'input_4', 'input_5', 'input_6')
+
+
+class QappApprovalForm(ModelForm):
+    """Form for creating the QAPP Approval page"""
+
+    project_plan_title = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    activity_number = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Activity Number"), required=True)
+
+    # TODO: Handle this carefully. It's not user defined, but rather based on
+    #       the QAPP creation flow. This form will always be instantiated with
+    #       the QAPP ID passed in.
+    qapp = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2', 'readonly': True}),
+        label=_(""), required=True)
+
+    class Meta:
+        """Meta data for QAPP Form."""
+
+        model = QappApproval
+        fields = ('project_plan_title', 'activity_number', 'qapp')
 
 
 class ExistingDataForm(ModelForm):
