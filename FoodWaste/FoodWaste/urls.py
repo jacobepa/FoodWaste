@@ -12,7 +12,8 @@ from django.contrib import admin
 from django.urls import include
 from FoodWaste.views import home, contact, about, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
-    ExistingDataEdit, export_pdf, export_excel, scenario
+    ExistingDataEdit, export_pdf, export_excel, \
+    QualityAssuranceProjectPlanCreate
 from FoodWaste.settings import MEDIA_ROOT, MEDIA_URL
 
 
@@ -21,9 +22,16 @@ urlpatterns = [
 
     url(r'^$', home, name='home'),
     url(r'^dashboard', home, name='dashboard'),
-    url(r'^scenario', scenario, name='scenario'),
     url(r'^contact', contact, name='contact'),
     url(r'^about', about, name='about'),
+    
+    # Begin QAPP URLs for creating and printing QAPPs
+    url(r'^qapp/create/',
+        QualityAssuranceProjectPlanCreate.as_view(),
+        name='qapp_create'),
+    url(r'^qapp/approval/',
+        QualityAssuranceProjectPlanCreate.as_view(),
+        name='qapp_approval'),
 
     # Begin existingdata URLs.
     # URLs for PDF and Excel exports.

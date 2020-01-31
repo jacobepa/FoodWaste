@@ -21,6 +21,10 @@ class Division(models.Model):
     """Class representing EPA Divisions available to the QAPP."""
     
     name = models.CharField(blank=False, null=False, max_length=255)
+
+    def __str__(self):
+        """Override str method to display name instead of stringified obj"""
+        return self.name
     
 
 class QualityAssuranceProjectPlan(models.Model):
