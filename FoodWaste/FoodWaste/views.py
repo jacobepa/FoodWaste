@@ -17,6 +17,7 @@ from xhtml2pdf import pisa
 from zipfile import ZipFile, ZIP_DEFLATED
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.forms import inlineformset_factory
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template.loader import get_template
@@ -24,20 +25,27 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView, \
     DetailView, UpdateView
 from FoodWaste.forms import ExistingDataForm, \
-    QualityAssuranceProjectPlanForm, QappApprovalForm
+    QualityAssuranceProjectPlanForm, QappApprovalForm, \
+    QualityAssuranceProjectLeadForm
 from FoodWaste.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
 from FoodWaste.settings import APP_DISCLAIMER
 from teams.models import Team, TeamMembership
 
+#ProjectLeadFormset = inlineformset_factory(
+#    QualityAssuranceProjectPlanForm, QualityAssuranceProjectLeadForm,
+#    fields=('name',))
+
 class QualityAssuranceProjectPlanCreate(CreateView):
     """Class for creating new QAPPs (Quality Assurance Project Plans)"""
-    
+
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
-        return render(request, "qapp/qapp_create.html",
-                      {'form': QualityAssuranceProjectPlanForm()})
+        return render(
+            request, "qapp/qapp_create.html",
+            {'form': QualityAssuranceProjectPlanForm(),
+            'project_lead_class': QualityAssuranceProjectLeadForm})
 
 
     @method_decorator(login_required)
