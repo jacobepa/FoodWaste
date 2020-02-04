@@ -43,7 +43,7 @@ pylint==2.4.4                   # Static code analysis tool which looks for prog
 PyPDF2==1.26.0                  # Pure-Python library built as a PDF toolkit.
 pyPdf==1.13                     # PDF toolkit.
 pytest==5.3.5                   # Framework to write small tests, yet scales to support complex functional testing for apps/lib.
-python==docx-0.8.10             # Python library for creating and updating Microsoft Word (.docx) files.
+python-docx==0.8.10             # Python library for creating and updating Microsoft Word (.docx) files.
 scipy==1.4.1                    # Scientific Library for Python.
 xhtml2pdf==0.2.4                # Package for saving html templates as PDF files. Used to return multiple files instead of a
                                 # single PDF Template Response (as in wkhtmltopdf).
