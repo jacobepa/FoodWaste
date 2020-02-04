@@ -15,7 +15,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
 from FoodWaste.models import  Division, ExistingData, ExistingDataSource, \
-    QualityAssuranceProjectPlan, QappApproval
+    QualityAssuranceProjectPlan, QappApproval, QualityAssuranceProjectLead
 from teams.models import TeamMembership, Team
 
 
@@ -50,6 +50,7 @@ class QualityAssuranceProjectPlanForm(ModelForm):
         label=_("QAPP Title:"), required=True)
 
     # Dynamic number of project leads
+    # project_leads = inlineformset_factory()
 
     qa_category = ChoiceField(
         label=_("QA Category:"), choices=QA_CATEGORY_CHOICES,
@@ -91,6 +92,25 @@ class QualityAssuranceProjectPlanForm(ModelForm):
         fields = ('division', 'division_branch', 'title', 'qa_category',
                   'intra_extra', 'revision_number', 'date', 'prepared_by',
                   'strap', 'tracking_id')
+
+
+class QualityAssuranceProjectLeadForm(ModelForm):
+    """Form for creating project leads for a given project"""
+    
+    project = ModelChoiceField(
+        label=_("Project:"), queryset=Division.objects.all(),
+        widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
+
+    name = CharField(
+        max_length=255,
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Lead Name:"), required=True)
+
+    class Meta:
+        """Meta data for QAPP Form."""
+
+        model = QualityAssuranceProjectLead
+        fields = ('project', 'name')
 
 
 class QappApprovalForm(ModelForm):
