@@ -9,13 +9,13 @@
 from django.forms import CharField, ChoiceField, ModelForm, TextInput, \
     Textarea, PasswordInput, ModelMultipleChoiceField, SelectMultiple, \
     BooleanField, RadioSelect, FileField, ClearableFileInput, \
-    ModelChoiceField, Select, DateTimeField
+    ModelChoiceField, Select, DateTimeField, inlineformset_factory
 from django.forms.widgets import DateTimeInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
 from FoodWaste.models import  Division, ExistingData, ExistingDataSource, \
-    QualityAssuranceProjectPlan, QappApproval, QualityAssuranceProjectLead
+    Qapp, QappApproval, QappLead
 from teams.models import TeamMembership, Team
 
 
@@ -32,7 +32,7 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                              'placeholder': 'Password'}))
 
 
-class QualityAssuranceProjectPlanForm(ModelForm):
+class QappForm(ModelForm):
     """Form for creating a new QAPP (Quality Assurance Project Plan)"""
     
     division = ModelChoiceField(
@@ -54,11 +54,11 @@ class QualityAssuranceProjectPlanForm(ModelForm):
 
     qa_category = ChoiceField(
         label=_("QA Category:"), choices=QA_CATEGORY_CHOICES,
-        widget=Select(attrs={'class': 'form-control mb-2'}), required=False)
+        widget=Select(attrs={'class': 'form-control mb-2'}), required=True)
 
     intra_extra = ChoiceField(
         label=_("Intra/Extramural:"), choices=XMURAL_CHOICES,
-        widget=Select(attrs={'class': 'form-control mb-2'}), required=False)
+        widget=Select(attrs={'class': 'form-control mb-2'}), required=True)
 
     revision_number = CharField(
         max_length=255,
@@ -67,7 +67,7 @@ class QualityAssuranceProjectPlanForm(ModelForm):
 
     date = DateTimeField(
         label=_("Date:"),
-        required=False,
+        required=True,
         widget=DateTimeInput(attrs={'class': 'form-control mb-2'}))
 
     prepared_by = CharField(
@@ -88,29 +88,33 @@ class QualityAssuranceProjectPlanForm(ModelForm):
     class Meta:
         """Meta data for QAPP Form."""
 
-        model = QualityAssuranceProjectPlan
+        model = Qapp
         fields = ('division', 'division_branch', 'title', 'qa_category',
                   'intra_extra', 'revision_number', 'date', 'prepared_by',
                   'strap', 'tracking_id')
 
 
-class QualityAssuranceProjectLeadForm(ModelForm):
+class QappLeadForm(ModelForm):
     """Form for creating project leads for a given project"""
-    
-    project = ModelChoiceField(
-        label=_("Project:"), queryset=Division.objects.all(),
-        widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
 
     name = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("Lead Name:"), required=True)
 
+    #project = ModelChoiceField(
+    #    label=_("Project:"), queryset=Qapp.objects.all(),
+    #    widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
+    project = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+                               required=True, label=_("Parent QAPP"),
+                               widget=TextInput(attrs={'class': 'form-control mb-2',
+                                                       'readonly':'readonly'}))
+
     class Meta:
         """Meta data for QAPP Form."""
 
-        model = QualityAssuranceProjectLead
-        fields = ('project', 'name')
+        model = QappLead
+        fields = ('name', 'project')
 
 
 class QappApprovalForm(ModelForm):
@@ -237,3 +241,9 @@ class ExistingDataForm(ModelForm):
         fields = ('work', 'email', 'phone', 'search', 'source',
                   'source_title', 'keywords', 'url',
                   'citation', 'comments')
+
+
+# https://swapps.com/blog/working-with-nested-forms-with-django/
+ProjectLeadFormset = inlineformset_factory(
+    Qapp, QappLead,
+    fields=('name',))

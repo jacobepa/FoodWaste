@@ -1,0 +1,24 @@
+<div class="col-sm-4"><h4>Project Leads</h4></div>
+<div class="col-sm-1 mx-1"><i onclick="addProjectLead({{object.id}})" class="fas fa-plus btn btn-sm btn-info"></i></div>
+<div class="col-sm-1 mx-1"><i onclick="editProjectLead(this)" class="fas fa-edit btn btn-sm btn-warning" disabled></i></div>
+<div class="col-sm-1 mx-1"><i onclick="removeProjectLead(this)" class="fas fa-minus btn btn-sm btn-danger" disabled></i></div>
+
+<table class="table table-bordered table-hover">
+    <caption>List of Project Leads</caption>
+    <thead class="table-secondary">
+        <tr>
+            <th scope="col">Name</th>
+        </tr>
+    </thead>
+    {% if project_leads_list %}
+    <tbody>
+        {% for lead in project_leads_list %}
+        <tr id="{{lead.id}}" onclick="rowClick('{{lead.id}}')">
+            <th scope="row">{{lead.name}}</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+    {% else %}
+    <tr><td>No Project Leads have been added!</td></tr>
+    {% endif %}
+</table>

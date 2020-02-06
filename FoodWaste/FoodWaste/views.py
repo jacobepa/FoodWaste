@@ -16,59 +16,114 @@ from wkhtmltopdf.views import PDFTemplateResponse
 from xhtml2pdf import pisa
 from zipfile import ZipFile, ZIP_DEFLATED
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.forms import inlineformset_factory
-from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
+from django.http import HttpRequest, HttpResponseRedirect, HttpResponse, \
+    JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView, \
     DetailView, UpdateView
 from FoodWaste.forms import ExistingDataForm, \
-    QualityAssuranceProjectPlanForm, QappApprovalForm, \
-    QualityAssuranceProjectLeadForm
+    QappForm, QappApprovalForm, \
+    QappLeadForm, ProjectLeadFormset
 from FoodWaste.models import ExistingData, ExistingDataSharingTeamMap, \
-    Attachment, DataAttachmentMap
+    Attachment, DataAttachmentMap, Qapp, \
+    QappLead
 from FoodWaste.settings import APP_DISCLAIMER
 from teams.models import Team, TeamMembership
 
-#ProjectLeadFormset = inlineformset_factory(
-#    QualityAssuranceProjectPlanForm, QualityAssuranceProjectLeadForm,
-#    fields=('name',))
 
-class QualityAssuranceProjectPlanCreate(CreateView):
+class ProjectPlanCreate(LoginRequiredMixin, CreateView):
     """Class for creating new QAPPs (Quality Assurance Project Plans)"""
-
+    model = Qapp
+    template_name = 'QAR5/SectionA/qapp_create.html'
+    
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
         return render(
-            request, "qapp/qapp_create.html",
-            {'form': QualityAssuranceProjectPlanForm(),
-            'project_lead_class': QualityAssuranceProjectLeadForm})
-
+            request, "QAR5/SectionA/qapp_create.html",
+            {'form': QappForm(),
+            'project_lead_class': QappLeadForm})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a new QAPP form filled out."""
-        qapp_form = QualityAssuranceProjectPlanForm(request.POST)
-        if qapp_form.is_valid():
-            obj = qapp_form.save(commit=True)
-            # Create and return an empty QappApproval form
-            form = QappApprovalForm()
-            return render(request, "qapp/approval.html",
-                          {'form': form, 'qapp_form': qapp_form})
-        return render(request, "qapp/qapp_create.html", {'form': qapp_form})
+        form = QappForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=True)
+            return HttpResponseRedirect('/qapp/approval?project_id=%d' % obj.id)
+            #return HttpResponseRedirect('/qapp/detail/%d/' % obj.id)
+
+        return render(request, "QAR5/SectionA/qapp_create.html", {'form': form})
 
 
-class QualityAssuranceProjectPlanApproval(CreateView):
-    """ """
+class ProjectPlanDetail(LoginRequiredMixin, DetailView):
+    """Class for viewing an existing (newly created) QAPP"""
+    model = Qapp
+    template_name = 'QAR5/SectionA/qapp_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['project_leads_list'] = QappLead.objects.filter(
+            project=context['object'])
+        return context
+
+
+class ProjectLeadCreate(LoginRequiredMixin, CreateView):
+    """Class for creating new QAPP Project Lead"""
+    model = QappLead
+    template_name = 'QAR5/SectionA/project_lead_create.html'
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
-        return render(request, "qapp/approval.html",
-                      {'form': QappApprovalForm(user=request.user)})
+        project_id = request.GET.get('project_id', 0)
+        qapp = Qapp.objects.get(id=project_id)
+        form = QappLeadForm({'project': qapp})
+        ctx = {'form': form, 'project_id': project_id}
+        return render(request, self.template_name, ctx)
+
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a new Project Lead form filled out."""
+        form = QappLeadForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=True)
+            return HttpResponseRedirect(
+                '/qapp/detail/%s/' % request.POST.get('project', '1'))
+        return HttpResponseRedirect('/qapp/create/')
+
+
+class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
+    """
+    Create the base approval page with no signatures.
+    Approval signatures will be added after the title and number.
+    """
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return a view with an empty form for creating a new QAPP."""
+        project_id = request.GET.get('project_id', 0)
+        qapp = Qapp.objects.get(id=project_id)
+        form = QappApprovalForm({'project': qapp})
+        ctx = {'form': form, 'project_id': project_id}
+
+        return render(request, "QAR5/SectionA/qapp_approval_create.html", ctx)
+
+    #@method_decorator(login_required)
+    #def post(self, request, *args, **kwargs):
+    #    """Process the post request with a new Project Lead form filled out."""
+    #    form = QappLeadForm(request.POST)
+    #    if form.is_valid():
+    #        obj = form.save(commit=True)
+    #        return HttpResponseRedirect(
+    #            '/qapp/detail/%s/' % request.POST.get('project', '1'))
+    #    return HttpResponseRedirect('/qapp/create/')
+    
 
 def get_existing_data_all():
     """Method to get all data regardless of user or team"""
@@ -104,7 +159,7 @@ def get_existing_data_team(team_id):
     return queryset
 
 
-class ExistingDataIndex(TemplateView):
+class ExistingDataIndex(LoginRequiredMixin, TemplateView):
     """Class to return the first page of the Existing Data flow"""
 
     template_name = 'existingdata/existing_data_index.html'
@@ -120,7 +175,7 @@ class ExistingDataIndex(TemplateView):
         return context
 
 
-class ExistingDataList(ListView):
+class ExistingDataList(LoginRequiredMixin, ListView):
     """View for Existing Data Tracking Tool."""
 
     model = ExistingData
@@ -153,7 +208,7 @@ class ExistingDataList(ListView):
         return get_existing_data_all()
 
 
-class ExistingDataDetail(DetailView):
+class ExistingDataDetail(LoginRequiredMixin, DetailView):
     """View for viewing the details of a Existing data instance"""
     model = ExistingData
     template_name = 'existingdata/existing_data_detail.html'
@@ -174,7 +229,7 @@ class ExistingDataDetail(DetailView):
         return context
 
 
-class ExistingDataEdit(UpdateView):
+class ExistingDataEdit(LoginRequiredMixin, UpdateView):
     """View for editing the details of a Existing data instance"""
     model = ExistingData
     form_class = ExistingDataForm
@@ -187,7 +242,7 @@ class ExistingDataEdit(UpdateView):
         return HttpResponseRedirect('/existingdata/detail/' + str(self.object.id))
 
 
-class ExistingDataCreate(CreateView):
+class ExistingDataCreate(LoginRequiredMixin, CreateView):
     """Class for creating new Existing Data."""
 
     @method_decorator(login_required)

@@ -22,12 +22,11 @@
 <!-- Create a button and DASHBOARD like GEMM to start QAPP input identified below -->
 
 {% if user.is_authenticated %}
-<ul class="nav nav-tabs">
-    <li><a href={% url 'qapp_create' %}>Scenario</a></li>
-    <li><a href={% url 'dashboard' %}>Dashboard</a></li>
-</ul>
+<a href={% url 'qapp_create' %} class="btn btn-md btn-success mb-3">Create a Scenario</a>
 {% endif %}
-<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+<hr />
+
 <p>
     <a class="btn btn-default" href="https://www.epa.gov/sites/production/files/2015-06/documents/g9-final.pdf">
         Learn more about USEPA Existing Data &raquo;
@@ -281,5 +280,4 @@ Revision # <!--Once a version line is done LOCK IT-->
 Description
 Effective Date
 Initial Version
-
 {% endblock %}

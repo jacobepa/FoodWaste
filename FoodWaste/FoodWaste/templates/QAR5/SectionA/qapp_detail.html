@@ -1,0 +1,55 @@
+{% extends "main/base.html" %}
+{% block content %}
+{% load static %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <img src="{% static 'EPA_files/logo.png' %}" alt="">
+                <p class="float-right blue-box-with-shadow">QUALITY ASSURANCE PROJECT PLAN</p>
+            </div>
+        </div>
+        <div class="row mt-4 text-center">
+            <div class="col-md-12">
+                <h2>Office of Research and Development</h2>
+                <h3>Center for Environmental Solutions & Emergency Response</h3>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="col-md-9">{% include 'QAR5/SectionA/qapp_details_partial.html' %}</div>
+                <div class="col-md-3">
+                    <button onclick="window.location.href='#'"
+                            class="my-2 col-md-12 btn btn-md btn-info">
+                        Back to Project List
+                    </button>
+                    <button onclick="window.location.href='/qapp/edit/{{object.id}}/'"
+                            class="my-2 col-md-12 btn btn-md btn-warning">
+                        Edit QAPP Info
+                    </button>
+                    <button onclick="window.location.href='/qapp/delete/{{object.id}}/'"
+                            class="my-2 col-md-12 btn btn-md btn-danger">
+                        Delete QAPP
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 row">
+            <div class="col-md-12">
+                {% include 'QAR5/SectionA/project_lead_partial.html' %}
+            </div>
+        </div>
+        <div class="mt-4 row">
+            <div class="col-md-12">
+                {% include 'QAR5/SectionA/project_approval_partial.html' %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+</script>
+{% endblock %}

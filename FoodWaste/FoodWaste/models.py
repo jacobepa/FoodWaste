@@ -27,7 +27,7 @@ class Division(models.Model):
         return self.name
 
 
-class QualityAssuranceProjectPlan(models.Model):
+class Qapp(models.Model):
     """Class representing a QAPP. This allows users to easily generate new QAPPs"""
     # Office of Research and Development
     # Center for Environmental Solutions & Emergency Response
@@ -51,17 +51,18 @@ class QualityAssuranceProjectPlan(models.Model):
     tracking_id = models.CharField(blank=False, null=False, max_length=255)
 
 
-class QualityAssuranceProjectLead(models.Model):
+class QappLead(models.Model):
     """
     Class representing a QAPP project lead. Project has a one-to-many
     relationship with ProjectLead(s)
     """
     
-    project = models.ForeignKey(QualityAssuranceProjectPlan,
-                                blank=False, null=False,
-                                related_name='projects',
-                                on_delete=models.CASCADE)
+    #project = models.ForeignKey(Qapp,
+    #                            blank=False, null=False,
+    #                            related_name='projects',
+    #                            on_delete=models.CASCADE)
     name = models.CharField(blank=False, null=False, max_length=255)
+    project = models.ForeignKey(Qapp, on_delete=models.CASCADE)
 
     def __str__(self):
         """Override str method to display name instead of stringified obj"""
@@ -74,7 +75,7 @@ class QappApproval(models.Model):
                                           max_length=255)
     activity_number = models.CharField(blank=False, null=False,
                                        max_length=255)
-    qapp = models.ForeignKey(QualityAssuranceProjectPlan, blank=False,
+    qapp = models.ForeignKey(Qapp, blank=False,
                              on_delete=models.CASCADE)
     # Dynamic number of signatures, one-to-many:
 
