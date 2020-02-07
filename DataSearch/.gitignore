@@ -14,10 +14,16 @@ datasearch_doxygen_config.txt
 .idea
 Databases/
 
-# Documents
+# Documents / Attachments
 .doc
 .docx
 .pdf
+datasearch_data/
+data_import/
+local/
+media/
+media/uploads/
+media/*/attachments/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,6 +1,6 @@
-# Strategies for Characterization of Food Waste (FoodWaste)
+# Strategies for Characterization of Food Waste (DataSearch)
 
-![FoodWaste](https://www.epa.gov/sites/production/files/2013-06/epa_seal_verysmall_trim.gif)
+![DataSearch](https://www.epa.gov/sites/production/files/2013-06/epa_seal_verysmall_trim.gif)
 
 ## About
 
@@ -28,25 +28,25 @@ Contact Product Lead: Daniel Young (young.daniel@epa.gov)
 
 ## Home
 
-See [Wiki/Home](https://github.com/USEPA/FoodWaste/wiki).
+See [Wiki/Home](https://github.com/USEPA/DataSearch/wiki).
 ***
 
 ## Build & run
 
-See [Wiki/Build & Run](https://github.com/USEPA/FoodWaste/wiki/Build-&-Run).
+See [Wiki/Build & Run](https://github.com/USEPA/DataSearch/wiki/Build-&-Run).
 ***
 
 ## Testing
 
-See [Wiki/Testing](https://github.com/USEPA/FoodWaste/wiki/Testing).
+See [Wiki/Testing](https://github.com/USEPA/DataSearch/wiki/Testing).
 ***
 
 ## Contributing
 
-See [Wiki/Contributing & Collaboration](https://github.com/USEPA/FoodWaste/wiki/Contributing).
+See [Wiki/Contributing & Collaboration](https://github.com/USEPA/DataSearch/wiki/Contributing).
 ***
 
 ## License
 
-See [Wiki/License](https://github.com/USEPA/FoodWaste/wiki/Licensing).
+See [Wiki/License](https://github.com/USEPA/DataSearch/wiki/Licensing).
 ***
