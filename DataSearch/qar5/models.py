@@ -51,12 +51,8 @@ class QappLead(models.Model):
     relationship with ProjectLead(s)
     """
     
-    #project = models.ForeignKey(Qapp,
-    #                            blank=False, null=False,
-    #                            related_name='projects',
-    #                            on_delete=models.CASCADE)
     name = models.CharField(blank=False, null=False, max_length=255)
-    project = models.ForeignKey(Qapp, on_delete=models.CASCADE)
+    qapp = models.ForeignKey(Qapp, on_delete=models.CASCADE)
 
     def __str__(self):
         """Override str method to display name instead of stringified obj"""

@@ -79,17 +79,14 @@ class QappForm(ModelForm):
 
 
 class QappLeadForm(ModelForm):
-    """Form for creating project leads for a given project"""
+    """Form for creating project leads for a given qapp"""
 
     name = CharField(
         max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("Lead Name:"), required=True)
 
-    #project = ModelChoiceField(
-    #    label=_("Project:"), queryset=Qapp.objects.all(),
-    #    widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
-    project = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
                                widget=TextInput(attrs={'class': 'form-control mb-2',
                                                        'readonly':'readonly'}))
@@ -98,7 +95,7 @@ class QappLeadForm(ModelForm):
         """Meta data for QAPP Form."""
 
         model = QappLead
-        fields = ('name', 'project')
+        fields = ('name', 'qapp')
 
 
 class QappApprovalForm(ModelForm):
@@ -114,13 +111,10 @@ class QappApprovalForm(ModelForm):
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("Activity Number"), required=True)
 
-    # TODO: Handle this carefully. It's not user defined, but rather based on
-    #       the QAPP creation flow. This form will always be instantiated with
-    #       the QAPP ID passed in.
-    qapp = CharField(
-        max_length=255,
-        widget=TextInput({'class': 'form-control mb-2', 'readonly': True}),
-        label=_(""), required=True)
+    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+                               required=True, label=_("Parent QAPP"),
+                               widget=TextInput(attrs={'class': 'form-control mb-2',
+                                                       'readonly':'readonly'}))
 
     class Meta:
         """Meta data for QAPP Form."""

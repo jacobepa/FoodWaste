@@ -12,7 +12,7 @@ function rowClick(id) {
 
 // addProjectLead({{ object.id }})
 function addProjectLead(id) {
-    window.location.href = '/qapp/project_lead/create?project_id=' + id;
+    window.location.href = '/qapp/project_lead/create?qapp_id=' + id;
 }
 
 // editProjectLead(this)

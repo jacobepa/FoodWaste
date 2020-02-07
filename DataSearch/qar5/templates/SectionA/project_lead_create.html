@@ -17,7 +17,7 @@
     </div>
     
     <div class="row mt-4">
-        <h3>Adding a new Project Lead for QAPP with ID {{project_id}}</h3>
+        <h3>Adding a new Project Lead for QAPP with ID {{qapp_id}}</h3>
         <div class="col-md-12">
             <form enctype="multipart/form-data" action="/qapp/project_lead/create/" method="post" role="form">
                 {% csrf_token %}
@@ -26,8 +26,8 @@
                     {{form.name}}
                 </div>
                 <div class="form-group row">
-                    <label>{{form.project.label}}</label>
-                    {{form.project}}
+                    <label>{{form.qapp.label}}</label>
+                    {{form.qapp}}
                 </div>
 
                 <div class="row justify-content-center">

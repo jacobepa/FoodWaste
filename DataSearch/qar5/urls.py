@@ -13,21 +13,21 @@ Available functions:
 """
 
 from django.conf.urls import url
-from qar5.views import ProjectPlanCreate, ProjectPlanDetail, \
+from qar5.views import QappCreate, QappDetail, \
     ProjectApprovalCreate, ProjectLeadCreate
 
 urlpatterns = [
     # URLs for CRUD operations.
     # Begin QAPP URLs for creating and printing QAPPs
     url(r'^create/',
-        ProjectPlanCreate.as_view(),
+        QappCreate.as_view(),
         name='qapp_create'),
 
     url(r'^detail/(?P<pk>\d+)/?$',
-        ProjectPlanDetail.as_view(),
+        QappDetail.as_view(),
         name='qapp_create'),
 
-    url(r'^approval/create/(?P<pk>\d+)/?$',
+    url(r'^approval/create/',
         ProjectApprovalCreate.as_view(),
         name='qapp_approval'),
 

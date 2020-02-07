@@ -3,21 +3,17 @@
 {% load static %}
 
     <div class="container">
-        <div class="row">
+        <div class="border rounded p-3 row">
             <div class="col-md-12">
                 <img src="{% static 'EPA_files/logo.png' %}" alt="">
                 <p class="float-right blue-box-with-shadow">QUALITY ASSURANCE PROJECT PLAN</p>
             </div>
-        </div>
-        <div class="row mt-4 text-center">
-            <div class="col-md-12">
+            <div class="col-md-12 mt-4 text-center">
                 <h2>Office of Research and Development</h2>
                 <h3>Center for Environmental Solutions & Emergency Response</h3>
             </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="col-md-9">{% include 'qar5/SectionA/qapp_details_partial.html' %}</div>
+            <div class="col-md-12 mt-4">
+                <div class="col-md-9">{% include 'SectionA/qapp_details_partial.html' %}</div>
                 <div class="col-md-3">
                     <button onclick="window.location.href='#'"
                             class="my-2 col-md-12 btn btn-md btn-info">
@@ -33,15 +29,13 @@
                     </button>
                 </div>
             </div>
-        </div>
-        <div class="mt-4 row">
-            <div class="col-md-12">
-                {% include 'qar5/SectionA/project_lead_partial.html' %}
+            <div class="col-md-12 mt-4">
+                {% include 'SectionA/project_lead_partial.html' %}
             </div>
         </div>
-        <div class="mt-4 row">
+        <div class="border rounded p-3 mt-4 row">
             <div class="col-md-12">
-                {% include 'qar5/SectionA/project_approval_partial.html' %}
+                {% include 'SectionA/project_approval_partial.html' %}
             </div>
         </div>
     </div>

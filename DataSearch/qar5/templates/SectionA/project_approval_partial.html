@@ -1,12 +1,30 @@
-<div class="col-sm-4"><h4>Project Approval Page</h4></div>
+<div class="col-md-12 text-center"><h3>QAPP Approval Page</h3></div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="col-md-12">
+            <label class="col-md-6 control-label">QAPP Plan Title:</label>
+            <div class="col-md-6">{{project_approval.project_plan_title}}</div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-md-6 control-label">QAPP Activity Number:</label>
+            <div class="col-md-6">{{project_approval.activity_number}}</div>
+        </div>
+    </div>
+    <div class="col-md-6 mt-4">
+        <label class="col-sm-8 text-right">Manage Approval Signatures:</label>
+        <div class="col-sm-1 mr-2 float-right"><i onclick="addApprovalSignature({{object.id}})" class="fas fa-plus btn btn-sm btn-info"></i></div>
+        <div class="col-sm-1 mr-2 float-right"><i onclick="editApprovalSignature(this)" class="fas fa-edit btn btn-sm btn-warning" disabled></i></div>
+        <div class="col-sm-1 mr-2 float-right"><i onclick="removeApprovalSignature(this)" class="fas fa-minus btn btn-sm btn-danger" disabled></i></div>
+    </div>
+</div>
 <table class="table table-bordered table-hover">
-    <caption>List of Project Leads</caption>
+    <caption>List of QAPP Approval Signatures</caption>
     <thead class="table-secondary">
         <tr>
             <th scope="col">Name</th>
         </tr>
     </thead>
-    {% if project_leads_list %}
+    {% if project_approval %}
     <tbody>
         {% for lead in project_leads_list %}
         <tr id="{{lead.id}}" onclick="rowClick('{{lead.id}}')">
