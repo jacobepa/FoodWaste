@@ -12,9 +12,8 @@ from django.contrib import admin
 from django.urls import include
 from FoodWaste.views import home, contact, about, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
-    ExistingDataEdit, export_pdf, export_excel, \
-    ProjectPlanCreate, ProjectLeadCreate, \
-    ProjectPlanDetail
+    ExistingDataEdit, export_pdf, export_excel, ProjectPlanCreate, \
+    ProjectLeadCreate, ProjectPlanDetail, ProjectApprovalCreate
 from FoodWaste.settings import MEDIA_ROOT, MEDIA_URL
 
 

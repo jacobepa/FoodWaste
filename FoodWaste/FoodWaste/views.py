@@ -162,7 +162,7 @@ def get_existing_data_team(team_id):
 class ExistingDataIndex(LoginRequiredMixin, TemplateView):
     """Class to return the first page of the Existing Data flow"""
 
-    template_name = 'existingdata/existing_data_index.html'
+    template_name = 'DataSearch/existing_data_index.html'
 
     def get_context_data(self, **kwargs):
         """
@@ -180,7 +180,7 @@ class ExistingDataList(LoginRequiredMixin, ListView):
 
     model = ExistingData
     context_object_name = 'existing_data_list'
-    template_name = 'existingdata/existing_data_list.html'
+    template_name = 'DataSearch/existing_data_list.html'
     
     def get_context_data(self, **kwargs):
         """
@@ -211,7 +211,7 @@ class ExistingDataList(LoginRequiredMixin, ListView):
 class ExistingDataDetail(LoginRequiredMixin, DetailView):
     """View for viewing the details of a Existing data instance"""
     model = ExistingData
-    template_name = 'existingdata/existing_data_detail.html'
+    template_name = 'DataSearch/existing_data_detail.html'
 
     def get_context_data(self, **kwargs):
         """
@@ -233,7 +233,7 @@ class ExistingDataEdit(LoginRequiredMixin, UpdateView):
     """View for editing the details of a Existing data instance"""
     model = ExistingData
     form_class = ExistingDataForm
-    template_name = 'existingdata/existing_data_edit.html'
+    template_name = 'DataSearch/existing_data_edit.html'
 
     def form_valid(self, form):
         """Existing Data Edit Form validation and redirect."""
@@ -248,7 +248,7 @@ class ExistingDataCreate(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new Existing Data."""
-        return render(request, "existingdata/existing_data_create.html",
+        return render(request, "DataSearch/existing_data_create.html",
                       {'form': ExistingDataForm(user=request.user)})
 
     @method_decorator(login_required)
@@ -286,7 +286,7 @@ class ExistingDataCreate(LoginRequiredMixin, CreateView):
                     data_team_map.data = obj
                     data_team_map.save()
             return HttpResponseRedirect('/existingdata/')
-        return render(request, 'existingdata/existing_data_create.html',
+        return render(request, 'DataSearch/existing_data_create.html',
                       {'form': form})
 
 
@@ -339,14 +339,14 @@ def export_pdf(request, *args, **kwargs):
         # Export ALL ExistingData available for this user to PDF.
         # data = get_existing_data_user(request.user)
         data = get_existing_data_all()
-        template = get_template('existingdata/existing_data_pdf_multi.html')
+        template = get_template('DataSearch/existing_data_pdf_multi.html')
         filename = 'export_existingdata_%s.pdf' % request.user.username
         # TODO get all attachment_ids
         attachment_ids = DataAttachmentMap.objects.all().values_list(
             'attachment', flat=True)
     else:
         data = ExistingData.objects.get(id=data_id)
-        template = get_template('existingdata/existing_data_pdf.html')
+        template = get_template('DataSearch/existing_data_pdf.html')
         filename = 'export_%s.pdf' % data.source_title
         # get attachment_ids related to just this data id
         attachment_ids = DataAttachmentMap.objects.filter(
