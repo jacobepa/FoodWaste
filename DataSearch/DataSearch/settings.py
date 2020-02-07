@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'accounts',
     'constants',
     'DataSearch',
+    'qar5',
     'support',
     'teams',
     'phonenumber_field',

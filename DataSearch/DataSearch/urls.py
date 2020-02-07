@@ -12,8 +12,7 @@ from django.contrib import admin
 from django.urls import include
 from DataSearch.views import home, contact, about, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
-    ExistingDataEdit, export_pdf, export_excel, ProjectPlanCreate, \
-    ProjectLeadCreate, ProjectPlanDetail, ProjectApprovalCreate
+    ExistingDataEdit, export_pdf, export_excel
 from DataSearch.settings import MEDIA_ROOT, MEDIA_URL
 
 
@@ -24,27 +23,6 @@ urlpatterns = [
     url(r'^dashboard', home, name='dashboard'),
     url(r'^contact', contact, name='contact'),
     url(r'^about', about, name='about'),
-    
-    # Begin QAPP URLs for creating and printing QAPPs
-    url(r'^qapp/create/',
-        ProjectPlanCreate.as_view(),
-        name='qapp_create'),
-
-    url(r'^qapp/detail/(?P<pk>\d+)/?$',
-        ProjectPlanDetail.as_view(),
-        name='qapp_create'),
-
-    url(r'^qapp/approval/create/(?P<pk>\d+)/?$',
-        ProjectApprovalCreate.as_view(),
-        name='qapp_approval'),
-
-    url(r'^qapp/project_lead/create/',
-        ProjectLeadCreate.as_view(),
-        name='get_project_lead_form'),
-
-    #url(r'^qapp/project_lead/edit/',
-    #    ProjectLeadCreate.as_view(),
-    #    name='get_project_lead_form'),
 
     # Begin existingdata URLs.
     # URLs for PDF and Excel exports.
@@ -87,6 +65,7 @@ urlpatterns = [
 
     # Begin other module import URLs.
     url(r'^accounts/', include('accounts.urls')),
+    url(r'^qar5/', include('qar5.urls')),
     url(r'^support/', include('support.urls')),
     url(r'^teams/', include('teams.urls')),
 ]
