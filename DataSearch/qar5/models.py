@@ -80,3 +80,61 @@ class QappApprovalSignature(models.Model):
     date = models.CharField(blank=True, null=True, max_length=255)
     # 6 EPA Project Approvals for Intramural or Extramural:
     # 4 Contractor Approvals for Extramural:
+
+
+class SectionB(models.Model):
+    """Class representing the entirety of SectionB for a given QAPP"""
+    qapp = models.ForeignKey(Qapp, blank=False,
+                             on_delete=models.CASCADE)
+    # b1_secondary_data
+    # b1_existing_data
+    # b1_data_requirements
+    # b1_databases_maps_literature
+    # b1_non_quality_constraints
+
+    # b2_secondary_data_sources
+    # b2_process
+    # b2_rationale
+    # b2_procedures
+    # b2_disclaimer
+
+    # b3_secondary_data_sources
+    # b3_process
+    # b3_rationale
+    # b3_procedures
+    # b3_disclaimer
+
+    # b4_existing_data_tracking
+
+
+class SectionC(models.Model):
+    """Class representing the entirety of SectionC for a given QAPP """
+    qapp = models.ForeignKey(Qapp, blank=False,
+                             on_delete=models.CASCADE)
+    # c1 # This TEXT needs to be added automatically
+    # c2 # This TEXT needs to be added automatically
+
+
+class SectionD(models.Model):
+    """Class representing the entirety of SectionD for a given QAPP """
+    qapp = models.ForeignKey(Qapp, blank=False,
+                             on_delete=models.CASCADE)
+    # d1
+    # d2
+    # d3
+
+# NOTE: All references are stored and retrievable from
+#       EXISTING DATA TRACKING SECTION THIS TOOL
+# class References(models.Model):
+
+class Revision(modelsModel):
+    """
+    Class used to track revisions of QAPPs.
+    This model has a many-to-one relationship with the Qapp model.
+    """
+    qapp = models.ForeignKey(Qapp, blank=False,
+                             on_delete=models.CASCADE)
+    # revision
+    # description
+    # effective_date
+    # initial version

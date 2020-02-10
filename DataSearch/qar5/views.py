@@ -151,49 +151,64 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
         return render(request, self.template_name, ctx)
 
 
-@login_required
-def section_b_index(request):
-    """Return the index page for QAR5 Section B"""
-    assert isinstance(request, HttpRequest)
-    qapp_id = request.GET.get('qapp_id', None)
-    return render(request, 'SectionB/index.html',
-                  {'title': 'QAR5 Section B', 'qapp_id': qapp_id,
-                   'SECTION_B_DEFAULTS': SECTION_B_DEFAULTS})
+class SectionB(LoginRequiredMixin, TemplateView):
+    """Class for processing QAPP Section B information"""
+    
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return the index page for QAR5 Section B"""
+        assert isinstance(request, HttpRequest)
+        qapp_id = request.GET.get('qapp_id', None)
+        return render(request, 'SectionB/index.html',
+                      {'title': 'QAR5 Section B', 'qapp_id': qapp_id,
+                       'SECTION_B_DEFAULTS': SECTION_B_DEFAULTS})
 
+    
+class SectionC(LoginRequiredMixin, TemplateView):
+    """Class for processing QAPP Section C information"""
 
-@login_required
-def section_c_index(request):
-    """Return the index page for QAR5 Section B"""
-    assert isinstance(request, HttpRequest)
-    qapp_id = request.GET.get('qapp_id', None)
-    return render(request, 'SectionC/index.html',
-                  {'title': 'QAR5 Section C', 'qapp_id': qapp_id,
-                   'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS})
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return the index page for QAR5 Section C"""
+        assert isinstance(request, HttpRequest)
+        qapp_id = request.GET.get('qapp_id', None)
+        return render(request, 'SectionC/index.html',
+                      {'title': 'QAR5 Section C', 'qapp_id': qapp_id,
+                       'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS})
 
+    
+class SectionD(LoginRequiredMixin, TemplateView):
+    """Class for processing QAPP Section D information"""
 
-@login_required
-def section_d_index(request):
-    """Return the index page for QAR5 Section B"""
-    assert isinstance(request, HttpRequest)
-    qapp_id = request.GET.get('qapp_id', None)
-    return render(request, 'SectionD/index.html',
-                  {'title': 'QAR5 Section D', 'qapp_id': qapp_id,
-                   'SECTION_D_DEFAULTS': SECTION_D_DEFAULTS})
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return the index page for QAR5 Section D"""
+        assert isinstance(request, HttpRequest)
+        qapp_id = request.GET.get('qapp_id', None)
+        return render(request, 'SectionD/index.html',
+                      {'title': 'QAR5 Section D', 'qapp_id': qapp_id,
+                       'SECTION_D_DEFAULTS': SECTION_D_DEFAULTS})
 
+    
+class SectionE(LoginRequiredMixin, TemplateView):
+    """Class for processing QAPP Section E information"""
 
-@login_required
-def section_e_index(request):
-    """Return the index page for QAR5 Section B"""
-    assert isinstance(request, HttpRequest)
-    qapp_id = request.GET.get('qapp_id', None)
-    return render(request, 'SectionE/index.html',
-                  {'title': 'QAR5 Section E', 'qapp_id': qapp_id})
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return the index page for QAR5 Section E"""
+        assert isinstance(request, HttpRequest)
+        qapp_id = request.GET.get('qapp_id', None)
+        return render(request, 'SectionE/index.html',
+                      {'title': 'QAR5 Section E', 'qapp_id': qapp_id})
 
+    
+class SectionF(LoginRequiredMixin, TemplateView):
+    """Class for processing QAPP Section F information"""
 
-@login_required
-def section_f_index(request):
-    """Return the index page for QAR5 Section B"""
-    assert isinstance(request, HttpRequest)
-    qapp_id = request.GET.get('qapp_id', None)
-    return render(request, 'SectionF/index.html',
-                  {'title': 'QAR5 Section F', 'qapp_id': qapp_id})
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return the index page for QAR5 Section F"""
+        assert isinstance(request, HttpRequest)
+        qapp_id = request.GET.get('qapp_id', None)
+        return render(request, 'SectionF/index.html',
+                      {'title': 'QAR5 Section F', 'qapp_id': qapp_id})

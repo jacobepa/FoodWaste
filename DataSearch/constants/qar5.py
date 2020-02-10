@@ -22,7 +22,7 @@ A3_DISTRIBUTION_LIST = """
     between research task personnel.
 """
 
-# A4 Note: Need to be able to add an organizational chart
+# A4 TODO: Need to be able to add an organizational chart
 #          see QA Template docs folder
 A4_PROJECT_TASK_ORGANIZATION = """
     Identify the individuals and organizations participating in the research
@@ -69,7 +69,6 @@ A8_SPECIAL_TRAINING_CERTIFICATION = """
 """
 
 # This TEXT needs to be added automatically for A.9
-# TODO: Add link to the EXISTING DATA WEB PAGE IN TOOL
 # TODO: Need to be able to enter path to drive insert here:
 #       (List file path where files are stored.)
 A9_DOCUMENTS_RECORDS = """
@@ -82,7 +81,8 @@ A9_DOCUMENTS_RECORDS = """
     and electronic, such that project research data generation may continue
     even if a researcher or an analyst participating in the project leaves
     the project staff. Electronic project records can be maintained by the
-    project lead on using this EXISTING DATA SEARCH TOOL or can be stored
+    project lead on using this <a href='/existingdata'>
+    EXISTING DATA SEARCH TOOL</a> or can be stored
     on the ORD network drive, List file path where files are stored.
     Electronic Records shall be maintained in a manner that maximizes the
     confidentiality, accessibility, and integrity of the data. ORD PPM Section
@@ -117,24 +117,26 @@ SECTION_A_DEFAULTS = {
 B1_DATA_GENERATION_ACQUISITION = """
     Identify the secondary data needed to meet the research objectives.
     If covered in project QAPP cite. If N/A type N/A.
-    <br />
+    <br /><br />
     Describe how the existing data information will be used in the research
     effort e.g. augment or replace existing data information, verify or
     validate existing data information. If covered in project QAPP cite. If N/A type N/A.
-    <br />
+    <br /><br />
     Specify requirements relating to the type of data, the age of data,
     geographical representation, temporal representation, and technological
     representation, as applicable. If covered in project QAPP cite. If N/A type N/A.
-    <br />
+    <br /><br />
     Identify databases, maps and literature, and list as applicable to the
     research effort
-    1 Information and data used to site or time sampling events meteorology,
-    geology, etc.
-    2 Anecdotal or other information triggering the study
-    3 Toxicity, exposure, and environmental fate data
-    4 Models and their output
-    5 Census data
-    6 GIS data.
+    <ol>
+    <li>1 Information and data used to site or time sampling
+    events meteorology, geology, etc.</li>
+    <li>2 Anecdotal or other information triggering the study</li>
+    <li>3 Toxicity, exposure, and environmental fate data</li>
+    <li>4 Models and their output</li>
+    <li>5 Census data</li>
+    <li>6 GIS data.</li>
+    </ol>
     If covered in project QAPP cite. If N/A type N/A.
     <br />
     Identify any non-quality constraints on the secondary data information that
@@ -151,15 +153,15 @@ B2_DATA_COLLECTION_EVALUATION = """
     for data gathering and how the project ensures that data or information
     collected are of sufficient quality to satisfy the needs of the research
     effort. If covered in project QAPP cite. If N/A type N/A.
-    <br />
+    <br /><br />
     Describe the process for acceptance rejection and inclusion exclusion of
     secondary data to support research objectives e.g., to exclude potential
     bias. If covered in project QAPP cite. If N/A type N/A.
-    <br />
+    <br /><br />
     Discuss the rationale for selecting the sources identified. If a hierarchy
     of sources exists for the gathering of secondary data, specify that
     hierarchy. If covered in project QAPP cite. If N/A type N/A.
-    <br />
+    <br /><br />
     Describe the procedures for determining the quality of the secondary data.
     Identify criteria for evaluating data or information quality e.g., using
     EPAs five General Assessment Factors or using measurement data criteria
@@ -167,7 +169,7 @@ B2_DATA_COLLECTION_EVALUATION = """
     comparability. Note Existing published data from sources such as
     governmental databases which have well-documented QA QC procedures may not
     require additional evaluation for quality. If covered in project QAPP cite. If N/A type N/A.
-    <br />
+    <br /><br />
     If the quality of the secondary data will not be evaluated by EPA, state
     this in the QAPP and require one of the following disclaimer statements to
     be added to any research product requiring clearance: EPA is distributing
@@ -275,8 +277,16 @@ E1_REFERENCES = """
     TRACKING SECTION THIS TOOL
 """
 
+SECTION_E_DEFAULTS = {
+    'E.1 REFERENCES': E1_REFERENCES
+}
+
 #######################################################
 # Constants and Strings for the QAR5 module Section F.
 F1_REVISION_HISTORY = """
 
 """
+
+SECTION_E_DEFAULTS = {
+    'F.1 REVISION HISTORY': F1_REVISION_HISTORY
+}
