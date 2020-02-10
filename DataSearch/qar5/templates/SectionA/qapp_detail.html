@@ -3,6 +3,13 @@
 {% load static %}
 
     <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3"><a href="#"><< Previous Page</a></div>
+            <div class="col-md-6"><h2>QAPP Section A</h2></div>
+            <div class="col-md-3"><a href="/qar5/SectionB?qapp_id={{object.id}}">Next Page >></a></div>
+        </div>
+
+        <!-- First page of Section A with QAPP details (including Project Leads) -->
         <div class="border rounded p-3 row">
             <div class="col-md-12">
                 <img src="{% static 'EPA_files/logo.png' %}" alt="">
@@ -33,10 +40,28 @@
                 {% include 'SectionA/project_lead_partial.html' %}
             </div>
         </div>
+
+        <!-- Project Approval Page -->
         <div class="border rounded p-3 mt-4 row">
             <div class="col-md-12">
                 {% include 'SectionA/project_approval_partial.html' %}
             </div>
+        </div>
+
+        <!-- This is where A.2 Table of Contents would go in final doc. -->
+
+        <!-- Render the rest of the Section A text: -->
+        <div class="border rounded p-3 row">
+            {% for key, value in SECTION_A_DEFAULTS %}
+            <div class="col-md-12 text-center">
+                <h3>{{key}}</h3>
+            </div>
+            <div class="col-md-12">
+                <p>
+                    {{value}}
+                </p>
+            </div>
+            {% endfor %}
         </div>
     </div>
 

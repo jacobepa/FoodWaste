@@ -14,7 +14,8 @@ Available functions:
 
 from django.conf.urls import url
 from qar5.views import QappCreate, QappDetail, \
-    ProjectApprovalCreate, ProjectLeadCreate
+    ProjectApprovalCreate, ProjectLeadCreate, ProjectApprovalSignatureCreate, \
+    sectionb_index
 
 urlpatterns = [
     # URLs for CRUD operations.
@@ -26,16 +27,49 @@ urlpatterns = [
     url(r'^detail/(?P<pk>\d+)/?$',
         QappDetail.as_view(),
         name='qapp_create'),
-
+    
+    ############################################
+    # Project Approval (and signatures) URLs
     url(r'^approval/create/',
         ProjectApprovalCreate.as_view(),
         name='qapp_approval'),
 
+    # Project Approval Signatures URLs
+    url(r'^approval_signature/create/',
+        ProjectApprovalSignatureCreate.as_view(),
+        name='get_approval_signature_form'),
+    
+    #url(r'^approval_signature/delete/(?P<pk>\d+)/?$',
+    #    get_approval_signature_form.as_view(),
+    #    name='get_approval_signature_form'),
+    
+    #url(r'^approval_signature/detail/(?P<pk>\d+)/?$',
+    #    get_approval_signature_form.as_view(),
+    #    name='get_approval_signature_form'),
+
+    #url(r'^approval_signature/edit/(?P<pk>\d+)/?$',
+    #    get_approval_signature_form.as_view(),
+    #    name='get_approval_signature_form'),
+
+    ############################################
+    # Project Lead URLs
     url(r'^project_lead/create/',
         ProjectLeadCreate.as_view(),
         name='get_project_lead_form'),
-
-    #url(r'^project_lead/edit/',
+    
+    #url(r'^project_lead/delete/(?P<pk>\d+)/?$',
     #    ProjectLeadCreate.as_view(),
     #    name='get_project_lead_form'),
+    
+    #url(r'^project_lead/detail/(?P<pk>\d+)/?$',
+    #    ProjectLeadCreate.as_view(),
+    #    name='get_project_lead_form'),
+
+    #url(r'^project_lead/edit/(?P<pk>\d+)/?$',
+    #    ProjectLeadCreate.as_view(),
+    #    name='get_project_lead_form'),
+
+    ############################################
+    # SectionB URLs
+    url(r'^SectionB/', sectionb_index, name='qapp_sectionb'),
 ]

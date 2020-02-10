@@ -9,12 +9,14 @@
 from django.forms import CharField, ChoiceField, ModelForm, TextInput, \
     Textarea, PasswordInput, ModelMultipleChoiceField, SelectMultiple, \
     BooleanField, RadioSelect, FileField, ClearableFileInput, \
-    ModelChoiceField, Select, DateTimeField, inlineformset_factory
+    ModelChoiceField, Select, DateTimeField, inlineformset_factory, \
+    CheckboxInput
 from django.forms.widgets import DateTimeInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
-from qar5.models import Division, Qapp, QappApproval, QappLead
+from qar5.models import Division, Qapp, QappApproval, QappLead, \
+    QappApprovalSignature
 
 class QappForm(ModelForm):
     """Form for creating a new QAPP (Quality Assurance Project Plan)"""
@@ -88,8 +90,9 @@ class QappLeadForm(ModelForm):
 
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
-                               widget=TextInput(attrs={'class': 'form-control mb-2',
-                                                       'readonly':'readonly'}))
+                               widget=TextInput(
+                                   attrs={'class': 'form-control mb-2',
+                                          'readonly':'readonly'}))
 
     class Meta:
         """Meta data for QAPP Form."""
@@ -113,12 +116,47 @@ class QappApprovalForm(ModelForm):
 
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
-                               widget=TextInput(attrs={'class': 'form-control mb-2',
-                                                       'readonly':'readonly'}))
+                               widget=TextInput(
+                                   attrs={'class': 'form-control mb-2',
+                                          'readonly':'readonly'}))
 
     class Meta:
-        """Meta data for QAPP Form."""
+        """Meta data for QappApproval Form."""
 
         model = QappApproval
         fields = ('project_plan_title', 'activity_number', 'qapp')
 
+
+class QappApprovalSignatureForm(ModelForm):
+    """Form for creating the QAPP Approval Signatures"""
+
+    qapp_approval = ModelChoiceField(
+        queryset=QappApproval.objects.all(), initial=0,
+        required=True, label=_("Parent QAPP Approval"),
+        widget=TextInput(attrs={'class': 'form-control mb-2',
+                                'readonly':'readonly'}))
+
+    contractor = BooleanField(
+        required=False, label=_("Contractor Signature? Default (no check) is EPA."),
+        widget=CheckboxInput(
+            attrs={'class': 'form-control custom-control-input'}))
+
+    name = CharField(max_length=255,
+                     widget=TextInput({'class': 'form-control mb-2'}),
+                     label=_("Print Name:"), required=False)
+
+    signature = CharField(
+        max_length=255, label=_("Signature:"), required=False,
+        widget=TextInput({'class': 'form-control mb-2',
+                          'readonly': 'readonly'}))
+
+    date = CharField(
+        max_length=255, label=_("Date:"), required=False,
+        widget=TextInput({'class': 'form-control mb-2',
+                          'readonly': 'readonly'}))
+
+    class Meta:
+        """Meta data for QappApprovalSignature Form."""
+
+        model = QappApprovalSignature
+        fields = ('qapp_approval', 'contractor', 'name', 'signature', 'date')

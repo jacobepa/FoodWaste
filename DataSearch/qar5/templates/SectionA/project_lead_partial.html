@@ -23,7 +23,7 @@
     <tbody>
         {% for lead in project_leads_list %}
         <tr id="{{lead.id}}" onclick="rowClick('{{lead.id}}')">
-            <th scope="row">{{lead.name}}</th>
+            <td scope="row">{{lead.name}}</td>
         </tr>
         {% endfor %}
     </tbody>

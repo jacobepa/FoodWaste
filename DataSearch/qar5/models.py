@@ -74,9 +74,9 @@ class QappApprovalSignature(models.Model):
     """Class representing a single signature on a QAPP Approval Page."""
     qapp_approval = models.ForeignKey(QappApproval, blank=False,
                                       on_delete=models.CASCADE)
-    intramural = models.BooleanField(blank=False, null=False, default=True)
-    name = models.CharField(blank=False, null=False, max_length=255)
-    signature = models.CharField(blank=False, null=False, max_length=255)
-    date = models.CharField(blank=False, null=False, max_length=255)
+    contractor = models.BooleanField(blank=True, null=False, default=False)
+    name = models.CharField(blank=True, null=True, max_length=255)
+    signature = models.CharField(blank=True, null=True, max_length=255)
+    date = models.CharField(blank=True, null=True, max_length=255)
     # 6 EPA Project Approvals for Intramural or Extramural:
     # 4 Contractor Approvals for Extramural:

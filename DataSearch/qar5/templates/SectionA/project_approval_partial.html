@@ -22,17 +22,27 @@
     <thead class="table-secondary">
         <tr>
             <th scope="col">Name</th>
+            <th scope="col">EPA or Contractor</th>
+            <th scope="col">Signature</th>
+            <th scope="col">Date</th>
         </tr>
     </thead>
-    {% if project_approval %}
+    {% if project_approval_signatures %}
     <tbody>
-        {% for lead in project_leads_list %}
-        <tr id="{{lead.id}}" onclick="rowClick('{{lead.id}}')">
-            <th scope="row">{{lead.name}}</th>
+        {% for signature in project_approval_signatures %}
+        <tr id="{{signature.id}}" onclick="rowClick('{{signature.id}}')">
+            <td scope="row">{{signature.name}}</td>
+            {% if signature.contractor %}
+            <td>Contractor</td>
+            {% else %}
+            <td>EPA</td>
+            {% endif %}
+            <td>{{signature.signature}}</td>
+            <td>{{signature.date}}</td>
         </tr>
         {% endfor %}
     </tbody>
     {% else %}
-    <tr><td>No Signature Forms have been added!</td></tr>
+    <tr><td>No Signature fields have been added!</td></tr>
     {% endif %}
 </table>
