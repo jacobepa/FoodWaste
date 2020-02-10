@@ -86,13 +86,17 @@ A9_DOCUMENTS_RECORDS = """
     Electronic Records shall be maintained in a manner that maximizes the
     confidentiality, accessibility, and integrity of the data. ORD PPM Section
     13.6 provides guidance on the maintenance of electronic records for ORD.
-"""
-
-A9_RECORDS_RETENTION = """
+    <br /><br />
     Records retention: Records that are generated under this research effort will
     be retained in accordance with EPA Records Schedule 1035, and as required by
     Section 5.1 of the ORD Quality Management Plan for QA Category A Projects.
 """
+
+#A9_RECORDS_RETENTION = """
+#    Records retention: Records that are generated under this research effort will
+#    be retained in accordance with EPA Records Schedule 1035, and as required by
+#    Section 5.1 of the ORD Quality Management Plan for QA Category A Projects.
+#"""
 
 SECTION_A_DEFAULTS = {
     'A.3 Distribution List': A3_DISTRIBUTION_LIST,
@@ -101,5 +105,6 @@ SECTION_A_DEFAULTS = {
     'A.6 Project Description': A6_PROJECT_DESCRIPTION,
     'A.7 Quality Objectives and Criteria': A7_QUALITY_OBJECTS_CRITERIA,
     'A.8 Special Training Certification': A8_SPECIAL_TRAINING_CERTIFICATION,
-    'A.9 Documents and Records': [A9_DOCUMENTS_RECORDS, A9_RECORDS_RETENTION]
+    'A.9 Documents and Records': A9_DOCUMENTS_RECORDS
+    #'A.9 Documents and Records': [A9_DOCUMENTS_RECORDS, A9_RECORDS_RETENTION]
 }

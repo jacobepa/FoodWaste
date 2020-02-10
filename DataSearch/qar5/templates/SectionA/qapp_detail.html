@@ -3,12 +3,7 @@
 {% load static %}
 
     <div class="container">
-        <div class="row text-center">
-            <div class="col-md-3"><a href="#"><< Previous Page</a></div>
-            <div class="col-md-6"><h2>QAPP Section A</h2></div>
-            <div class="col-md-3"><a href="/qar5/SectionB?qapp_id={{object.id}}">Next Page >></a></div>
-        </div>
-
+        {% include 'SectionA/header_footer_partial.html' %}
         <!-- First page of Section A with QAPP details (including Project Leads) -->
         <div class="border rounded p-3 row">
             <div class="col-md-12">
@@ -42,7 +37,7 @@
         </div>
 
         <!-- Project Approval Page -->
-        <div class="border rounded p-3 mt-4 row">
+        <div class="border rounded p-3 my-4 row">
             <div class="col-md-12">
                 {% include 'SectionA/project_approval_partial.html' %}
             </div>
@@ -52,17 +47,20 @@
 
         <!-- Render the rest of the Section A text: -->
         <div class="border rounded p-3 row">
-            {% for key, value in SECTION_A_DEFAULTS %}
+            {% for key, value in SECTION_A_DEFAULTS.items %}
             <div class="col-md-12 text-center">
                 <h3>{{key}}</h3>
             </div>
             <div class="col-md-12">
                 <p>
-                    {{value}}
+                    <!-- the |safe filter lets us use HTML in the text without escaping it -->
+                    <!-- DON'T USE THE SAFE FILTER IF PROCESSING USER INPUT -->
+                    {{value |safe}}
                 </p>
             </div>
             {% endfor %}
         </div>
+        {% include 'SectionA/header_footer_partial.html' %}
     </div>
 
 {% endblock %}
