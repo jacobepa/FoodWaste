@@ -1,0 +1,19 @@
+{% extends "main/base.html" %}
+{% block content %}
+{% load static %}
+
+    <div class="container">
+        {% include 'SectionF/header_footer_partial.html' %}
+        <div class="border rounded p-3 row">
+            {% include 'EPA_QAPP_Header_Partial.html' %}
+
+        </div>
+        {% include 'SectionF/header_footer_partial.html' %}
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+</script>
+{% endblock %}

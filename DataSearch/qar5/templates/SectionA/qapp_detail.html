@@ -6,15 +6,8 @@
         {% include 'SectionA/header_footer_partial.html' %}
         <!-- First page of Section A with QAPP details (including Project Leads) -->
         <div class="border rounded p-3 row">
+            {% include 'EPA_QAPP_Header_Partial.html' %}
             <div class="col-md-12">
-                <img src="{% static 'EPA_files/logo.png' %}" alt="">
-                <p class="float-right blue-box-with-shadow">QUALITY ASSURANCE PROJECT PLAN</p>
-            </div>
-            <div class="col-md-12 mt-4 text-center">
-                <h2>Office of Research and Development</h2>
-                <h3>Center for Environmental Solutions & Emergency Response</h3>
-            </div>
-            <div class="col-md-12 mt-4">
                 <div class="col-md-9">{% include 'SectionA/qapp_details_partial.html' %}</div>
                 <div class="col-md-3">
                     <button onclick="window.location.href='#'"

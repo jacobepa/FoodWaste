@@ -3,10 +3,10 @@
 {% load static %}
 
     <div class="container">
-        {% include 'SectionB/header_footer_partial.html' %}
+        {% include 'SectionD/header_footer_partial.html' %}
         <div class="border rounded p-3 row">
             {% include 'EPA_QAPP_Header_Partial.html' %}
-            {% for key, value in SECTION_B_DEFAULTS.items %}
+            {% for key, value in SECTION_D_DEFAULTS.items %}
             <div class="col-md-12 text-center">
                 <h3>{{key}}</h3>
             </div>
@@ -19,7 +19,7 @@
             </div>
             {% endfor %}
         </div>
-        {% include 'SectionB/header_footer_partial.html' %}
+        {% include 'SectionD/header_footer_partial.html' %}
     </div>
 
 {% endblock %}
