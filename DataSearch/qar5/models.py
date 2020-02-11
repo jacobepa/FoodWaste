@@ -86,25 +86,30 @@ class SectionB(models.Model):
     """Class representing the entirety of SectionB for a given QAPP"""
     qapp = models.ForeignKey(Qapp, blank=False,
                              on_delete=models.CASCADE)
-    # b1_secondary_data
-    # b1_existing_data
-    # b1_data_requirements
-    # b1_databases_maps_literature
-    # b1_non_quality_constraints
+    # B1 Secondary Data will be a dropdown with options from the following: ?
+    # analytical methods, animal subjects, cell culture models, existing data,
+    # measurements, model application, model development, software development
+    #b1_secondary_data = 
 
-    # b2_secondary_data_sources
-    # b2_process
-    # b2_rationale
-    # b2_procedures
-    # b2_disclaimer
+    b1_existing_data = models.CharField(blank=False, null=False,
+                                        max_length=255)
+    b1_data_requirements = models.CharField(blank=False, null=False,
+                                            max_length=255)
+    b1_databases_maps_literature = models.CharField(blank=False, null=False,
+                                                    max_length=255)
+    b1_non_quality_constraints = models.CharField(blank=False, null=False,
+                                                  max_length=255)
 
-    # b3_secondary_data_sources
-    # b3_process
-    # b3_rationale
-    # b3_procedures
-    # b3_disclaimer
+    b2_secondary_data_sources = models.CharField(blank=False, null=False,
+                                                 max_length=255)
+    b2_process = models.CharField(blank=False, null=False, max_length=255)
+    b2_rationale = models.CharField(blank=False, null=False, max_length=255)
+    b2_procedures = models.CharField(blank=False, null=False, max_length=255)
+    b2_disclaimer = models.CharField(blank=False, null=False, max_length=255)
 
-    # b4_existing_data_tracking
+    b3_process = models.CharField(blank=False, null=False, max_length=255)
+    b4_existing_data_tracking = models.CharField(blank=False, null=False,
+                                                 max_length=255)
 
 
 class SectionC(models.Model):
@@ -127,7 +132,7 @@ class SectionD(models.Model):
 #       EXISTING DATA TRACKING SECTION THIS TOOL
 # class References(models.Model):
 
-class Revision(modelsModel):
+class Revision(models.Model):
     """
     Class used to track revisions of QAPPs.
     This model has a many-to-one relationship with the Qapp model.

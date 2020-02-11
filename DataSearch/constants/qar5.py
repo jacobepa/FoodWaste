@@ -110,24 +110,35 @@ SECTION_A_DEFAULTS = {
     #'A.9 Documents and Records': [A9_DOCUMENTS_RECORDS, A9_RECORDS_RETENTION]
 }
 
+SECONDARY_DATA_OPTIONS = (
+    ('Analytical Methods','Analytical Methods'),
+    ('Animal Subjects', 'Animal Subjects'),
+    ('Cell Culture Models', 'Cell Culture Models'),
+    ('Existing Data', 'Existing Data'),
+    ('Measurements', 'Measurements'),
+    ('Model Application', 'Model Application'),
+    ('Model Development', 'Model Development'),
+    ('Software Development', 'Software Development')
+)
 
-#######################################################
-# Constants and Strings for the QAR5 module Section B.
-# TODO: FIELD REQUIRED TO BE COMPLETED IN APP
-B1_DATA_GENERATION_ACQUISITION = """
+B1_SECONDARY_DATA = """
     Identify the secondary data needed to meet the research objectives.
     If covered in project QAPP cite. If N/A type N/A.
-    <br /><br />
+"""
+
+B1_EXISTING_DATA = """
     Describe how the existing data information will be used in the research
     effort e.g. augment or replace existing data information, verify or
     validate existing data information. If covered in project QAPP cite. If N/A type N/A.
-    <br /><br />
+"""
+
+B1_DATA_REQUIREMENTS = """
     Specify requirements relating to the type of data, the age of data,
     geographical representation, temporal representation, and technological
     representation, as applicable. If covered in project QAPP cite. If N/A type N/A.
-    <br /><br />
-    Identify databases, maps and literature, and list as applicable to the
-    research effort
+"""
+
+B1_DATABASES_MAPS_LITERATURE = """
     <ol>
     <li>1 Information and data used to site or time sampling
     events meteorology, geology, etc.</li>
@@ -138,7 +149,9 @@ B1_DATA_GENERATION_ACQUISITION = """
     <li>6 GIS data.</li>
     </ol>
     If covered in project QAPP cite. If N/A type N/A.
-    <br />
+"""
+
+B1_NON_QUALITY_CONSTRAINTS = """
     Identify any non-quality constraints on the secondary data information that
     affect its use in the research effort e.g., legal, programmatic, privacy
     confidentiality i.e. is it proprietary or CBI. If supporting an office,
@@ -147,21 +160,26 @@ B1_DATA_GENERATION_ACQUISITION = """
     Federal Rule of Evidence 702. If covered in project QAPP cite. If N/A type N/A.
 """
 
-# TODO: FIELD REQUIRED TO BE COMPLETED IN APP
-B2_DATA_COLLECTION_EVALUATION = """
+B2_SECONDARY_DATA_SOURCES = """
     Identify the sources for the secondary data. Describe the planning process
     for data gathering and how the project ensures that data or information
     collected are of sufficient quality to satisfy the needs of the research
     effort. If covered in project QAPP cite. If N/A type N/A.
-    <br /><br />
+"""
+
+B2_PROCESS = """
     Describe the process for acceptance rejection and inclusion exclusion of
     secondary data to support research objectives e.g., to exclude potential
     bias. If covered in project QAPP cite. If N/A type N/A.
-    <br /><br />
+"""
+
+B2_RATIONALE = """
     Discuss the rationale for selecting the sources identified. If a hierarchy
     of sources exists for the gathering of secondary data, specify that
     hierarchy. If covered in project QAPP cite. If N/A type N/A.
-    <br /><br />
+"""
+
+B2_PROCEDURES = """
     Describe the procedures for determining the quality of the secondary data.
     Identify criteria for evaluating data or information quality e.g., using
     EPAs five General Assessment Factors or using measurement data criteria
@@ -169,7 +187,9 @@ B2_DATA_COLLECTION_EVALUATION = """
     comparability. Note Existing published data from sources such as
     governmental databases which have well-documented QA QC procedures may not
     require additional evaluation for quality. If covered in project QAPP cite. If N/A type N/A.
-    <br /><br />
+"""
+
+B2_DISCLAIMER = """
     If the quality of the secondary data will not be evaluated by EPA, state
     this in the QAPP and require one of the following disclaimer statements to
     be added to any research product requiring clearance: EPA is distributing
@@ -183,26 +203,26 @@ B2_DATA_COLLECTION_EVALUATION = """
     If covered in project QAPP cite. If N/A type N/A.
 """
 
-# TODO: FIELD REQUIRED TO BE COMPLETED IN APP
-B3_DATA_MANAGEMENT_DOCUMENTATION = """
+B3_PROCESS = """
     Describe the process for documenting and tracking sources used and the
     information that will be recorded for the secondary data collected e.g.
     data source, originating organization, report title, type of information,
     date. If covered in project QAPP cite. If N/A type N/A.
 """
 
-# TODO: FIELD REQUIRED TO BE COMPLETED IN APP
 B4_EXISTING_DATA_TRACKING = """
     Existing data sources are tracked and logged in CESER application Existing
     Data Search Tool https://134.67.216.106 under CESER
-    QMP K-LRTD-0032360-QM-1-0 and QAPP K-LRTD-0032360-QP-1-0. If covered in project QAPP cite. If N/A type N/A.
+    QMP K-LRTD-0032360-QM-1-0 and QAPP K-LRTD-0032360-QP-1-0.
+    If covered in project QAPP cite. If N/A type N/A.
 """
 
-SECTION_B_DEFAULTS = {
-    'B.1 Data Acquisition and Collection': B1_DATA_GENERATION_ACQUISITION,
-    'B.2 Data Collection and Evaluation': B2_DATA_COLLECTION_EVALUATION,
-    'B.3 Data Management and Documentation': B3_DATA_MANAGEMENT_DOCUMENTATION,
-    'B.4 Existing Data Tracking': B4_EXISTING_DATA_TRACKING
+SECTION_B_INFO = {
+    0: SECONDARY_DATA_OPTIONS, 1: B1_SECONDARY_DATA, 2: B1_EXISTING_DATA,
+    3: B1_DATA_REQUIREMENTS, 4: B1_DATABASES_MAPS_LITERATURE,
+    5: B1_NON_QUALITY_CONSTRAINTS, 6: B2_SECONDARY_DATA_SOURCES,
+    7: B2_PROCESS, 8: B2_RATIONALE, 9: B2_PROCEDURES,
+    10: B2_DISCLAIMER, 11: B3_PROCESS, 12: B4_EXISTING_DATA_TRACKING
 }
 
 #######################################################
@@ -232,6 +252,10 @@ C2_REPORTS_TO_MANAGEMENT = """
 SECTION_C_DEFAULTS = {
     'C.1 Assessments and Response Actions': C1_ASSESSMENTS_RESPONSE_ACTIONS,
     'C.2 Reports to Management': C2_REPORTS_TO_MANAGEMENT
+}
+SECTION_C_INFO = {
+    0: C1_ASSESSMENTS_RESPONSE_ACTIONS,
+    1: C2_REPORTS_TO_MANAGEMENT
 }
 
 #######################################################
@@ -268,6 +292,11 @@ SECTION_D_DEFAULTS = {
     'D.1 Data Review, Verification, and Validation': D1_DATA_REVIEW_VERIFICATION_VALIDATION,
     'D.2 Verification and Validation Methods': D2_VERIFICATION_VALIDATION_METHODS,
     'D.3 Reconciliation with User Requirements': D3_RECONCILIATION_USER_REQUIREMENTS,
+}
+SECTION_D_INFO = {
+    0: D1_DATA_REVIEW_VERIFICATION_VALIDATION,
+    1: D2_VERIFICATION_VALIDATION_METHODS,
+    2: D3_RECONCILIATION_USER_REQUIREMENTS,
 }
 
 #######################################################

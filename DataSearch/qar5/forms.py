@@ -15,8 +15,9 @@ from django.forms.widgets import DateTimeInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
+from constants.qar5 import SECTION_B_INFO
 from qar5.models import Division, Qapp, QappApproval, QappLead, \
-    QappApprovalSignature
+    QappApprovalSignature, SectionB
 
 class QappForm(ModelForm):
     """Form for creating a new QAPP (Quality Assurance Project Plan)"""
@@ -160,3 +161,82 @@ class QappApprovalSignatureForm(ModelForm):
 
         model = QappApprovalSignature
         fields = ('qapp_approval', 'contractor', 'name', 'signature', 'date')
+
+
+class SectionBForm(ModelForm):
+    """Class representing the entirety of SectionB for a given QAPP"""
+    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+                               required=True, label=_("Parent QAPP"),
+                               widget=TextInput(
+                                   attrs={'class': 'form-control mb-2',
+                                          'readonly':'readonly'}))
+    # B1 Secondary Data will be a dropdown with options from the following: ?
+    # analytical methods, animal subjects, cell culture models, existing data,
+    # measurements, model application, model development, software development
+    #b1_secondary_data = 
+
+    # TODO: Add constant text as info pop up (potentially help_text ?)
+    b1_existing_data = CharField(
+        max_length=255, help_text=SECTION_B_INFO[2],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b1_data_requirements = CharField(
+        max_length=255, help_text=SECTION_B_INFO[3],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b1_databases_maps_literature = CharField(
+        max_length=255, help_text=SECTION_B_INFO[4],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b1_non_quality_constraints = CharField(
+        max_length=255, help_text=SECTION_B_INFO[5],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b2_secondary_data_sources = CharField(
+        max_length=255, help_text=SECTION_B_INFO[6],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b2_process = CharField(
+        max_length=255, help_text=SECTION_B_INFO[7],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b2_rationale = CharField(
+        max_length=255, help_text=SECTION_B_INFO[8],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b2_procedures = CharField(
+        max_length=255, help_text=SECTION_B_INFO[9],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b2_disclaimer = CharField(
+        max_length=255, help_text=SECTION_B_INFO[10],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b3_process = CharField(
+        max_length=255, help_text=SECTION_B_INFO[11],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+
+    b4_existing_data_tracking = CharField(
+        max_length=255, help_text=SECTION_B_INFO[12],
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Project Plan Title"), required=True)
+    
+    class Meta:
+        """Meta data for QappApprovalSignature Form."""
+
+        model = SectionB
+        fields = ('b1_existing_data', 'b1_data_requirements',
+                  'b1_databases_maps_literature', 'b1_non_quality_constraints',
+                  'b2_secondary_data_sources', 'b2_process', 'b2_rationale',
+                  'b2_procedures', 'b2_disclaimer', 'b3_process',
+                  'b4_existing_data_tracking')
