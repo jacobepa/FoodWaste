@@ -12,9 +12,9 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, TemplateView
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
-    SECTION_C_DEFAULTS, SECTION_D_DEFAULTS
+    SECTION_C_DEFAULTS, SECTION_D_INFO
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
-    QappApprovalSignatureForm, SectionAForm, SectionBForm
+    QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature
 
 class QappCreate(LoginRequiredMixin, CreateView):
@@ -208,9 +208,13 @@ class SectionD(LoginRequiredMixin, TemplateView):
         """Return the index page for QAR5 Section D"""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
+        qapp = Qapp.objects.get(id=qapp_id)
+        form_init = {'qapp': qapp}
+        form = SectionDForm(form_init)
         return render(request, 'SectionD/index.html',
                       {'title': 'QAR5 Section D', 'qapp_id': qapp_id,
-                       'SECTION_D_DEFAULTS': SECTION_D_DEFAULTS})
+                       'SECTION_D_INFO': SECTION_D_INFO,
+                       'form': form})
 
     
 class SectionE(LoginRequiredMixin, TemplateView):

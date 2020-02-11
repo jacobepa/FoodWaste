@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
 from constants.qar5 import SECTION_A_INFO
 from qar5.models import Division, Qapp, QappApproval, QappLead, \
-    QappApprovalSignature, SectionA, SectionB
+    QappApprovalSignature, SectionA, SectionB, SectionD
 
 class QappForm(ModelForm):
     """Form for creating a new QAPP (Quality Assurance Project Plan)"""
@@ -288,3 +288,34 @@ class SectionBForm(ModelForm):
         fields = ('b1_2', 'b1_3', 'b1_4', 'b1_5', 'b2_1', 'b2_2',
                   'b2_3', 'b2_4', 'b2_5', 'b3', 'b4')
          
+
+# No SectionC Necessary, both fields are auto-generated.
+
+class SectionDForm(ModelForm):
+    """Class representing the entirety of SectionD for a given QAPP"""
+    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+                               required=True, label=_("Parent QAPP"),
+                               widget=TextInput(
+                                   attrs={'class': 'form-control mb-2',
+                                          'readonly':'readonly'}))
+    
+    d1 = CharField(
+        max_length=2047,
+        label=_("D.1 Data Review, Verification, and Validation"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+    
+    d2 = CharField(
+        max_length=2047, label=_("D.2 Verification and Validation Methods"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+    
+    d3 = CharField(
+        max_length=2047,
+        label=_("D.3 Reconciliation with User Requirements"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+
+
+    class Meta:
+        """Meta data for SectionBForm Form."""
+
+        model = SectionD
+        fields = ('d1', 'd2', 'd3')

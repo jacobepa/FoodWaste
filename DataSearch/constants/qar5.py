@@ -289,15 +289,10 @@ D3_RECONCILIATION_USER_REQUIREMENTS = """
     confidence limit and describe how the method will be performed.
 """
 
-SECTION_D_DEFAULTS = {
-    'D.1 Data Review, Verification, and Validation': D1_DATA_REVIEW_VERIFICATION_VALIDATION,
-    'D.2 Verification and Validation Methods': D2_VERIFICATION_VALIDATION_METHODS,
-    'D.3 Reconciliation with User Requirements': D3_RECONCILIATION_USER_REQUIREMENTS,
-}
 SECTION_D_INFO = {
-    0: D1_DATA_REVIEW_VERIFICATION_VALIDATION,
-    1: D2_VERIFICATION_VALIDATION_METHODS,
-    2: D3_RECONCILIATION_USER_REQUIREMENTS,
+    'd1': D1_DATA_REVIEW_VERIFICATION_VALIDATION,
+    'd2': D2_VERIFICATION_VALIDATION_METHODS,
+    'd3': D3_RECONCILIATION_USER_REQUIREMENTS,
 }
 
 #######################################################

@@ -143,9 +143,9 @@ class SectionD(models.Model):
     """Class representing the entirety of SectionD for a given QAPP """
     qapp = models.ForeignKey(Qapp, blank=False,
                              on_delete=models.CASCADE)
-    # d1
-    # d2
-    # d3
+    d1 = models.CharField(blank=False, null=False, max_length=2047)
+    d2 = models.CharField(blank=False, null=False, max_length=2047)
+    d3 = models.CharField(blank=False, null=False, max_length=2047)
 
 # NOTE: All references are stored and retrievable from
 #       EXISTING DATA TRACKING SECTION THIS TOOL

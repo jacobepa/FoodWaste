@@ -6,7 +6,55 @@
         {% include 'SectionD/header_footer_partial.html' %}
         <div class="border rounded p-3 row">
             {% include 'EPA_QAPP_Header_Partial.html' %}
-            {% for key, value in SECTION_D_DEFAULTS.items %}
+            
+            <div class="col-md-12">
+                <form enctype="multipart/form-data" action="/qar5/SectionB?qapp_id={{qapp_id}}" method="post" role="form" id="sectiona_form">
+                    {% csrf_token %}
+                    <div class="">
+                        <!------- Section D1 ------->
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label">
+                                {{form.d1.label}}
+                                <a tabindex="0" data-trigger="focus" data-container="body" class="text-info fa fa-info-circle"
+                                   role="button" data-toggle="popover" title="{{form.d1.label}}" data-placement="top"
+                                   data-content="{{SECTION_D_INFO.d1}}" onclick="delayRemoveFade()"></a>
+                            </label>
+                            <div class="col-sm-8">{{form.d1}}</div>
+                        </div>
+
+                        <!------- Section D2 ------->
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label">
+                                {{form.d2.label}}
+                                <a tabindex="0" data-trigger="focus" data-container="body" class="text-info fa fa-info-circle"
+                                   role="button" data-toggle="popover" title="{{form.d2.label}}" data-placement="top"
+                                   data-content="{{SECTION_D_INFO.d2}}" onclick="delayRemoveFade()"></a>
+                            </label>
+                            <div class="col-sm-8">{{form.d2}}</div>
+                        </div>
+
+                        <!------- Section D3 ------->
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label">
+                                {{form.d3.label}}
+                                <a tabindex="0" data-trigger="focus" data-container="body" class="text-info fa fa-info-circle"
+                                   role="button" data-toggle="popover" title="{{form.d3.label}}" data-placement="top"
+                                   data-content="{{SECTION_D_INFO.d3}}" onclick="delayRemoveFade()"></a>
+                            </label>
+                            <div class="col-sm-8">{{form.d3}}</div>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <button type="submit" class="m-2 col-md-2 btn btn-md btn-success save">Save Changes</button>
+                            <button type="reset" class="m-2 col-md-2 col-md-offset-1 btn btn-md btn-warning">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+            {% for key, value in SECTION_D_INFO.items %}
             <div class="col-md-12 text-center">
                 <h3>{{key}}</h3>
             </div>
@@ -24,7 +72,13 @@
 
 {% endblock %}
 
+
 {% block scripts %}
 <script>
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover({
+            container: 'body'
+        });
+    });
 </script>
 {% endblock %}
