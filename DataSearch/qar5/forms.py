@@ -15,7 +15,7 @@ from django.forms.widgets import DateTimeInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
-from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO
+from constants.qar5 import SECTION_A_INFO
 from qar5.models import Division, Qapp, QappApproval, QappLead, \
     QappApprovalSignature, SectionA, SectionB
 
@@ -212,7 +212,7 @@ class SectionAForm(ModelForm):
         initial=SECTION_A_INFO['a9'])
 
     a9_drive_path = CharField(
-        max_length=255, label=_("Drive Path:"), required=True,
+        max_length=255, label=_("A.9 Drive Path:"), required=True,
         widget=TextInput({'class': 'form-control mb-2'}))
     
     class Meta:
@@ -234,69 +234,57 @@ class SectionBForm(ModelForm):
     # analytical methods, animal subjects, cell culture models, existing data,
     # measurements, model application, model development, software development
     #b1_secondary_data = 
+    #b1_1 = 
 
     # TODO: Add constant text as info pop up (potentially help_text ?)
-    b1_existing_data = CharField(
-        max_length=255, help_text=SECTION_B_INFO[2],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b1_2 = CharField(
+        max_length=2047, label=_("B.1 Describe Existing Data Use"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b1_data_requirements = CharField(
-        max_length=255, help_text=SECTION_B_INFO[3],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b1_3 = CharField(
+        max_length=2047, label=_("B.1 Specify Requirements"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b1_databases_maps_literature = CharField(
-        max_length=255, help_text=SECTION_B_INFO[4],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b1_4 = CharField(
+        max_length=2047, label=_("B.1 Identify Databases, Maps, Literature..."),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b1_non_quality_constraints = CharField(
-        max_length=255, help_text=SECTION_B_INFO[5],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b1_5 = CharField(
+        max_length=2047, label=_("B.1 Identify Non-Quality Constraints"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b2_secondary_data_sources = CharField(
-        max_length=255, help_text=SECTION_B_INFO[6],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b2_1 = CharField(
+        max_length=2047, label=_("B.2 Identify Sources"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b2_process = CharField(
-        max_length=255, help_text=SECTION_B_INFO[7],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b2_2 = CharField(
+        max_length=2047, label=_("B.2 Describe Acceptance/Rejection Process"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b2_rationale = CharField(
-        max_length=255, help_text=SECTION_B_INFO[8],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b2_3 = CharField(
+        max_length=2047, label=_("B.2 Discuss Rationale for Selections"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b2_procedures = CharField(
-        max_length=255, help_text=SECTION_B_INFO[9],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b2_4 = CharField(
+        max_length=2047, label=_("B.2 Describe Procedures"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b2_disclaimer = CharField(
-        max_length=255, help_text=SECTION_B_INFO[10],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b2_5 = CharField(
+        max_length=2047, label=_("B.2 Disclaimer"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b3_process = CharField(
-        max_length=255, help_text=SECTION_B_INFO[11],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b3 = CharField(
+        max_length=2047, label=_("B.3 Data Management and Documentation"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b4_existing_data_tracking = CharField(
-        max_length=255, help_text=SECTION_B_INFO[12],
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Project Plan Title"), required=True)
+    b4 = CharField(
+        max_length=2047, label=_("B.4 Existing Data Tracking"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
     
     class Meta:
         """Meta data for SectionBForm Form."""
 
         model = SectionB
-        fields = ('b1_existing_data', 'b1_data_requirements',
-                  'b1_databases_maps_literature', 'b1_non_quality_constraints',
-                  'b2_secondary_data_sources', 'b2_process', 'b2_rationale',
-                  'b2_procedures', 'b2_disclaimer', 'b3_process',
-                  'b4_existing_data_tracking')
+        fields = ('b1_2', 'b1_3', 'b1_4', 'b1_5', 'b2_1', 'b2_2',
+                  'b2_3', 'b2_4', 'b2_5', 'b3', 'b4')
+         

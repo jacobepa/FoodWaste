@@ -114,26 +114,21 @@ class SectionB(models.Model):
     # analytical methods, animal subjects, cell culture models, existing data,
     # measurements, model application, model development, software development
     #b1_secondary_data = 
+    #b1_1 = 
 
-    b1_existing_data = models.CharField(blank=False, null=False,
-                                        max_length=255)
-    b1_data_requirements = models.CharField(blank=False, null=False,
-                                            max_length=255)
-    b1_databases_maps_literature = models.CharField(blank=False, null=False,
-                                                    max_length=255)
-    b1_non_quality_constraints = models.CharField(blank=False, null=False,
-                                                  max_length=255)
+    b1_2 = models.CharField(blank=False, null=False, max_length=2047)
+    b1_3 = models.CharField(blank=False, null=False, max_length=2047)
+    b1_4 = models.CharField(blank=False, null=False, max_length=2047)
+    b1_5 = models.CharField(blank=False, null=False, max_length=2047)
 
-    b2_secondary_data_sources = models.CharField(blank=False, null=False,
-                                                 max_length=255)
-    b2_process = models.CharField(blank=False, null=False, max_length=255)
-    b2_rationale = models.CharField(blank=False, null=False, max_length=255)
-    b2_procedures = models.CharField(blank=False, null=False, max_length=255)
-    b2_disclaimer = models.CharField(blank=False, null=False, max_length=255)
+    b2_1 = models.CharField(blank=False, null=False, max_length=2047)
+    b2_2 = models.CharField(blank=False, null=False, max_length=2047)
+    b2_3 = models.CharField(blank=False, null=False, max_length=2047)
+    b2_4 = models.CharField(blank=False, null=False, max_length=2047)
+    b2_5 = models.CharField(blank=False, null=False, max_length=2047)
 
-    b3_process = models.CharField(blank=False, null=False, max_length=255)
-    b4_existing_data_tracking = models.CharField(blank=False, null=False,
-                                                 max_length=255)
+    b3 = models.CharField(blank=False, null=False, max_length=2047)
+    b4 = models.CharField(blank=False, null=False, max_length=2047)
 
 
 class SectionC(models.Model):

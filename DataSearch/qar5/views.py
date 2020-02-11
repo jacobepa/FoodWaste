@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect, JsonResponse, HttpRequest
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, TemplateView
-from constants.qar5 import SECTION_A_INFO, \
+from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_DEFAULTS
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     QappApprovalSignatureForm, SectionAForm, SectionBForm
@@ -160,7 +160,10 @@ class SectionA(LoginRequiredMixin, TemplateView):
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
-        form = SectionAForm({'qapp': qapp})
+        form_init = {'qapp': qapp,
+                     'a3': SECTION_A_INFO['a3'],
+                     'a9': SECTION_A_INFO['a9']}
+        form = SectionAForm(form_init)
         # TODO pass in SectionB Form
         return render(request, 'SectionA/index.html',
                       {'title': 'QAR5 Section A', 'qapp_id': qapp_id,
@@ -176,11 +179,12 @@ class SectionB(LoginRequiredMixin, TemplateView):
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
-        form = SectionBForm({'qapp': qapp})
+        form_init = {'qapp': qapp}
+        form = SectionBForm(form_init)
         # TODO pass in SectionB Form
         return render(request, 'SectionB/index.html',
                       {'title': 'QAR5 Section B', 'qapp_id': qapp_id,
-                       'form': form})
+                       'SECTION_B_INFO': SECTION_B_INFO, 'form': form})
 
     
 class SectionC(LoginRequiredMixin, TemplateView):
