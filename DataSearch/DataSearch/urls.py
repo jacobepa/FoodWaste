@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^dashboard', home, name='dashboard'),
     url(r'^contact', contact, name='contact'),
     url(r'^about', about, name='about'),
+    url(r'^flowsa', about, name='flowsa'),
 
     # Begin existingdata URLs.
     # URLs for PDF and Excel exports.
