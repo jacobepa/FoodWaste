@@ -53,6 +53,8 @@
                     <div class="col-sm-9">
                         <select id="searchMethodSelect" class="form-control">
                             <option value="google">Google Scholar</option>
+                            <option value="scifinder-n">SciFinder-n</option>
+                            <option value="scifinder-a">SciFinder-n Advanced</option>
                             <option value="duck">DuckDuckGo</option>
                             <option value="custom">Custom URL</option>
                         </select>
@@ -151,8 +153,10 @@
         $('#searchLink').on('click', goSearch);
     });
 
-    var DUCK_URL = 'https://duckduckgo.com/?q=';
     var GOOGLE_URL = 'https://scholar.google.com/scholar?q=';
+    var SCIFINDER_N_URL = 'https://scifinder-n.cas.org/references';
+    var SCIFINDER_A_URL = 'https://scifinder-n.cas.org/advanced-search/references';
+    var DUCK_URL = 'https://duckduckgo.com/?q=';
     function searchFieldUpdate() {
         var searchTerm = $("#id_search").val();
         if (searchTerm.length > 5) {
@@ -177,6 +181,10 @@
             var searchSelection = $("#searchMethodSelect").val();
             if (searchSelection === 'google')
                 searchUrl = GOOGLE_URL + searchTerm;
+            else if (searchSelection === 'scifinder-a')
+                searchUrl = SCIFINDER_A_URL;
+            else if (searchSelection === 'scifinder-n')
+                searchUrl = SCIFINDER_N_URL;
             else if (searchSelection === 'duck')
                 searchUrl = DUCK_URL + searchTerm;
             else
