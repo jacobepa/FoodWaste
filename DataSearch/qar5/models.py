@@ -9,6 +9,7 @@
 
 from django.db import models
 from django.utils import timezone
+from constants.utils import get_attachment_storage_path
 
 
 class Division(models.Model):
@@ -80,6 +81,29 @@ class QappApprovalSignature(models.Model):
     date = models.CharField(blank=True, null=True, max_length=255)
     # 6 EPA Project Approvals for Intramural or Extramural:
     # 4 Contractor Approvals for Extramural:
+
+
+class SectionA(models.Model):
+    """Class representing SectionA (A.3 and later) for a given QAPP"""
+    qapp = models.ForeignKey(Qapp, blank=False,
+                             on_delete=models.CASCADE)
+    
+    # A3 is readonly, defaults populated in form from constants module.
+    a3 = models.CharField(blank=False, null=False, max_length=2047)
+    # A4 is user input with an optional chart (a4_chart)
+    a4 = models.CharField(blank=False, null=False, max_length=2047)
+    a4_chart = models.FileField(null=True, blank=True, upload_to=get_attachment_storage_path)
+    # A5 is user input
+    a5 = models.CharField(blank=False, null=False, max_length=2047)
+    # A6 is user input
+    a6 = models.CharField(blank=False, null=False, max_length=2047)
+    # A7 is user input
+    a7 = models.CharField(blank=False, null=False, max_length=2047)
+    # A8 is user input
+    a8 = models.CharField(blank=False, null=False, max_length=2047)
+    # A9 is mixed defaults and user input, thus we should break it up
+    a9 = models.CharField(blank=False, null=False, max_length=2047)
+    a9_drive_path = models.CharField(blank=False, null=False, max_length=255)
 
 
 class SectionB(models.Model):

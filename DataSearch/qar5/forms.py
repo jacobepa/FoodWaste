@@ -15,9 +15,9 @@ from django.forms.widgets import DateTimeInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
-from constants.qar5 import SECTION_B_INFO
+from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO
 from qar5.models import Division, Qapp, QappApproval, QappLead, \
-    QappApprovalSignature, SectionB
+    QappApprovalSignature, SectionA, SectionB
 
 class QappForm(ModelForm):
     """Form for creating a new QAPP (Quality Assurance Project Plan)"""
@@ -163,6 +163,66 @@ class QappApprovalSignatureForm(ModelForm):
         fields = ('qapp_approval', 'contractor', 'name', 'signature', 'date')
 
 
+class SectionAForm(ModelForm):
+    """Class representing the rest of Section A (A.3 and later)"""
+    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+                               required=True, label=_("Parent QAPP"),
+                               widget=Textarea(
+                                   attrs={'class': 'form-control mb-2',
+                                          'readonly':'readonly'}))
+    a3 = CharField(
+        max_length=2047, label=_("A.3 Distribution List"),
+        required=False, widget=Textarea(
+            {'class': 'form-control mb-2', 'readonly': 'readonly'}),
+        initial=SECTION_A_INFO['a3'])
+
+    a4 = CharField(
+        max_length=2047, label=_("A.4 Project Task Organization"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+
+    a4_chart = FileField(
+        label=_("Upload Organizational Chart (optional)"), required=False,
+        widget=ClearableFileInput(attrs={
+            'multiple': False, 'class': 'custom-file-input'}))
+
+    a5 = CharField(
+        max_length=2047, label=_("A.5 Problem Definition Background"),
+        required=True, widget=Textarea(
+            {'class': 'form-control mb-2'}))
+
+    a6 = CharField(
+        max_length=2047, label=_("A.6 DisProject Description"),
+        required=True, widget=Textarea(
+            {'class': 'form-control mb-2'}))
+
+    a7 = CharField(
+        max_length=2047, label=_("A.7 Quality Objectives and Criteria"),
+        required=True, widget=Textarea(
+            {'class': 'form-control mb-2'}))
+
+    a8 = CharField(
+        max_length=2047, label=_("A.8 Special Training Certification"),
+        required=True, widget=Textarea(
+            {'class': 'form-control mb-2'}))
+
+    a9 = CharField(
+        max_length=255, label=_("A.9 Documents and Records"),
+        required=False, widget=Textarea(
+            {'class': 'form-control mb-2', 'readonly': 'readonly'}),
+        initial=SECTION_A_INFO['a9'])
+
+    a9_drive_path = CharField(
+        max_length=255, label=_("Drive Path:"), required=True,
+        widget=TextInput({'class': 'form-control mb-2'}))
+    
+    class Meta:
+        """Meta data for SectionAForm Form."""
+
+        model = SectionA
+        fields = ('qapp', 'a3', 'a4', 'a4_chart', 'a5',
+                  'a6', 'a7', 'a8', 'a9', 'a9_drive_path')
+
+
 class SectionBForm(ModelForm):
     """Class representing the entirety of SectionB for a given QAPP"""
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
@@ -232,7 +292,7 @@ class SectionBForm(ModelForm):
         label=_("Project Plan Title"), required=True)
     
     class Meta:
-        """Meta data for QappApprovalSignature Form."""
+        """Meta data for SectionBForm Form."""
 
         model = SectionB
         fields = ('b1_existing_data', 'b1_data_requirements',

@@ -3,7 +3,7 @@
 {% load static %}
 
     <div class="container">
-        {% include 'SectionA/header_footer_partial.html' %}
+        {% include 'SectionA/detail_header_footer_partial.html' %}
         <!-- First page of Section A with QAPP details (including Project Leads) -->
         <div class="border rounded p-3 row">
             {% include 'EPA_QAPP_Header_Partial.html' %}
@@ -38,22 +38,7 @@
 
         <!-- This is where A.2 Table of Contents would go in final doc. -->
 
-        <!-- Render the rest of the Section A text: -->
-        <div class="border rounded p-3 row">
-            {% for key, value in SECTION_A_DEFAULTS.items %}
-            <div class="col-md-12 text-center">
-                <h3>{{key}}</h3>
-            </div>
-            <div class="col-md-12">
-                <p>
-                    <!-- the |safe filter lets us use HTML in the text without escaping it -->
-                    <!-- DON'T USE THE SAFE FILTER IF PROCESSING USER INPUT -->
-                    {{value |safe}}
-                </p>
-            </div>
-            {% endfor %}
-        </div>
-        {% include 'SectionA/header_footer_partial.html' %}
+        {% include 'SectionA/detail_header_footer_partial.html' %}
     </div>
 
 {% endblock %}

@@ -22,6 +22,11 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
 
+def get_attachment_storage_path(instance, filename):
+    """Build the attachment storage path using username and filename."""
+    return 'uploads/%s/attachments/%s' % (instance.uploaded_by.username, filename)
+
+
 # Email Utility functions.
 def split_email_list(email_list):
     """Replace all defined delimiter characters with spaces."""

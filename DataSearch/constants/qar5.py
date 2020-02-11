@@ -99,14 +99,14 @@ A9_DOCUMENTS_RECORDS = """
 #    Section 5.1 of the ORD Quality Management Plan for QA Category A Projects.
 #"""
 
-SECTION_A_DEFAULTS = {
-    'A.3 Distribution List': A3_DISTRIBUTION_LIST,
-    'A.4 Project Task Organization': A4_PROJECT_TASK_ORGANIZATION,
-    'A.5 Problem Definition Background': A5_PROBLEM_DEFINITION_BACKGROUND,
-    'A.6 Project Description': A6_PROJECT_DESCRIPTION,
-    'A.7 Quality Objectives and Criteria': A7_QUALITY_OBJECTS_CRITERIA,
-    'A.8 Special Training Certification': A8_SPECIAL_TRAINING_CERTIFICATION,
-    'A.9 Documents and Records': A9_DOCUMENTS_RECORDS
+SECTION_A_INFO= {
+    'a3': A3_DISTRIBUTION_LIST,
+    'a4': A4_PROJECT_TASK_ORGANIZATION,
+    'a5': A5_PROBLEM_DEFINITION_BACKGROUND,
+    'a6': A6_PROJECT_DESCRIPTION,
+    'a7': A7_QUALITY_OBJECTS_CRITERIA,
+    'a8': A8_SPECIAL_TRAINING_CERTIFICATION,
+    'a9': A9_DOCUMENTS_RECORDS
     #'A.9 Documents and Records': [A9_DOCUMENTS_RECORDS, A9_RECORDS_RETENTION]
 }
 

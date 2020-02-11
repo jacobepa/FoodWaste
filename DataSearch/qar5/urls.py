@@ -15,7 +15,7 @@ Available functions:
 from django.conf.urls import url
 from qar5.views import QappCreate, QappDetail, \
     ProjectApprovalCreate, ProjectLeadCreate, ProjectApprovalSignatureCreate, \
-    SectionB, SectionC, SectionD, SectionE, SectionF
+    SectionA, SectionB, SectionC, SectionD, SectionE, SectionF
 
 urlpatterns = [
     # URLs for CRUD operations.
@@ -71,6 +71,7 @@ urlpatterns = [
 
     ############################################
     # SectionB URLs
+    url(r'^SectionA/', SectionA.as_view(), name='qapp_sectiona'),
     url(r'^SectionB/', SectionB.as_view(), name='qapp_sectionb'),
     url(r'^SectionC/', SectionC.as_view(), name='qapp_sectionc'),
     url(r'^SectionD/', SectionD.as_view(), name='qapp_sectiond'),

@@ -11,10 +11,10 @@ from django.http import HttpResponseRedirect, JsonResponse, HttpRequest
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, TemplateView
-from constants.qar5 import SECTION_A_DEFAULTS, \
+from constants.qar5 import SECTION_A_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_DEFAULTS
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
-    QappApprovalSignatureForm, SectionBForm
+    QappApprovalSignatureForm, SectionAForm, SectionBForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature
 
 class QappCreate(LoginRequiredMixin, CreateView):
@@ -56,7 +56,7 @@ class QappDetail(LoginRequiredMixin, DetailView):
         context['project_approval_signatures'] = \
             QappApprovalSignature.objects.filter(
                 qapp_approval=context['project_approval'])
-        context['SECTION_A_DEFAULTS'] = SECTION_A_DEFAULTS
+        context['SECTION_A_INFO'] = SECTION_A_INFO
         return context
 
 
@@ -151,6 +151,22 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
         return render(request, self.template_name, ctx)
 
 
+class SectionA(LoginRequiredMixin, TemplateView):
+    """Class for processing QAPP Section A (A.3 and later) information"""
+    
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return the index page for QAR5 Section A (A.3 and later)"""
+        assert isinstance(request, HttpRequest)
+        qapp_id = request.GET.get('qapp_id', None)
+        qapp = Qapp.objects.get(id=qapp_id)
+        form = SectionAForm({'qapp': qapp})
+        # TODO pass in SectionB Form
+        return render(request, 'SectionA/index.html',
+                      {'title': 'QAR5 Section A', 'qapp_id': qapp_id,
+                       'SECTION_A_INFO': SECTION_A_INFO, 'form': form})
+
+
 class SectionB(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section B information"""
     
@@ -163,7 +179,8 @@ class SectionB(LoginRequiredMixin, TemplateView):
         form = SectionBForm({'qapp': qapp})
         # TODO pass in SectionB Form
         return render(request, 'SectionB/index.html',
-                      {'title': 'QAR5 Section B', 'qapp_id': qapp_id})
+                      {'title': 'QAR5 Section B', 'qapp_id': qapp_id,
+                       'form': form})
 
     
 class SectionC(LoginRequiredMixin, TemplateView):
