@@ -12,7 +12,7 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, TemplateView
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
-    SECTION_C_DEFAULTS, SECTION_D_INFO
+    SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature
@@ -226,7 +226,8 @@ class SectionE(LoginRequiredMixin, TemplateView):
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         return render(request, 'SectionE/index.html',
-                      {'title': 'QAR5 Section E', 'qapp_id': qapp_id})
+                      {'title': 'QAR5 Section E', 'qapp_id': qapp_id,
+                       'SECTION_E_INFO': SECTION_E_INFO})
 
     
 class SectionF(LoginRequiredMixin, TemplateView):
@@ -238,4 +239,5 @@ class SectionF(LoginRequiredMixin, TemplateView):
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         return render(request, 'SectionF/index.html',
-                      {'title': 'QAR5 Section F', 'qapp_id': qapp_id})
+                      {'title': 'QAR5 Section F', 'qapp_id': qapp_id,
+                       'SECTION_F_INFO': SECTION_F_INFO})

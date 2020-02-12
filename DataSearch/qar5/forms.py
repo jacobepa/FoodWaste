@@ -191,7 +191,7 @@ class SectionAForm(ModelForm):
             {'class': 'form-control mb-2'}))
 
     a6 = CharField(
-        max_length=2047, label=_("A.6 DisProject Description"),
+        max_length=2047, label=_("A.6 Project Description"),
         required=True, widget=Textarea(
             {'class': 'form-control mb-2'}))
 

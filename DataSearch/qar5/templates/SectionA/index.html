@@ -27,10 +27,16 @@
                         </div>
 
                         <!------- Section A4 Chart Upload ------->
-                        <div class="form-group row my-2">
-                            <label class="col-sm-3 control-label">{{form.a4_chart.label}}</label>
-                            <div class="col-sm-8">{{form.a4_chart}}</div>
+                        <div class="row mt-2">
+                            <div class="form-group col-sm-12">
+                                <label class="col-sm-3 control-label" for="id_a4_chart">{{form.a4_chart.label}}</label>
+                                <div class="col-sm-8">
+                                    {{form.a4_chart}}
+                                    <label class="custom-file-label" for="id_a4_chart">Select a file...</label>
+                                </div>
+                            </div>
                         </div>
+                        
 
                         <!------- Section A5 ------->
                         <div class="form-group row">
@@ -113,6 +119,12 @@
         $('[data-toggle="popover"]').popover({
             container: 'body'
         });
+    });
+
+    $('.custom-file-input').on('change', function () {
+        var fileName = $(this).val().split('\\').pop();
+        if (fileName) $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        else $(this).next('.custom-file-label').addClass("selected").html('Select a file...');
     });
 </script>
 {% endblock %}

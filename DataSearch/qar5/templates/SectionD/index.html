@@ -51,21 +51,6 @@
                     </div>
                 </form>
             </div>
-
-
-            <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-            {% for key, value in SECTION_D_INFO.items %}
-            <div class="col-md-12 text-center">
-                <h3>{{key}}</h3>
-            </div>
-            <div class="col-md-12">
-                <p>
-                    <!-- the |safe filter lets us use HTML in the text without escaping it -->
-                    <!-- DON'T USE THE SAFE FILTER IF PROCESSING USER INPUT -->
-                    {{value |safe}}
-                </p>
-            </div>
-            {% endfor %}
         </div>
         {% include 'SectionD/header_footer_partial.html' %}
     </div>
