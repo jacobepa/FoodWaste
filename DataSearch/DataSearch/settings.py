@@ -79,6 +79,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'DataSearch.urls'
+APPEND_SLASH = False
 
 # Template configuration.
 # https://docs.djangoproject.com/en/2.1/topics/templates/.

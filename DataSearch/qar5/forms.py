@@ -206,7 +206,7 @@ class SectionAForm(ModelForm):
             {'class': 'form-control mb-2'}))
 
     a9 = CharField(
-        max_length=255, label=_("A.9 Documents and Records"),
+        max_length=2047, label=_("A.9 Documents and Records"),
         required=False, widget=Textarea(
             {'class': 'form-control mb-2', 'readonly': 'readonly'}),
         initial=SECTION_A_INFO['a9'])

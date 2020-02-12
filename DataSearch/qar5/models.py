@@ -23,22 +23,28 @@ class Division(models.Model):
 
 
 class Qapp(models.Model):
-    """Class representing a QAPP. This allows users to easily generate new QAPPs"""
+    """
+    Class representing a QAPP.
+    This allows users to easily generate new QAPPs
+    """
     # Office of Research and Development
     # Center for Environmental Solutions & Emergency Response
 
     division = models.ForeignKey(Division, blank=False, null=False,
                                  related_name='divisions',
                                  on_delete=models.CASCADE)
-    division_branch = models.CharField(blank=False, null=False, max_length=255)
+    division_branch = models.CharField(
+        blank=False, null=False, max_length=255)
     title = models.CharField(blank=False, null=False, max_length=255)
 
     # Dynamic number of project leads (project lead, co-leads) one-to-many
-    # epa_project_lead_1 = models.CharField(blank=False, null=False, max_length=255)
-    # epa_project_lead_2 = models.CharField(blank=False, null=False, max_length=255)
+    # epa_project_lead_1 = models.CharField(
+    #     blank=False, null=False, max_length=255)
+    # epa_project_lead_2 = models.CharField(
+    #     blank=False, null=False, max_length=255)
 
-    qa_category = models.CharField(blank=False, null=False, max_length=255) # choice
-    intra_extra = models.CharField(blank=False, null=False, max_length=64) # choice
+    qa_category = models.CharField(blank=False, null=False, max_length=255)
+    intra_extra = models.CharField(blank=False, null=False, max_length=64)
     revision_number = models.CharField(blank=False, null=False, max_length=255)
     date = models.DateTimeField(blank=False, null=False, default=timezone.now)
     prepared_by = models.CharField(blank=False, null=False, max_length=255)
@@ -79,20 +85,19 @@ class QappApprovalSignature(models.Model):
     name = models.CharField(blank=True, null=True, max_length=255)
     signature = models.CharField(blank=True, null=True, max_length=255)
     date = models.CharField(blank=True, null=True, max_length=255)
-    # 6 EPA Project Approvals for Intramural or Extramural:
-    # 4 Contractor Approvals for Extramural:
 
 
 class SectionA(models.Model):
     """Class representing SectionA (A.3 and later) for a given QAPP"""
-    qapp = models.ForeignKey(Qapp, blank=False,
-                             on_delete=models.CASCADE)
+    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
+                                primary_key=True)
     
     # A3 is readonly, defaults populated in form from constants module.
     a3 = models.CharField(blank=False, null=False, max_length=2047)
     # A4 is user input with an optional chart (a4_chart)
     a4 = models.CharField(blank=False, null=False, max_length=2047)
-    a4_chart = models.FileField(null=True, blank=True, upload_to=get_attachment_storage_path)
+    a4_chart = models.FileField(null=True, blank=True,
+                                upload_to=get_attachment_storage_path)
     # A5 is user input
     a5 = models.CharField(blank=False, null=False, max_length=2047)
     # A6 is user input
@@ -108,8 +113,8 @@ class SectionA(models.Model):
 
 class SectionB(models.Model):
     """Class representing the entirety of SectionB for a given QAPP"""
-    qapp = models.ForeignKey(Qapp, blank=False,
-                             on_delete=models.CASCADE)
+    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
+                                primary_key=True)
     # B1 Secondary Data will be a dropdown with options from the following: ?
     # analytical methods, animal subjects, cell culture models, existing data,
     # measurements, model application, model development, software development
@@ -133,16 +138,16 @@ class SectionB(models.Model):
 
 class SectionC(models.Model):
     """Class representing the entirety of SectionC for a given QAPP """
-    qapp = models.ForeignKey(Qapp, blank=False,
-                             on_delete=models.CASCADE)
-    # c1 # This TEXT needs to be added automatically
-    # c2 # This TEXT needs to be added automatically
+    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
+                                primary_key=True)
+    c1 = models.CharField(blank=False, null=False, max_length=2047)
+    c2 = models.CharField(blank=False, null=False, max_length=2047)
 
 
 class SectionD(models.Model):
     """Class representing the entirety of SectionD for a given QAPP """
-    qapp = models.ForeignKey(Qapp, blank=False,
-                             on_delete=models.CASCADE)
+    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
+                                primary_key=True)
     d1 = models.CharField(blank=False, null=False, max_length=2047)
     d2 = models.CharField(blank=False, null=False, max_length=2047)
     d3 = models.CharField(blank=False, null=False, max_length=2047)
@@ -155,10 +160,13 @@ class Revision(models.Model):
     """
     Class used to track revisions of QAPPs.
     This model has a many-to-one relationship with the Qapp model.
+    This model is referenced in the front-end as Section F.1
     """
-    qapp = models.ForeignKey(Qapp, blank=False,
-                             on_delete=models.CASCADE)
-    # revision
-    # description
-    # effective_date
-    # initial version
+    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
+                                primary_key=True)
+    revision = models.CharField(blank=False, null=False, max_length=255)
+    description = models.CharField(blank=False, null=False, max_length=255)
+    effective_date = models.DateTimeField(blank=False, null=False,
+                                          default=timezone.now)
+    initial_version = models.CharField(
+        blank=False, null=False, max_length=255)

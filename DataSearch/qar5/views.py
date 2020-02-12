@@ -15,7 +15,8 @@ from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm
-from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature
+from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
+    SectionA
 
 class QappCreate(LoginRequiredMixin, CreateView):
     """Class for creating new QAPPs (Quality Assurance Project Plans)"""
@@ -151,26 +152,55 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
         return render(request, self.template_name, ctx)
 
 
-class SectionA(LoginRequiredMixin, TemplateView):
+class SectionAView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section A (A.3 and later) information"""
-    
+    template_name = 'SectionA/index.html'
+
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section A (A.3 and later)"""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
-        form_init = {'qapp': qapp,
-                     'a3': SECTION_A_INFO['a3'],
-                     'a9': SECTION_A_INFO['a9']}
-        form = SectionAForm(form_init)
+        existing_section_a = SectionA.objects.filter(qapp=qapp).first()
+
+        if existing_section_a:
+            form = SectionAForm(instance=existing_section_a)
+
+        else:
+            form = SectionAForm({'qapp': qapp,
+                                 'a3': SECTION_A_INFO['a3'],
+                                 'a9': SECTION_A_INFO['a9']})
+
         # TODO pass in SectionB Form
-        return render(request, 'SectionA/index.html',
+        return render(request, self.template_name,
                       {'title': 'QAR5 Section A', 'qapp_id': qapp_id,
                        'SECTION_A_INFO': SECTION_A_INFO, 'form': form})
 
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a SectionA form filled out."""
+        ctx = {'qapp_id': request.GET.get('qapp_id', None),
+               'SECTION_A_INFO': SECTION_A_INFO, 'title': 'QAR5 Section A'}
 
-class SectionB(LoginRequiredMixin, TemplateView):
+        qapp = Qapp.objects.get(id=ctx['qapp_id'])
+        existing_section_a = SectionA.objects.filter(qapp=qapp).first()
+
+        # Update if existing, otherwise insert new:
+        if existing_section_a:
+            ctx['form'] = SectionAForm(instance=existing_section_a,
+                                       data=request.POST)
+        else:
+            ctx['form'] = SectionAForm(request.POST)
+
+        if ctx['form'].is_valid():
+            ctx['obj'] = ctx['form'].save(commit=True)
+            ctx['save_success'] = 'Successfully Saved Changes!'
+
+        return render(request, self.template_name, ctx)
+
+
+class SectionBView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section B information"""
     
     @method_decorator(login_required)
@@ -187,7 +217,7 @@ class SectionB(LoginRequiredMixin, TemplateView):
                        'SECTION_B_INFO': SECTION_B_INFO, 'form': form})
 
     
-class SectionC(LoginRequiredMixin, TemplateView):
+class SectionCView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section C information"""
 
     @method_decorator(login_required)
@@ -200,7 +230,7 @@ class SectionC(LoginRequiredMixin, TemplateView):
                        'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS})
 
     
-class SectionD(LoginRequiredMixin, TemplateView):
+class SectionDView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section D information"""
 
     @method_decorator(login_required)
@@ -217,7 +247,7 @@ class SectionD(LoginRequiredMixin, TemplateView):
                        'form': form})
 
     
-class SectionE(LoginRequiredMixin, TemplateView):
+class SectionEView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section E information"""
 
     @method_decorator(login_required)
@@ -230,7 +260,7 @@ class SectionE(LoginRequiredMixin, TemplateView):
                        'SECTION_E_INFO': SECTION_E_INFO})
 
     
-class SectionF(LoginRequiredMixin, TemplateView):
+class SectionFView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section F information"""
 
     @method_decorator(login_required)
