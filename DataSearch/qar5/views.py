@@ -16,7 +16,7 @@ from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
-    SectionA
+    SectionA, SectionB, SectionC, SectionD
 
 class QappCreate(LoginRequiredMixin, CreateView):
     """Class for creating new QAPPs (Quality Assurance Project Plans)"""
@@ -152,6 +152,7 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
         return render(request, self.template_name, ctx)
 
 
+
 class SectionAView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section A (A.3 and later) information"""
     template_name = 'SectionA/index.html'
@@ -172,7 +173,6 @@ class SectionAView(LoginRequiredMixin, TemplateView):
                                  'a3': SECTION_A_INFO['a3'],
                                  'a9': SECTION_A_INFO['a9']})
 
-        # TODO pass in SectionB Form
         return render(request, self.template_name,
                       {'title': 'QAR5 Section A', 'qapp_id': qapp_id,
                        'SECTION_A_INFO': SECTION_A_INFO, 'form': form})
@@ -202,6 +202,7 @@ class SectionAView(LoginRequiredMixin, TemplateView):
 
 class SectionBView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section B information"""
+    template_name = 'SectionB/index.html'
     
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
@@ -209,12 +210,41 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
-        form_init = {'qapp': qapp}
-        form = SectionBForm(form_init)
+        
+        existing_section_b = SectionB.objects.filter(qapp=qapp).first()
+
+        if existing_section_b:
+            form = SectionBForm(instance=existing_section_b)
+
+        else:
+            form = SectionBForm({'qapp': qapp})
+
         # TODO pass in SectionB Form
-        return render(request, 'SectionB/index.html',
+        return render(request, self.template_name,
                       {'title': 'QAR5 Section B', 'qapp_id': qapp_id,
                        'SECTION_B_INFO': SECTION_B_INFO, 'form': form})
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a SectionB form filled out."""
+        ctx = {'qapp_id': request.GET.get('qapp_id', None),
+               'SECTION_B_INFO': SECTION_B_INFO, 'title': 'QAR5 Section B'}
+
+        qapp = Qapp.objects.get(id=ctx['qapp_id'])
+        existing_section_b = SectionB.objects.filter(qapp=qapp).first()
+
+        # Update if existing, otherwise insert new:
+        if existing_section_b:
+            ctx['form'] = SectionBForm(instance=existing_section_b,
+                                       data=request.POST)
+        else:
+            ctx['form'] = SectionBForm(request.POST)
+
+        if ctx['form'].is_valid():
+            ctx['obj'] = ctx['form'].save(commit=True)
+            ctx['save_success'] = 'Successfully Saved Changes!'
+
+        return render(request, self.template_name, ctx)
 
     
 class SectionCView(LoginRequiredMixin, TemplateView):

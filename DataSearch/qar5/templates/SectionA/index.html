@@ -12,9 +12,7 @@
                 <form enctype="multipart/form-data" action="/qar5/SectionA?qapp_id={{qapp_id}}" method="post" role="form" id="sectiona_form">
                     {% csrf_token %}
                     <div class="">
-                        <div class="form-group row hidden">
-                            {{form.qapp}}
-                        </div>
+                        <div class="form-group row hidden">{{form.qapp}}</div>
 
                         <div class="form-group row">
                             <label for="" class="col-sm-3 control-label">{{form.a3.label}}</label>
@@ -125,9 +123,6 @@
         $('[data-toggle="popover"]').popover({
             container: 'body'
         });
-        setTimeout(function () {
-            $("#save_success").addClass('fade');
-        }, 2000);
     });
 
     $('.custom-file-input').on('change', function () {

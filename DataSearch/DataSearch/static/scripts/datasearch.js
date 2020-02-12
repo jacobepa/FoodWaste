@@ -4,6 +4,10 @@ function delayRemoveFade() {
     setTimeout($('.fade').removeClass('fade'), 300);
 }
 
+setTimeout(function () {
+    $("#save_success").addClass('fade');
+}, 2000);
+
 function fromEditToDetail() {
     var path = window.location.pathname.replace('edit', 'detail');
     window.location.href = path;

@@ -227,7 +227,7 @@ class SectionBForm(ModelForm):
     """Class representing the entirety of SectionB for a given QAPP"""
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
-                               widget=TextInput(
+                               widget=Textarea(
                                    attrs={'class': 'form-control mb-2',
                                           'readonly':'readonly'}))
     # B1 Secondary Data will be a dropdown with options from the following: ?
@@ -285,8 +285,8 @@ class SectionBForm(ModelForm):
         """Meta data for SectionBForm Form."""
 
         model = SectionB
-        fields = ('b1_2', 'b1_3', 'b1_4', 'b1_5', 'b2_1', 'b2_2',
-                  'b2_3', 'b2_4', 'b2_5', 'b3', 'b4')
+        fields = ('qapp', 'b1_2', 'b1_3', 'b1_4', 'b1_5', 'b2_1',
+                  'b2_2', 'b2_3', 'b2_4', 'b2_5', 'b3', 'b4')
          
 
 # No SectionC Necessary, both fields are auto-generated.
@@ -295,7 +295,7 @@ class SectionDForm(ModelForm):
     """Class representing the entirety of SectionD for a given QAPP"""
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
-                               widget=TextInput(
+                               widget=Textarea(
                                    attrs={'class': 'form-control mb-2',
                                           'readonly':'readonly'}))
     
@@ -318,4 +318,4 @@ class SectionDForm(ModelForm):
         """Meta data for SectionBForm Form."""
 
         model = SectionD
-        fields = ('d1', 'd2', 'd3')
+        fields = ('qapp', 'd1', 'd2', 'd3')
