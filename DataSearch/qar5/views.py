@@ -262,6 +262,7 @@ class SectionCView(LoginRequiredMixin, TemplateView):
     
 class SectionDView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section D information"""
+    template_name = 'SectionD/index.html'
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
@@ -269,12 +270,40 @@ class SectionDView(LoginRequiredMixin, TemplateView):
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
-        form_init = {'qapp': qapp}
-        form = SectionDForm(form_init)
-        return render(request, 'SectionD/index.html',
+        existing_section_d = SectionD.objects.filter(qapp=qapp).first()
+
+        if existing_section_d:
+            form = SectionDForm(instance=existing_section_d)
+
+        else:
+            form = SectionDForm({'qapp': qapp})
+
+        return render(request, self.template_name,
                       {'title': 'QAR5 Section D', 'qapp_id': qapp_id,
                        'SECTION_D_INFO': SECTION_D_INFO,
                        'form': form})
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a SectionD form filled out."""
+        ctx = {'qapp_id': request.GET.get('qapp_id', None),
+               'SECTION_D_INFO': SECTION_D_INFO, 'title': 'QAR5 Section D'}
+
+        qapp = Qapp.objects.get(id=ctx['qapp_id'])
+        existing_section_d = SectionD.objects.filter(qapp=qapp).first()
+
+        # Update if existing, otherwise insert new:
+        if existing_section_d:
+            ctx['form'] = SectionDForm(instance=existing_section_d,
+                                       data=request.POST)
+        else:
+            ctx['form'] = SectionDForm(request.POST)
+
+        if ctx['form'].is_valid():
+            ctx['obj'] = ctx['form'].save(commit=True)
+            ctx['save_success'] = 'Successfully Saved Changes!'
+
+        return render(request, self.template_name, ctx)
 
     
 class SectionEView(LoginRequiredMixin, TemplateView):
