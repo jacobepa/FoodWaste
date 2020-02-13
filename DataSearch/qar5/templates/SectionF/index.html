@@ -6,20 +6,36 @@
         {% include 'SectionF/header_footer_partial.html' %}
         <div class="border rounded p-3 row">
             {% include 'EPA_QAPP_Header_Partial.html' %}
-            {% for key, value in SECTION_F_INFO.items %}
+            <table class="table table-bordered table-hover">
+                <caption>Revision History</caption>
+                <thead class="table-secondary">
+                    <tr>
+                        <th scope="col">Revision Number</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Effective Date</th>
+                        <th scope="col">Initial Version</th>
+                    </tr>
+                </thead>
+                {% if revisions %}
+                <tbody>
+                    {% for revision in revisions%}
+                    <tr id="{{revision.id}}">
+                        <td scope="row">{{revision.revision}}</td>
+                        <td scope="row">{{revision.description}}</td>
+                        <td scope="row">{{revision.effective_date}}</td>
+                        <td scope="row">{{revision.initial_version}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% else %}
+                <tr><td>No Revisions have been created...</td></tr>
+                {% endif %}
+            </table>
             <div class="col-md-12 text-center">
-                <h3>{{key}}</h3>
-            </div>
-            <div class="col-md-12">
-                <p>
-                    <!-- the |safe filter lets us use HTML in the text without escaping it -->
-                    <!-- DON'T USE THE SAFE FILTER IF PROCESSING USER INPUT -->
-                    {{value |safe}}
-                </p>
-            </div>
-            {% endfor %}
-            <div class="col-md-12 text-center">
-                <button class="btn btn-md btn-success">Add a New Revision</button>
+                <button class="btn btn-md btn-success"
+                        onclick="location.href='/qar5/revision/create?qapp_id={{qapp_id}}'">
+                    Add a New Revision
+                </button>
             </div>
         </div>
         {% include 'SectionF/header_footer_partial.html' %}

@@ -162,8 +162,8 @@ class Revision(models.Model):
     This model has a many-to-one relationship with the Qapp model.
     This model is referenced in the front-end as Section F.1
     """
-    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
-                                primary_key=True)
+    qapp = models.ForeignKey(Qapp, blank=False,
+                             on_delete=models.CASCADE)
     revision = models.CharField(blank=False, null=False, max_length=255)
     description = models.CharField(blank=False, null=False, max_length=255)
     effective_date = models.DateTimeField(blank=False, null=False,

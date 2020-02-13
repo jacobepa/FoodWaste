@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
 from constants.qar5 import SECTION_A_INFO
 from qar5.models import Division, Qapp, QappApproval, QappLead, \
-    QappApprovalSignature, SectionA, SectionB, SectionD
+    QappApprovalSignature, SectionA, SectionB, SectionD, Revision
 
 class QappForm(ModelForm):
     """Form for creating a new QAPP (Quality Assurance Project Plan)"""
@@ -319,3 +319,41 @@ class SectionDForm(ModelForm):
 
         model = SectionD
         fields = ('qapp', 'd1', 'd2', 'd3')
+
+
+class RevisionForm(ModelForm):
+    """
+    Form for creating and adding new Revisions (Section F)
+    To a given QAPP.
+    """
+    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+                               required=True, label=_("Parent QAPP"),
+                               widget=Textarea(
+                                   attrs={'class': 'form-control mb-2',
+                                          'readonly':'readonly'}))
+    revision = CharField(
+        max_length=255,
+        label=_("Revision Number"),
+        required=True, widget=TextInput({'class': 'form-control mb-2'}))
+
+    description = CharField(
+        max_length=255,
+        label=_("Description"),
+        required=True, widget=TextInput({'class': 'form-control mb-2'}))
+
+    effective_date = DateTimeField(
+        label=_("Effective Date"),
+        required=True, widget=DateTimeInput(
+            attrs={'class': 'form-control mb-2'}))
+
+    initial_version = CharField(
+        max_length=255,
+        label=_("Initial Version"),
+        required=True, widget=TextInput({'class': 'form-control mb-2'}))
+    
+    class Meta:
+        """Meta data for SectionBForm Form."""
+
+        model = Revision
+        fields = ('qapp', 'revision', 'description',
+                  'effective_date', 'initial_version')

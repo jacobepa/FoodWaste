@@ -5,6 +5,7 @@
 
 """Definition of qar5 views."""
 
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, JsonResponse, HttpRequest
@@ -13,10 +14,12 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, TemplateView
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
+from DataSearch.settings import DATETIME_FORMAT
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
-    QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm
+    QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm, \
+    RevisionForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
-    SectionA, SectionB, SectionC, SectionD
+    SectionA, SectionB, SectionC, SectionD, Revision
 
 class QappCreate(LoginRequiredMixin, CreateView):
     """Class for creating new QAPPs (Quality Assurance Project Plans)"""
@@ -38,7 +41,7 @@ class QappCreate(LoginRequiredMixin, CreateView):
         if form.is_valid():
             obj = form.save(commit=True)
             return HttpResponseRedirect('/qar5/approval/create?qapp_id=%d' % obj.id)
-            #return HttpResponseRedirect('/qar5/detail/%d/' % obj.id)
+            #return HttpResponseRedirect('/qar5/detail/%d' % obj.id)
 
         return render(request, 'qar5/SectionA/qapp_create.html', {'form': form})
 
@@ -84,8 +87,7 @@ class ProjectLeadCreate(LoginRequiredMixin, CreateView):
         if form.is_valid():
             obj = form.save(commit=True)
             return HttpResponseRedirect(
-                '/qar5/detail/%s/' % qapp_id)
-        #return HttpResponseRedirect('/qar5/create/')
+                '/qar5/detail/%s' % qapp_id)
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
 
@@ -114,7 +116,7 @@ class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
         qapp_id = form.data.get('qapp', '')
         if form.is_valid():
             obj = form.save(commit=True)
-            return HttpResponseRedirect('/qar5/detail/%s/' % qapp_id)
+            return HttpResponseRedirect('/qar5/detail/%s' % qapp_id)
 
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
@@ -147,7 +149,7 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
         if form.is_valid():
             obj = form.save(commit=True)
             return HttpResponseRedirect(
-                '/qar5/detail/%s/' % qapp_id)
+                '/qar5/detail/%s' % qapp_id)
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
 
@@ -320,13 +322,45 @@ class SectionEView(LoginRequiredMixin, TemplateView):
 
     
 class SectionFView(LoginRequiredMixin, TemplateView):
-    """Class for processing QAPP Section F information"""
+    """Class for processing QAPP Section F information, REVISIONS"""
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section F"""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
+        revisions = Revision.objects.filter(qapp_id=qapp_id)
         return render(request, 'SectionF/index.html',
                       {'title': 'QAR5 Section F', 'qapp_id': qapp_id,
-                       'SECTION_F_INFO': SECTION_F_INFO})
+                       'SECTION_F_INFO': SECTION_F_INFO,
+                       'revisions': revisions})
+
+
+class RevisionCreate(LoginRequiredMixin, CreateView):
+    """Class for creating new Revisions of a given QAPP"""
+    template_name = 'SectionF/revision_create.html'
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return a view with an empty form for creating a new QAPP."""
+        qapp_id = request.GET.get('qapp_id', 0)
+        qapp = Qapp.objects.get(id=qapp_id)
+        form = RevisionForm({'qapp': qapp})
+        ctx = {'form': form, 'qapp_id': qapp_id}
+
+        return render(request, self.template_name, ctx)
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a new Project Lead form filled out."""
+        form = RevisionForm(request.POST)
+        qapp_id = form.data.get('qapp', '')
+        #datetime_str = form.data['effective_date']
+        #datetime_obj = datetime.strptime(datetime_str, DATETIME_FORMAT)
+        #form.data['effective_date'] = datetime_obj
+        if form.is_valid():
+            obj = form.save(commit=True)
+            return HttpResponseRedirect('/qar5/SectionF?qapp_id=%s' % qapp_id)
+
+        ctx = {'form': form, 'qapp_id': qapp_id}
+        return render(request, self.template_name, ctx)
