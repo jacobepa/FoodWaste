@@ -14,7 +14,7 @@ from django.forms.widgets import DateTimeInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
-from DataSearch.models import  ExistingData, ExistingDataSource
+from DataSearch.models import ExistingData, ExistingDataSource
 from teams.models import TeamMembership, Team
 
 

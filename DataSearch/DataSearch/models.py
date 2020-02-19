@@ -21,17 +21,17 @@ class Attachment(models.Model):
     uploaded_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
 
     def __str__(self):
-        """Override str method to display name instead of stringified obj"""
+        """Override str method to display name instead of stringified obj."""
         return self.name
 
 
 class ExistingDataSource(models.Model):
-    """Model containing options for the data source dropdown"""
+    """Model containing options for the data source dropdown."""
 
     name = models.CharField(blank=False, null=False, max_length=255)
 
     def __str__(self):
-        """Override str method to display name instead of stringified obj"""
+        """Override str method to display name instead of stringified obj."""
         return self.name
 
 
@@ -73,7 +73,7 @@ class ExistingData(models.Model):
         return [(field.name, field.value_to_string(self)) for field in ExistingData._meta.fields]
 
     def __str__(self):
-        """Override str method to display source instead of stringified obj"""
+        """Override str method to display source instead of stringified obj."""
         return self.source_title
 
 

@@ -10,7 +10,7 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-    """Add docstring."""
+    """Add method docstring."""  # TODO add docstring.
 
     dependencies = [
         ('accounts', '0001_initial'),

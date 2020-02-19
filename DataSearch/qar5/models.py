@@ -18,15 +18,13 @@ class Division(models.Model):
     name = models.CharField(blank=False, null=False, max_length=255)
 
     def __str__(self):
-        """Override str method to display name instead of stringified obj"""
+        """Override str method to display name instead of stringified obj."""
         return self.name
 
 
 class Qapp(models.Model):
-    """
-    Class representing a QAPP.
-    This allows users to easily generate new QAPPs
-    """
+    """Class representing a QAPP. Allows users to easily generate new QAPPs."""
+
     # Office of Research and Development
     # Center for Environmental Solutions & Emergency Response
 
@@ -54,20 +52,22 @@ class Qapp(models.Model):
 
 class QappLead(models.Model):
     """
-    Class representing a QAPP project lead. Project has a one-to-many
-    relationship with ProjectLead(s)
+    Class representing a QAPP project lead.
+
+    Project has a one-to-many relationship with ProjectLead(s).
     """
-    
+
     name = models.CharField(blank=False, null=False, max_length=255)
     qapp = models.ForeignKey(Qapp, on_delete=models.CASCADE)
 
     def __str__(self):
-        """Override str method to display name instead of stringified obj"""
+        """Override str method to display name instead of stringified obj."""
         return self.name
 
 
 class QappApproval(models.Model):
     """Class representing the approval page of a QAPP document."""
+
     project_plan_title = models.CharField(blank=False, null=False,
                                           max_length=255)
     activity_number = models.CharField(blank=False, null=False,
@@ -79,6 +79,7 @@ class QappApproval(models.Model):
 
 class QappApprovalSignature(models.Model):
     """Class representing a single signature on a QAPP Approval Page."""
+
     qapp_approval = models.ForeignKey(QappApproval, blank=False,
                                       on_delete=models.CASCADE)
     contractor = models.BooleanField(blank=True, null=False, default=False)
@@ -88,10 +89,11 @@ class QappApprovalSignature(models.Model):
 
 
 class SectionA(models.Model):
-    """Class representing SectionA (A.3 and later) for a given QAPP"""
+    """Class representing SectionA (A.3 and later) for a given QAPP."""
+
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
-    
+
     # A3 is readonly, defaults populated in form from constants module.
     a3 = models.CharField(blank=False, null=False, max_length=2047)
     # A4 is user input with an optional chart (a4_chart)
@@ -112,7 +114,8 @@ class SectionA(models.Model):
 
 
 class SectionB(models.Model):
-    """Class representing the entirety of SectionB for a given QAPP"""
+    """Class representing the entirety of SectionB for a given QAPP."""
+
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
     # B1 Secondary Data will be a dropdown with options from the following: ?
@@ -137,7 +140,8 @@ class SectionB(models.Model):
 
 
 class SectionC(models.Model):
-    """Class representing the entirety of SectionC for a given QAPP """
+    """Class representing the entirety of SectionC for a given QAPP."""
+
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
     c1 = models.CharField(blank=False, null=False, max_length=2047)
@@ -145,7 +149,8 @@ class SectionC(models.Model):
 
 
 class SectionD(models.Model):
-    """Class representing the entirety of SectionD for a given QAPP """
+    """Class representing the entirety of SectionD for a given QAPP."""
+
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
     d1 = models.CharField(blank=False, null=False, max_length=2047)
@@ -159,9 +164,11 @@ class SectionD(models.Model):
 class Revision(models.Model):
     """
     Class used to track revisions of QAPPs.
+
     This model has a many-to-one relationship with the Qapp model.
     This model is referenced in the front-end as Section F.1
     """
+
     qapp = models.ForeignKey(Qapp, blank=False,
                              on_delete=models.CASCADE)
     revision = models.CharField(blank=False, null=False, max_length=255)

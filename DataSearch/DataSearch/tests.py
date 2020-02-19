@@ -23,7 +23,7 @@ class ViewTest(TestCase):
         # Django 1.7 requires an explicit setup() when running tests in PTVS.
         @classmethod
         def setUpClass(cls):
-            """Add docstring."""
+            """Add method docstring."""  # TODO add docstring.
             super(ViewTest, cls).setUpClass()
             django.setup()
 

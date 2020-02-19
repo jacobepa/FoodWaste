@@ -18,6 +18,7 @@ in the apps.py.
 
 from django.apps import AppConfig
 
+
 class Qar5Config(AppConfig):
     """qar5 configuration."""
 
