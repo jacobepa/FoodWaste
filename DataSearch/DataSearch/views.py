@@ -33,18 +33,20 @@ from teams.models import Team, TeamMembership
 
 
 def get_existing_data_all():
-    """Method to get all data regardless of user or team"""
+    """Method to get all data regardless of user or team."""
     return ExistingData.objects.all()
 
 
 def get_existing_data_user(user_id):
     """
-    Method to get all data belonging to a team of which the provided user
-    is a member. The logic filters for the user's non-member teams,
-    then excludes those teams from the data results.
-    This is necessary because there is no direct connection between data
-    model users and existing data instances. The relation here is through
-    the teams model.
+    Method to get all data belonging to a team.
+
+    - of which the provided user is a member.
+    - logic filters for the user's non-member teams
+    - then excludes those teams from the data results.
+    - This is necessary because there is no direct connection between data
+    - model users and existing data instances. The relation here is through
+    - the teams model.
     """
     user = User.objects.get(id=user_id)
     include_teams = TeamMembership.objects.filter(
@@ -67,14 +69,15 @@ def get_existing_data_team(team_id):
 
 
 class ExistingDataIndex(LoginRequiredMixin, TemplateView):
-    """Class to return the first page of the Existing Data flow"""
+    """Class to return the first page of the Existing Data flow."""
 
     template_name = 'DataSearch/existing_data_index.html'
 
     def get_context_data(self, **kwargs):
         """
-        Custom method override to send data to the template. Specifically,
-        we want to send a list of users and teams to select from.
+        Custom method override to send data to the template.
+        
+        - Specifically, want to send a list of users and teams to select from.
         """
         context = super().get_context_data(**kwargs)
         context['users'] = User.objects.all()
@@ -88,11 +91,12 @@ class ExistingDataList(LoginRequiredMixin, ListView):
     model = ExistingData
     context_object_name = 'existing_data_list'
     template_name = 'DataSearch/existing_data_list.html'
-    
+
     def get_context_data(self, **kwargs):
         """
-        Custom method override to send data to the template. Specifically,
-        we want to send the user or team information for this list of data.
+        Custom method override to send data to the template.
+        
+        - Specifically, want to send the user or team information for this list of data.
         """
         context = super().get_context_data(**kwargs)
         path = self.request.path.split('/')
@@ -105,6 +109,7 @@ class ExistingDataList(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
+        """Add method docstring."""  # TODO add docstring.
         path = self.request.path.split('/')
         p_id = path[len(path) - 1]
         p_type = path[len(path) - 2]
@@ -116,14 +121,16 @@ class ExistingDataList(LoginRequiredMixin, ListView):
 
 
 class ExistingDataDetail(LoginRequiredMixin, DetailView):
-    """View for viewing the details of a Existing data instance"""
+    """View for viewing the details of a Existing data instance."""
+
     model = ExistingData
     template_name = 'DataSearch/existing_data_detail.html'
 
     def get_context_data(self, **kwargs):
         """
-        Custom method override to send data to the template. Specifically,
-        we want to send the user or team information for this list of data.
+        Custom method override to send data to the template.
+        
+        - Specifically, want to send the user or team information for this list of data.
         """
         context = super().get_context_data(**kwargs)
         referer = self.request.META['HTTP_REFERER'].split('/')
@@ -137,7 +144,8 @@ class ExistingDataDetail(LoginRequiredMixin, DetailView):
 
 
 class ExistingDataEdit(LoginRequiredMixin, UpdateView):
-    """View for editing the details of a Existing data instance"""
+    """View for editing the details of a Existing data instance."""
+
     model = ExistingData
     form_class = ExistingDataForm
     template_name = 'DataSearch/existing_data_edit.html'
@@ -240,7 +248,6 @@ def about(request):
 
 def export_pdf(request, *args, **kwargs):
     """Function to export Existing  Data as a PDF document."""
-
     data_id = kwargs.get('pk', None)
     if data_id is None:
         # Export ALL ExistingData available for this user to PDF.
@@ -324,7 +331,6 @@ def export_pdf(request, *args, **kwargs):
 
 def export_excel(request, *args, **kwargs):
     """Function to export Existing Existing Data as an Excel sheet."""
-
     data_id = kwargs.get('pk', None)
     if data_id is None:
         # Export ALL ExistingData available for this user to Excel.

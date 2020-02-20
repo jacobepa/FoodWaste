@@ -128,7 +128,7 @@ def test_dcite_method():
 
             @due.dcite("XXX0", path='someclass:method')
             def method(self, arg1, kwarg2="blah"):
-                """docstring"""
+                """Add docstring."""  # TODO add docstring.
                 assert arg1 == "magical"
                 assert kwarg2 == 1
                 return "load"
@@ -254,7 +254,7 @@ def test_dcite_match_conditions_function():
     @due.dcite(Doi(_sample_doi), path='callable',
                conditions={(1, "kwarg2"): {"boo"}})
     def method(arg1, kwarg2="blah"):
-        """docstring"""
+        """Add docstring."""  # TODO add docstring.
         assert arg1 == "magical"
         return "load %s" % kwarg2
 
@@ -279,7 +279,7 @@ def test_dcite_match_conditions_method():
         @due.dcite(Doi(_sample_doi), path='obj.callable',
                    conditions={(2, "kwarg2"): {"boo"}})
         def method(self, arg1, kwarg2="blah"):
-            """docstring"""
+            """Add docstring."""  # TODO add docstring.
             assert arg1 == "magical"
             return "load %s" % kwarg2
 

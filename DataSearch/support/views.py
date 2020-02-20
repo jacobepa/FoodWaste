@@ -35,6 +35,7 @@ from .models import *
 
 getcontext().prec = 9
 
+
 class UserManualView(TemplateView):
     """
     View to present and process the "request more info" form.
@@ -73,10 +74,9 @@ def download_manual(request):
 
 
 def event_file_download(request, *args, **kwargs):
-    """Find and download the file matching the provided file name"""
+    """Find and download the file matching the provided file name."""
     file_name = kwargs.get('file_name', None)
     return download_file(request, file_name)
-
 
 
 def download_file(request, name):
@@ -92,7 +92,7 @@ def download_file(request, name):
             response['Content-Disposition'] = con_disp
             return response
 
-    #elif ext == 'docx':
+    # elif ext == 'docx':
     #    with open(file, 'rb') as doc:
     #        response = HttpResponse(doc)
     #        con_disp = 'attachment; filename="' + name + '"'

@@ -6,7 +6,7 @@
 # We disable the invalid name because urlpatterns is the Django default
 
 """
-URLs related to managing Products
+URLs related to managing Products.
 
 Available functions:
 - None yet

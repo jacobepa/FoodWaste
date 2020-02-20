@@ -20,9 +20,10 @@ from qar5.models import Division, Qapp, QappApproval, QappLead, \
     QappApprovalSignature, SectionA, SectionB, SectionD, Revision, \
     SectionBType
 
+
 class QappForm(ModelForm):
-    """Form for creating a new QAPP (Quality Assurance Project Plan)"""
-    
+    """Form for creating a new QAPP (Quality Assurance Project Plan)."""
+
     division = ModelChoiceField(
         label=_("Division:"), queryset=Division.objects.all(),
         widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
@@ -81,7 +82,7 @@ class QappForm(ModelForm):
 
 
 class QappLeadForm(ModelForm):
-    """Form for creating project leads for a given qapp"""
+    """Form for creating project leads for a given qapp."""
 
     name = CharField(
         max_length=255,
@@ -92,7 +93,7 @@ class QappLeadForm(ModelForm):
                                required=True, label=_("Parent QAPP"),
                                widget=TextInput(
                                    attrs={'class': 'form-control mb-2',
-                                          'readonly':'readonly'}))
+                                          'readonly': 'readonly'}))
 
     class Meta:
         """Meta data for QAPP Form."""
@@ -102,7 +103,7 @@ class QappLeadForm(ModelForm):
 
 
 class QappApprovalForm(ModelForm):
-    """Form for creating the QAPP Approval page"""
+    """Form for creating the QAPP Approval page."""
 
     project_plan_title = CharField(
         max_length=255,
@@ -118,7 +119,7 @@ class QappApprovalForm(ModelForm):
                                required=True, label=_("Parent QAPP"),
                                widget=TextInput(
                                    attrs={'class': 'form-control mb-2',
-                                          'readonly':'readonly'}))
+                                          'readonly': 'readonly'}))
 
     class Meta:
         """Meta data for QappApproval Form."""
@@ -128,13 +129,13 @@ class QappApprovalForm(ModelForm):
 
 
 class QappApprovalSignatureForm(ModelForm):
-    """Form for creating the QAPP Approval Signatures"""
+    """Form for creating the QAPP Approval Signatures."""
 
     qapp_approval = ModelChoiceField(
         queryset=QappApproval.objects.all(), initial=0,
         required=True, label=_("Parent QAPP Approval"),
         widget=TextInput(attrs={'class': 'form-control mb-2',
-                                'readonly':'readonly'}))
+                                'readonly': 'readonly'}))
 
     contractor = BooleanField(
         required=False, label=_("Contractor Signature? Default (no check) is EPA."),
@@ -163,12 +164,13 @@ class QappApprovalSignatureForm(ModelForm):
 
 
 class SectionAForm(ModelForm):
-    """Class representing the rest of Section A (A.3 and later)"""
+    """Class representing the rest of Section A (A.3 and later)."""
+
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
                                widget=Textarea(
                                    attrs={'class': 'form-control mb-2',
-                                          'readonly':'readonly'}))
+                                          'readonly': 'readonly'}))
     a3 = CharField(
         max_length=2047, label=_("A.3 Distribution List"),
         required=False, widget=Textarea(
@@ -228,17 +230,18 @@ class SectionAForm(ModelForm):
 
 
 class SectionBForm(ModelForm):
-    """Class representing the entirety of SectionB for a given QAPP"""
+    """Class representing the entirety of SectionB for a given QAPP."""
+
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
                                widget=Textarea(
                                    attrs={'class': 'form-control mb-2',
-                                          'readonly':'readonly'}))
+                                          'readonly': 'readonly'}))
     # B1 Secondary Data will be a dropdown with options from the following: ?
     # analytical methods, animal subjects, cell culture models, existing data,
     # measurements, model application, model development, software development
-    #b1_secondary_data = 
-    #b1_1 = 
+    # b1_secondary_data =
+    # b1_1 =
 
     # @@@02202020JS - Modifying the labels to get rid of 'existing data',
     # so the sectionb_type can be appended to labels in the template.
@@ -286,39 +289,39 @@ class SectionBForm(ModelForm):
     b4 = CharField(
         max_length=2047, label=_("B.4"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
-    
+
     class Meta:
         """Meta data for SectionBForm Form."""
 
         model = SectionB
         fields = ('qapp', 'b1_2', 'b1_3', 'b1_4', 'b1_5', 'b2_1',
                   'b2_2', 'b2_3', 'b2_4', 'b2_5', 'b3', 'b4')
-         
+
 
 # No SectionC Necessary, both fields are auto-generated.
 
 class SectionDForm(ModelForm):
-    """Class representing the entirety of SectionD for a given QAPP"""
+    """Class representing the entirety of SectionD for a given QAPP."""
+
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
                                widget=Textarea(
                                    attrs={'class': 'form-control mb-2',
-                                          'readonly':'readonly'}))
-    
+                                          'readonly': 'readonly'}))
+
     d1 = CharField(
         max_length=2047,
         label=_("D.1 Data Review, Verification, and Validation"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
-    
+
     d2 = CharField(
         max_length=2047, label=_("D.2 Verification and Validation Methods"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
-    
+
     d3 = CharField(
         max_length=2047,
         label=_("D.3 Reconciliation with User Requirements"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
 
     class Meta:
         """Meta data for SectionBForm Form."""
@@ -328,15 +331,13 @@ class SectionDForm(ModelForm):
 
 
 class RevisionForm(ModelForm):
-    """
-    Form for creating and adding new Revisions (Section F)
-    To a given QAPP.
-    """
+    """Form for creating and adding new Revisions (Section F) to QAPP."""
+
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
                                widget=Textarea(
                                    attrs={'class': 'form-control mb-2',
-                                          'readonly':'readonly'}))
+                                          'readonly': 'readonly'}))
     revision = CharField(
         max_length=255,
         label=_("Revision Number"),
@@ -356,7 +357,7 @@ class RevisionForm(ModelForm):
         max_length=255,
         label=_("Initial Version"),
         required=True, widget=TextInput({'class': 'form-control mb-2'}))
-    
+
     class Meta:
         """Meta data for SectionBForm Form."""
 

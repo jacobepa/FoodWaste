@@ -36,7 +36,7 @@ stubbed_script = pathjoin(pathjoin(stubbed_dir, 'script.py'))
 
 @pytest.fixture(scope="module")
 def stubbed_env():
-    """Create stubbed module with a sample script"""
+    """Create stubbed module with a sample script."""
     os.makedirs(stubbed_dir)
     with open(stubbed_script, 'wb') as f:
         f.write("""
@@ -72,6 +72,7 @@ print("done123")
     'collector_class', [DueCreditCollector, InactiveDueCreditCollector]
 )
 def test_api(collector_class):
+    """Add function docstring."""  # TODO add docstring.
     due = collector_class()
     # Add references.
     due.add(BibTeX('@article{XXX00, ...}'))

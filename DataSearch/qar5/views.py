@@ -55,7 +55,8 @@ class QappList(LoginRequiredMixin, ListView):
     #    return context
 
 class QappCreate(LoginRequiredMixin, CreateView):
-    """Class for creating new QAPPs (Quality Assurance Project Plans)"""
+    """Class for creating new QAPPs (Quality Assurance Project Plans)."""
+
     model = Qapp
     template_name = 'SectionA/qapp_create.html'
     
@@ -82,11 +83,13 @@ class QappCreate(LoginRequiredMixin, CreateView):
 
 
 class QappDetail(LoginRequiredMixin, DetailView):
-    """Class for viewing an existing (newly created) QAPP"""
+    """Class for viewing an existing (newly created) QAPP."""
+
     model = Qapp
     template_name = 'SectionA/qapp_detail.html'
 
     def get_context_data(self, **kwargs):
+        """Add method docstring."""  # TODO add docstring.
         context = super().get_context_data(**kwargs)
         context['project_leads_list'] = QappLead.objects.filter(
             qapp=context['object'])
@@ -100,7 +103,8 @@ class QappDetail(LoginRequiredMixin, DetailView):
 
 
 class ProjectLeadCreate(LoginRequiredMixin, CreateView):
-    """Class for creating new QAPP Project Lead"""
+    """Class for creating new QAPP Project Lead."""
+
     model = QappLead
     template_name = 'SectionA/project_lead_create.html'
 
@@ -130,8 +134,10 @@ class ProjectLeadCreate(LoginRequiredMixin, CreateView):
 class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
     """
     Create the base approval page with no signatures.
+
     Approval signatures will be added after the title and number.
     """
+
     template_name = 'SectionA/qapp_approval_create.html'
 
     @method_decorator(login_required)
@@ -158,7 +164,8 @@ class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
 
 
 class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
-    """Class for creating new QAPP Project Approval Signatures"""
+    """Class for creating new QAPP Project Approval Signatures."""
+
     model = QappApprovalSignature
     template_name = 'SectionA/project_approval_signature_create.html'
 
@@ -191,12 +198,13 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
 
 
 class SectionAView(LoginRequiredMixin, TemplateView):
-    """Class for processing QAPP Section A (A.3 and later) information"""
+    """Class for processing QAPP Section A (A.3 and later) information."""
+
     template_name = 'SectionA/index.html'
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section A (A.3 and later)"""
+        """Return the index page for QAR5 Section A (A.3 and later)."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -238,12 +246,13 @@ class SectionAView(LoginRequiredMixin, TemplateView):
 
 
 class SectionBView(LoginRequiredMixin, TemplateView):
-    """Class for processing QAPP Section B information"""
+    """Class for processing QAPP Section B information."""
+
     template_name = 'SectionB/index.html'
-    
+
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section B"""
+        """Return the index page for QAR5 Section B."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -289,25 +298,26 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 
     
 class SectionCView(LoginRequiredMixin, TemplateView):
-    """Class for processing QAPP Section C information"""
+    """Class for processing QAPP Section C information."""
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section C"""
+        """Return the index page for QAR5 Section C."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         return render(request, 'SectionC/index.html',
                       {'title': 'QAR5 Section C', 'qapp_id': qapp_id,
                        'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS})
 
-    
+
 class SectionDView(LoginRequiredMixin, TemplateView):
-    """Class for processing QAPP Section D information"""
+    """Class for processing QAPP Section D information."""
+
     template_name = 'SectionD/index.html'
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section D"""
+        """Return the index page for QAR5 Section D."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -346,26 +356,26 @@ class SectionDView(LoginRequiredMixin, TemplateView):
 
         return render(request, self.template_name, ctx)
 
-    
+
 class SectionEView(LoginRequiredMixin, TemplateView):
-    """Class for processing QAPP Section E information"""
+    """Class for processing QAPP Section E information."""
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section E"""
+        """Return the index page for QAR5 Section E."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         return render(request, 'SectionE/index.html',
                       {'title': 'QAR5 Section E', 'qapp_id': qapp_id,
                        'SECTION_E_INFO': SECTION_E_INFO})
 
-    
+
 class SectionFView(LoginRequiredMixin, TemplateView):
-    """Class for processing QAPP Section F information, REVISIONS"""
+    """Class for processing QAPP Section F information, REVISIONS."""
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section F"""
+        """Return the index page for QAR5 Section F."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         revisions = Revision.objects.filter(qapp_id=qapp_id)
@@ -376,7 +386,8 @@ class SectionFView(LoginRequiredMixin, TemplateView):
 
 
 class RevisionCreate(LoginRequiredMixin, CreateView):
-    """Class for creating new Revisions of a given QAPP"""
+    """Class for creating new Revisions of a given QAPP."""
+
     template_name = 'SectionF/revision_create.html'
 
     @method_decorator(login_required)
