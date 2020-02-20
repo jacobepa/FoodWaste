@@ -16,7 +16,7 @@
             <button class="col-sm-12 btn btn-md btn-info" onclick="window.location.href='/existingdata/create/'">
                 Add source and/or attach 'Existing Data.'
             </button>
-            </div>
+        </div>
     </div>
 
     <table class="table table-bordered table-hover">
@@ -68,12 +68,12 @@
 
 {% block scripts %}
     <script>
-        function rowClick(rowId) {
-            $("tr").removeClass('table-active');
-            $("#" + rowId).addClass('table-active');
-            $("i").removeAttr('disabled');
-            $("i").attr('id', rowId);
-        }
+        //function rowClick(rowId) {
+        //    $("tr").removeClass('table-active');
+        //    $("#" + rowId).addClass('table-active');
+        //    $("i").removeAttr('disabled');
+        //    $("i").attr('id', rowId);
+        //}
         function viewEditExistingData(btn) {
             if ($(btn).attr('disabled')) return;
             window.location.href = '/existingdata/detail/' + $(btn).attr('id');

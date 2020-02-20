@@ -17,7 +17,8 @@ from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
 from constants.qar5 import SECTION_A_INFO
 from qar5.models import Division, Qapp, QappApproval, QappLead, \
-    QappApprovalSignature, SectionA, SectionB, SectionD, Revision
+    QappApprovalSignature, SectionA, SectionB, SectionD, Revision, \
+    SectionBType
 
 class QappForm(ModelForm):
     """Form for creating a new QAPP (Quality Assurance Project Plan)"""
@@ -48,19 +49,17 @@ class QappForm(ModelForm):
         widget=Select(attrs={'class': 'form-control mb-2'}), required=True)
 
     revision_number = CharField(
-        max_length=255,
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Revision Number:"), required=True)
+        max_length=255, label=_("Revision Number:"), required=True,
+        widget=TextInput({'class': 'form-control mb-2'}))
 
     date = DateTimeField(
-        label=_("Date:"),
-        required=True,
+        label=_("Date:"), required=True,
         widget=DateTimeInput(attrs={'class': 'form-control mb-2'}))
 
-    prepared_by = CharField(
-        max_length=255,
-        widget=TextInput({'class': 'form-control mb-2'}),
-        label=_("Prepared By:"), required=True)
+    # prepared_by = CharField(
+    #     max_length=255, label=_("Prepared By:"), required=True,
+    #     widget=TextInput({'class': 'form-control mb-2',
+    #                      'readonly':'readonly'}))
 
     strap = CharField(
         max_length=255,
@@ -77,8 +76,8 @@ class QappForm(ModelForm):
 
         model = Qapp
         fields = ('division', 'division_branch', 'title', 'qa_category',
-                  'intra_extra', 'revision_number', 'date', 'prepared_by',
-                  'strap', 'tracking_id')
+                  'intra_extra', 'revision_number', 'date', 'strap',
+                  'tracking_id')
 
 
 class QappLeadForm(ModelForm):
@@ -214,13 +213,18 @@ class SectionAForm(ModelForm):
     a9_drive_path = CharField(
         max_length=255, label=_("A.9 Drive Path:"), required=True,
         widget=TextInput({'class': 'form-control mb-2'}))
+
+    sectionb_type = ModelChoiceField(
+        label=_("Section B Type:"), queryset=SectionBType.objects.all(),
+        widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
     
     class Meta:
         """Meta data for SectionAForm Form."""
 
         model = SectionA
         fields = ('qapp', 'a3', 'a4', 'a4_chart', 'a5',
-                  'a6', 'a7', 'a8', 'a9', 'a9_drive_path')
+                  'a6', 'a7', 'a8', 'a9', 'a9_drive_path',
+                  'sectionb_type')
 
 
 class SectionBForm(ModelForm):
@@ -236,9 +240,11 @@ class SectionBForm(ModelForm):
     #b1_secondary_data = 
     #b1_1 = 
 
-    # TODO: Add constant text as info pop up (potentially help_text ?)
+    # @@@02202020JS - Modifying the labels to get rid of 'existing data',
+    # so the sectionb_type can be appended to labels in the template.
+    # B1_2 and B4 are the only two that changed because of this
     b1_2 = CharField(
-        max_length=2047, label=_("B.1 Describe Existing Data Use"),
+        max_length=2047, label=_("B.1 Describe"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
     b1_3 = CharField(
@@ -278,7 +284,7 @@ class SectionBForm(ModelForm):
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
     b4 = CharField(
-        max_length=2047, label=_("B.4 Existing Data Tracking"),
+        max_length=2047, label=_("B.4"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
     
     class Meta:

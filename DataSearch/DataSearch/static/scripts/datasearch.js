@@ -51,5 +51,4 @@ function removeApprovalSignature(btn) {
     if ($(btn).attr('disabled')) return;
     window.location.href = '/qar5/approval_signature/delete/' + $(btn).attr('id');
 }
-
 //////////////////////////////////////////////////////////////////////

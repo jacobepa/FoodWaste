@@ -17,12 +17,13 @@ from DataSearch.settings import MEDIA_ROOT, MEDIA_URL
 
 
 urlpatterns = [
-    url(r'^admin/?$', admin.site.urls),
+    url(r'^admin', admin.site.urls),
 
     url(r'^$', home, name='home'),
     url(r'^dashboard/?$', home, name='dashboard'),
     url(r'^contact/?$', contact, name='contact'),
     url(r'^about/?$', about, name='about'),
+    url(r'^scifinder/?$', about, name='scifinder'),
     url(r'^flowsa/?$', about, name='flowsa'),
 
     # Begin existingdata URLs.

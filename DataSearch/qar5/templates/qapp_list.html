@@ -1,0 +1,107 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1><font color="blue">QUALITY ASSURANCE PROJECT PLAN.</font></h1>
+    <h2>
+        <font color="blue">Office of Research and Development</font>
+        <font color="blue">Center for Environmental Solutions & Emergency Response.</font>
+    </h2>
+    <p>
+        The following checklist summarizes QAPP requirements for projects involving
+        Secondary Data or Existing Data and Information. More comprehensive
+        guidance on developing QAPPs for research projects is provided in the
+        EPA-240-R-02-009 report titled Guidance for Quality Assurance Project
+        Plans EPA QA G-5. The completed checklist will be entered into QA
+        Track with the approved QAPP by the QA Manager when final. The work on
+        this project has been approved under the CESER QMP K-LRTD-0032360-QM-1-0
+        and QAPP K-LRTD-0032360-QP-1-0.
+    </p>
+    <p>
+        <a class="btn btn-default" href="https://www.epa.gov/sites/production/files/2015-06/documents/g9-final.pdf">
+            Learn more about USEPA Existing Data &raquo;
+        </a>
+    </p>
+
+    {% if user.is_authenticated %}
+    <div class="row mb-2">
+        <button class="col-sm-12 btn btn-md btn-info" onclick="window.location.href='/qar5/create'">
+            Create a new QAR5
+        </button>
+    </div>
+    <div class="row">
+        <table class="table table-bordered table-hover col-sm-12">
+            <thead class="table-secondary">
+                <tr>
+                    <th scope="col">Division Branch</th>
+                    <th scope="col">QAR5 Title</th>
+                    <th scope="col">QA Category</th>
+                    <th scope="col">Revision Number</th>
+                    <th scope="col">StRAP</th>
+                    <th scope="col">Tracking ID</th>
+                    <!-- TODO: Show prepared by if you are admin -->
+                </tr>
+            </thead>
+            <tbody>
+                {% if qapp_list %}
+                {% for qar5 in qapp_list %}
+                <tr id="{{qar5.id}}" onclick="rowClick('{{qar5.id}}')">
+                    <td scope="row">{{qar5.division_branch}}</td>
+                    <td>{{qar5.title}}</td>
+                    <td>{{qar5.qa_category}}</td>
+                    <td>{{qar5.revision_number}}</td>
+                    <td>{{qar5.strap}}</td>
+                    <td>{{qar5.tracking_id}}</td>
+                </tr>
+                <!-- TODO: Show prepared by if you are admin -->
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="6">No Existing Data exist!</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-3">
+            <i class="btn btn-info btn-md" onclick="viewEditExistingQar5(this)" disabled>
+                View or Edit Existing QAR5
+            </i>
+        </div>
+        <div class="col-sm-3">
+            <i class="btn btn-info btn-md" onclick="exportAllQar5('docx')">
+                Export All QAR5 to Word Doc
+            </i>
+        </div>
+        <div class="col-sm-3">
+            <i class="btn btn-info btn-md" onclick="exportAllQar5('pdf')">
+                Export All QAR5 to PDF
+            </i>
+        </div>
+        <div class="col-sm-3">
+            <i class="btn btn-info btn-md" onclick="exportAllQar5('excel')">
+                Export All QAR5 to Excel
+            </i>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function viewEditExistingQar5(btn) {
+            if ($(btn).attr('disabled')) return;
+            window.location.href = '/qar5/detail/' + $(btn).attr('id');
+        }
+        function exportAllQar5(exportType) {
+            if (exportType === 'docx')
+                window.location.href = '/qar5/exportdocx';
+            else if (exportType === 'pdf')
+                window.location.href = '/qar5/exportpdf';
+            else
+                window.location.href = '/qar5/exportexcel';
+        }
+    </script>
+{% endblock %}

@@ -11,7 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, JsonResponse, HttpRequest
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView, TemplateView
+from django.views.generic import CreateView, DetailView, ListView, \
+    TemplateView
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
 from DataSearch.settings import DATETIME_FORMAT
@@ -19,7 +20,39 @@ from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm, \
     RevisionForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
-    SectionA, SectionB, SectionC, SectionD, Revision
+    SectionA, SectionB, SectionBType, SectionC, SectionD, Revision
+
+class QappList(LoginRequiredMixin, ListView):
+    """Class for listing this user's (or all if admin) QAR5 objects."""
+    model = Qapp
+    template_name = 'qapp_list.html'
+    context_object_name = 'qapp_list'
+
+    def get_queryset(self):
+        """
+        Custom method override to send data to the template. Specifically,
+        we want to send only data that belongs (prepared_by) the user.
+        """
+        user = self.request.user
+        if user.is_superuser:
+            return Qapp.objects.all()
+        else:
+            return Qapp.objects.filter(prepared_by=user)
+    
+    #def get_context_data(self, **kwargs):
+    #    """
+    #    Custom method override to send data to the template. Specifically,
+    #    we want to send only data that belongs (prepared_by) the user.
+    #    """
+    #    context = super().get_context_data(**kwargs)
+    #    user = self.request.user
+    #    if user.is_superuser:
+    #        context['']
+    #    #if p_type == 'user':
+    #    #    context['p_user'] = User.objects.get(id=p_id)
+    #    #elif p_type == 'team':
+    #    #    context['team'] = Team.objects.get(id=p_id)
+    #    return context
 
 class QappCreate(LoginRequiredMixin, CreateView):
     """Class for creating new QAPPs (Quality Assurance Project Plans)"""
@@ -39,11 +72,13 @@ class QappCreate(LoginRequiredMixin, CreateView):
         """Process the post request with a new QAPP form filled out."""
         form = QappForm(request.POST)
         if form.is_valid():
-            obj = form.save(commit=True)
+            obj = form.save(commit=False)
+            # Assign current user as the prepared_by
+            obj.prepared_by = request.user
+            obj.save()
             return HttpResponseRedirect('/qar5/approval/create?qapp_id=%d' % obj.id)
-            #return HttpResponseRedirect('/qar5/detail/%d' % obj.id)
 
-        return render(request, 'qar5/SectionA/qapp_create.html', {'form': form})
+        return render(request, 'SectionA/qapp_create.html', {'form': form})
 
 
 class QappDetail(LoginRequiredMixin, DetailView):
@@ -212,6 +247,9 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
+        sectiona = SectionA.objects.get(qapp_id=qapp_id)
+        sectionb_type_id = sectiona.sectionb_type_id
+        sectionb_type = SectionBType.objects.get(id=sectionb_type_id)
         
         existing_section_b = SectionB.objects.filter(qapp=qapp).first()
 
@@ -224,7 +262,8 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         # TODO pass in SectionB Form
         return render(request, self.template_name,
                       {'title': 'QAR5 Section B', 'qapp_id': qapp_id,
-                       'SECTION_B_INFO': SECTION_B_INFO, 'form': form})
+                       'SECTION_B_INFO': SECTION_B_INFO, 'form': form,
+                       'sectionb_type': sectionb_type})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):

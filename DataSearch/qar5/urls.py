@@ -16,11 +16,15 @@ from django.conf.urls import url
 from qar5.views import QappCreate, QappDetail, ProjectApprovalCreate, \
     ProjectLeadCreate, ProjectApprovalSignatureCreate, SectionAView, \
     SectionBView, SectionCView, SectionDView, SectionEView, SectionFView, \
-    RevisionCreate
+    RevisionCreate, QappList
 
 urlpatterns = [
     # URLs for CRUD operations.
     # Begin QAPP URLs for creating and printing QAPPs
+    url(r'^list/?$',
+        QappList.as_view(),
+        name='qapp_list'),
+
     url(r'^create/?$',
         QappCreate.as_view(),
         name='qapp_create'),

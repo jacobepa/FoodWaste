@@ -7,6 +7,7 @@
 
 """Definition of models."""
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from constants.utils import get_attachment_storage_path
@@ -14,6 +15,16 @@ from constants.utils import get_attachment_storage_path
 
 class Division(models.Model):
     """Class representing EPA Divisions available to the QAPP."""
+    
+    name = models.CharField(blank=False, null=False, max_length=255)
+
+    def __str__(self):
+        """Override str method to display name instead of stringified obj"""
+        return self.name
+
+
+class SectionBType(models.Model):
+    """Class representing Section B Types."""
     
     name = models.CharField(blank=False, null=False, max_length=255)
 
@@ -36,20 +47,37 @@ class Qapp(models.Model):
     division_branch = models.CharField(
         blank=False, null=False, max_length=255)
     title = models.CharField(blank=False, null=False, max_length=255)
-
-    # Dynamic number of project leads (project lead, co-leads) one-to-many
-    # epa_project_lead_1 = models.CharField(
-    #     blank=False, null=False, max_length=255)
-    # epa_project_lead_2 = models.CharField(
-    #     blank=False, null=False, max_length=255)
-
     qa_category = models.CharField(blank=False, null=False, max_length=255)
     intra_extra = models.CharField(blank=False, null=False, max_length=64)
-    revision_number = models.CharField(blank=False, null=False, max_length=255)
-    date = models.DateTimeField(blank=False, null=False, default=timezone.now)
-    prepared_by = models.CharField(blank=False, null=False, max_length=255)
+    revision_number = models.CharField(
+        blank=False, null=False, max_length=255)
+    date = models.DateTimeField(
+        blank=False, null=False, default=timezone.now)
+    prepared_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True)
     strap = models.CharField(blank=False, null=False, max_length=255)
     tracking_id = models.CharField(blank=False, null=False, max_length=255)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Overwrite the default save_model method so we can automatically
+        set the prepared_by field as current user.
+        """
+        # Only set prepared_by when it's the first save (create)
+        user = request.user
+        if not obj.pk:
+            obj.prepared_by = request.user
+        return super().save_model(request, obj, form, change)
+
+    #def save(user):
+    #    """
+    #    Overwrite the default save_model method so we can automatically
+    #    set the prepared_by field as current user.
+    #    """
+    #    # Only set prepared_by when it's the first save (create)
+    #    if not obj.pk:
+    #        obj.prepared_by = request.user
+    #    return super().save(commit=True)
 
 
 class QappLead(models.Model):
@@ -109,6 +137,10 @@ class SectionA(models.Model):
     # A9 is mixed defaults and user input, thus we should break it up
     a9 = models.CharField(blank=False, null=False, max_length=2047)
     a9_drive_path = models.CharField(blank=False, null=False, max_length=255)
+    # Dropdown selection for the SectionB Classificiation
+    sectionb_type = models.ForeignKey(SectionBType, blank=True, null=True,
+                                      related_name='sectionb_type',
+                                      on_delete=models.CASCADE)
 
 
 class SectionB(models.Model):
