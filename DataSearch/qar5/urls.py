@@ -16,7 +16,7 @@ from django.conf.urls import url
 from qar5.views import QappCreate, QappDetail, ProjectApprovalCreate, \
     ProjectLeadCreate, ProjectApprovalSignatureCreate, SectionAView, \
     SectionBView, SectionCView, SectionDView, SectionEView, SectionFView, \
-    RevisionCreate, QappList, QappEdit
+    RevisionCreate, QappList, QappEdit, export_doc, export_pdf, export_excel
 
 urlpatterns = [
     # URLs for CRUD operations.
@@ -36,7 +36,22 @@ urlpatterns = [
     url(r'^edit/(?P<pk>\d+)/?$',
         QappEdit.as_view(),
         name='qapp_edit'),
-    
+
+    # Single QAR5 Exports:
+    url(r'^exportdoc/(?P<pk>\d+)/?$',
+        export_doc, name='qar5_doc'),
+    url(r'^exportpdf/(?P<pk>\d+)/?$',
+        export_pdf, name='qar5_pdf'),
+    url(r'^exportexcel/(?P<pk>\d+)/?$',
+        export_excel, name='qar5_excel'),
+    # All QAR5 Exports:
+    url(r'^exportdoc/?$',
+        export_doc, name='qar5_all_doc'),
+    url(r'^exportpdf/?$',
+        export_pdf, name='qar5_all_pdf'),
+    url(r'^exportexcel/?$',
+        export_excel, name='qar5_all_excel'),
+
     ############################################
     # Project Approval (and signatures) URLs
     url(r'^approval/create/?$',

@@ -22,6 +22,19 @@
                             class="my-2 col-md-12 btn btn-md btn-danger">
                         Delete QAR5
                     </button>
+
+                    <button onclick="window.location.href='/qar5/exportdoc/{{object.id}}'"
+                            class="my-2 col-md-12 btn btn-md btn-info">
+                        Export to Word Doc
+                    </button>
+                    <button onclick="window.location.href='/qar5/exportpdf/{{object.id}}'"
+                            class="my-2 col-md-12 btn btn-md btn-info">
+                        Export to PDF
+                    </button>
+                    <button onclick="window.location.href='/qar5/exportexcel/{{object.id}}'"
+                            class="my-2 col-md-12 btn btn-md btn-info">
+                        Export to Excel
+                    </button>
                 </div>
             </div>
             <div class="col-md-12 mt-4">

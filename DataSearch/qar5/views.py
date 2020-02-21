@@ -10,9 +10,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, JsonResponse, HttpRequest
 from django.shortcuts import render
+from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, ListView, \
     TemplateView, UpdateView
+from docx import Document
+from docx.enum.style import WD_STYLE_TYPE
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.shared import Inches
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
 from DataSearch.settings import DATETIME_FORMAT
@@ -34,10 +39,7 @@ class QappList(LoginRequiredMixin, ListView):
         we want to send only data that belongs (prepared_by) the user.
         """
         user = self.request.user
-        if user.is_superuser:
-            return Qapp.objects.all()
-        else:
-            return Qapp.objects.filter(prepared_by=user)
+        return get_all_qar5_for_user(user)
     
 
 class QappEdit(LoginRequiredMixin, UpdateView):
@@ -446,3 +448,84 @@ class RevisionCreate(LoginRequiredMixin, CreateView):
 
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
+
+
+def get_all_qar5_for_user(user):
+    """Method to get all data regardless of user or team."""
+    if user.is_superuser:
+        return Qapp.objects.all()
+    else:
+        return Qapp.objects.filter(prepared_by=user)
+
+
+def get_qar5_for_user(user, id):
+    """Method to get all data regardless of user or team."""
+    # Only return the qapp if the user has permissions (super or owner)
+    if user.is_superuser or qapp.prepared_by == user:
+        return Qapp.objects.get(id=id)
+    return none
+
+
+def export_doc(request, *args, **kwargs):
+    """Function to export QAR5 as a Word Document."""
+    data_id = kwargs.get('pk', None) 
+    if data_id is None:
+        # TODO: Export ALL QAR5 objects available for this user to Docx.
+        data = get_all_qar5_for_user(request.user)
+
+    else:
+        data = get_qar5_for_user(request.user, data_id)
+        if not data:
+            return
+        # TODO: Build the docx to be exported
+        document = Document()
+
+        # Coversheet with signatures section:
+        # 1 row has WD_ALIGN_PARAGRAPH.LEFT aligned EPA logo.
+        document.add_picture(static('/EPA_Files/logo.png'), width=Inches(1.25))
+        # 2 row has right-aligned box "Quality Assurance Project Plan"
+        # Align the picture/text WD_ALIGN_PARAGRAPH.RIGHT
+        blue_header_style = document.styles.add_style(
+            'blue_header', WD_STYLE_TYPE.PARAGRAPH).paragraph_format
+        blue_header_style.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+        blue_header = document.add_header('Quality Assurance Project Plan')
+        # TODO Make the blue_header text white.
+        document.add_picture('blue_background.png', width=Inches(4))
+        # background color: rgb(0, 176, 240)
+        # The rest of the document will be WD_ALIGN_PARAGRAPH.CENTER
+        # 3 blank
+        # 4 Office of Research and Development
+        # 5 Center for Environmental Solutions & Emergency Response
+
+        # Next few sections are from the qapp object
+        document.save('test_export.docx')
+
+    return
+
+
+def export_pdf(request, *args, **kwargs):
+    """Function to export QAR5 as a PDF document."""
+    data_id = kwargs.get('pk', None)
+    if data_id is None:
+        # TODO: Export ALL QAR5 objects available for this user to PDF.
+        data = get_all_qar5_for_user(request.user)
+
+    else:
+        data = get_qar5_for_user(request.user, data_id)
+        if not data:
+            return
+        # TODO: Build the pdf to be exported
+
+
+def export_excel(request, *args, **kwargs):
+    """Function to export QAR5 as an Excel sheet."""
+    data_id = kwargs.get('pk', None)
+    if data_id is None:
+        # TODO: Export ALL QAR5 objects available for this user to excel.
+        data = get_all_qar5_for_user(request.user)
+
+    else:
+        data = get_qar5_for_user(request.user, data_id)
+        if not data:
+            return
+        # TODO: Build the excel sheet to be exported
