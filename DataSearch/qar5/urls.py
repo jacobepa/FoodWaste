@@ -16,7 +16,7 @@ from django.conf.urls import url
 from qar5.views import QappCreate, QappDetail, ProjectApprovalCreate, \
     ProjectLeadCreate, ProjectApprovalSignatureCreate, SectionAView, \
     SectionBView, SectionCView, SectionDView, SectionEView, SectionFView, \
-    RevisionCreate, QappList
+    RevisionCreate, QappList, QappEdit
 
 urlpatterns = [
     # URLs for CRUD operations.
@@ -32,6 +32,10 @@ urlpatterns = [
     url(r'^detail/(?P<pk>\d+)/?$',
         QappDetail.as_view(),
         name='qapp_detail'),
+
+    url(r'^edit/(?P<pk>\d+)/?$',
+        QappEdit.as_view(),
+        name='qapp_edit'),
     
     ############################################
     # Project Approval (and signatures) URLs

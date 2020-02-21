@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect, JsonResponse, HttpRequest
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, ListView, \
-    TemplateView
+    TemplateView, UpdateView
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
 from DataSearch.settings import DATETIME_FORMAT
@@ -39,32 +39,32 @@ class QappList(LoginRequiredMixin, ListView):
         else:
             return Qapp.objects.filter(prepared_by=user)
     
-    #def get_context_data(self, **kwargs):
-    #    """
-    #    Custom method override to send data to the template. Specifically,
-    #    we want to send only data that belongs (prepared_by) the user.
-    #    """
-    #    context = super().get_context_data(**kwargs)
-    #    user = self.request.user
-    #    if user.is_superuser:
-    #        context['']
-    #    #if p_type == 'user':
-    #    #    context['p_user'] = User.objects.get(id=p_id)
-    #    #elif p_type == 'team':
-    #    #    context['team'] = Team.objects.get(id=p_id)
-    #    return context
+
+class QappEdit(LoginRequiredMixin, UpdateView):
+    """View for editing the details of an existing Qapp instance."""
+
+    model = Qapp
+    form_class = QappForm
+    template_name = 'qapp_edit.html'
+
+    def form_valid(self, form):
+        """Qapp Edit Form validation and redirect."""
+        self.object = form.save(commit=False)
+        self.object.save()
+        return HttpResponseRedirect('/qar5/detail/' + str(self.object.id))
+
 
 class QappCreate(LoginRequiredMixin, CreateView):
     """Class for creating new QAPPs (Quality Assurance Project Plans)."""
 
     model = Qapp
-    template_name = 'SectionA/qapp_create.html'
+    template_name = 'qapp_create.html'
     
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
         return render(
-            request, 'SectionA/qapp_create.html',
+            request, 'qapp_create.html',
             {'form': QappForm(),
             'project_lead_class': QappLeadForm})
 
@@ -79,14 +79,14 @@ class QappCreate(LoginRequiredMixin, CreateView):
             obj.save()
             return HttpResponseRedirect('/qar5/approval/create?qapp_id=%d' % obj.id)
 
-        return render(request, 'SectionA/qapp_create.html', {'form': form})
+        return render(request, 'qapp_create.html', {'form': form})
 
 
 class QappDetail(LoginRequiredMixin, DetailView):
     """Class for viewing an existing (newly created) QAPP."""
 
     model = Qapp
-    template_name = 'SectionA/qapp_detail.html'
+    template_name = 'qapp_detail.html'
 
     def get_context_data(self, **kwargs):
         """Add method docstring."""  # TODO add docstring.
@@ -138,7 +138,7 @@ class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
     Approval signatures will be added after the title and number.
     """
 
-    template_name = 'SectionA/qapp_approval_create.html'
+    template_name = 'qapp_approval_create.html'
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
