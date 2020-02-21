@@ -18,9 +18,9 @@ from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
 from DataSearch.settings import DATETIME_FORMAT
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm, \
-    RevisionForm
+    RevisionForm, ReferencesForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
-    SectionA, SectionB, SectionBType, SectionC, SectionD, Revision
+    SectionA, SectionB, SectionBType, SectionC, SectionD, Revision, References
 
 class QappList(LoginRequiredMixin, ListView):
     """Class for listing this user's (or all if admin) QAR5 objects."""
@@ -359,15 +359,47 @@ class SectionDView(LoginRequiredMixin, TemplateView):
 
 class SectionEView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section E information."""
+    template_name = 'SectionE/index.html'
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section E."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
-        return render(request, 'SectionE/index.html',
+        qapp = Qapp.objects.get(id=qapp_id)
+        existing_references = References.objects.filter(qapp=qapp).first()
+
+        # Update if existing, otherwise insert new:
+        if existing_references:
+            form = ReferencesForm(instance=existing_references)
+        else:
+            form = ReferencesForm({'qapp': qapp})
+
+        return render(request, self.template_name,
                       {'title': 'QAR5 Section E', 'qapp_id': qapp_id,
-                       'SECTION_E_INFO': SECTION_E_INFO})
+                       'SECTION_E_INFO': SECTION_E_INFO, 'form': form})
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a SectionE form filled out."""
+        ctx = {'qapp_id': request.GET.get('qapp_id', None),
+               'SECTION_E_INFO': SECTION_E_INFO, 'title': 'QAR5 Section E'}
+
+        qapp = Qapp.objects.get(id=ctx['qapp_id'])
+        existing_references = References.objects.filter(qapp=qapp).first()
+
+        # Update if existing, otherwise insert new:
+        if existing_references:
+            ctx['form'] = ReferencesForm(instance=existing_references,
+                                         data=request.POST)
+        else:
+            ctx['form'] = ReferencesForm(request.POST)
+
+        if ctx['form'].is_valid():
+            ctx['obj'] = ctx['form'].save(commit=True)
+            ctx['save_success'] = 'Successfully Saved Changes!'
+
+        return render(request, self.template_name, ctx)
 
 
 class SectionFView(LoginRequiredMixin, TemplateView):

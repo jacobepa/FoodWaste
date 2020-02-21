@@ -18,7 +18,7 @@ from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
 from constants.qar5 import SECTION_A_INFO
 from qar5.models import Division, Qapp, QappApproval, QappLead, \
     QappApprovalSignature, SectionA, SectionB, SectionD, Revision, \
-    SectionBType
+    SectionBType, References
 
 
 class QappForm(ModelForm):
@@ -328,6 +328,25 @@ class SectionDForm(ModelForm):
 
         model = SectionD
         fields = ('qapp', 'd1', 'd2', 'd3')
+
+
+class ReferencesForm(ModelForm):
+    """Form for creating and adding References (Section E) to QAPP."""
+
+    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+                               required=True, label=_("Parent QAPP"),
+                               widget=Textarea(
+                                   attrs={'class': 'form-control mb-2',
+                                          'readonly': 'readonly'}))
+    references = CharField(
+        label=_("References"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+
+    class Meta:
+        """Meta data for SectionBForm Form."""
+
+        model = References
+        fields = ('qapp', 'references')
 
 
 class RevisionForm(ModelForm):

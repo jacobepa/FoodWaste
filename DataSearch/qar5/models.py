@@ -189,9 +189,19 @@ class SectionD(models.Model):
     d2 = models.CharField(blank=False, null=False, max_length=2047)
     d3 = models.CharField(blank=False, null=False, max_length=2047)
 
+
 # NOTE: All references are stored and retrievable from
 #       EXISTING DATA TRACKING SECTION THIS TOOL
-# class References(models.Model):
+class References(models.Model):
+    """
+    Class used to store references for the related QAPP.
+    """
+     
+    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
+                                primary_key=True)
+    references = models.TextField(blank=True, null=True)
+
+
 
 class Revision(models.Model):
     """
