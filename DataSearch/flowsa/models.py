@@ -7,9 +7,12 @@
 
 """Definition of models."""
 
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 from django.db import models
-from constants.utils import get_flowsa_storage_path
+from constants.utils import get_flowsa_storage_path, upload_storage
 from teams.models import User
+
 
 class Upload(models.Model):
     """
@@ -19,7 +22,8 @@ class Upload(models.Model):
     """
     name = models.CharField(max_length=255, blank=True)
     file = models.FileField(null=True, blank=True,
-                            upload_to=get_flowsa_storage_path)
+                            upload_to=get_flowsa_storage_path,
+                            storage=upload_storage)
     uploaded_by = models.ForeignKey(User, blank=False,
                                     related_name='flowsa_uploaded_by',
                                     on_delete=models.CASCADE)

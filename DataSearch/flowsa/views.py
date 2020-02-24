@@ -6,7 +6,6 @@
 
 
 """Definition of views."""
-
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,6 +13,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
+from os import path
 from flowsa.forms import UploadForm
 from flowsa.models import Upload
 
@@ -45,9 +45,11 @@ class FlowsaIndex(LoginRequiredMixin, TemplateView):
         if form.is_valid():
             file = form.save(commit=False)
             file.uploaded_by = request.user
+            file.name = file.file.name
             file.save()
-            data = {'is_valid': True, 'name': file.file.name, 
-                    'url': file.file.url}
+            data = {'is_valid': True, 'name': file.name,
+                    'download_url': '/flowsa/download_file/%s' % file.id,
+                    'delete_url': '/flowsa/delete_file/%s' % file.id}
         else:
             data = {'is_valid': False}
 

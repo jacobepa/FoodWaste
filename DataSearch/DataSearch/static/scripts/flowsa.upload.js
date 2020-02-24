@@ -20,7 +20,10 @@ $(function () {
             done: function (e, data) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
                 if (data.result.is_valid) {
                     $("#gallery tbody").prepend(
-                        "<tr><td><a href='" + data.result.url + "'>" + data.result.name + "</a></td></tr>"
+                        "<tr><td><a href='" + data.result.download_url + "'>" + data.result.name + "</a></td>" +
+                        "<td><a href='" + data.result.delete_url +
+                        "' onclick='return confirm(\"Are you sure? This will delete the file from the server.\")'>" +
+                        "Delete File</a></td></tr>"
                     )
                 }
             }

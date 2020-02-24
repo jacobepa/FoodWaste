@@ -17,9 +17,13 @@ Available functions:
 - xstr
 """
 
-from operator import itemgetter
-from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.core.mail import EmailMultiAlternatives
+from operator import itemgetter
+
+upload_storage = FileSystemStorage(location=settings.UPLOAD_ROOT,
+                                   base_url='/uploads')
 
 
 def get_attachment_storage_path(instance, filename):
@@ -30,12 +34,14 @@ def get_attachment_storage_path(instance, filename):
 
 def get_flowsa_storage_path(instance, filename):
     """Build the FLOWSA upload storage path using username and filename."""
-    return 'uploads/%s/flowsa/%s' % (instance.uploaded_by.username, filename)
+    return '%s/flowsa/%s' % (
+        instance.uploaded_by.username, filename)
 
 
 def get_scifinder_storage_path(instance, filename):
-    """Build the FLOWSA upload storage path using username and filename."""
-    return 'uploads/%s/scifinder/%s' % (instance.uploaded_by.username, filename)
+    """Build the scifinder upload storage path using username and filename."""
+    return '%s/scifinder/%s' % (
+        instance.uploaded_by.username, filename)
 
 
 # Email Utility functions.

@@ -7,7 +7,7 @@
     <div class="row">
         <h2>SciFinder</h2>
         <h2>CESER | Center for Environmental Solutions & Emergency Response.</h2>
-        <h4><a href="">Search using SciFinder and upload your results below</a></h4>
+        <h4><a href="https://scifinder-n.cas.org/">Search using SciFinder and upload your results below</a></h4>
     </div>
 
     <div class="row">
@@ -30,15 +30,19 @@
         <table id="gallery" class="table table-bordered">
             <thead>
                 <tr>
-                    <th colspan="3">Files</th>
+                    <th colspan="2">Uploaded Files (download using links)</th>
                 </tr>
             </thead>
             <tbody>
                 {% for file in files %}
                 <tr>
-                    <td><a href="/scifinder/download_file/{{ file.file.id }}">{{ file.file.name }}</a></td>
-                    <td><a href="#">Delete File</a></td>
-                    <td><a href="#">Download File</a></td>
+                    <td><a href="/scifinder/download_file/{{ file.id }}">{{ file.name }}</a></td>
+                    <td>
+                        <a href="/scifinder/delete_file/{{ file.id }}"
+                           onclick="return confirm('Are you sure? This will delete the file from the server.')">
+                            Delete File
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

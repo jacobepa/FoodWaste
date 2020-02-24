@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
+from os import path
 from scifinder.forms import UploadForm
 from scifinder.models import Upload
 
@@ -45,9 +46,11 @@ class ScifinderIndex(LoginRequiredMixin, TemplateView):
         if form.is_valid():
             file = form.save(commit=False)
             file.uploaded_by = request.user
+            file.name = file.file.name
             file.save()
-            data = {'is_valid': True, 'name': file.file.name, 
-                    'url': file.file.url}
+            data = {'is_valid': True, 'name': file.name,
+                    'download_url': '/scifinder/download_file/%s' % file.id,
+                    'delete_url': '/scifinder/delete_file/%s' % file.id}
         else:
             data = {'is_valid': False}
 
