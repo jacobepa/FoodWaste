@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'accounts',
     'constants',
     'DataSearch',
+    'flowsa',
     'qar5',
     'support',
     'teams',

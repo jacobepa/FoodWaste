@@ -27,6 +27,11 @@ def get_attachment_storage_path(instance, filename):
     return 'uploads/%s/attachments/%s' % (instance.uploaded_by.username, filename)
 
 
+def get_flowsa_storage_path(instance, filename):
+    """Build the FLOWSA upload storage path using username and filename."""
+    return 'uploads/%s/flowsa/%s' % (instance.uploaded_by.username, filename)
+
+
 # Email Utility functions.
 def split_email_list(email_list):
     """Replace all defined delimiter characters with spaces."""
