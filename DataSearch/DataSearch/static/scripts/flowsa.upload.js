@@ -1,13 +1,13 @@
 // https://simpleisbetterthancomplex.com/tutorial/2016/11/22/django-multiple-file-upload-using-ajax.html
 function loadedScripts() {
-    sessionStorage.setItem('flowsa-upload-loaded', true);
+    sessionStorage.setItem('file-upload-loaded', true);
     setTimeout(function () {
-        sessionStorage.removeItem('flowsa-upload-loaded', undefined)
-    }, 1000);
+        sessionStorage.removeItem('file-upload-loaded', undefined)
+    }, 200);
 }
 
 $(function () {
-    if (!sessionStorage.getItem('flowsa-upload-loaded')) {
+    if (!sessionStorage.getItem('file-upload-loaded')) {
         loadedScripts();
         /* 1. OPEN THE FILE EXPLORER WINDOW */
         $(".js-upload-files").click(function () {

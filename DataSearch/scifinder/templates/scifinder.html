@@ -5,14 +5,9 @@
 
 <div class="container">
     <div class="row">
-        <h2>FLOWSA</h2>
+        <h2>SciFinder</h2>
         <h2>CESER | Center for Environmental Solutions & Emergency Response.</h2>
-        <h4>Data Files</h4>
-        <p>
-            Stores and returns water datasets in FlowByActivity and FlowBySector
-            format. The water dataset should be based on at least two original
-            sources + crosswalks.
-        </p>
+        <h4><a href="">Search using SciFinder and upload your results below</a></h4>
     </div>
 
     <div class="row">
@@ -28,7 +23,7 @@
         {# 2. FILE INPUT TO BE USED BY THE PLUG-IN #}
         <input id="fileupload" type="file" name="file" multiple
                style="display: none;"
-               data-url="{% url 'flowsa:flowsa_index' %}"
+               data-url="{% url 'scifinder:scifinder_index' %}"
                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
 
         {# 3. TABLE TO DISPLAY THE UPLOADED FILES #}
@@ -41,7 +36,7 @@
             <tbody>
                 {% for file in files %}
                 <tr>
-                    <td><a href="/flowsa/download_file/{{ file.file.id }}">{{ file.file.name }}</a></td>
+                    <td><a href="/scifinder/download_file/{{ file.file.id }}">{{ file.file.name }}</a></td>
                     <td><a href="#">Delete File</a></td>
                     <td><a href="#">Download File</a></td>
                 </tr>

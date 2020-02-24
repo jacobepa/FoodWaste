@@ -24,12 +24,18 @@ from django.conf import settings
 
 def get_attachment_storage_path(instance, filename):
     """Build the attachment storage path using username and filename."""
-    return 'uploads/%s/attachments/%s' % (instance.uploaded_by.username, filename)
+    return 'uploads/%s/attachments/%s' % (
+        instance.uploaded_by.username, filename)
 
 
 def get_flowsa_storage_path(instance, filename):
     """Build the FLOWSA upload storage path using username and filename."""
     return 'uploads/%s/flowsa/%s' % (instance.uploaded_by.username, filename)
+
+
+def get_scifinder_storage_path(instance, filename):
+    """Build the FLOWSA upload storage path using username and filename."""
+    return 'uploads/%s/scifinder/%s' % (instance.uploaded_by.username, filename)
 
 
 # Email Utility functions.

@@ -1,4 +1,4 @@
-# models.py (flowsa)
+# models.py (scifinder)
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
@@ -8,20 +8,20 @@
 """Definition of models."""
 
 from django.db import models
-from constants.utils import get_flowsa_storage_path
+from constants.utils import get_scifinder_storage_path
 from teams.models import User
 
 class Upload(models.Model):
     """
-    Class representing a FLOWSA file Upload.
+    Class representing a scifinder file Upload.
     These files are stored in the MEDIA directory, but references
     to the location and other metadata are stored in the database.
     """
     name = models.CharField(max_length=255, blank=True)
     file = models.FileField(null=True, blank=True,
-                            upload_to=get_flowsa_storage_path)
+                            upload_to=get_scifinder_storage_path)
     uploaded_by = models.ForeignKey(User, blank=False,
-                                    related_name='flowsa_uploaded_by',
+                                    related_name='scifinder_uploaded_by',
                                     on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 

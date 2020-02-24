@@ -23,7 +23,6 @@ urlpatterns = [
     url(r'^dashboard/?$', home, name='dashboard'),
     url(r'^contact/?$', contact, name='contact'),
     url(r'^about/?$', about, name='about'),
-    url(r'^scifinder/?$', about, name='scifinder'),
 
     # Begin existingdata URLs.
     # URLs for PDF and Excel exports.
@@ -67,6 +66,7 @@ urlpatterns = [
     # Begin other module import URLs.
     url(r'^accounts/', include('accounts.urls')),
     url(r'^flowsa/', include('flowsa.urls', namespace='flowsa')),
+    url(r'^scifinder/', include('scifinder.urls', namespace='scifinder')),
     url(r'^qar5/', include('qar5.urls')),
     url(r'^support/', include('support.urls')),
     url(r'^teams/', include('teams.urls')),
