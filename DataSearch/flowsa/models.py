@@ -7,9 +7,12 @@
 
 """Definition of models."""
 
+
+import os
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.db import models
+from django.dispatch import receiver
 from constants.utils import get_flowsa_storage_path, upload_storage
 from teams.models import User
 
@@ -32,3 +35,15 @@ class Upload(models.Model):
     def __str__(self):
         """Override str method to display name instead of stringified obj."""
         return self.name
+
+
+# auto-delete files from filesystem when they are unneeded:
+@receiver(models.signals.post_delete, sender=Upload)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `MediaFile` object is deleted.
+    """
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)

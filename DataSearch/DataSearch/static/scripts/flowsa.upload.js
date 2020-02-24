@@ -21,9 +21,7 @@ $(function () {
                 if (data.result.is_valid) {
                     $("#gallery tbody").prepend(
                         "<tr><td><a href='" + data.result.download_url + "'>" + data.result.name + "</a></td>" +
-                        "<td><a href='" + data.result.delete_url +
-                        "' onclick='return confirm(\"Are you sure? This will delete the file from the server.\")'>" +
-                        "Delete File</a></td></tr>"
+                        "<td><a href='" + data.result.delete_url + "'>Delete File</a></td></tr>"
                     )
                 }
             }

@@ -11,8 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DeleteView
 from os import path
 from flowsa.forms import UploadForm
 from flowsa.models import Upload
@@ -54,3 +55,15 @@ class FlowsaIndex(LoginRequiredMixin, TemplateView):
             data = {'is_valid': False}
 
         return JsonResponse(data)
+
+
+class FlowsaDelete(LoginRequiredMixin, DeleteView):
+    """Class for deleting previously uploaded files."""
+    
+    model = Upload
+    template_name = 'flowsa_upload_confirm_delete.html'
+    success_url = reverse_lazy('flowsa:flowsa_index')
+
+
+def flowsa_download(request):
+    """Method for downloading a previously uploaded file."""
