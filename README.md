@@ -15,13 +15,13 @@ This work is related to additional food waste research under SHC RA7, including 
 US EPA
 Office of Research and Development
 CESER | Center for Environmental Solutions & Emergency Response
-https://intranet.ord.epa.gov/ceser
+<https://intranet.ord.epa.gov/ceser>
 
 LRTD | Land Remediation & Technology Division
-https://intranet.ord.epa.gov/ceser/land-remediation-technology-division
+<https://intranet.ord.epa.gov/ceser/land-remediation-technology-division>
 
 EDAB | Environmental Decision Analytics Branch
-https://intranet.ord.epa.gov/ceser/environmental-decision-analytics-branch
+<https://intranet.ord.epa.gov/ceser/environmental-decision-analytics-branch>
 
 26 W. Martin Luther King Dr. (ML-CHL)
 Cincinnati, OH 45268-3001
