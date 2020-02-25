@@ -62,16 +62,16 @@ urlpatterns = [
     url(r'^approval_signature/create/?$',
         ProjectApprovalSignatureCreate.as_view(),
         name='get_approval_signature_form'),
-    
-    #url(r'^approval_signature/delete/(?P<pk>\d+)/?$',
-    #    get_approval_signature_form.as_view(),
-    #    name='get_approval_signature_form'),
-    
-    #url(r'^approval_signature/detail/(?P<pk>\d+)/?$',
+
+    # url(r'^approval_signature/delete/(?P<pk>\d+)/?$',
     #    get_approval_signature_form.as_view(),
     #    name='get_approval_signature_form'),
 
-    #url(r'^approval_signature/edit/(?P<pk>\d+)/?$',
+    # url(r'^approval_signature/detail/(?P<pk>\d+)/?$',
+    #    get_approval_signature_form.as_view(),
+    #    name='get_approval_signature_form'),
+
+    # url(r'^approval_signature/edit/(?P<pk>\d+)/?$',
     #    get_approval_signature_form.as_view(),
     #    name='get_approval_signature_form'),
 
@@ -80,16 +80,16 @@ urlpatterns = [
     url(r'^project_lead/create/?$',
         ProjectLeadCreate.as_view(),
         name='get_project_lead_form'),
-    
-    #url(r'^project_lead/delete/(?P<pk>\d+)/?$',
-    #    ProjectLeadCreate.as_view(),
-    #    name='get_project_lead_form'),
-    
-    #url(r'^project_lead/detail/(?P<pk>\d+)/?$',
+
+    # url(r'^project_lead/delete/(?P<pk>\d+)/?$',
     #    ProjectLeadCreate.as_view(),
     #    name='get_project_lead_form'),
 
-    #url(r'^project_lead/edit/(?P<pk>\d+)/?$',
+    # url(r'^project_lead/detail/(?P<pk>\d+)/?$',
+    #    ProjectLeadCreate.as_view(),
+    #    name='get_project_lead_form'),
+
+    # url(r'^project_lead/edit/(?P<pk>\d+)/?$',
     #    ProjectLeadCreate.as_view(),
     #    name='get_project_lead_form'),
 
@@ -101,7 +101,7 @@ urlpatterns = [
     url(r'^SectionD/?$', SectionDView.as_view(), name='qapp_sectiond'),
     url(r'^SectionE/?$', SectionEView.as_view(), name='qapp_sectione'),
     url(r'^SectionF/?$', SectionFView.as_view(), name='qapp_sectionf'),
-    
+
     # Revision is part of Section F
     url(r'^revision/create/?$',
         RevisionCreate.as_view(),

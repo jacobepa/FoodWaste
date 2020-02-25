@@ -15,7 +15,7 @@ from constants.utils import get_attachment_storage_path
 
 class Division(models.Model):
     """Class representing EPA Divisions available to the QAPP."""
-    
+
     name = models.CharField(blank=False, null=False, max_length=255)
 
     def __str__(self):
@@ -25,11 +25,11 @@ class Division(models.Model):
 
 class SectionBType(models.Model):
     """Class representing Section B Types."""
-    
+
     name = models.CharField(blank=False, null=False, max_length=255)
 
     def __str__(self):
-        """Override str method to display name instead of stringified obj"""
+        """Override str method to display name instead of stringified obj."""
         return self.name
 
 
@@ -58,8 +58,9 @@ class Qapp(models.Model):
 
     def save_model(self, request, obj, form, change):
         """
-        Overwrite the default save_model method so we can automatically
-        set the prepared_by field as current user.
+        Overwrite the default save_model method.
+        
+        So we can automatically set the prepared_by field as current user.
         """
         # Only set prepared_by when it's the first save (create)
         user = request.user
@@ -67,7 +68,7 @@ class Qapp(models.Model):
             obj.prepared_by = request.user
         return super().save_model(request, obj, form, change)
 
-    #def save(user):
+    # def save(user):
     #    """
     #    Overwrite the default save_model method so we can automatically
     #    set the prepared_by field as current user.
@@ -153,8 +154,8 @@ class SectionB(models.Model):
     # B1 Secondary Data will be a dropdown with options from the following: ?
     # analytical methods, animal subjects, cell culture models, existing data,
     # measurements, model application, model development, software development
-    #b1_secondary_data = 
-    #b1_1 = 
+    # b1_secondary_data =
+    # b1_1 =
 
     b1_2 = models.CharField(blank=False, null=False, max_length=2047)
     b1_3 = models.CharField(blank=False, null=False, max_length=2047)
@@ -193,14 +194,11 @@ class SectionD(models.Model):
 # NOTE: All references are stored and retrievable from
 #       EXISTING DATA TRACKING SECTION THIS TOOL
 class References(models.Model):
-    """
-    Class used to store references for the related QAPP.
-    """
-     
+    """Class used to store references for the related QAPP."""
+
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
     references = models.TextField(blank=True, null=True)
-
 
 
 class Revision(models.Model):

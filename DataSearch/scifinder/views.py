@@ -23,10 +23,11 @@ from scifinder.models import Upload
 
 class ScifinderIndex(LoginRequiredMixin, TemplateView):
     """
-    Class to return the main scifinder page along with a list of all
-    scifinder uploaded files available to this user as well as a form for
-    uploading new scifinder files. This class also handles the POSTs
-    for new file uploads.
+    Class to return the main scifinder page.
+
+    Along with a list of all scifinder uploaded files available to this user as
+    well as a form for uploading new scifinder files. This class also handles
+    the POSTs for new file uploads.
     """
 
     template_name = 'scifinder.html'
@@ -34,8 +35,10 @@ class ScifinderIndex(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """
-        Return a view with an empty form for uploading new scifinder files
-        in addition to a list of scifinder files available to the current user.
+        Return a view with an empty form.
+
+        For uploading new scifinder files in addition to a list of scifinder
+        files available to the current user.
         """
         files_list = Upload.objects.filter(uploaded_by=request.user)
         return render(request, self.template_name,
@@ -61,7 +64,7 @@ class ScifinderIndex(LoginRequiredMixin, TemplateView):
 
 class ScifinderDelete(LoginRequiredMixin, DeleteView):
     """Class for deleting previously uploaded files."""
-    
+
     model = Upload
     template_name = 'scifinder_upload_confirm_delete.html'
     success_url = reverse_lazy('scifinder:scifinder_index')

@@ -219,7 +219,7 @@ class SectionAForm(ModelForm):
     sectionb_type = ModelChoiceField(
         label=_("Section B Type:"), queryset=SectionBType.objects.all(),
         widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
-    
+
     class Meta:
         """Meta data for SectionAForm Form."""
 
