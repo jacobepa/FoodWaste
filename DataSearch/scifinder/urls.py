@@ -14,9 +14,12 @@ app_name = 'scifinder'
 
 urlpatterns = [
     url(r'^$', ScifinderIndex.as_view(), name='scifinder_index'),
-    #url(r'^download_file/(?P<pk>\d+)/?$',
-    #    scifinder_download,
-    #    name='scifinder_download'),
+    url(r'^download_file/(?P<pk>\d+)/?$',
+        scifinder_download,
+        name='scifinder_download'),
+    url(r'^download_files/?$',
+        scifinder_download,
+        name='scifinder_downloads'),
     url(r'^delete_file/(?P<pk>\d+)/?$',
         ScifinderDelete.as_view(),
         name='scifinder_delete'),

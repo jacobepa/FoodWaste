@@ -30,13 +30,16 @@
         <table id="gallery" class="table table-bordered">
             <thead>
                 <tr>
-                    <th colspan="2">Uploaded Files (download using links)</th>
+                    <th colspan="2">
+                        Uploaded Files
+                        (<a href="/scifinder/download_files/">Download All</a>)
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 {% for file in files %}
                 <tr>
-                    <td><a href="/scifinder/download_file/{{ file.id }}">{{ file.name }}</a></td>
+                    <td><a href="/scifinder/download_file/{{ file.id }}"><span class="fa fa-download"></span> {{ file.name }}</a></td>
                     <td>
                         <a href="/scifinder/delete_file/{{ file.id }}">
                             Delete File

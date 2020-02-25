@@ -20,7 +20,8 @@ $(function () {
             done: function (e, data) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
                 if (data.result.is_valid) {
                     $("#gallery tbody").prepend(
-                        "<tr><td><a href='" + data.result.download_url + "'>" + data.result.name + "</a></td>" +
+                        "<tr><td><a href='" + data.result.download_url + "'><span class='fa fa-download'></span>" +
+                        data.result.name + "</a></td>" +
                         "<td><a href='" + data.result.delete_url + "'>Delete File</a></td></tr>"
                     )
                 }

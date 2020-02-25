@@ -7,6 +7,7 @@
 
 """Definition of views."""
 
+from os import path
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,7 +16,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, DeleteView
-from os import path
+from constants.utils import download_file, download_files
 from scifinder.forms import UploadForm
 from scifinder.models import Upload
 
@@ -66,5 +67,21 @@ class ScifinderDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('scifinder:scifinder_index')
 
 
-def scifinder_download(request):
+def scifinder_download(request, *args, **kwargs):
     """Method for downloading a previously uploaded file."""
+
+    upload_id = kwargs.get('pk', None)
+    if upload_id is None:
+        # Export all uploads for this user:
+        file_list = Upload.objects.filter(uploaded_by=request.user)
+        zip_name = '%s_scifinder_uploads' % request.user.username
+        return download_files(file_list, zip_name)
+
+    else:
+        # Export the upload specified, if it belongs to the user:
+        file = Upload.objects.get(id=upload_id)
+        
+        if file.uploaded_by == request.user:
+            return download_file(file)
+
+    return HttpResponse()

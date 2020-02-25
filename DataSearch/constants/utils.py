@@ -17,9 +17,13 @@ Available functions:
 - xstr
 """
 
+from io import BytesIO
+from os import path
+from zipfile import ZipFile, ZIP_DEFLATED
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponse
 from operator import itemgetter
 
 upload_storage = FileSystemStorage(location=settings.UPLOAD_ROOT,
@@ -155,3 +159,44 @@ def is_float(val_str):
     except ValueError:
         return False
     return True
+
+
+def download_files(file_list, zip_name):
+    """Shared method to zip multiple files and return them to the browser"""
+    # Create a zip archive to return multiple files: PDF, n attachments.
+    zip_mem = BytesIO()
+    archive = ZipFile(zip_mem, 'w')
+    for f in file_list:
+        try:
+            file = f.file.file
+            temp_path = path.basename(file.name)
+            archive.write(file.name, temp_path)
+        except FileNotFoundError:
+            print('File not found!')
+
+    archive.close()
+    response = HttpResponse(zip_mem.getvalue(),
+                            content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename=' + \
+        '"%s.zip"' % zip_name
+    response['Content-length'] = zip_mem.tell()
+    return response
+
+
+def download_file(file):
+    """Download a single file (Upload object)"""
+    # Check file extensions, some (Excel) require special content types
+    name_split = file.file.name.split('.')
+    ext = name_split[len(name_split) - 1]
+
+    with open(file.file.file.name) as f:
+        if 'xls' in ext:
+            con_type = 'application/vnd.vnd.openxmlformats-' + \
+                'officedocument.spreadsheetml.sheet'
+            response = HttpResponse(f, con_type)
+        else:
+            response = HttpResponse(f)
+
+        con_disp = 'attachment; filename="' + file.name + '"'
+        response['Content-Disposition'] = con_disp
+        return response

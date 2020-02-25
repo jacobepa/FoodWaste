@@ -7,14 +7,17 @@
 
 """Definition of views."""
 from datetime import datetime
+from io import BytesIO
+from os import path
+from zipfile import ZipFile, ZIP_DEFLATED
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, DeleteView
-from os import path
+from constants.utils import download_file, download_files
 from flowsa.forms import UploadForm
 from flowsa.models import Upload
 
@@ -65,5 +68,21 @@ class FlowsaDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('flowsa:flowsa_index')
 
 
-def flowsa_download(request):
+def flowsa_download(request, *args, **kwargs):
     """Method for downloading a previously uploaded file."""
+
+    upload_id = kwargs.get('pk', None)
+    if upload_id is None:
+        # Export all uploads for this user:
+        file_list = Upload.objects.filter(uploaded_by=request.user)
+        zip_name = '%s_flowsa_uploads' % request.user.username
+        return download_files(file_list, zip_name)
+
+    else:
+        # Export the upload specified, if it belongs to the user:
+        file = Upload.objects.get(id=upload_id)
+        
+        if file.uploaded_by == request.user:
+            return download_file(file)
+
+    return HttpResponse()
