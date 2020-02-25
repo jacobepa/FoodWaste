@@ -76,7 +76,7 @@ class ExistingDataIndex(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """
         Custom method override to send data to the template.
-        
+
         - Specifically, want to send a list of users and teams to select from.
         """
         context = super().get_context_data(**kwargs)
@@ -95,7 +95,7 @@ class ExistingDataList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         """
         Custom method override to send data to the template.
-        
+
         - Specifically, want to send the user or team information for this list of data.
         """
         context = super().get_context_data(**kwargs)
@@ -129,7 +129,7 @@ class ExistingDataDetail(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         """
         Custom method override to send data to the template.
-        
+
         - Specifically, want to send the user or team information for this list of data.
         """
         context = super().get_context_data(**kwargs)

@@ -27,20 +27,24 @@ from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
     SectionA, SectionB, SectionBType, SectionC, SectionD, Revision, References
 
+
 class QappList(LoginRequiredMixin, ListView):
     """Class for listing this user's (or all if admin) QAR5 objects."""
+
     model = Qapp
     template_name = 'qapp_list.html'
     context_object_name = 'qapp_list'
 
     def get_queryset(self):
         """
-        Custom method override to send data to the template. Specifically,
-        we want to send only data that belongs (prepared_by) the user.
+        Custom method override to send data to the template.
+
+        Specifically, we want to send only data that belongs (prepared_by)
+        the user.
         """
         user = self.request.user
         return get_all_qar5_for_user(user)
-    
+
 
 class QappEdit(LoginRequiredMixin, UpdateView):
     """View for editing the details of an existing Qapp instance."""
@@ -95,7 +99,7 @@ class QappDetail(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['project_leads_list'] = QappLead.objects.filter(
             qapp=context['object'])
-        context['project_approval'] =  QappApproval.objects.get(
+        context['project_approval'] = QappApproval.objects.get(
             qapp=context['object'])
         context['project_approval_signatures'] = \
             QappApprovalSignature.objects.filter(
@@ -118,7 +122,6 @@ class ProjectLeadCreate(LoginRequiredMixin, CreateView):
         form = QappLeadForm({'qapp': qapp})
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
-
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -181,7 +184,6 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
 
-
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a new Project Lead form filled out."""
@@ -196,7 +198,6 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
                 '/qar5/detail/%s' % qapp_id)
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
-
 
 
 class SectionAView(LoginRequiredMixin, TemplateView):
@@ -361,6 +362,7 @@ class SectionDView(LoginRequiredMixin, TemplateView):
 
 class SectionEView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section E information."""
+
     template_name = 'SectionE/index.html'
 
     @method_decorator(login_required)
@@ -439,9 +441,9 @@ class RevisionCreate(LoginRequiredMixin, CreateView):
         """Process the post request with a new Project Lead form filled out."""
         form = RevisionForm(request.POST)
         qapp_id = form.data.get('qapp', '')
-        #datetime_str = form.data['effective_date']
-        #datetime_obj = datetime.strptime(datetime_str, DATETIME_FORMAT)
-        #form.data['effective_date'] = datetime_obj
+        # datetime_str = form.data['effective_date']
+        # datetime_obj = datetime.strptime(datetime_str, DATETIME_FORMAT)
+        # form.data['effective_date'] = datetime_obj
         if form.is_valid():
             obj = form.save(commit=True)
             return HttpResponseRedirect('/qar5/SectionF?qapp_id=%s' % qapp_id)

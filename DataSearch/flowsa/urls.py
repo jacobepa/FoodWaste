@@ -14,7 +14,7 @@ app_name = 'flowsa'
 
 urlpatterns = [
     url(r'^$', FlowsaIndex.as_view(), name='flowsa_index'),
-    #url(r'^download_file/(?P<pk>\d+)/?$',
+    # url(r'^download_file/(?P<pk>\d+)/?$',
     #    flowsa_download,
     #    name='flowsa_download'),
     url(r'^delete_file/(?P<pk>\d+)/?$',

@@ -20,9 +20,11 @@ from teams.models import User
 class Upload(models.Model):
     """
     Class representing a FLOWSA file Upload.
+
     These files are stored in the MEDIA directory, but references
     to the location and other metadata are stored in the database.
     """
+
     name = models.CharField(max_length=255, blank=True)
     file = models.FileField(null=True, blank=True,
                             upload_to=get_flowsa_storage_path,
@@ -41,7 +43,8 @@ class Upload(models.Model):
 @receiver(models.signals.post_delete, sender=Upload)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
     """
-    Deletes file from filesystem
+    Deletes file from filesystem.
+
     when corresponding `MediaFile` object is deleted.
     """
     if instance.file:

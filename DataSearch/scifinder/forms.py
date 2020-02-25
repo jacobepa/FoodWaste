@@ -11,6 +11,10 @@ from scifinder.models import Upload
 
 
 class UploadForm(ModelForm):
+    """Add docstring."""  # TODO add docstring.
+
     class Meta:
+        """Add docstring."""  # TODO add docstring.
+
         model = Upload
         fields = ('file', )

@@ -21,10 +21,11 @@ from flowsa.models import Upload
 
 class FlowsaIndex(LoginRequiredMixin, TemplateView):
     """
-    Class to return the main FLOWSA page along with a list of all
-    FLOWSA uploaded files available to this user as well as a form for
-    uploading new FLOWSA files. This class also handles the POSTs
-    for new file uploads.
+    Class to return the main FLOWSA page.
+
+    Along with a list of all FLOWSA uploaded files available to this user as
+    well as a form for uploading new FLOWSA files. This class also handles the
+    POSTs for new file uploads.
     """
 
     template_name = 'flowsa.html'
@@ -32,8 +33,10 @@ class FlowsaIndex(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """
-        Return a view with an empty form for uploading new FLOWSA files
-        in addition to a list of FLOWSA files available to the current user.
+        Return a view with an empty form.
+
+        For uploading new FLOWSA files in addition to a list of FLOWSA files
+        available to the current user.
         """
         files_list = Upload.objects.filter(uploaded_by=request.user)
         return render(request, self.template_name,
@@ -59,7 +62,7 @@ class FlowsaIndex(LoginRequiredMixin, TemplateView):
 
 class FlowsaDelete(LoginRequiredMixin, DeleteView):
     """Class for deleting previously uploaded files."""
-    
+
     model = Upload
     template_name = 'flowsa_upload_confirm_delete.html'
     success_url = reverse_lazy('flowsa:flowsa_index')

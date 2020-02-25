@@ -14,7 +14,7 @@ app_name = 'scifinder'
 
 urlpatterns = [
     url(r'^$', ScifinderIndex.as_view(), name='scifinder_index'),
-    #url(r'^download_file/(?P<pk>\d+)/?$',
+    # url(r'^download_file/(?P<pk>\d+)/?$',
     #    scifinder_download,
     #    name='scifinder_download'),
     url(r'^delete_file/(?P<pk>\d+)/?$',

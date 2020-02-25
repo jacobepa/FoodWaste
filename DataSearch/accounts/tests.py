@@ -1135,7 +1135,7 @@ class TestCase(TransactionTestCase):
 
     @classmethod
     def setupclass(cls):
-        """Add docstring.""" # Not Necessary
+        """Add docstring."""  # Not Necessary
         super().setupclass()
         if not conns_support_trans():
             return
