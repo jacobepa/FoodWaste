@@ -7,29 +7,62 @@
     <div class="row">
         <h2>SciFinder</h2>
         <h2>CESER | Center for Environmental Solutions & Emergency Response.</h2>
-        <h4><a href="https://scifinder-n.cas.org/" target="_blank">
-            <span class="fa fa-search"></span>
-            Search using SciFinder and upload your results below
-        </a></h4>
     </div>
 
-<h2>Important Information: If you do not have an account please contact Dr. Michael Gonzalez to request access. Access is limited to RTP, Duluth, and Cincinnati campuses, per SciFinder license.</h2>
+    <!--------------------------->
+    <!-- Clean up this section -->
+    <h4>
+        Important Information:
+        If you do not have an account please contact Dr. Michael Gonzalez to request access.
+    </h4>
+    <h4>
+        Access is limited to RTP, Duluth, and Cincinnati campuses, per SciFinder license.
+    </h4>
+    <h4>With SciFinder-n, you have access to:</h4>
+    <ul>
+        <li>Predictive and Experimental Retrosynthesis</li>
+        <li>PatentPak</li>
+        <li>MethodsNow for synthetic chemists</li>
+        <li>the unmatched CAS content collection</li>
+    </ul>
+    <p>CAS user survey shows SciFinder-n improves research efficiency by 50% compared to SciFinder</p>
+    <label>To obtain SciFinder login, email the contact for your campus:</label>
+    <table>
+        <tr>
+            <td class="text-right"><label>Cincinnati Campus:</label></td>
+            <td>
+                <button class="btn btn-sm btn-info btn-block"
+                        onclick="window.location='mailto:gonzalez.michael@epa.gov?subject=Request access to SciFinder&amp;body=Dr. Gonzalez, Request SciFinder Access'">
+                    <span class="fa fa-envelope"></span> Dr. Gonzalez
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-right"><label>Duluth Campus:</label></td>
+            <td>
+                <button class="btn btn-sm btn-info btn-block">
+                    <span class="fa fa-envelope"></span> Duluth Campus
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-right"><label>RTP Campus:</label></td>
+            <td>
+                <button class="btn btn-sm btn-info btn-block">
+                    <span class="fa fa-envelope"></span> RTP Campus
+                </button>
+            </td>
+        </tr>
+    </table>
+    
+    <!--------------------------->
 
-<a href="mailto:gonzalez.michael@epa.gov?subject=Request access to SciFinder&amp;body=Dr. Gonzalez, Request SciFinder Access">Email Dr. Gonzalez</a>
-
-<b>Log in to SciFinder-n</b>
- 
-<h3>With SciFinder-n, you have access to:</h3>
-
-<ul>
-<li>Predictive and Experimental Retrosynthesis</li>
-<li>PatentPak</li>
-<li>MethodsNow for synthetic chemists</li>
-<li>the unmatched CAS content collection</li>
-</ul>
-
-<b>CAS user survey shows Scifindern improves research efficiency by 50% compared to SciFinder</b>
-
+    <div class="row">
+        <h4><button onclick="window.open('https://scifinder-n.cas.org/', '_blank')" class="btn btn-success">
+            <span class="fa fa-search"></span>
+            Search with SciFinder and upload your results below
+        </button></h4>
+    </div>
 
     <div class="row">
         <button type="button" class="btn btn-info js-upload-files text-center col-md-12">
@@ -71,22 +104,6 @@
             </tbody>
         </table>
     </div>
-
-    <div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Uploading...</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <!-- NOTE: These script references need to be inside <body> (content block) to properly load. -->
