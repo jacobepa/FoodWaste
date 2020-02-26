@@ -505,9 +505,29 @@ def export_doc(request, *args, **kwargs):
     return
 
 
+def get_all_qapp_info(qapp_id):
+    """Method to return all pieces of a qapp in a dictionary"""
+    ctx = {}
+    ctx['qapp'] = Qapp.objects.get(id=qapp_id)
+    ctx['qapp_leads'] = QappLead.objects.filter(qapp_id=qapp_id)
+    ctx['qapp_approval'] = QappApproval.objects.get(qapp_id=qapp_id)
+    ctx['signatures'] = QappApprovalSignature.objects.filter(
+        qapp_approval_id=qapp_approval.id)
+    ctx['section_a'] = SectionA.objects.get(qapp_id=qapp_id)
+    ctx['section_b'] = SectionB.objects.get(qapp_id=qapp_id)
+    ctx['section_c'] = SectionC.objects.get(qapp_id=qapp_id)
+    ctx['section_d'] = SectionD.objects.get(qapp_id=qapp_id)
+    ctx['section_e'] = References.objects.get(qapp_id=qapp_id)
+    ctx['section_f'] = Revision.objects.filter(qapp_id=qapp_id)
+    return ctx
+
+
 def export_pdf(request, *args, **kwargs):
     """Function to export QAR5 as a PDF document."""
-    data_id = kwargs.get('pk', None)
+    qapp_id = kwargs.get('pk', None)
+    # Get all required data together before populating the PDF Export Template
+    qapp_info = get_all_qapp_info(qapp_id)
+
     if data_id is None:
         # TODO: Export ALL QAR5 objects available for this user to PDF.
         data = get_all_qar5_for_user(request.user)
