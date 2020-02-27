@@ -1,3 +1,13 @@
+.word-wrap {
+    word-wrap: break-word;
+}
+
+.equal {
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+}
+
 .card-horizontal {
     display: flex;
     flex: 1 1 auto;

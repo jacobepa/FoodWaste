@@ -3,19 +3,7 @@
 {% load static %}
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-8 col-sm-offset-2">
-            <img src="{% static 'EPA_files/logo.png' %}" alt="">
-            <p class="float-right blue-box-with-shadow">QUALITY ASSURANCE PROJECT PLAN</p>
-        </div>
-    </div>
-    <div class="row mt-4 text-center">
-        <div class="col-sm-8 col-sm-offset-2">
-            <h2>Office of Research and Development</h2>
-            <h3>Center for Environmental Solutions & Emergency Response</h3>
-        </div>
-    </div>
-    
+    {% include 'EPA_QAPP_Header_Partial.html' %}
     <div class="row">
         <div class="col-md-12">
             {% if form.errors %}

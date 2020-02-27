@@ -8,7 +8,8 @@
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, JsonResponse, HttpRequest
+from django.http import HttpResponseRedirect, JsonResponse, HttpRequest, \
+    HttpResponse
 from django.shortcuts import render
 from django.templatetags.static import static
 from django.utils.decorators import method_decorator
@@ -18,6 +19,7 @@ from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.shared import Inches
+from wkhtmltopdf.views import PDFTemplateResponse
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
 from DataSearch.settings import DATETIME_FORMAT
@@ -505,49 +507,69 @@ def export_doc(request, *args, **kwargs):
     return
 
 
-def get_all_qapp_info(qapp_id):
+def get_all_qapp_info(user, qapp_id):
     """Method to return all pieces of a qapp in a dictionary"""
     ctx = {}
-    ctx['qapp'] = Qapp.objects.get(id=qapp_id)
-    ctx['qapp_leads'] = QappLead.objects.filter(qapp_id=qapp_id)
-    ctx['qapp_approval'] = QappApproval.objects.get(qapp_id=qapp_id)
-    ctx['signatures'] = QappApprovalSignature.objects.filter(
-        qapp_approval_id=qapp_approval.id)
-    ctx['section_a'] = SectionA.objects.get(qapp_id=qapp_id)
-    ctx['section_b'] = SectionB.objects.get(qapp_id=qapp_id)
-    ctx['section_c'] = SectionC.objects.get(qapp_id=qapp_id)
-    ctx['section_d'] = SectionD.objects.get(qapp_id=qapp_id)
-    ctx['section_e'] = References.objects.get(qapp_id=qapp_id)
-    ctx['section_f'] = Revision.objects.filter(qapp_id=qapp_id)
-    return ctx
+    ctx['qapp'] = Qapp.objects.filter(id=qapp_id).first()
+    # Only return this if the user has access to it...
+    if user.is_superuser or ctx['qapp'].prepared_by == user:
+        ctx['qapp_leads'] = QappLead.objects.filter(qapp_id=qapp_id)
+        ctx['qapp_approval'] = QappApproval.objects.filter(
+            qapp_id=qapp_id).first()
+        ctx['signatures'] = QappApprovalSignature.objects.filter(
+            qapp_approval_id=ctx['qapp_approval'].id)
+        ctx['section_a'] = SectionA.objects.filter(qapp_id=qapp_id).first()
+        ctx['section_b'] = SectionB.objects.filter(qapp_id=qapp_id).first()
+        ctx['section_c'] = SectionC.objects.filter(qapp_id=qapp_id).first()
+        ctx['section_d'] = SectionD.objects.filter(qapp_id=qapp_id).first()
+        ctx['references'] = References.objects.filter(qapp_id=qapp_id).first()
+        ctx['revisions'] = Revision.objects.filter(qapp_id=qapp_id)
+        return ctx
+    return None
 
 
 def export_pdf(request, *args, **kwargs):
     """Function to export QAR5 as a PDF document."""
+    template_name = 'export/qar5_pdf_template.html'
     qapp_id = kwargs.get('pk', None)
-    # Get all required data together before populating the PDF Export Template
-    qapp_info = get_all_qapp_info(qapp_id)
 
-    if data_id is None:
+    if qapp_id is None:
         # TODO: Export ALL QAR5 objects available for this user to PDF.
         data = get_all_qar5_for_user(request.user)
 
     else:
-        data = get_qar5_for_user(request.user, data_id)
-        if not data:
-            return
+        # Get all required data together before populating the PDF Export Template
+        # data = get_qar5_for_user(request.user, data_id)
+        qapp_info = get_all_qapp_info(request.user, qapp_id)
+        if not qapp_info:
+            return HttpResponse(request)
+
+        filename = '%s.pdf' % qapp_info['qapp'].title
         # TODO: Build the pdf to be exported
+        return PDFTemplateResponse(
+            request=request,
+            template=template_name,
+            filename=filename,
+            context=qapp_info,
+            show_content_in_browser=False,
+            cmd_options={},
+        )
+        # return render(request, template_name, qapp_info)
 
 
 def export_excel(request, *args, **kwargs):
     """Function to export QAR5 as an Excel sheet."""
-    data_id = kwargs.get('pk', None)
-    if data_id is None:
+    qapp_id = kwargs.get('pk', None)
+
+    if qapp_id is None:
         # TODO: Export ALL QAR5 objects available for this user to excel.
         data = get_all_qar5_for_user(request.user)
 
     else:
-        data = get_qar5_for_user(request.user, data_id)
-        if not data:
-            return
+        # Get all required data together before populating the PDF Export Template
+        #data = get_qar5_for_user(request.user, data_id)
+        qapp_info = get_all_qapp_info(request.user, qapp_id)
+        if not qapp_info:
+            return HttpResponse()
+
         # TODO: Build the excel sheet to be exported
