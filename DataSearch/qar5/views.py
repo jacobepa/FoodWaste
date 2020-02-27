@@ -547,20 +547,33 @@ def export_pdf(request, *args, **kwargs):
         zip_mem = BytesIO()
         archive = ZipFile(zip_mem, 'w')
         for id in qapp_ids:
-            qapp_info = get_qapp_info(request.user, id)
-            if qapp_info:
-                # Create file name to be written to archive
-                temp_file_name = '%d_%s.pdf' % (
-                    id, qapp_info['qapp'].title)
-                html = template.render(qapp_info)
-                result = BytesIO()
-                content = BytesIO(html.encode('utf-8'))
-                pdf = pisa.pisaDocument(content, result)
-                if pdf.err:
-                    return HttpResponse(request)
-
+            resp = export_pdf(request, pk=id)
+            filename = resp.filename
+            if filename:
+                temp_file_name = '%d_%s' % (id, filename)
+                resp.render()
                 with tempfile.SpooledTemporaryFile() as tmp:
-                    archive.writestr(temp_file_name, result.getvalue())
+                    archive.writestr(temp_file_name, resp.content)
+                #archive.write(resp.rendered_content)
+
+            # Create file name to be written to archive
+            #temp_file_name = '%d_%s.pdf' % (
+            #    id, qapp_info['qapp'].title)
+
+            #qapp_info = get_qapp_info(request.user, id)
+            #if qapp_info:
+            #    # Create file name to be written to archive
+            #    temp_file_name = '%d_%s.pdf' % (
+            #        id, qapp_info['qapp'].title)
+            #    html = template.render(qapp_info)
+            #    result = BytesIO()
+            #    content = BytesIO(html.encode('utf-8'))
+            #    pdf = pisa.pisaDocument(content, result)
+            #    if pdf.err:
+            #        return HttpResponse(request)
+
+            #    with tempfile.SpooledTemporaryFile() as tmp:
+            #        archive.writestr(temp_file_name, result.getvalue())
         
         archive.close()
         response = HttpResponse(zip_mem.getvalue(),
@@ -578,7 +591,7 @@ def export_pdf(request, *args, **kwargs):
             return HttpResponse(request)
 
         filename = '%s.pdf' % qapp_info['qapp'].title
-        return PDFTemplateResponse(
+        resp = PDFTemplateResponse(
             request=request,
             template=template_name,
             filename=filename,
@@ -586,6 +599,7 @@ def export_pdf(request, *args, **kwargs):
             show_content_in_browser=False,
             cmd_options={},
         )
+        return resp
 
 
 def export_excel(request, *args, **kwargs):
