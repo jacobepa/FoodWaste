@@ -11,10 +11,9 @@ from datetime import datetime
 from io import BytesIO
 from openpyxl import Workbook
 from os import path, remove
-from tempfile import TemporaryFile
 from wkhtmltopdf.views import PDFTemplateResponse
 from xhtml2pdf import pisa
-from zipfile import ZipFile, ZIP_DEFLATED
+from zipfile import ZipFile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User

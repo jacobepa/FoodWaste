@@ -5,21 +5,27 @@
 
 """Definition of qar5 views."""
 
+from docx import Document
+from docx.enum.style import WD_STYLE_TYPE
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.shared import Inches
 from datetime import datetime
+from io import BytesIO
+from os import remove
+import tempfile
+from wkhtmltopdf.views import PDFTemplateResponse
+from xhtml2pdf import pisa
+from zipfile import ZipFile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, JsonResponse, HttpRequest, \
     HttpResponse
 from django.shortcuts import render
+from django.template.loader import get_template
 from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, ListView, \
     TemplateView, UpdateView
-from docx import Document
-from docx.enum.style import WD_STYLE_TYPE
-from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from docx.shared import Inches
-from wkhtmltopdf.views import PDFTemplateResponse
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
 from DataSearch.settings import DATETIME_FORMAT
@@ -507,7 +513,7 @@ def export_doc(request, *args, **kwargs):
     return
 
 
-def get_all_qapp_info(user, qapp_id):
+def get_qapp_info(user, qapp_id):
     """Method to return all pieces of a qapp in a dictionary"""
     ctx = {}
     ctx['qapp'] = Qapp.objects.filter(id=qapp_id).first()
@@ -531,21 +537,47 @@ def get_all_qapp_info(user, qapp_id):
 def export_pdf(request, *args, **kwargs):
     """Function to export QAR5 as a PDF document."""
     template_name = 'export/qar5_pdf_template.html'
+    template = get_template(template_name)
     qapp_id = kwargs.get('pk', None)
 
     if qapp_id is None:
-        # TODO: Export ALL QAR5 objects available for this user to PDF.
-        data = get_all_qar5_for_user(request.user)
+        # Get all qapp_id available to the user
+        qapp_ids = Qapp.objects.values_list('id', flat=True)
+        # Create a zip archive to return multiple PDFs
+        zip_mem = BytesIO()
+        archive = ZipFile(zip_mem, 'w')
+        for id in qapp_ids:
+            qapp_info = get_qapp_info(request.user, id)
+            if qapp_info:
+                # Create file name to be written to archive
+                temp_file_name = '%d_%s.pdf' % (
+                    id, qapp_info['qapp'].title)
+                html = template.render(qapp_info)
+                result = BytesIO()
+                content = BytesIO(html.encode('utf-8'))
+                pdf = pisa.pisaDocument(content, result)
+                if pdf.err:
+                    return HttpResponse(request)
+
+                with tempfile.SpooledTemporaryFile() as tmp:
+                    archive.writestr(temp_file_name, result.getvalue())
+        
+        archive.close()
+        response = HttpResponse(zip_mem.getvalue(),
+                                content_type='application/force-download')
+        response['Content-Disposition'] = \
+            'attachment; filename="%s_qapps.zip"' % request.user.username
+        response['Content-length'] = zip_mem.tell()
+        return response
 
     else:
-        # Get all required data together before populating the PDF Export Template
+        # Get all required data before populating the PDF Export Template
         # data = get_qar5_for_user(request.user, data_id)
-        qapp_info = get_all_qapp_info(request.user, qapp_id)
+        qapp_info = get_qapp_info(request.user, qapp_id)
         if not qapp_info:
             return HttpResponse(request)
 
         filename = '%s.pdf' % qapp_info['qapp'].title
-        # TODO: Build the pdf to be exported
         return PDFTemplateResponse(
             request=request,
             template=template_name,
@@ -554,7 +586,6 @@ def export_pdf(request, *args, **kwargs):
             show_content_in_browser=False,
             cmd_options={},
         )
-        # return render(request, template_name, qapp_info)
 
 
 def export_excel(request, *args, **kwargs):
