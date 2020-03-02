@@ -596,19 +596,25 @@ def export_excel(request, *args, **kwargs):
         archive = ZipFile(zip_mem, 'w')
         for id in qapp_ids:
             resp = export_excel(request, pk=id)
-            filename = resp.filename
+            filename = resp['filename']
             if filename:
                 temp_file_name = '%d_%s' % (id, filename)
-                resp.render()
                 with tempfile.SpooledTemporaryFile() as tmp:
                     archive.writestr(temp_file_name, resp.content)
+        archive.close()
+        response = HttpResponse(
+            zip_mem.getvalue(), content_type='application/force-download')
+        response['Content-Disposition'] = \
+            'attachment; filename="%s_qapps.zip"' % request.user.username
+        response['Content-length'] = zip_mem.tell()
+        return response
 
     else:
         qapp_info = get_qapp_info(request.user, qapp_id)
         if not qapp_info:
             return HttpResponse(request)
 
-        filename = '%s.xls' % qapp_info['qapp'].title
+        filename = '%s.xlsx' % qapp_info['qapp'].title
 
         # TODO: Build the excel sheet to be exported
         workbook = Workbook()
@@ -833,14 +839,17 @@ def export_excel(request, *args, **kwargs):
             sheet.cell(row=row, column=1).value = \
                 'D.3 - Reconciliation with User Requirements'
             sheet.cell(row=row, column=2).value = qapp_info['section_d'].d3
-        row += 2
+        row += 3
 
         # ###########################
         # Write References Section
-        references = str.splitlines(qapp_info['references'].references)
-        for ref in references:
-            sheet.cell(row=row, column=1).value = ref
-            row += 1
+        sheet.cell(row=row, column=1).value = 'References'
+        row += 1
+        if qapp_info['references']:
+            references = str.splitlines(qapp_info['references'].references)
+            for ref in references:
+                sheet.cell(row=row, column=1).value = ref
+                row += 1
 
         # Now return the generated excel sheet to be downloaded.
         content_type = 'application/vnd.vnd.openxmlformats-' + \
@@ -848,6 +857,7 @@ def export_excel(request, *args, **kwargs):
         response = HttpResponse(content_type=content_type)
         response['Content-Disposition'] = \
             'attachment; filename="%s"' % filename
+        response['filename'] = filename
         sheet.title = qapp_info['qapp'].title
         workbook.save(response)
         return response
