@@ -335,6 +335,7 @@ class UserRegistrationView(FormView):
     """
 
     template_register = "registration/register.html"
+    template_register_inactive = "registration/register_inactive.html"
     # Email and subject line for the message sent to the app admins.
     admin_subject_template_name = 'registration/register_request_admin_subject.txt'
     admin_email_template_name = 'registration/register_request_admin_email.html'
@@ -366,47 +367,51 @@ class UserRegistrationView(FormView):
                 state = None
             country = Country.objects.get(id=user.userprofile.country_id)
 
-            # Send an activation email.
-            request_email_context = {
-                'APP_NAME': settings.APP_NAME,
-                'email': settings.EMAIL_HOST_USER,
-                'domain': request.META['HTTP_HOST'],
-                'site_name': settings.SITE_NAME,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'user': user,
-                'sector': sector,
-                'role': role,
-                'state': state,
-                'country': country,
-                'protocol': 'http',
-            }
-            subject = loader.render_to_string(
-                self.admin_subject_template_name, request_email_context)
-            # Email subject *must not* contain newlines.
-            subject = ''.join(subject.splitlines())
-            email = loader.render_to_string(
-                self.admin_email_template_name, request_email_context)
-            # This is driven by local_settings.py.
-            send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                      settings.USER_APPROVAL_EMAIL, fail_silently=False)
+            # NOTE: Disable this on dev machines to test account creation:
+            if not settings.EMAIL_DISABLED:
+                # Send an activation email.
+                request_email_context = {
+                    'APP_NAME': settings.APP_NAME,
+                    'email': settings.EMAIL_HOST_USER,
+                    'domain': request.META['HTTP_HOST'],
+                    'site_name': settings.SITE_NAME,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'user': user,
+                    'sector': sector,
+                    'role': role,
+                    'state': state,
+                    'country': country,
+                    'protocol': 'http',
+                }
+                subject = loader.render_to_string(
+                    self.admin_subject_template_name, request_email_context)
+                # Email subject *must not* contain newlines.
+                subject = ''.join(subject.splitlines())
+                email = loader.render_to_string(
+                    self.admin_email_template_name, request_email_context)
+                # This is driven by local_settings.py.
+                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                          settings.USER_APPROVAL_EMAIL, fail_silently=False)
 
-            # Send an email to the user notifying them that the account request
-            # is under review.
-            user_email_context = {
-                'APP_NAME': settings.APP_NAME,
-                'email': user.email
-            }
-            subject = loader.render_to_string(
-                self.user_subject_template_name, user_email_context)
-            # Email subject *must not* contain newlines
-            subject = ''.join(subject.splitlines())
-            email = loader.render_to_string(
-                self.user_email_template_name, user_email_context)
-            send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                      [user.email], fail_silently=False)
+                # Send an email to the user notifying them that
+                # the account request is under review.
+                user_email_context = {
+                    'APP_NAME': settings.APP_NAME,
+                    'email': user.email
+                }
+                subject = loader.render_to_string(
+                    self.user_subject_template_name, user_email_context)
+                # Email subject *must not* contain newlines
+                subject = ''.join(subject.splitlines())
+                email = loader.render_to_string(
+                    self.user_email_template_name, user_email_context)
+
+                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                          [user.email], fail_silently=False)
 
             # Render the activation needed template.
-            return render(request, self.template_register_inactive, locals())
+            return render(request, self.template_register_inactive,
+                          {'APP_NAME': settings.APP_NAME})
             # py-lint: disable=E1101
         return render(request, self.template_register, locals())
 

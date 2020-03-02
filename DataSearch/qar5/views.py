@@ -14,7 +14,6 @@ from io import BytesIO
 from os import remove
 import tempfile
 from wkhtmltopdf.views import PDFTemplateResponse
-from xhtml2pdf import pisa
 from zipfile import ZipFile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -554,30 +553,10 @@ def export_pdf(request, *args, **kwargs):
                 resp.render()
                 with tempfile.SpooledTemporaryFile() as tmp:
                     archive.writestr(temp_file_name, resp.content)
-                #archive.write(resp.rendered_content)
 
-            # Create file name to be written to archive
-            #temp_file_name = '%d_%s.pdf' % (
-            #    id, qapp_info['qapp'].title)
-
-            #qapp_info = get_qapp_info(request.user, id)
-            #if qapp_info:
-            #    # Create file name to be written to archive
-            #    temp_file_name = '%d_%s.pdf' % (
-            #        id, qapp_info['qapp'].title)
-            #    html = template.render(qapp_info)
-            #    result = BytesIO()
-            #    content = BytesIO(html.encode('utf-8'))
-            #    pdf = pisa.pisaDocument(content, result)
-            #    if pdf.err:
-            #        return HttpResponse(request)
-
-            #    with tempfile.SpooledTemporaryFile() as tmp:
-            #        archive.writestr(temp_file_name, result.getvalue())
-        
         archive.close()
-        response = HttpResponse(zip_mem.getvalue(),
-                                content_type='application/force-download')
+        response = HttpResponse(
+            zip_mem.getvalue(), content_type='application/force-download')
         response['Content-Disposition'] = \
             'attachment; filename="%s_qapps.zip"' % request.user.username
         response['Content-length'] = zip_mem.tell()
