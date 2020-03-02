@@ -413,7 +413,7 @@ class UserRegistrationView(FormView):
             return render(request, self.template_register_inactive,
                           {'APP_NAME': settings.APP_NAME})
             # py-lint: disable=E1101
-        return render(request, self.template_register, locals())
+        return render(request, self.template_register, {'form': form})
 
 
 class UserApprovalView(TemplateView):
