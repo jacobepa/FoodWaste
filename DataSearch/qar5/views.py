@@ -151,7 +151,7 @@ class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
     Approval signatures will be added after the title and number.
     """
 
-    template_name = 'qapp_approval_create.html'
+    template_name = 'SectionA/qapp_approval_create.html'
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
