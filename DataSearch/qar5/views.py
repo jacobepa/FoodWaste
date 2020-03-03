@@ -293,6 +293,7 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 
         qapp = Qapp.objects.get(id=ctx['qapp_id'])
         existing_section_b = SectionB.objects.filter(qapp=qapp).first()
+        ctx['sectionb_type'] = qapp.sectiona.sectionb_type
 
         # Update if existing, otherwise insert new:
         if existing_section_b:
