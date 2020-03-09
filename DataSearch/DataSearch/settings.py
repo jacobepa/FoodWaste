@@ -27,6 +27,10 @@ EMAIL_DISCLAIMER = '<p style="font-weight:bold;color:red">Please do not reply to
 EMAIL_DISCLAIMER_PLAIN = 'Please do not reply to this email. Thank you.'
 BCC_EMAIL = ''
 
+SUPPORT_EMAIL = [
+    'young.daniel@epa.gov',
+]
+
 WKHTMLTOPDF_CMD_OPTIONS = {
     'quiet': True,
 }

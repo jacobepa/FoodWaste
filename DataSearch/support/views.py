@@ -232,7 +232,7 @@ class SuggestionEditView(FormView):
             else:
                 support_type_desc = support_type_name
 
-            support_email = settings.SUPPORT_GSC_EMAIL
+            support_email = settings.SUPPORT_EMAIL
             submitter_email = support.weblink
 
             # Use this when testing so ordqatrack@epa.gov doesn't get test emails.
