@@ -12,23 +12,25 @@ from docx.shared import Inches
 from datetime import datetime
 from io import BytesIO
 from openpyxl import Workbook
-from os import remove
+from os import getcwd, path, remove
+import pypandoc
 import tempfile
 from wkhtmltopdf.views import PDFTemplateResponse
 from zipfile import ZipFile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, JsonResponse, HttpRequest, \
-    HttpResponse
+from django.contrib.staticfiles.finders import find
+from django.http import FileResponse, HttpResponseRedirect, HttpRequest, \
+    HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
 from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, ListView, \
     TemplateView, UpdateView
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
     SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
-from DataSearch.settings import DATETIME_FORMAT
+from DataSearch.settings import DATETIME_FORMAT, DEBUG, STATIC_ROOT
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm, \
     RevisionForm, ReferencesForm
@@ -479,37 +481,126 @@ def get_qar5_for_user(user, id):
 
 def export_doc(request, *args, **kwargs):
     """Function to export QAR5 as a Word Document."""
-    data_id = kwargs.get('pk', None) 
-    if data_id is None:
+    qapp_id = kwargs.get('pk', None) 
+    template_name = 'export/qar5_pdf_template.html'
+
+    if qapp_id is None:
         # TODO: Export ALL QAR5 objects available for this user to Docx.
-        data = get_all_qar5_for_user(request.user)
+        qapp_info = get_all_qar5_for_user(request.user)
 
     else:
-        data = get_qar5_for_user(request.user, data_id)
-        if not data:
+        qapp_info = get_qapp_info(request.user, qapp_id)
+        if not qapp_info:
             return
+
+        filename = '%s.docx' % qapp_info['qapp'].title
+
+        # ############################################################
+        # The following section of code generates a docx file from an
+        # HTML file, but the formatting is suboptimal:
+        # 1) Write a temporary rendered HTML template file.
+        # with tempfile.TemporaryFile(suffix='.docx') as docx:
+        #    with tempfile.TemporaryFile(suffix='.html') as tmp:
+        #        content = render_to_string(template_name, qapp_info).encode('utf-8')
+        #        tmp.write(content)
+        #        # 2) Use pypandoc to convert this HTML file to docx format.
+        #        out_file = docx.name
+        #        # NOTE: close both files because pypandoc will open them again
+        #        tmp.close()
+        #        docx.close()
+        #        pypandoc.convert(source=content, format='html',
+        #                         to='docx', outputfile=out_file)
+        #        #pypandoc.convert(source=tmp.name, format='html',
+        #        #                 to='docx', outputfile=out_file)
+        #    # 3) Delete the temporary rendered HTML template file.
+        #    #    Should be done automatically with SpooledTemporaryFile
+        #    # 4) Return the converted docx file.
+        #    return FileResponse(open(docx.name, 'rb'), filename=filename)
+        # ############################################################
+        # ############################################################
+        # The following section of code will generate a docx file, manually
+        # and tediously crafted by hand as opposed to generated from HTML.
+        # This method has the potential to be better formatted, but is
+        # much less efficient.
         # TODO: Build the docx to be exported
         document = Document()
-
+        
+        # #################################################
+        # BEGIN COVER PAGE
+        # #################################################
         # Coversheet with signatures section:
-        # 1 row has WD_ALIGN_PARAGRAPH.LEFT aligned EPA logo.
-        document.add_picture(static('/EPA_Files/logo.png'), width=Inches(1.25))
-        # 2 row has right-aligned box "Quality Assurance Project Plan"
+        # 1) row has WD_ALIGN_PARAGRAPH.LEFT aligned EPA logo.
+        if DEBUG:
+            logo = path.join(STATIC_ROOT, 'EPA_Files', 'logo.png')
+        else:
+            logo = static('logo.png')
+        document.add_picture(logo, width=Inches(1.25))
+        # 2) row has right-aligned box "Quality Assurance Project Plan"
         # Align the picture/text WD_ALIGN_PARAGRAPH.RIGHT
         blue_header_style = document.styles.add_style(
             'blue_header', WD_STYLE_TYPE.PARAGRAPH).paragraph_format
         blue_header_style.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-        blue_header = document.add_header('Quality Assurance Project Plan')
-        # TODO Make the blue_header text white.
-        document.add_picture('blue_background.png', width=Inches(4))
-        # background color: rgb(0, 176, 240)
-        # The rest of the document will be WD_ALIGN_PARAGRAPH.CENTER
-        # 3 blank
-        # 4 Office of Research and Development
-        # 5 Center for Environmental Solutions & Emergency Response
+        blue_header = document.add_heading('Quality Assurance Project Plan')
 
+        # TODO Make blue_header text white, add blue background with shadow
+        # document.add_picture('blue_background.png', width=Inches(4))
+        # background color: rgb(0, 176, 240)
+
+        # The rest of the document will be WD_ALIGN_PARAGRAPH.CENTER
+
+        # blank line
+        # 1)  Heading 1 - Office of Research and Development
+        # 2)  Heading 2 - Center for Environmental Solutions & Emergency Response
+        # blank line
         # Next few sections are from the qapp object
-        document.save('test_export.docx')
+        # 3)  Heading 3 - Center for Environmental Solutions & Emergency Response
+        # 4)  Heading 3 - Division Branch
+        # blank line
+        # 5)  Heading 2 - EPA Project Leads
+        #     a) Heading 3 - NAME
+        #     n) ....
+        # blank line
+        # 6)  Heading 3 - Extramural
+        # 7)  Heading 3 - Category
+        # 8)  Heading 3 - Revision Number
+        # 9)  Heading 3 - Date
+        # blank line
+        # 10) Heading 2 - Prepared By
+        # 11) Heading 3 - NAME
+        # blank line
+        # 12) Heading 3 - STRAP
+        # 13) Heading 3 - TRACKING ID
+        # #################################################
+        # END COVER PAGE
+        # BEGIN APPROVAL PAGE
+        # #################################################
+        # 14) Heading 2 - Approval Page
+        # 15) Create a grid ...
+        num_signatures = len(qapp_info['signatures'])
+        table = document.add_table(rows=6+num_signatures, cols=12)
+        row_cells = table.rows[0].cells
+        row_cells[0].text = 'QA Project Plan Title:'
+        row_cells[0].merge(row_cells[3])
+        row_cells[4].text = 'THIS IS THE QA PROJECT PLAN TITLE FROM DB'
+        row_cells[4].merge(row_cells[11])
+        row_cells = table.rows[1].cells
+        row_cells[0].text = 'QA Activity Number:'
+        row_cells[0].merge(row_cells[3])
+        row_cells[4].text = 'THIS IS THE QA ACTIVITY NUMBER FROM DB'
+        row_cells[4].merge(row_cells[11])
+        # #################################################
+        # END APPROVAL PAGE
+        # BEGIN ...... PAGE
+        # #################################################
+
+
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.' + \
+                'wordprocessingml.document')
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+        document.save(response)
+        #document.save('test_export.docx')
+        return response
 
     return
 
