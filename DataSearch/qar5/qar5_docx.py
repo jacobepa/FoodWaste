@@ -203,6 +203,8 @@ def export_doc(request, *args, **kwargs):
         # TODO
 
         # TODO: Paragraphs aren't formatting properly, still double spaces...
+
+        # Section A
         document.add_heading('Section A - Executive Summary', level=1)
         document.add_heading('A.1 Distribution List', level=2)
         document.add_paragraph(qapp_info['section_a'].a3, 'No Spacing')
@@ -219,59 +221,66 @@ def export_doc(request, *args, **kwargs):
         document.add_heading('A.7 Documents and Records', level=2)
         document.add_paragraph(qapp_info['section_a'].a9, 'No Spacing')
 
-        #  1) Heading 1 - Section B - Experimental Design
+        # Section B
         document.add_heading('Section B - Experimental Design', level=1)
-        #  2) Heading 2 - B.1 Sample/Data Collection, Gathering, or Use
         document.add_heading('B.1 Sample/Data Collection, Gathering, or Use',
                              level=2)
-        #  3) Heading 3 - B.1.1 Use
         document.add_heading('B.1.1 Use', level=3)
-        #  4) Paragraph - asdf
         document.add_paragraph(qapp_info['section_b'].b1_2, 'No Spacing')
-        #  5) Heading 3 - B.1.2 Requirements
         document.add_heading('B.1.2 Requirements', level=3)
-        #  6) Paragraph - adsf
         document.add_paragraph(qapp_info['section_b'].b1_3, 'No Spacing')
-        #  7) Heading 3 - B.1.3 Databases, Maps, Literature
         document.add_heading('B.1.3 Databases, Maps, Literature', level=3)
-        #  8) Paragraph - adsf
         document.add_paragraph(qapp_info['section_b'].b1_4, 'No Spacing')
-        #  9) Heading 3 - B.1.4 Non-Quality Constraints
         document.add_heading('B.1.4 Non-Quality Constraints', level=3)
-        # 10) Paragraph - adsf
         document.add_paragraph(qapp_info['section_b'].b1_5, 'No Spacing')
-        # 11) Heading 2 - B.2 Data Analysis / Statistical Design / Data Management
         document.add_heading(
             'B.2 Data Analysis / Statistical Design / Data Management',
             level=2)
-        # 12) Heading 3 - B.2.1 Sources
         document.add_heading('B.2.1 Sources', level=3)
-        # 13) Paragraph - asdf
         document.add_paragraph(qapp_info['section_b'].b2_1, 'No Spacing')
-        # 14) Heading 3 - B.2.2 Acceptance/Rejection Process
         document.add_heading('B.2.2 Acceptance/Rejection Process', level=3)
-        # 15) Paragraph - adf
         document.add_paragraph(qapp_info['section_b'].b2_2, 'No Spacing')
-        # 16) Heading 3 - B.2.3 Rationale for Selections
         document.add_heading('B.2.3 Rationale for Selections', level=3)
-        # 17) Paragraph - asdf
         document.add_paragraph(qapp_info['section_b'].b2_3, 'No Spacing')
-        # 18) Heading 3 - B.2.4 Procedures
         document.add_heading('B.2.4 Procedures', level=3)
-        # 19) Paragraph - adsf
         document.add_paragraph(qapp_info['section_b'].b2_4, 'No Spacing')
-        # 20) Heading 3 - B.2.5 Disclaimer
         document.add_heading('B.2.5 Disclaimer', level=3)
-        # 21) Paragraph - asdf
         document.add_paragraph(qapp_info['section_b'].b2_5, 'No Spacing')
-        # 22) Heading 2 - B.3 Data Management and Documentation
         document.add_heading('B.3 Data Management and Documentation', level=2)
-        # 23) Paragraph - asdf
         document.add_paragraph(qapp_info['section_b'].b3, 'No Spacing')
-        # 24) Heading 2 - B.4 Tracking
         document.add_heading('B.4 Tracking', level=2)
-        # 25) Paragraph - asfd
         document.add_paragraph(qapp_info['section_b'].b4, 'No Spacing')
+
+        # Section C
+        document.add_heading('Section C', level=1)
+        if qapp_info['section_c']:
+            document.add_heading('C.1 Assessments and Response Actions',
+                                 level=2)
+            document.add_paragraph(qapp_info['section_c'].c1, 'No Spacing')
+            document.add_heading('C.2 Reports to Management', level=2)
+            document.add_paragraph(qapp_info['section_c'].c2, 'No Spacing')
+        else:
+            document.add_heading('C.1 Assessments and Response Actions',
+                                 level=2)
+            document.add_heading('C.2 Reports to Management', level=2)
+
+        # Section D
+        document.add_heading('Section D', level=1)
+        document.add_heading('D.1 Data Review, Verification, and Validation',
+                             level=2)
+        document.add_paragraph(qapp_info['section_d'].d1, 'No Spacing')
+        document.add_heading('D.2 Verification and Validation Methods',
+                             level=2)
+        document.add_paragraph(qapp_info['section_d'].d2, 'No Spacing')
+        document.add_heading('D.3 Reconciliation with User Requirements',
+                             level=2)
+        document.add_paragraph(qapp_info['section_d'].d3, 'No Spacing')
+
+        # References
+        document.add_heading('References', level=1)
+        document.add_paragraph(qapp_info['references'].references,
+                               'No Spacing')
+
 
         response = HttpResponse(
             content_type='application/vnd.openxmlformats-officedocument.' + \
