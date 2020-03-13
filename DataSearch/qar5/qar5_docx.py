@@ -7,7 +7,9 @@
 
 from docx import Document
 from docx.enum.style import WD_BUILTIN_STYLE, WD_STYLE_TYPE
-from docx.enum.text import WD_COLOR_INDEX, WD_PARAGRAPH_ALIGNMENT
+from docx.enum.text import WD_COLOR_INDEX, WD_LINE_SPACING, \
+    WD_PARAGRAPH_ALIGNMENT
+    
 from docx.shared import Inches
 from os import path
 # import pypandoc
@@ -43,7 +45,6 @@ def export_doc(request, *args, **kwargs):
         # BEGIN COVER PAGE
         # #################################################
         # Coversheet with signatures section:
-        # 1) row has WD_ALIGN_PARAGRAPH.LEFT aligned EPA logo.
         if DEBUG:
             logo = path.join(STATIC_ROOT, 'EPA_Files', 'logo.png')
         else:
@@ -51,7 +52,7 @@ def export_doc(request, *args, **kwargs):
 
         document.add_picture(logo, width=Inches(1.25))
 
-        # 2) row has right-aligned box "Quality Assurance Project Plan"
+        # row has right-aligned box "Quality Assurance Project Plan"
         # Align the picture/text WD_ALIGN_PARAGRAPH.RIGHT
         blue_header_style = document.styles.add_style(
             'blue_header', WD_STYLE_TYPE.PARAGRAPH).paragraph_format
@@ -64,6 +65,10 @@ def export_doc(request, *args, **kwargs):
             'center_text', WD_STYLE_TYPE.PARAGRAPH).paragraph_format
         style_center.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
+        style_paragraph = document.styles.add_style(
+            'style_paragraph', WD_STYLE_TYPE.PARAGRAPH).paragraph_format
+        style_paragraph.line_spacing_rule = WD_LINE_SPACING.SINGLE
+
         # TODO Make blue_header text white, add blue background with shadow
         # document.add_picture('blue_background.png', width=Inches(4))
         # background color: rgb(0, 176, 240)
@@ -71,49 +76,37 @@ def export_doc(request, *args, **kwargs):
         # The rest of the document will be WD_ALIGN_PARAGRAPH.CENTER
 
         # blank line
-        # 1)  Heading 1 - Office of Research and Development
         document.add_heading('Office of Research and Development', level=1)
-        # 2)  Heading 2 - Center for Environmental Solutions & Emergency Response
         document.add_heading(qapp_info['qapp'].division.name, level=1)
         # blank line
         # Next few sections are from the qapp object
-        # 3)  Heading 3 - Division Branch
         document.add_heading(qapp_info['qapp'].division_branch, level=3)
         # blank line
-        # 4)  Heading 2 - EPA Project Lead
         document.add_heading('EPA Project Lead', level=2)
         for lead in qapp_info['qapp_leads']:
-            #     4.n) Heading 3 - NAME ...
             document.add_heading(lead.name, level=3)
         # blank line
-        # 5)  Heading 3 - Extramural
         document.add_heading(qapp_info['qapp'].intra_extra, level=3)
-        # 6)  Heading 3 - Category
         document.add_heading(qapp_info['qapp'].qa_category, level=3)
-        # 7)  Heading 3 - Revision Number
         document.add_heading(qapp_info['qapp'].revision_number, level=3)
-        # 8)  Heading 3 - Date
         document.add_heading(str(qapp_info['qapp'].date), level=3)
         # blank line
-        # 9) Heading 2 - Prepared By
         document.add_heading('Prepared By', level=2)
-        # 10) Heading 3 - NAME
         document.add_heading(
             '%s %s' % (qapp_info['qapp'].prepared_by.first_name,
                        qapp_info['qapp'].prepared_by.last_name,),
             level=3)
         # blank line
-        # 11) Heading 3 - STRAP
         document.add_heading(qapp_info['qapp'].strap, level=3)
-        # 12) Heading 3 - TRACKING ID
         document.add_heading(qapp_info['qapp'].tracking_id, level=3)
+
         # #################################################
         # END COVER PAGE
         # BEGIN APPROVAL PAGE
         # #################################################
-        # 13) Heading 2 - Approval Page
+
         document.add_heading('Approval Page', level=2)
-        # 14) Create a grid ...
+        # Signature grid ...
         num_signatures = len(qapp_info['signatures'])
         table = document.add_table(rows=6+num_signatures, cols=12)
         table.style = styles['Table Grid']
@@ -184,12 +177,101 @@ def export_doc(request, *args, **kwargs):
         row_cells[4].text = 'Signature/Date:'
         row_cells[4].merge(row_cells[5])
         row_cells[6].merge(row_cells[11])
+        document.add_page_break()
 
         # #################################################
         # END APPROVAL PAGE
-        # BEGIN ...... PAGE
+        # BEGIN ToC PAGE
         # #################################################
 
+        document.add_heading('Table of Contents', level=2)
+        document.add_heading(
+            'TODO: This will have to be generated after the rest of ' + \
+            'the doc so we know page numbers and contents...', level=3)
+        document.add_page_break()
+
+        # #################################################
+        # END ToC PAGE
+        # BEGIN Everything Else PAGE
+        # #################################################
+
+        #  1) Heading 1 - Revision History
+        document.add_heading('Revision History', level=1)
+        #  2) Table Label
+        document.add_heading('Revision History', level=3)
+        #  3) Table (revision history)
+        # TODO
+
+        # TODO: Paragraphs aren't formatting properly, still double spaces...
+        document.add_heading('Section A - Executive Summary', level=1)
+        document.add_heading('A.1 Distribution List', level=2)
+        document.add_paragraph(qapp_info['section_a'].a3, 'No Spacing')
+        document.add_heading('A.2 Project Task Organization', level=2)
+        document.add_paragraph(qapp_info['section_a'].a4, 'No Spacing')
+        document.add_heading('A.3 Problem Definition Background', level=2)
+        document.add_paragraph(qapp_info['section_a'].a5, 'No Spacing')
+        document.add_heading('A.4 Project Description', level=2)
+        document.add_paragraph(qapp_info['section_a'].a6, 'No Spacing')
+        document.add_heading('A.5 Quality Objectives and Criteria', level=2)
+        document.add_paragraph(qapp_info['section_a'].a7, 'No Spacing')
+        document.add_heading('A.6 Special Training Certification', level=2)
+        document.add_paragraph(qapp_info['section_a'].a8, 'No Spacing')
+        document.add_heading('A.7 Documents and Records', level=2)
+        document.add_paragraph(qapp_info['section_a'].a9, 'No Spacing')
+
+        #  1) Heading 1 - Section B - Experimental Design
+        document.add_heading('Section B - Experimental Design', level=1)
+        #  2) Heading 2 - B.1 Sample/Data Collection, Gathering, or Use
+        document.add_heading('B.1 Sample/Data Collection, Gathering, or Use',
+                             level=2)
+        #  3) Heading 3 - B.1.1 Use
+        document.add_heading('B.1.1 Use', level=3)
+        #  4) Paragraph - asdf
+        document.add_paragraph(qapp_info['section_b'].b1_2, 'No Spacing')
+        #  5) Heading 3 - B.1.2 Requirements
+        document.add_heading('B.1.2 Requirements', level=3)
+        #  6) Paragraph - adsf
+        document.add_paragraph(qapp_info['section_b'].b1_3, 'No Spacing')
+        #  7) Heading 3 - B.1.3 Databases, Maps, Literature
+        document.add_heading('B.1.3 Databases, Maps, Literature', level=3)
+        #  8) Paragraph - adsf
+        document.add_paragraph(qapp_info['section_b'].b1_4, 'No Spacing')
+        #  9) Heading 3 - B.1.4 Non-Quality Constraints
+        document.add_heading('B.1.4 Non-Quality Constraints', level=3)
+        # 10) Paragraph - adsf
+        document.add_paragraph(qapp_info['section_b'].b1_5, 'No Spacing')
+        # 11) Heading 2 - B.2 Data Analysis / Statistical Design / Data Management
+        document.add_heading(
+            'B.2 Data Analysis / Statistical Design / Data Management',
+            level=2)
+        # 12) Heading 3 - B.2.1 Sources
+        document.add_heading('B.2.1 Sources', level=3)
+        # 13) Paragraph - asdf
+        document.add_paragraph(qapp_info['section_b'].b2_1, 'No Spacing')
+        # 14) Heading 3 - B.2.2 Acceptance/Rejection Process
+        document.add_heading('B.2.2 Acceptance/Rejection Process', level=3)
+        # 15) Paragraph - adf
+        document.add_paragraph(qapp_info['section_b'].b2_2, 'No Spacing')
+        # 16) Heading 3 - B.2.3 Rationale for Selections
+        document.add_heading('B.2.3 Rationale for Selections', level=3)
+        # 17) Paragraph - asdf
+        document.add_paragraph(qapp_info['section_b'].b2_3, 'No Spacing')
+        # 18) Heading 3 - B.2.4 Procedures
+        document.add_heading('B.2.4 Procedures', level=3)
+        # 19) Paragraph - adsf
+        document.add_paragraph(qapp_info['section_b'].b2_4, 'No Spacing')
+        # 20) Heading 3 - B.2.5 Disclaimer
+        document.add_heading('B.2.5 Disclaimer', level=3)
+        # 21) Paragraph - asdf
+        document.add_paragraph(qapp_info['section_b'].b2_5, 'No Spacing')
+        # 22) Heading 2 - B.3 Data Management and Documentation
+        document.add_heading('B.3 Data Management and Documentation', level=2)
+        # 23) Paragraph - asdf
+        document.add_paragraph(qapp_info['section_b'].b3, 'No Spacing')
+        # 24) Heading 2 - B.4 Tracking
+        document.add_heading('B.4 Tracking', level=2)
+        # 25) Paragraph - asfd
+        document.add_paragraph(qapp_info['section_b'].b4, 'No Spacing')
 
         response = HttpResponse(
             content_type='application/vnd.openxmlformats-officedocument.' + \
