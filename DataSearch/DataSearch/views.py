@@ -207,6 +207,10 @@ class ExistingDataCreate(LoginRequiredMixin, CreateView):
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
+    # ################################################
+    # NOTE: REMOVE THIS AFTER DOCX EXPORT IS DONE!
+    # ################################################
+    return HttpResponseRedirect('/qar5/exportdoc/1')
     return render(
         request,
         'index.html',
