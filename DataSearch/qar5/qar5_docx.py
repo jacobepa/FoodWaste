@@ -198,67 +198,81 @@ def export_doc(request, *args, **kwargs):
         #  1) Heading 1 - Revision History
         document.add_heading('Revision History', level=1)
         #  2) Table Label
-        document.add_heading('Revision History', level=3)
+        document.add_heading('Table 1 QAR5 Revision History', level=3)
         #  3) Table (revision history)
-        # TODO
+        num_revisions = len(qapp_info['revisions'])
+        table = document.add_table(rows=1+num_signatures, cols=3)
+        table.style = styles['Light List']
+        row_cells = table.rows[0].cells
+        row_cells[0].text = 'Revision Number'
+        row_cells[1].text = 'Date Approved'
+        row_cells[2].text = 'Revision'
+
+        iter_count = 0
+        for rev in qapp_info['revisions']:
+            row_cells = table.rows[1+iter_count].cells
+            row_cells[0].text = rev.revision
+            row_cells[1].text = str(rev.effective_date)
+            row_cells[2].text = rev.description
+            iter_count += 1
 
         # TODO: Paragraphs aren't formatting properly, still double spaces...
 
         # Section A
         document.add_heading('Section A - Executive Summary', level=1)
         document.add_heading('A.1 Distribution List', level=2)
-        document.add_paragraph(qapp_info['section_a'].a3, 'No Spacing')
+        document.add_paragraph(qapp_info['section_a'].a3, styles['No Spacing'])
         document.add_heading('A.2 Project Task Organization', level=2)
-        document.add_paragraph(qapp_info['section_a'].a4, 'No Spacing')
+        document.add_paragraph(qapp_info['section_a'].a4, styles['No Spacing'])
         document.add_heading('A.3 Problem Definition Background', level=2)
-        document.add_paragraph(qapp_info['section_a'].a5, 'No Spacing')
+        document.add_paragraph(qapp_info['section_a'].a5, styles['No Spacing'])
         document.add_heading('A.4 Project Description', level=2)
-        document.add_paragraph(qapp_info['section_a'].a6, 'No Spacing')
+        document.add_paragraph(qapp_info['section_a'].a6, styles['No Spacing'])
         document.add_heading('A.5 Quality Objectives and Criteria', level=2)
-        document.add_paragraph(qapp_info['section_a'].a7, 'No Spacing')
+        document.add_paragraph(qapp_info['section_a'].a7, styles['No Spacing'])
         document.add_heading('A.6 Special Training Certification', level=2)
-        document.add_paragraph(qapp_info['section_a'].a8, 'No Spacing')
+        document.add_paragraph(qapp_info['section_a'].a8, styles['No Spacing'])
         document.add_heading('A.7 Documents and Records', level=2)
-        document.add_paragraph(qapp_info['section_a'].a9, 'No Spacing')
+        document.add_paragraph(qapp_info['section_a'].a9, styles['No Spacing'])
 
         # Section B
         document.add_heading('Section B - Experimental Design', level=1)
         document.add_heading('B.1 Sample/Data Collection, Gathering, or Use',
                              level=2)
         document.add_heading('B.1.1 Use', level=3)
-        document.add_paragraph(qapp_info['section_b'].b1_2, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b1_2, styles['No Spacing'])
         document.add_heading('B.1.2 Requirements', level=3)
-        document.add_paragraph(qapp_info['section_b'].b1_3, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b1_3, styles['No Spacing'])
         document.add_heading('B.1.3 Databases, Maps, Literature', level=3)
-        document.add_paragraph(qapp_info['section_b'].b1_4, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b1_4, styles['No Spacing'])
         document.add_heading('B.1.4 Non-Quality Constraints', level=3)
-        document.add_paragraph(qapp_info['section_b'].b1_5, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b1_5, styles['No Spacing'])
         document.add_heading(
             'B.2 Data Analysis / Statistical Design / Data Management',
             level=2)
         document.add_heading('B.2.1 Sources', level=3)
-        document.add_paragraph(qapp_info['section_b'].b2_1, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b2_1, styles['No Spacing'])
         document.add_heading('B.2.2 Acceptance/Rejection Process', level=3)
-        document.add_paragraph(qapp_info['section_b'].b2_2, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b2_2, styles['No Spacing'])
         document.add_heading('B.2.3 Rationale for Selections', level=3)
-        document.add_paragraph(qapp_info['section_b'].b2_3, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b2_3, styles['No Spacing'])
         document.add_heading('B.2.4 Procedures', level=3)
-        document.add_paragraph(qapp_info['section_b'].b2_4, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b2_4, styles['No Spacing'])
         document.add_heading('B.2.5 Disclaimer', level=3)
-        document.add_paragraph(qapp_info['section_b'].b2_5, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b2_5, styles['No Spacing'])
         document.add_heading('B.3 Data Management and Documentation', level=2)
-        document.add_paragraph(qapp_info['section_b'].b3, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b3, styles['No Spacing'])
         document.add_heading('B.4 Tracking', level=2)
-        document.add_paragraph(qapp_info['section_b'].b4, 'No Spacing')
+        document.add_paragraph(qapp_info['section_b'].b4, styles['No Spacing'])
 
         # Section C
         document.add_heading('Section C', level=1)
         if qapp_info['section_c']:
             document.add_heading('C.1 Assessments and Response Actions',
                                  level=2)
-            document.add_paragraph(qapp_info['section_c'].c1, 'No Spacing')
+            document.add_paragraph(qapp_info['section_c'].c1, styles['No Spacing'])
             document.add_heading('C.2 Reports to Management', level=2)
-            document.add_paragraph(qapp_info['section_c'].c2, 'No Spacing')
+            document.add_paragraph(qapp_info['section_c'].c2, styles['No Spacing'])
         else:
             document.add_heading('C.1 Assessments and Response Actions',
                                  level=2)
@@ -268,13 +282,13 @@ def export_doc(request, *args, **kwargs):
         document.add_heading('Section D', level=1)
         document.add_heading('D.1 Data Review, Verification, and Validation',
                              level=2)
-        document.add_paragraph(qapp_info['section_d'].d1, 'No Spacing')
+        document.add_paragraph(qapp_info['section_d'].d1, styles['No Spacing'])
         document.add_heading('D.2 Verification and Validation Methods',
                              level=2)
-        document.add_paragraph(qapp_info['section_d'].d2, 'No Spacing')
+        document.add_paragraph(qapp_info['section_d'].d2, styles['No Spacing'])
         document.add_heading('D.3 Reconciliation with User Requirements',
                              level=2)
-        document.add_paragraph(qapp_info['section_d'].d3, 'No Spacing')
+        document.add_paragraph(qapp_info['section_d'].d3, styles['No Spacing'])
 
         # References
         document.add_heading('References', level=1)
