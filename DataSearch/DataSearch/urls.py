@@ -49,9 +49,6 @@ urlpatterns = [
         name='existing_data_edit'),
 
     # This should be the last existingdata URL.
-    url(r'^existingdata/list/?$',
-        ExistingDataList.as_view(),
-        name='tracking_tool_list'),
     url(r'^existingdata/list/user/(?P<pk>\d+)/?$',
         ExistingDataList.as_view(),
         name='tracking_tool_list'),

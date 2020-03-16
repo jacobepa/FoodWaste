@@ -32,7 +32,8 @@ from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm, \
     RevisionForm, ReferencesForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
-    SectionA, SectionB, SectionBType, SectionC, SectionD, Revision, References
+    SectionA, SectionB, SectionBType, SectionC, SectionD, \
+    QappSharingTeamMap, Revision, References
 from teams.models import Team, TeamMembership
 
 
@@ -47,6 +48,7 @@ class QappIndex(LoginRequiredMixin, TemplateView):
 
         - Specifically, want to send a list of users and teams to select from.
         """
+
         context = super().get_context_data(**kwargs)
         context['users'] = User.objects.all()
         context['teams'] = Team.objects.all()
@@ -60,15 +62,34 @@ class QappList(LoginRequiredMixin, ListView):
     template_name = 'qapp_list.html'
     context_object_name = 'qapp_list'
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
         """
         Custom method override to send data to the template.
 
-        Specifically, we want to send only data that belongs (prepared_by)
-        the user.
+        - Specifically, want to send the user or team information for this list of data.
         """
-        user = self.request.user
-        return get_all_qar5_for_user(user)
+
+        context = super().get_context_data(**kwargs)
+        path = self.request.path.split('/')
+        p_id = path[len(path) - 1]
+        p_type = path[len(path) - 2]
+        if p_type == 'user':
+            context['p_user'] = User.objects.get(id=p_id)
+        elif p_type == 'team':
+            context['team'] = Team.objects.get(id=p_id)
+        return context
+
+    def get_queryset(self):
+        """Add method docstring."""  # TODO add docstring.
+
+        path = self.request.path.split('/')
+        p_id = path[len(path) - 1]
+        p_type = path[len(path) - 2]
+        if p_type == 'user':
+            return get_all_qar5_for_user(p_id)
+        if p_type == 'team':
+            return get_all_qar5_for_team(p_id)
+        return get_existing_data_all()
 
 
 class QappEdit(LoginRequiredMixin, UpdateView):
@@ -80,6 +101,7 @@ class QappEdit(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         """Qapp Edit Form validation and redirect."""
+
         self.object = form.save(commit=False)
         self.object.save()
         return HttpResponseRedirect('/qar5/detail/' + str(self.object.id))
@@ -94,21 +116,24 @@ class QappCreate(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
+
         return render(
             request, 'qapp_create.html',
-            {'form': QappForm(),
+            {'form': QappForm(user=request.user),
             'project_lead_class': QappLeadForm})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a new QAPP form filled out."""
-        form = QappForm(request.POST)
+
+        form = QappForm(request.POST, user=request.user)
         if form.is_valid():
             obj = form.save(commit=False)
             # Assign current user as the prepared_by
             obj.prepared_by = request.user
             obj.save()
-            return HttpResponseRedirect('/qar5/approval/create?qapp_id=%d' % obj.id)
+            return HttpResponseRedirect(
+                '/qar5/approval/create?qapp_id=%d' % obj.id)
 
         return render(request, 'qapp_create.html', {'form': form})
 
@@ -121,6 +146,7 @@ class QappDetail(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         """Add method docstring."""  # TODO add docstring.
+
         context = super().get_context_data(**kwargs)
         context['project_leads_list'] = QappLead.objects.filter(
             qapp=context['object'])
@@ -141,7 +167,10 @@ class ProjectLeadCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return a view with an empty form for creating a new Project Lead."""
+        """
+        Return a view with an empty form for creating a new Project Lead.
+        """
+
         qapp_id = request.GET.get('qapp_id', 0)
         qapp = Qapp.objects.get(id=qapp_id)
         form = QappLeadForm({'qapp': qapp})
@@ -150,7 +179,10 @@ class ProjectLeadCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        """Process the post request with a new Project Lead form filled out."""
+        """
+        Process the post request with a new Project Lead form filled out.
+        """
+
         form = QappLeadForm(request.POST)
         qapp_id = request.POST.get('qapp', None)
         if form.is_valid():
@@ -173,6 +205,7 @@ class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
+
         qapp_id = request.GET.get('qapp_id', 0)
         qapp = Qapp.objects.get(id=qapp_id)
         form = QappApprovalForm({'qapp': qapp})
@@ -182,7 +215,10 @@ class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        """Process the post request with a new Project Lead form filled out."""
+        """
+        Process the post request with a new Project Lead form filled out.
+        """
+
         form = QappApprovalForm(request.POST)
         qapp_id = form.data.get('qapp', '')
         if form.is_valid():
@@ -201,17 +237,25 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return a view with an empty form for creating a new Approval Signature."""
+        """
+        Return a view with an empty form for
+        creating a new Approval Signature.
+        """
+
         qapp_id = request.GET.get('qapp_id', 0)
         qapp = Qapp.objects.get(id=qapp_id)
         qapp_approval = QappApproval.objects.get(qapp=qapp)
-        form = QappApprovalSignatureForm({'qapp': qapp, 'qapp_approval': qapp_approval})
+        form = QappApprovalSignatureForm(
+            {'qapp': qapp, 'qapp_approval': qapp_approval})
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        """Process the post request with a new Project Lead form filled out."""
+        """
+        Process the post request with a new Project Lead form filled out.
+        """
+
         form = QappApprovalSignatureForm(request.POST)
         approval_id = request.POST.get('qapp_approval', None)
         approval = QappApproval.objects.get(id=approval_id)
@@ -233,6 +277,7 @@ class SectionAView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section A (A.3 and later)."""
+
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -253,6 +298,7 @@ class SectionAView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionA form filled out."""
+
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
                'SECTION_A_INFO': SECTION_A_INFO, 'title': 'QAR5 Section A'}
 
@@ -281,6 +327,7 @@ class SectionBView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section B."""
+
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -305,6 +352,7 @@ class SectionBView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionB form filled out."""
+
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
                'SECTION_B_INFO': SECTION_B_INFO, 'title': 'QAR5 Section B'}
 
@@ -332,6 +380,7 @@ class SectionCView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section C."""
+
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         return render(request, 'SectionC/index.html',
@@ -347,6 +396,7 @@ class SectionDView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section D."""
+
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -366,6 +416,7 @@ class SectionDView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionD form filled out."""
+
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
                'SECTION_D_INFO': SECTION_D_INFO, 'title': 'QAR5 Section D'}
 
@@ -394,6 +445,7 @@ class SectionEView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section E."""
+
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -412,6 +464,7 @@ class SectionEView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionE form filled out."""
+
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
                'SECTION_E_INFO': SECTION_E_INFO, 'title': 'QAR5 Section E'}
 
@@ -455,6 +508,7 @@ class RevisionCreate(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
+
         qapp_id = request.GET.get('qapp_id', 0)
         qapp = Qapp.objects.get(id=qapp_id)
         form = RevisionForm({'qapp': qapp})
@@ -464,7 +518,10 @@ class RevisionCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        """Process the post request with a new Project Lead form filled out."""
+        """
+        Process the post request with a new Project Lead form filled out.
+        """
+
         form = RevisionForm(request.POST)
         qapp_id = form.data.get('qapp', '')
         # datetime_str = form.data['effective_date']
@@ -472,22 +529,48 @@ class RevisionCreate(LoginRequiredMixin, CreateView):
         # form.data['effective_date'] = datetime_obj
         if form.is_valid():
             obj = form.save(commit=True)
-            return HttpResponseRedirect('/qar5/SectionF?qapp_id=%s' % qapp_id)
+            return HttpResponseRedirect(
+                '/qar5/SectionF?qapp_id=%s' % qapp_id)
 
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
 
 
-def get_all_qar5_for_user(user):
-    """Method to get all data regardless of user or team."""
-    if user.is_superuser:
-        return Qapp.objects.all()
-    else:
-        return Qapp.objects.filter(prepared_by=user)
+def get_all_qar5_for_user(user_id):
+    """
+    Method to get all qapps belonging to a team.
+
+    - of which the provided user is a member.
+    - logic filters for the user's non-member teams
+    - then excludes those teams from the data results.
+    - This is necessary because there is no direct connection between data
+    - model users and qapp instances. The relation here is through
+    - the teams model.
+    """
+    user = User.objects.get(id=user_id)
+    include_teams = TeamMembership.objects.filter(
+        member=user).values_list('team', flat=True)
+    exclude_teams = TeamMembership.objects.exclude(
+        team__in=include_teams).distinct().values_list('team', flat=True)
+    exclude_data = QappSharingTeamMap.objects.filter(
+        team__in=exclude_teams).values_list('qapp', flat=True)
+    queryset = Qapp.objects.exclude(id__in=exclude_data)
+    return queryset
+
+
+def get_all_qar5_for_team(team_id):
+    """Method to get all data belonging to a team."""
+
+    team = Team.objects.get(id=team_id)
+    include_qapps = QappSharingTeamMap.objects.filter(
+        team=team).values_list('qapp', flat=True)
+    queryset = Qapp.objects.filter(id__in=include_qapps)
+    return queryset
 
 
 def get_qar5_for_user(user, id):
     """Method to get all data regardless of user or team."""
+
     # Only return the qapp if the user has permissions (super or owner)
     if user.is_superuser or qapp.prepared_by == user:
         return Qapp.objects.get(id=id)
@@ -496,6 +579,7 @@ def get_qar5_for_user(user, id):
 
 def get_qapp_info(user, qapp_id):
     """Method to return all pieces of a qapp in a dictionary"""
+
     ctx = {}
     ctx['qapp'] = Qapp.objects.filter(id=qapp_id).first()
     # Only return this if the user has access to it...
@@ -518,6 +602,7 @@ def get_qapp_info(user, qapp_id):
 @login_required
 def export_pdf(request, *args, **kwargs):
     """Function to export QAR5 as a PDF document."""
+
     template_name = 'export/qar5_pdf_template.html'
     template = get_template(template_name)
     qapp_id = kwargs.get('pk', None)
@@ -567,6 +652,7 @@ def export_pdf(request, *args, **kwargs):
 @login_required
 def export_excel(request, *args, **kwargs):
     """Function to export QAR5 as an Excel sheet."""
+
     # template_name = 'export/qar5_pdf_template.html'
     # template = get_template(template_name)
     qapp_id = kwargs.get('pk', None)

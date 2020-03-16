@@ -2,10 +2,10 @@
 
 {% block content %}
 <div class="container">
-    <h1><font color="blue">QUALITY ASSURANCE PROJECT PLAN.</font></h1>
+    <h1>QUALITY ASSURANCE PROJECT PLAN.</h1>
     <h2>
-        <font color="blue">Office of Research and Development</font>
-        <font color="blue">Center for Environmental Solutions & Emergency Response.</font>
+        Office of Research and Development
+        Center for Environmental Solutions & Emergency Response.
     </h2>
     <p>
         The following checklist summarizes QAPP requirements for projects involving
@@ -100,11 +100,11 @@
         }
         function exportAllQar5(exportType) {
             if (exportType === 'docx')
-                window.location.href = '/qar5/exportdocx';
+                window.location.href = window.location.pathname.replace('list', 'exportdocx');
             else if (exportType === 'pdf')
-                window.location.href = '/qar5/exportpdf';
+                window.location.href = window.location.pathname.replace('list', 'exportpdf');
             else
-                window.location.href = '/qar5/exportexcel';
+                window.location.href = window.location.pathname.replace('list', 'exportexcel');
         }
     </script>
 {% endblock %}

@@ -23,9 +23,9 @@ urlpatterns = [
     url(r'^$', QappIndex.as_view(), name='qapp_index'),
     # URLs for CRUD operations.
     # Begin QAPP URLs for creating and printing QAPPs
-    url(r'^list/?$',
-        QappList.as_view(),
-        name='qapp_list'),
+    # url(r'^list/?$',
+    #     QappList.as_view(),
+    #     name='qapp_list'),
 
     url(r'^create/?$',
         QappCreate.as_view(),
@@ -38,6 +38,13 @@ urlpatterns = [
     url(r'^edit/(?P<pk>\d+)/?$',
         QappEdit.as_view(),
         name='qapp_edit'),
+
+    url(r'^list/user/(?P<pk>\d+)/?$',
+        QappList.as_view(),
+        name='qapp_list'),
+    url(r'^list/team/(?P<pk>\d+)/?$',
+        QappList.as_view(),
+        name='qapp_list'),
 
     # Single QAR5 Exports:
     url(r'^exportdoc/(?P<pk>\d+)/?$',

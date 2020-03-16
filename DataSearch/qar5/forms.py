@@ -19,6 +19,7 @@ from constants.qar5 import SECTION_A_INFO
 from qar5.models import Division, Qapp, QappApproval, QappLead, \
     QappApprovalSignature, SectionA, SectionB, SectionD, Revision, \
     SectionBType, References
+from teams.models import Team, TeamMembership
 
 
 class QappForm(ModelForm):
@@ -72,13 +73,31 @@ class QappForm(ModelForm):
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("QA Tracking ID:"), required=True)
 
+    teams = ModelMultipleChoiceField(
+        widget=SelectMultiple({'class': 'form-control mb-2',
+                               'placeholder': 'Teams'}),
+        queryset=Team.objects.none(),
+        label=_("Share With Teams"), required=False)
+
+    def __init__(self, *args, **kwargs):
+        """Override default init to add custom queryset for teams."""
+        try:
+            current_user = kwargs.pop('user')
+            super(QappForm, self).__init__(*args, **kwargs)
+            team_ids = TeamMembership.objects.filter(
+                member=current_user).values_list('team', flat=True)
+            self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
+            self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
+        except:
+            super(QappForm, self).__init__(*args, **kwargs)
+
     class Meta:
         """Meta data for QAPP Form."""
 
         model = Qapp
         fields = ('division', 'division_branch', 'title', 'qa_category',
                   'intra_extra', 'revision_number', 'date', 'strap',
-                  'tracking_id')
+                  'tracking_id', 'teams')
 
 
 class QappLeadForm(ModelForm):
