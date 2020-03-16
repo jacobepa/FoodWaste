@@ -16,10 +16,11 @@ from django.conf.urls import url
 from qar5.views import QappCreate, QappDetail, ProjectApprovalCreate, \
     ProjectLeadCreate, ProjectApprovalSignatureCreate, SectionAView, \
     SectionBView, SectionCView, SectionDView, SectionEView, SectionFView, \
-    RevisionCreate, QappList, QappEdit, export_pdf, export_excel
+    RevisionCreate, QappList, QappEdit, QappIndex, export_pdf, export_excel
 from qar5.qar5_docx import export_doc
 
 urlpatterns = [
+    url(r'^$', QappIndex.as_view(), name='qapp_index'),
     # URLs for CRUD operations.
     # Begin QAPP URLs for creating and printing QAPPs
     url(r'^list/?$',

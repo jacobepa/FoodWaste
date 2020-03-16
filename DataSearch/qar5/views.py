@@ -15,6 +15,7 @@ from wkhtmltopdf.views import PDFTemplateResponse
 from zipfile import ZipFile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.staticfiles.finders import find
 from django.http import FileResponse, HttpResponseRedirect, HttpRequest, \
     HttpResponse, JsonResponse
@@ -32,6 +33,24 @@ from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     RevisionForm, ReferencesForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
     SectionA, SectionB, SectionBType, SectionC, SectionD, Revision, References
+from teams.models import Team, TeamMembership
+
+
+class QappIndex(LoginRequiredMixin, TemplateView):
+    """Class to return the first page of the Existing Data flow."""
+
+    template_name = 'qapp_index.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Custom method override to send data to the template.
+
+        - Specifically, want to send a list of users and teams to select from.
+        """
+        context = super().get_context_data(**kwargs)
+        context['users'] = User.objects.all()
+        context['teams'] = Team.objects.all()
+        return context
 
 
 class QappList(LoginRequiredMixin, ListView):
