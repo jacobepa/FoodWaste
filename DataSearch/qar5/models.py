@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from constants.utils import get_attachment_storage_path
+from teams.models import Team, User
 
 
 class Division(models.Model):
@@ -55,6 +56,8 @@ class Qapp(models.Model):
         User, on_delete=models.SET_NULL, null=True, blank=True)
     strap = models.CharField(blank=False, null=False, max_length=255)
     tracking_id = models.CharField(blank=False, null=False, max_length=255)
+    # List of teams with which the QAR5 is shared.
+    teams = models.ManyToManyField(Team, through='QappSharingTeamMap')
 
     def save_model(self, request, obj, form, change):
         """
@@ -77,6 +80,22 @@ class Qapp(models.Model):
     #    if not obj.pk:
     #        obj.prepared_by = request.user
     #    return super().save(commit=True)
+
+
+class QappSharingTeamMap(models.Model):
+    """Mapping between Existing Data and Teams they share."""
+
+    added_date = models.DateTimeField(auto_now_add=True,
+                                      blank=False,
+                                      editable=False)
+    qapp = models.ForeignKey(Qapp, blank=False,
+                             related_name='qapp_teams',
+                             on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, blank=False,
+                             related_name='team_qapp',
+                             on_delete=models.CASCADE)
+    # Indicates if the team can edit the project.
+    can_edit = models.BooleanField(blank=False)
 
 
 class QappLead(models.Model):
