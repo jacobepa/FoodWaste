@@ -16,8 +16,10 @@ from django.conf.urls import url
 from qar5.views import QappCreate, QappDetail, ProjectApprovalCreate, \
     ProjectLeadCreate, ProjectApprovalSignatureCreate, SectionAView, \
     SectionBView, SectionCView, SectionDView, SectionEView, SectionFView, \
-    RevisionCreate, QappList, QappEdit, QappIndex, export_pdf, export_excel
-from qar5.qar5_docx import export_doc
+    RevisionCreate, QappList, QappEdit, QappIndex
+from qar5.qar5_docx import export_doc, export_doc_single
+from qar5.qar5_excel import export_excel, export_excel_single
+from qar5.qar5_pdf import export_pdf, export_pdf_single
 
 urlpatterns = [
     url(r'^$', QappIndex.as_view(), name='qapp_index'),
@@ -46,19 +48,28 @@ urlpatterns = [
         QappList.as_view(),
         name='qapp_list'),
 
-    # Single QAR5 Exports:
+    # Single QAR5 Exports (if user has access, owner or team):
     url(r'^exportdoc/(?P<pk>\d+)/?$',
-        export_doc, name='qar5_doc'),
+        export_doc_single, name='qar5_doc'),
     url(r'^exportpdf/(?P<pk>\d+)/?$',
-        export_pdf, name='qar5_pdf'),
+        export_pdf_single, name='qar5_pdf'),
     url(r'^exportexcel/(?P<pk>\d+)/?$',
-        export_excel, name='qar5_excel'),
-    # All QAR5 Exports:
-    url(r'^exportdoc/?$',
+        export_excel_single, name='qar5_excel'),
+
+    # All QAR5 Exports for User:
+    url(r'^exportdoc/user/(?P<pk>\d+)/?$',
         export_doc, name='qar5_all_doc'),
-    url(r'^exportpdf/?$',
+    url(r'^exportpdf/user/(?P<pk>\d+)/?$',
         export_pdf, name='qar5_all_pdf'),
-    url(r'^exportexcel/?$',
+    url(r'^exportexcel/user/(?P<pk>\d+)/?$',
+        export_excel, name='qar5_all_excel'),
+
+    # All QAR5 Exports for Team:
+    url(r'^exportdoc/team/(?P<pk>\d+)/?$',
+        export_doc, name='qar5_all_doc'),
+    url(r'^exportpdf/team/(?P<pk>\d+)/?$',
+        export_pdf, name='qar5_all_pdf'),
+    url(r'^exportexcel/team/(?P<pk>\d+)/?$',
         export_excel, name='qar5_all_excel'),
 
     ############################################

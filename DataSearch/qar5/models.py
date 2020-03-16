@@ -10,6 +10,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from constants.qar5 import SECTION_C_INFO
 from constants.utils import get_attachment_storage_path
 from teams.models import Team, User
 
@@ -191,13 +192,17 @@ class SectionB(models.Model):
     b4 = models.CharField(blank=False, null=False, max_length=2047)
 
 
-class SectionC(models.Model):
+class SectionC():
     """Class representing the entirety of SectionC for a given QAPP."""
 
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
-    c1 = models.CharField(blank=False, null=False, max_length=2047)
-    c2 = models.CharField(blank=False, null=False, max_length=2047)
+    #c1 = models.CharField(blank=False, null=False, max_length=2047)
+    #c2 = models.CharField(blank=False, null=False, max_length=2047)
+    c1 = SECTION_C_INFO[0]
+    c2 = SECTION_C_INFO[1]
+
+
 
 
 class SectionD(models.Model):

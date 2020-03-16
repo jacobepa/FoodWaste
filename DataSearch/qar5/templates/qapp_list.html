@@ -69,7 +69,7 @@
             </i>
         </div>
         <div class="col-sm-3">
-            <button class="btn btn-info btn-md" onclick="exportAllQar5('docx')" disabled>
+            <button class="btn btn-info btn-md" onclick="exportAllQar5('docx')">
                 Export All QAR5 to Word Doc
             </button>
         </div>
@@ -100,7 +100,7 @@
         }
         function exportAllQar5(exportType) {
             if (exportType === 'docx')
-                window.location.href = window.location.pathname.replace('list', 'exportdocx');
+                window.location.href = window.location.pathname.replace('list', 'exportdoc');
             else if (exportType === 'pdf')
                 window.location.href = window.location.pathname.replace('list', 'exportpdf');
             else
