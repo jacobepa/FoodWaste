@@ -7,6 +7,7 @@
 
 from docx import Document
 from docx.enum.style import WD_BUILTIN_STYLE, WD_STYLE_TYPE
+from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_ROW_HEIGHT_RULE
 from docx.enum.text import WD_COLOR_INDEX, WD_LINE_SPACING, \
     WD_PARAGRAPH_ALIGNMENT
 from docx.shared import Inches
@@ -77,6 +78,16 @@ def add_center_heading(document, text, level):
 #    style_center.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
 
+def set_table_row_height(table):
+    """Helper method to set minimum row height and alignment for a table"""
+    for row in table.rows:
+        row.height_rule = WD_ROW_HEIGHT_RULE.AT_LEAST
+        row.height = Inches(0.35)
+        for cell in row.cells:
+            cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+
+
+
 # py-lint: disable=no-member
 def export_doc_single(request, *args, **kwargs):
     """Function to export a single QAR5 object as a Word Docx file."""
@@ -129,25 +140,25 @@ def export_doc_single(request, *args, **kwargs):
     add_center_heading(document, qapp_info['qapp'].division.name, 1)
     # blank line
     # Next few sections are from the qapp object
-    document.add_heading(qapp_info['qapp'].division_branch, level=3)
+    add_center_heading(document, qapp_info['qapp'].division_branch, level=3)
     # blank line
-    document.add_heading('EPA Project Lead', level=2)
+    add_center_heading(document, 'EPA Project Lead', level=2)
     for lead in qapp_info['qapp_leads']:
-        document.add_heading(lead.name, level=3)
+        add_center_heading(document, lead.name, level=3)
     # blank line
-    document.add_heading(qapp_info['qapp'].intra_extra, level=3)
-    document.add_heading(qapp_info['qapp'].qa_category, level=3)
-    document.add_heading(qapp_info['qapp'].revision_number, level=3)
-    document.add_heading(str(qapp_info['qapp'].date), level=3)
+    add_center_heading(document, qapp_info['qapp'].intra_extra, level=3)
+    add_center_heading(document, qapp_info['qapp'].qa_category, level=3)
+    add_center_heading(document, qapp_info['qapp'].revision_number, level=3)
+    add_center_heading(document, str(qapp_info['qapp'].date), level=3)
     # blank line
-    document.add_heading('Prepared By', level=2)
-    document.add_heading(
+    add_center_heading(document, 'Prepared By', level=2)
+    add_center_heading(document, 
         '%s %s' % (qapp_info['qapp'].prepared_by.first_name,
                     qapp_info['qapp'].prepared_by.last_name,),
         level=3)
     # blank line
-    document.add_heading(qapp_info['qapp'].strap, level=3)
-    document.add_heading(qapp_info['qapp'].tracking_id, level=3)
+    add_center_heading(document, qapp_info['qapp'].strap, level=3)
+    add_center_heading(document, qapp_info['qapp'].tracking_id, level=3)
 
     # #################################################
     # END COVER PAGE
@@ -159,6 +170,8 @@ def export_doc_single(request, *args, **kwargs):
     num_signatures = len(qapp_info['signatures'])
     table = document.add_table(rows=6+num_signatures, cols=12)
     table.style = styles['Table Grid']
+
+    set_table_row_height(table)
 
     row_cells = table.rows[0].cells
     row_cells[0].text = 'QA Project Plan Title:'
