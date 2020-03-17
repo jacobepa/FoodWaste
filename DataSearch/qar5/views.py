@@ -52,7 +52,6 @@ class QappIndex(LoginRequiredMixin, TemplateView):
 
         - Specifically, want to send a list of users and teams to select from.
         """
-
         context = super().get_context_data(**kwargs)
         context['users'] = User.objects.all()
         context['teams'] = Team.objects.all()
@@ -72,7 +71,6 @@ class QappList(LoginRequiredMixin, ListView):
 
         - Specifically, want to send the user or team information for this list of data.
         """
-
         context = super().get_context_data(**kwargs)
         path = self.request.path.split('/')
         p_id = path[len(path) - 1]
@@ -85,7 +83,6 @@ class QappList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         """Add method docstring."""  # TODO add docstring.
-
         path = self.request.path.split('/')
         p_id = path[len(path) - 1]
         p_type = path[len(path) - 2]
@@ -105,7 +102,6 @@ class QappEdit(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         """Qapp Edit Form validation and redirect."""
-
         self.object = form.save(commit=False)
         self.object.save()
         return HttpResponseRedirect('/qar5/detail/' + str(self.object.id))
@@ -120,7 +116,6 @@ class QappCreate(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
-
         return render(
             request, 'qapp_create.html',
             {'form': QappForm(user=request.user),
@@ -129,7 +124,6 @@ class QappCreate(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a new QAPP form filled out."""
-
         form = QappForm(request.POST, user=request.user)
         if form.is_valid():
             obj = form.save(commit=False)
@@ -159,7 +153,6 @@ class QappDetail(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         """Add method docstring."""  # TODO add docstring.
-
         context = super().get_context_data(**kwargs)
         context['project_leads_list'] = QappLead.objects.filter(
             qapp=context['object'])
@@ -180,10 +173,7 @@ class ProjectLeadCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """
-        Return a view with an empty form for creating a new Project Lead.
-        """
-
+        """Return a view with an empty form for creating a new Project Lead."""
         qapp_id = request.GET.get('qapp_id', 0)
         qapp = Qapp.objects.get(id=qapp_id)
         form = QappLeadForm({'qapp': qapp})
@@ -192,10 +182,7 @@ class ProjectLeadCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        """
-        Process the post request with a new Project Lead form filled out.
-        """
-
+        """Process the post request with a new Project Lead form filled out."""
         form = QappLeadForm(request.POST)
         qapp_id = request.POST.get('qapp', None)
         if form.is_valid():
@@ -218,7 +205,6 @@ class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
-
         qapp_id = request.GET.get('qapp_id', 0)
         qapp = Qapp.objects.get(id=qapp_id)
         form = QappApprovalForm({'qapp': qapp})
@@ -228,10 +214,7 @@ class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        """
-        Process the post request with a new Project Lead form filled out.
-        """
-
+        """Process the post request with a new Project Lead form filled out."""
         form = QappApprovalForm(request.POST)
         qapp_id = form.data.get('qapp', '')
         if form.is_valid():
@@ -250,11 +233,7 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """
-        Return a view with an empty form for
-        creating a new Approval Signature.
-        """
-
+        """Return a view with an empty form for creating a new Approval Signature."""
         qapp_id = request.GET.get('qapp_id', 0)
         qapp = Qapp.objects.get(id=qapp_id)
         qapp_approval = QappApproval.objects.get(qapp=qapp)
@@ -265,10 +244,7 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        """
-        Process the post request with a new Project Lead form filled out.
-        """
-
+        """Process the post request with a new Project Lead form filled out."""
         form = QappApprovalSignatureForm(request.POST)
         approval_id = request.POST.get('qapp_approval', None)
         approval = QappApproval.objects.get(id=approval_id)
@@ -290,7 +266,6 @@ class SectionAView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section A (A.3 and later)."""
-
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -311,7 +286,6 @@ class SectionAView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionA form filled out."""
-
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
                'SECTION_A_INFO': SECTION_A_INFO, 'title': 'QAR5 Section A'}
 
@@ -340,7 +314,6 @@ class SectionBView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section B."""
-
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -365,7 +338,6 @@ class SectionBView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionB form filled out."""
-
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
                'SECTION_B_INFO': SECTION_B_INFO, 'title': 'QAR5 Section B'}
 
@@ -393,7 +365,6 @@ class SectionCView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section C."""
-
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         return render(request, 'SectionC/index.html',
@@ -409,7 +380,6 @@ class SectionDView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section D."""
-
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -429,7 +399,6 @@ class SectionDView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionD form filled out."""
-
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
                'SECTION_D_INFO': SECTION_D_INFO, 'title': 'QAR5 Section D'}
 
@@ -458,7 +427,6 @@ class SectionEView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAR5 Section E."""
-
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -477,7 +445,6 @@ class SectionEView(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionE form filled out."""
-
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
                'SECTION_E_INFO': SECTION_E_INFO, 'title': 'QAR5 Section E'}
 
@@ -521,7 +488,6 @@ class RevisionCreate(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
-
         qapp_id = request.GET.get('qapp_id', 0)
         qapp = Qapp.objects.get(id=qapp_id)
         form = RevisionForm({'qapp': qapp})
@@ -531,10 +497,7 @@ class RevisionCreate(LoginRequiredMixin, CreateView):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        """
-        Process the post request with a new Project Lead form filled out.
-        """
-
+        """Process the post request with a new Project Lead form filled out."""
         form = RevisionForm(request.POST)
         qapp_id = form.data.get('qapp', '')
         # datetime_str = form.data['effective_date']
@@ -577,7 +540,6 @@ def get_qar5_for_user(user_id, qapp_id=None):
 
 def get_qar5_for_team(team_id, qapp_id=None):
     """Method to get all data belonging to a team."""
-
     team = Team.objects.get(id=team_id)
     include_qapps = QappSharingTeamMap.objects.filter(
         team=team).values_list('qapp', flat=True)
@@ -591,7 +553,6 @@ def get_qar5_for_team(team_id, qapp_id=None):
 
 def get_qapp_info(user, qapp_id):
     """Method to return all pieces of a qapp in a dictionary"""
-
     ctx = {}
     ctx['qapp'] = get_qar5_for_user(user.id, qapp_id)
 

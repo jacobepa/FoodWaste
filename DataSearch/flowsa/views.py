@@ -73,7 +73,6 @@ class FlowsaDelete(LoginRequiredMixin, DeleteView):
 
 def flowsa_download(request, *args, **kwargs):
     """Method for downloading a previously uploaded file."""
-
     upload_id = kwargs.get('pk', None)
     if upload_id is None:
         # Export all uploads for this user:
