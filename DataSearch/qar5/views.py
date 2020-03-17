@@ -36,6 +36,11 @@ from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
 from teams.models import Team, TeamMembership
 
 
+def get_qapp_all():
+    """Method to get all data regardless of user or team."""
+    return Qapp.objects.all()
+
+
 class QappIndex(LoginRequiredMixin, TemplateView):
     """Class to return the first page of the Existing Data flow."""
 
@@ -88,7 +93,7 @@ class QappList(LoginRequiredMixin, ListView):
             return get_qar5_for_user(p_id)
         if p_type == 'team':
             return get_qar5_for_team(p_id)
-        return get_existing_data_all()
+        return get_qapp_all()
 
 
 class QappEdit(LoginRequiredMixin, UpdateView):

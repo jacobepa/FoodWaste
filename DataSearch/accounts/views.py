@@ -269,7 +269,7 @@ class PasswordResetConfirmView(FormView):
         :return:
         """
         form = self.form_class(request.POST)
-        uuidb64 = kwargs.get('uuidb64', None)
+        uidb64 = kwargs.get('uuidb64', None)
         token = kwargs.get('token', None)
         usermodel = get_user_model()
         assert uidb64 is not None and token is not None

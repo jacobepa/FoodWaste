@@ -48,7 +48,7 @@ def export_excel(request, *args, **kwargs):
                 temp_file_name = '%d_%s' % (id, filename)
                 with tempfile.SpooledTemporaryFile() as tmp:
                     archive.writestr(temp_file_name, resp.content)
-                    
+
         archive.close()
         response = HttpResponse(
             zip_mem.getvalue(), content_type='application/force-download')

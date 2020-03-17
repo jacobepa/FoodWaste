@@ -11,7 +11,7 @@ from os import path
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -87,4 +87,4 @@ def scifinder_download(request, *args, **kwargs):
         if file.uploaded_by == request.user:
             return download_file(file)
 
-    return HttpResponse()
+    return HttpResponse(request)
