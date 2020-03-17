@@ -162,7 +162,7 @@ def is_float(val_str):
 
 
 def download_files(file_list, zip_name):
-    """Shared method to zip multiple files and return them to the browser"""
+    """Shared method to zip multiple files and return them to the browser."""
     # Create a zip archive to return multiple files: PDF, n attachments.
     zip_mem = BytesIO()
     archive = ZipFile(zip_mem, 'w')
@@ -184,7 +184,7 @@ def download_files(file_list, zip_name):
 
 
 def download_file(file):
-    """Download a single file (Upload object)"""
+    """Download a single file (Upload object)."""
     # Check file extensions, some (Excel) require special content types
     name_split = file.file.name.split('.')
     ext = name_split[len(name_split) - 1]

@@ -42,7 +42,7 @@ class Upload(models.Model):
 @receiver(models.signals.post_delete, sender=Upload)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
     """
-    Deletes file from filesystem.
+    Delete file from filesystem.
 
     When corresponding `MediaFile` object is deleted.
     """

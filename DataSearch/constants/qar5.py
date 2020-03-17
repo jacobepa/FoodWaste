@@ -4,6 +4,7 @@
 # young.daniel@epa.gov
 # py-lint: disable=C0301
 
+"""Add docstring."""
 
 #######################################################
 # Constants and Strings for the QAR5 module Section A.

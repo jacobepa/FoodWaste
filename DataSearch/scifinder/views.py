@@ -72,7 +72,6 @@ class ScifinderDelete(LoginRequiredMixin, DeleteView):
 
 def scifinder_download(request, *args, **kwargs):
     """Method for downloading a previously uploaded file."""
-
     upload_id = kwargs.get('pk', None)
     if upload_id is None:
         # Export all uploads for this user:

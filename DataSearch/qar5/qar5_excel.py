@@ -18,7 +18,6 @@ from qar5.views import get_qapp_info, get_qar5_for_team, get_qar5_for_user
 @login_required
 def export_excel(request, *args, **kwargs):
     """Function to export multiple QAR5 objects as Excel sheets."""
-
     qapp_id = kwargs.get('pk', None)
     if 'user' in request.path:
         user_id = kwargs.get('pk', None)
@@ -59,7 +58,6 @@ def export_excel(request, *args, **kwargs):
 
 def export_excel_single(request, *args, **kwargs):
     """Function to export a single QAR5 object as an Excel sheet."""
-
     qapp_id = kwargs.get('pk', None)
     qapp_info = get_qapp_info(request.user, qapp_id)
 

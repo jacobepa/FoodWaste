@@ -23,7 +23,6 @@ from qar5.views import get_qar5_for_user, get_qapp_info
 
 def export_doc(request, *args, **kwargs):
     """Function to export a multiple QAR5 objects as Word Docx files."""
-
     if 'user' in request.path:
         user_id = kwargs.get('pk', None)
         team_id = qapp_id = None
@@ -63,7 +62,6 @@ def export_doc(request, *args, **kwargs):
 
 def export_doc_single(request, *args, **kwargs):
     """Function to export a single QAR5 object as a Word Docx file."""
-
     qapp_id = kwargs.get('pk', None) 
     qapp_info = get_qapp_info(request.user, qapp_id)
 
