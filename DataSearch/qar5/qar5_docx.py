@@ -68,15 +68,6 @@ def add_center_heading(document, text, level):
     paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
 
-#def add_center_heading_styles(document):
-#    """
-#    Helper method to instantiate a document with the required header formats
-#    """
-#    style_center = document.styles.add_style(
-#        'center_text', WD_STYLE_TYPE.PARAGRAPH).paragraph_format
-#    style_center.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-
-
 def set_table_row_height(table):
     """Helper method to set minimum row height and alignment for a table"""
     for row in table.rows:
@@ -118,10 +109,6 @@ def export_doc_single(request, *args, **kwargs):
     run.add_picture(logo, width=Inches(1.5))
     run.add_text('\t\t\t')
     run.add_picture(qual_assur_proj_plan, width=Inches(3))
-
-    style_center = document.styles.add_style(
-        'center_text', WD_STYLE_TYPE.PARAGRAPH).paragraph_format
-    style_center.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
     style_paragraph = document.styles.add_style(
         'style_paragraph', WD_STYLE_TYPE.PARAGRAPH).paragraph_format
