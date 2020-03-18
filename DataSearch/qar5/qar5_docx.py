@@ -64,11 +64,16 @@ def export_doc(request, *args, **kwargs):
         return response
 
 
-def add_center_heading(document, text, level):
+def add_custom_heading(document, text, level):
     """Helper method to easily add centered headers to a docx file"""
-    heading_style = 'Heading %d' % level
     heading_style = 'custom_header_%d' % level
     paragraph = document.add_paragraph(text, heading_style)
+    return paragraph
+
+
+def add_center_heading(document, text, level):
+    """Helper method to easily add centered headers to a docx file"""
+    paragraph = add_custom_heading(document, text, level)
     paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
 
@@ -109,7 +114,7 @@ def add_custom_headers(document):
 
 def create_toc(document):
     """Helper method to set up the Table of Contents page"""
-    document.add_heading('Table of Contents', level=2)
+    add_custom_heading(document, 'Table of Contents', level=2)
     paragraph = document.add_paragraph()
     run = paragraph.add_run()
     # creates a new element
@@ -209,7 +214,7 @@ def export_doc_single(request, *args, **kwargs):
     # BEGIN APPROVAL PAGE
     # #################################################
 
-    document.add_heading('Approval Page', level=2)
+    add_custom_heading(document, 'Approval Page', level=2)
     # Signature grid ...
     num_signatures = len(qapp_info['signatures'])
     table = document.add_table(rows=6+num_signatures, cols=12)
