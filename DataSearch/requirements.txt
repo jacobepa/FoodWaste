@@ -18,12 +18,12 @@
 astroid==2.3.3                  # Currently the library powering pylints capabilities.
 autopep8==1.5                   # Automatically formats Python code to conform to the PEP 8 style guide.
 bcrypt==3.1.7                   # Modern password hashing for your software and your servers. *May be required for RTP RHEL server
-coverage==5.0.3                 # Measures code coverage, typically during test execution.
+coverage==5.0.4                 # Measures code coverage, typically during test execution.
 django-docs==0.3.1              # Allows to serve Sphinx generated docs directly from Django.
 django-filter==2.2.0            # Reusable Django application allows users to filter querysets dynamically.
 django-grappelli==2.14.1        # A jazzy skin for the Django Admin-Interface.
 django-session-security==2.6.6  # Provides a mechanism to logout inactive authenticated users.
-Django==3.0.3                   # Python Modules.
+Django==3.0.4                   # Python Modules.
 django-phonenumber-field==4.0.0 # An international phone number field for django models.
 djangorestframework==3.11.0     # Powerful and flexible toolkit for building Web APIs.
 django-wkhtmltopdf==3.3.0       # Allows a Django site to output dynamic PDFs.
@@ -31,19 +31,19 @@ docutils==0.16                  # Modular system for processing documentation in
 duecredit==0.8.0                # Citation of scientific software and methods, and limited visibility of donation requests for open-source software.
 flake8==3.7.9                   # Flake8 is a wrapper around these tools: PyFlakes; pycodestyle; Ned Batchelder's McCabe script.
 mccabe==0.6.1                   # McCabe checker, plugin for flake8.
-numpy==1.18.1                   # NumPy: array processing for numbers, strings, records, and objects.
+numpy==1.18.2                   # NumPy: array processing for numbers, strings, records, and objects.
 openpyxl==3.0.3                 # Python library to read/write Excel 2010 xlsx/xlsm/xltx/xltm files.
 pep8==1.7.1                     # Tool to check your Python code against some of the style conventions in PEP 8.
 pisa==3.0.33                    # PDF generator using HTML and CSS.
 psycopg2==2.8.4                 # Python-PostgreSQL Database Adapter.
 pyflakes==2.1.1                 # Analyzes programs and detects various errors.
-pylint_django==2.0.13           # pylint_django.checkers.db_performance looks for migrations which add new model fields and these fields have a default value.
+pylint_django==2.0.14           # pylint_django.checkers.db_performance looks for migrations which add new model fields and these fields have a default value.
 pylint-plugin-utils==0.6        # Utilities and helpers for writing Pylint plugins.
 pylint==2.4.4                   # Static code analysis tool which looks for programming errors, helps enforcing PEP 8 coding standard.
 PyPDF2==1.26.0                  # Pure-Python library built as a PDF toolkit.
 pyPdf==1.13                     # PDF toolkit.
 pytest-django==3.8.0            # Django project/applications with the pytest testing tool.
-pytest==5.3.5                   # Framework to write small tests, yet scales to support complex functional testing for apps/lib.
+pytest==5.4.1                   # Framework to write small tests, yet scales to support complex functional testing for apps/lib.
 python-docx==0.8.10             # Python library for creating and updating Microsoft Word (.docx) files.
 scipy==1.4.1                    # Scientific Library for Python.
 xhtml2pdf==0.2.4                # Package for saving html templates as PDF files. Used to return multiple files instead of a
