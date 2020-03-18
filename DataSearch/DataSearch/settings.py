@@ -31,6 +31,12 @@ SUPPORT_EMAIL = [
     'young.daniel@epa.gov',
 ]
 
+USER_APPROVAL_EMAIL = [
+    'young.daniel@epa.gov',
+    'meyer.david@epa.gov',
+    'gonzalez.michael@epa.gov',
+]
+
 WKHTMLTOPDF_CMD_OPTIONS = {
     'quiet': True,
 }
