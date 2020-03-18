@@ -76,8 +76,13 @@ class QappForm(ModelForm):
     teams = ModelMultipleChoiceField(
         widget=SelectMultiple({'class': 'form-control mb-2',
                                'placeholder': 'Teams'}),
-        queryset=Team.objects.none(),
+        queryset=Team.objects.all(),
         label=_("Share With Teams"), required=False)
+
+    can_edit = BooleanField(
+        required=True, label=_("Teams can edit the QAPP"),
+        initial=False, widget=CheckboxInput(
+            attrs={'class': 'form-control mb-2'}))
 
     def __init__(self, *args, **kwargs):
         """Override default init to add custom queryset for teams."""
@@ -97,7 +102,7 @@ class QappForm(ModelForm):
         model = Qapp
         fields = ('division', 'division_branch', 'title', 'qa_category',
                   'intra_extra', 'revision_number', 'date', 'strap',
-                  'tracking_id', 'teams')
+                  'tracking_id', 'teams', 'can_edit')
 
 
 class QappLeadForm(ModelForm):

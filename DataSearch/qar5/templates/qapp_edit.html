@@ -8,6 +8,7 @@
             <form method="post">
                 {% csrf_token %}
                 {{form}}
+                <br /><br />
                 {% include 'edit_buttons_partial.html' %}
             </form>
         </div>

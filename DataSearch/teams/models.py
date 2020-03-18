@@ -35,6 +35,11 @@ class Team(models.Model):
     # List of members.
     members = models.ManyToManyField(User, through="TeamMembership")
 
+    def __str__(self):
+        """Override str method to display name instead of stringified obj."""
+        return self.name
+
+
 
 class TeamMembership(models.Model):
     """Object describing user's membership on a project team."""

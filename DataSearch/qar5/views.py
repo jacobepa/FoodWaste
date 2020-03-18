@@ -102,8 +102,7 @@ class QappEdit(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         """Qapp Edit Form validation and redirect."""
-        self.object = form.save(commit=False)
-        self.object.save()
+        self.object = form.save()
         return HttpResponseRedirect('/qar5/detail/' + str(self.object.id))
 
 

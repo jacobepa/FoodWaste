@@ -96,7 +96,7 @@ class QappSharingTeamMap(models.Model):
                              related_name='team_qapp',
                              on_delete=models.CASCADE)
     # Indicates if the team can edit the project.
-    can_edit = models.BooleanField(blank=False)
+    can_edit = models.BooleanField(blank=False, default=True)
 
 
 class QappLead(models.Model):
