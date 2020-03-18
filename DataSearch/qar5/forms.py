@@ -80,9 +80,9 @@ class QappForm(ModelForm):
         label=_("Share With Teams"), required=False)
 
     can_edit = BooleanField(
-        required=True, label=_("Teams can edit the QAPP"),
-        initial=False, widget=CheckboxInput(
-            attrs={'class': 'form-control mb-2'}))
+        required=False, label=_("Teams can edit the QAPP"),
+        widget=CheckboxInput(
+            attrs={'class': 'form-control col-sm-1 mb-2'}))
 
     def __init__(self, *args, **kwargs):
         """Override default init to add custom queryset for teams."""
@@ -91,8 +91,10 @@ class QappForm(ModelForm):
             super(QappForm, self).__init__(*args, **kwargs)
             team_ids = TeamMembership.objects.filter(
                 member=current_user).values_list('team', flat=True)
-            self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
-            self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
+            self.fields['teams'].queryset = \
+                Team.objects.filter(id__in=team_ids)
+            self.fields['teams'].label_from_instance = \
+                lambda obj: "%s" % obj.name
         except:
             super(QappForm, self).__init__(*args, **kwargs)
 
@@ -162,7 +164,8 @@ class QappApprovalSignatureForm(ModelForm):
                                 'readonly': 'readonly'}))
 
     contractor = BooleanField(
-        required=False, label=_("Contractor Signature? Default (no check) is EPA."),
+        required=False,
+        label=_("Contractor Signature? Default (no check) is EPA."),
         widget=CheckboxInput(
             attrs={'class': 'form-control custom-control-input'}))
 
