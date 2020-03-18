@@ -6,11 +6,14 @@
 """Definition of qar5 docx export methods."""
 
 from docx import Document
+from docx.enum.dml import MSO_THEME_COLOR_INDEX
 from docx.enum.style import WD_BUILTIN_STYLE, WD_STYLE_TYPE
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_ROW_HEIGHT_RULE
 from docx.enum.text import WD_COLOR_INDEX, WD_LINE_SPACING, \
     WD_PARAGRAPH_ALIGNMENT
-from docx.shared import Inches
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+from docx.shared import Inches, Pt
 
 from io import BytesIO
 from os import path
@@ -64,6 +67,7 @@ def export_doc(request, *args, **kwargs):
 def add_center_heading(document, text, level):
     """Helper method to easily add centered headers to a docx file"""
     heading_style = 'Heading %d' % level
+    heading_style = 'custom_header_%d' % level
     paragraph = document.add_paragraph(text, heading_style)
     paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
@@ -75,6 +79,64 @@ def set_table_row_height(table):
         row.height = Inches(0.35)
         for cell in row.cells:
             cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+
+
+def add_custom_headers(document):
+    """
+    Helper method to create and inject custom headers into a docx.
+    This functionality is necessary so the cover page isn't added
+    to the auto-generated Table of Contents.
+    """
+    
+    custom_header_1 = document.styles.add_style(
+        'custom_header_1', WD_STYLE_TYPE.PARAGRAPH)
+    custom_header_1.font.size = Pt(14)
+    custom_header_1.font.bold = True
+    custom_header_1.font.color.theme_color = MSO_THEME_COLOR_INDEX.ACCENT_1
+
+    custom_header_2 = document.styles.add_style(
+        'custom_header_2', WD_STYLE_TYPE.PARAGRAPH)
+    custom_header_2.font.size = Pt(13)
+    custom_header_2.font.bold = True
+    custom_header_2.font.color.theme_color = MSO_THEME_COLOR_INDEX.ACCENT_1
+
+    custom_header_3 = document.styles.add_style(
+        'custom_header_3', WD_STYLE_TYPE.PARAGRAPH)
+    custom_header_3.font.size = Pt(11)
+    custom_header_3.font.bold = True
+    custom_header_3.font.color.theme_color = MSO_THEME_COLOR_INDEX.ACCENT_1
+
+
+def create_toc(document):
+    """Helper method to set up the Table of Contents page"""
+    document.add_heading('Table of Contents', level=2)
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run()
+    # creates a new element
+    fldChar = OxmlElement('w:fldChar')
+    # sets attribute on element
+    fldChar.set(qn('w:fldCharType'), 'begin')
+    instrText = OxmlElement('w:instrText')
+    # sets attribute on element
+    instrText.set(qn('xml:space'), 'preserve')
+    # change 1-3 depending on heading levels you need
+    instrText.text = 'TOC \\o "1-3" \\h \\z \\u'
+
+    fldChar2 = OxmlElement('w:fldChar')
+    fldChar2.set(qn('w:fldCharType'), 'separate')
+    fldChar3 = OxmlElement('w:t')
+    fldChar3.text = "Right-click to update Table of Contents."
+    fldChar2.append(fldChar3)
+
+    fldChar4 = OxmlElement('w:fldChar')
+    fldChar4.set(qn('w:fldCharType'), 'end')
+
+    r_element = run._r
+    r_element.append(fldChar)
+    r_element.append(instrText)
+    r_element.append(fldChar2)
+    r_element.append(fldChar4)
+    p_element = paragraph._p
 
 
 
@@ -90,8 +152,9 @@ def export_doc_single(request, *args, **kwargs):
     filename = '%s.docx' % qapp_info['qapp'].title
 
     document = Document()
+    add_custom_headers(document)
     styles = document.styles
-        
+
     # #################################################
     # BEGIN COVER PAGE
     # #################################################
@@ -109,10 +172,6 @@ def export_doc_single(request, *args, **kwargs):
     run.add_picture(logo, width=Inches(1.5))
     run.add_text('\t\t\t')
     run.add_picture(qual_assur_proj_plan, width=Inches(3))
-
-    style_paragraph = document.styles.add_style(
-        'style_paragraph', WD_STYLE_TYPE.PARAGRAPH).paragraph_format
-    style_paragraph.line_spacing_rule = WD_LINE_SPACING.SINGLE
 
     # TODO Make blue_header text white, add blue background with shadow
     # document.add_picture('blue_background.png', width=Inches(4))
@@ -231,10 +290,7 @@ def export_doc_single(request, *args, **kwargs):
     # BEGIN ToC PAGE
     # #################################################
 
-    document.add_heading('Table of Contents', level=2)
-    document.add_heading(
-        'TODO: This will have to be generated after the rest of ' + \
-        'the doc so we know page numbers and contents...', level=3)
+    create_toc(document)
     document.add_page_break()
 
     # #################################################

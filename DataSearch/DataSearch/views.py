@@ -210,7 +210,7 @@ def home(request):
     # ################################################
     # NOTE: REMOVE THIS AFTER DOCX EXPORT IS DONE!
     # ################################################
-    # return HttpResponseRedirect('/qar5/exportdoc/1')
+    return HttpResponseRedirect('/qar5/exportdoc/1')
     return render(
         request,
         'index.html',
