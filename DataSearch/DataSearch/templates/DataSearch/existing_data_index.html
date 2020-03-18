@@ -15,10 +15,10 @@
                     onclick="window.location='https://www.epa.gov/sites/production/files/2015-07/documents/cklist-secondary.pdf'">
                 Checklist for use of Existing Data&raquo;
             </button>
-            <a class="btn btn-default offset-sm-1"
+            <button class="btn btn-default offset-sm-1"
                onclick="window.location='https://www.epa.gov/sites/production/files/2015-06/documents/g5-final.pdf'">
                 See Chapter 3 (G-5) &raquo;
-            </a>
+            </button>
         </div>
 
         <div class="row mt-4">
@@ -78,14 +78,14 @@
             </div>
             <div class="col-sm-6">
                 <label class="col-sm-12">or create...</label>
-                <a href="{% url 'team_create' %}" class="col-sm-5 btn btn-success">
+                <button onclick="window.location='{% url 'team_create' %}'" class="col-sm-5 btn btn-success">
                     <span class="glyphicon glyphicon-plus"></span>
                     New Team
-                </a>
-                <a href="/existingdata/create/" class="col-sm-5 offset-sm-1 btn btn-success">
+                </button>
+                <button onclick="window.location='/existingdata/create/'" class="col-sm-5 offset-sm-1 btn btn-success">
                     <span class="glyphicon glyphicon-plus"></span>
                     New Data Entry
-                </a>
+                </button>
             </div>
         </div>
     </div>
