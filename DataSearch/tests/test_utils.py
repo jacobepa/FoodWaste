@@ -23,7 +23,7 @@ from tests.utils import is_interactive
 def test_is_interactive_crippled_stdout(monkeypatch):
     """Not an EPA File, Skipping Doc."""
     class MockedOut(object):
-        """The one which has no isatty.        """
+        """The one which has no isatty."""
 
         def write(self, *args, **kwargs):
             """Not an EPA File, Skipping Doc."""
