@@ -26,7 +26,7 @@
     {% if user.is_authenticated %}
     <div class="row mb-2">
         <button class="col-sm-12 btn btn-md btn-info" onclick="window.location.href='/qar5/create'">
-            Create a new QAR5
+            Create a new QAPP
         </button>
     </div>
     <div class="row">
@@ -34,7 +34,7 @@
             <thead class="table-secondary">
                 <tr>
                     <th scope="col">Division Branch</th>
-                    <th scope="col">QAR5 Title</th>
+                    <th scope="col">QAPP Title</th>
                     <th scope="col">QA Category</th>
                     <th scope="col">Revision Number</th>
                     <th scope="col">StRAP</th>
@@ -65,22 +65,22 @@
     <div class="row">
         <div class="col-sm-3">
             <i class="btn btn-info btn-md" onclick="viewEditExistingQar5(this)" disabled>
-                View or Edit Existing QAR5
+                View or Edit Existing QAPP
             </i>
         </div>
         <div class="col-sm-3">
             <button class="btn btn-info btn-md" onclick="exportAllQar5('docx')">
-                Export All QAR5 to Word Doc
+                Export All QAPP to Word Doc
             </button>
         </div>
         <div class="col-sm-3">
             <button class="btn btn-info btn-md" onclick="exportAllQar5('pdf')">
-                Export All QAR5 to PDF
+                Export All QAPP to PDF
             </button>
         </div>
         <div class="col-sm-3">
             <button class="btn btn-info btn-md" onclick="exportAllQar5('excel')">
-                Export All QAR5 to Excel
+                Export All QAPP to Excel
             </button>
         </div>
     </div>

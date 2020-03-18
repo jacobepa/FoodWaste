@@ -26,7 +26,7 @@ from DataSearch.settings import DEBUG, STATIC_ROOT
 from qar5.views import get_qar5_for_user, get_qar5_for_team, get_qapp_info
 
 def export_doc(request, *args, **kwargs):
-    """Function to export a multiple QAR5 objects as Word Docx files."""
+    """Function to export a multiple QAPP objects as Word Docx files."""
     if 'user' in request.path:
         user_id = kwargs.get('pk', None)
         team_id = qapp_id = None
@@ -147,7 +147,7 @@ def create_toc(document):
 
 # py-lint: disable=no-member
 def export_doc_single(request, *args, **kwargs):
-    """Function to export a single QAR5 object as a Word Docx file."""
+    """Function to export a single QAPP object as a Word Docx file."""
     qapp_id = kwargs.get('pk', None) 
     qapp_info = get_qapp_info(request.user, qapp_id)
 
@@ -306,7 +306,7 @@ def export_doc_single(request, *args, **kwargs):
     #  1) Heading 1 - Revision History
     document.add_heading('Revision History', level=1)
     #  2) Table Label
-    document.add_heading('Table 1 QAR5 Revision History', level=3)
+    document.add_heading('Table 1 QAPP Revision History', level=3)
     #  3) Table (revision history)
     num_revisions = len(qapp_info['revisions'])
     table = document.add_table(rows=1+num_signatures, cols=3)

@@ -57,7 +57,7 @@ class Qapp(models.Model):
         User, on_delete=models.SET_NULL, null=True, blank=True)
     strap = models.CharField(blank=False, null=False, max_length=255)
     tracking_id = models.CharField(blank=False, null=False, max_length=255)
-    # List of teams with which the QAR5 is shared.
+    # List of teams with which the QAPP is shared.
     teams = models.ManyToManyField(Team, through='QappSharingTeamMap')
 
     def save_model(self, request, obj, form, change):

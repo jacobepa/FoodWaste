@@ -7,7 +7,7 @@
 """Add docstring."""
 
 #######################################################
-# Constants and Strings for the QAR5 module Section A.
+# Constants and Strings for the QAPP module Section A.
 A3_DISTRIBUTION_LIST = """
     Quality Assurance Project Plans and Standard Operating Procedures shall be
     controlled through documented approvals as required by Section 5.3 of the
@@ -228,7 +228,7 @@ SECTION_B_INFO = {
 }
 
 #######################################################
-# Constants and Strings for the QAR5 module Section C.
+# Constants and Strings for the QAPP module Section C.
 # This TEXT needs to be added automatically for C.1
 C1_ASSESSMENTS_RESPONSE_ACTIONS = """
     For QA Category A projects, at least one QA audit is required per ORD QA
@@ -261,7 +261,7 @@ SECTION_C_INFO = {
 }
 
 #######################################################
-# Constants and Strings for the QAR5 module Section D.
+# Constants and Strings for the QAPP module Section D.
 D1_DATA_REVIEW_VERIFICATION_VALIDATION = """
     Itemize the information and records which must be included in the data report
     package and specify the reporting format for hard copy and any electronic forms.
@@ -297,7 +297,7 @@ SECTION_D_INFO = {
 }
 
 #######################################################
-# Constants and Strings for the QAR5 module Section E.
+# Constants and Strings for the QAPP module Section E.
 E1_REFERENCES = """
     All references are stored and retrievable from EXISTING DATA
     TRACKING SECTION THIS TOOL
@@ -308,7 +308,7 @@ SECTION_E_INFO = {
 }
 
 #######################################################
-# Constants and Strings for the QAR5 module Section F.
+# Constants and Strings for the QAPP module Section F.
 F1_REVISION_HISTORY = """
 
 """

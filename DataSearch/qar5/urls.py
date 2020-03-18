@@ -48,7 +48,7 @@ urlpatterns = [
         QappList.as_view(),
         name='qapp_list'),
 
-    # Single QAR5 Exports (if user has access, owner or team):
+    # Single QAPP Exports (if user has access, owner or team):
     url(r'^exportdoc/(?P<pk>\d+)/?$',
         export_doc_single, name='qar5_doc'),
     url(r'^exportpdf/(?P<pk>\d+)/?$',
@@ -56,7 +56,7 @@ urlpatterns = [
     url(r'^exportexcel/(?P<pk>\d+)/?$',
         export_excel_single, name='qar5_excel'),
 
-    # All QAR5 Exports for User:
+    # All QAPP Exports for User:
     url(r'^exportdoc/user/(?P<pk>\d+)/?$',
         export_doc, name='qar5_all_doc'),
     url(r'^exportpdf/user/(?P<pk>\d+)/?$',
@@ -64,7 +64,7 @@ urlpatterns = [
     url(r'^exportexcel/user/(?P<pk>\d+)/?$',
         export_excel, name='qar5_all_excel'),
 
-    # All QAR5 Exports for Team:
+    # All QAPP Exports for Team:
     url(r'^exportdoc/team/(?P<pk>\d+)/?$',
         export_doc, name='qar5_all_doc'),
     url(r'^exportpdf/team/(?P<pk>\d+)/?$',

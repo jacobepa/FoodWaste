@@ -17,7 +17,7 @@ from qar5.views import get_qapp_info, get_qar5_for_team, get_qar5_for_user
 
 @login_required
 def export_excel(request, *args, **kwargs):
-    """Function to export multiple QAR5 objects as Excel sheets."""
+    """Function to export multiple QAPP objects as Excel sheets."""
     qapp_id = kwargs.get('pk', None)
     if 'user' in request.path:
         user_id = kwargs.get('pk', None)
@@ -57,7 +57,7 @@ def export_excel(request, *args, **kwargs):
         return response
 
 def export_excel_single(request, *args, **kwargs):
-    """Function to export a single QAR5 object as an Excel sheet."""
+    """Function to export a single QAPP object as an Excel sheet."""
     qapp_id = kwargs.get('pk', None)
     qapp_info = get_qapp_info(request.user, qapp_id)
 
@@ -160,7 +160,7 @@ def export_excel_single(request, *args, **kwargs):
     # Write the Revision History
     sheet.cell(row=row, column=1).value = 'Revision History'
     row += 1
-    sheet.cell(row=row, column=1).value = 'Table 1 QAR5 Revision History'
+    sheet.cell(row=row, column=1).value = 'Table 1 QAPP Revision History'
     row += 1
     sheet.cell(row=row, column=1).value = 'Revision Number'
     sheet.cell(row=row, column=2).value = 'Date Approved'

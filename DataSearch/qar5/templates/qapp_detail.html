@@ -12,15 +12,17 @@
                 <div class="col-md-3">
                     <button onclick="window.location.href='/qar5/'"
                             class="my-2 col-md-12 btn btn-md btn-info">
-                        Back to QAR5 List
+                        Back to QAPP List
                     </button>
                     <button onclick="window.location.href='/qar5/edit/{{object.id}}'"
-                            class="my-2 col-md-12 btn btn-md btn-warning">
-                        Edit QAR5 Info
+                            class="my-2 col-md-12 btn btn-md btn-warning"
+                            {% if edit_message %} disabled title="{{edit_message}}" {% endif %}>
+                        Edit QAPP Info
                     </button>
                     <button onclick="window.location.href='/qar5/delete/{{object.id}}'"
-                            class="my-2 col-md-12 btn btn-md btn-danger">
-                        Delete QAR5
+                            class="my-2 col-md-12 btn btn-md btn-danger"
+                            {% if edit_message %} disabled title="{{edit_message}}" {% endif %}>
+                        Delete QAPP
                     </button>
 
                     <button onclick="window.location.href='/qar5/exportdoc/{{object.id}}'"

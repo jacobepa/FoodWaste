@@ -18,7 +18,7 @@ from qar5.views import get_qapp_info, get_qar5_for_team, get_qar5_for_user
 
 @login_required
 def export_pdf(request, *args, **kwargs):
-    """Function to export multiple QAR5 objects as PDF documents."""
+    """Function to export multiple QAPP objects as PDF documents."""
     template_name = 'export/qar5_pdf_template.html'
     template = get_template(template_name)
     if 'user' in request.path:
@@ -61,7 +61,7 @@ def export_pdf(request, *args, **kwargs):
 
 
 def export_pdf_single(request, *args, **kwargs):
-    """Function to export a single QAR5 object as a PDF document."""
+    """Function to export a single QAPP object as a PDF document."""
     template_name = 'export/qar5_pdf_template.html'
     # Get all required data before populating the PDF Export Template
 

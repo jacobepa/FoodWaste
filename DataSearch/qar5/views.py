@@ -59,7 +59,7 @@ class QappIndex(LoginRequiredMixin, TemplateView):
 
 
 class QappList(LoginRequiredMixin, ListView):
-    """Class for listing this user's (or all if admin) QAR5 objects."""
+    """Class for listing this user's (or all if admin) QAPP objects."""
 
     model = Qapp
     template_name = 'qapp_list.html'
@@ -93,6 +93,32 @@ class QappList(LoginRequiredMixin, ListView):
         return get_qapp_all()
 
 
+def check_can_edit(qapp, user):
+    """
+    Method used to check if the provided user can edit the provided qapp.
+    All of the user's member teams are checked as well as the user's 
+    super user status or qapp ownership status.
+    """
+
+    # Check if any of the user's teams have edit privilege:
+    user_teams = TeamMembership.objects.filter(
+        member=user).values_list('team', flat=True)
+
+    for team in user_teams:
+        data_team_map = QappSharingTeamMap.objects.filter(
+            qapp=qapp, team=team).first()
+        if data_team_map and data_team_map.can_edit:
+            return true
+
+    # Check if the user is super or owns the qapp:
+    if user.is_superuser:
+        return True
+
+    # Since this is the last check, the qapp is either owned by
+    # the user, or the user does not have edit privilege at all:
+    return qapp.prepared_by == user
+
+
 class QappEdit(LoginRequiredMixin, UpdateView):
     """View for editing the details of an existing Qapp instance."""
 
@@ -100,8 +126,23 @@ class QappEdit(LoginRequiredMixin, UpdateView):
     form_class = QappForm
     template_name = 'qapp_edit.html'
 
+    def get(self, request, *args, **kwargs):
+        """
+        Override default get request so we can verify the user has edit
+        privileges, either through super status or team membership.
+        """
+        pk = kwargs.get('pk')
+        qapp = Qapp.objects.filter(id=pk).first()
+        if check_can_edit(qapp, request.user):
+            return HttpResponse(self.template_name, {'object': qapp})
+
+        reason = 'You don\'t have edit permissions for this QAPP!'
+        return HttpResponseRedirect('/qar5/detail/%s' % pk, 401, reason)
+
+
     def form_valid(self, form):
         """Qapp Edit Form validation and redirect."""
+        # Verify the current user has permissions to modify this QAPP:
         self.object = form.save(commit=False)
         self.object.save()
         # Prepare and insert teams data.
@@ -136,7 +177,7 @@ class QappCreate(LoginRequiredMixin, CreateView):
 
     model = Qapp
     template_name = 'qapp_create.html'
-    
+
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new QAPP."""
@@ -186,6 +227,9 @@ class QappDetail(LoginRequiredMixin, DetailView):
             QappApprovalSignature.objects.filter(
                 qapp_approval=context['project_approval'])
         context['SECTION_A_INFO'] = SECTION_A_INFO
+        if not check_can_edit(context['object'], self.request.user):
+            context['edit_message'] = \
+                'You don\'t have edit permissions for this QAPP!'
         return context
 
 
@@ -289,7 +333,7 @@ class SectionAView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section A (A.3 and later)."""
+        """Return the index page for QAPP Section A (A.3 and later)."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -304,14 +348,14 @@ class SectionAView(LoginRequiredMixin, TemplateView):
                                  'a9': SECTION_A_INFO['a9']})
 
         return render(request, self.template_name,
-                      {'title': 'QAR5 Section A', 'qapp_id': qapp_id,
+                      {'title': 'QAPP Section A', 'qapp_id': qapp_id,
                        'SECTION_A_INFO': SECTION_A_INFO, 'form': form})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionA form filled out."""
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
-               'SECTION_A_INFO': SECTION_A_INFO, 'title': 'QAR5 Section A'}
+               'SECTION_A_INFO': SECTION_A_INFO, 'title': 'QAPP Section A'}
 
         qapp = Qapp.objects.get(id=ctx['qapp_id'])
         existing_section_a = SectionA.objects.filter(qapp=qapp).first()
@@ -337,7 +381,7 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section B."""
+        """Return the index page for QAPP Section B."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -355,7 +399,7 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 
         # TODO pass in SectionB Form
         return render(request, self.template_name,
-                      {'title': 'QAR5 Section B', 'qapp_id': qapp_id,
+                      {'title': 'QAPP Section B', 'qapp_id': qapp_id,
                        'SECTION_B_INFO': SECTION_B_INFO, 'form': form,
                        'sectionb_type': sectionb_type})
 
@@ -363,7 +407,7 @@ class SectionBView(LoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionB form filled out."""
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
-               'SECTION_B_INFO': SECTION_B_INFO, 'title': 'QAR5 Section B'}
+               'SECTION_B_INFO': SECTION_B_INFO, 'title': 'QAPP Section B'}
 
         qapp = Qapp.objects.get(id=ctx['qapp_id'])
         existing_section_b = SectionB.objects.filter(qapp=qapp).first()
@@ -388,11 +432,11 @@ class SectionCView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section C."""
+        """Return the index page for QAPP Section C."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         return render(request, 'SectionC/index.html',
-                      {'title': 'QAR5 Section C', 'qapp_id': qapp_id,
+                      {'title': 'QAPP Section C', 'qapp_id': qapp_id,
                        'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS})
 
 
@@ -403,7 +447,7 @@ class SectionDView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section D."""
+        """Return the index page for QAPP Section D."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -416,7 +460,7 @@ class SectionDView(LoginRequiredMixin, TemplateView):
             form = SectionDForm({'qapp': qapp})
 
         return render(request, self.template_name,
-                      {'title': 'QAR5 Section D', 'qapp_id': qapp_id,
+                      {'title': 'QAPP Section D', 'qapp_id': qapp_id,
                        'SECTION_D_INFO': SECTION_D_INFO,
                        'form': form})
 
@@ -424,7 +468,7 @@ class SectionDView(LoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionD form filled out."""
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
-               'SECTION_D_INFO': SECTION_D_INFO, 'title': 'QAR5 Section D'}
+               'SECTION_D_INFO': SECTION_D_INFO, 'title': 'QAPP Section D'}
 
         qapp = Qapp.objects.get(id=ctx['qapp_id'])
         existing_section_d = SectionD.objects.filter(qapp=qapp).first()
@@ -450,7 +494,7 @@ class SectionEView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section E."""
+        """Return the index page for QAPP Section E."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
@@ -463,14 +507,14 @@ class SectionEView(LoginRequiredMixin, TemplateView):
             form = ReferencesForm({'qapp': qapp})
 
         return render(request, self.template_name,
-                      {'title': 'QAR5 Section E', 'qapp_id': qapp_id,
+                      {'title': 'QAPP Section E', 'qapp_id': qapp_id,
                        'SECTION_E_INFO': SECTION_E_INFO, 'form': form})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a SectionE form filled out."""
         ctx = {'qapp_id': request.GET.get('qapp_id', None),
-               'SECTION_E_INFO': SECTION_E_INFO, 'title': 'QAR5 Section E'}
+               'SECTION_E_INFO': SECTION_E_INFO, 'title': 'QAPP Section E'}
 
         qapp = Qapp.objects.get(id=ctx['qapp_id'])
         existing_references = References.objects.filter(qapp=qapp).first()
@@ -494,12 +538,12 @@ class SectionFView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        """Return the index page for QAR5 Section F."""
+        """Return the index page for QAPP Section F."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         revisions = Revision.objects.filter(qapp_id=qapp_id)
         return render(request, 'SectionF/index.html',
-                      {'title': 'QAR5 Section F', 'qapp_id': qapp_id,
+                      {'title': 'QAPP Section F', 'qapp_id': qapp_id,
                        'SECTION_F_INFO': SECTION_F_INFO,
                        'revisions': revisions})
 
