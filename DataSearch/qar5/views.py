@@ -103,36 +103,31 @@ class QappEdit(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """Qapp Edit Form validation and redirect."""
         self.object = form.save(commit=False)
-        #self.obj.prepared_by = request.user
         self.object.save()
         # Prepare and insert teams data.
         if form.cleaned_data['teams']:
-
-            #existing_teams = QappSharingTeamMap.objects.filter(
-            #    qapp=self.object).values_list('team', flat=True)
-            #for elem in existing_teams:
-            #    # If the user deselected any teams, remove it from the db map:
-            #    if elem not in form_teams:
-            #        elem.delete()
-            #    # Else we insert a new team or update existing team in db:
-            #    else:
-
             form_teams = form.cleaned_data['teams']
 
+            # Remove any team maps that have been deselected:
             remove_teams = QappSharingTeamMap.objects.filter(
                 qapp=self.object).exclude(team__in=form_teams)
+
             for team in remove_teams:
                 team.delete()
 
+            # Insert or update selected team maps:
             for team in form_teams:
                 data_team_map = QappSharingTeamMap.objects.filter(
                     qapp=self.object, team=team).first()
+                # Create new team map if not exists:
                 if not data_team_map:
                     data_team_map = QappSharingTeamMap()
                     data_team_map.team = team
                     data_team_map.qapp = self.object
+                # Update (or set) the can_edit field:
                 data_team_map.can_edit = form.cleaned_data['can_edit']
                 data_team_map.save()
+        # Return back to the details page:
         return HttpResponseRedirect('/qar5/detail/' + str(self.object.id))
 
 
