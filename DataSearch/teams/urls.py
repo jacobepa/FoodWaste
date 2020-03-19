@@ -16,7 +16,7 @@ Available functions:
 from django.conf.urls import url
 from teams.views import APITeamListView, APITeamDetailView, \
     APITeamMembershipListView, APITeamMembershipDetailView, \
-    TeamCreateView, TeamManagementView, TeamEditView
+    TeamCreateView, TeamManagementView, TeamEditView, TeamListView
 
 urlpatterns = [
 
@@ -33,6 +33,7 @@ urlpatterns = [
 
     # Team management.
     url(r'^team/$', TeamCreateView.as_view(), name='team_create'),
+    url(r'^list/$', TeamListView.as_view(), name='team_list'),
     url(r'^team/(?P<team_id>\d+)/manage$', TeamManagementView.as_view(),
         name='team_manage'),
     url(r'^team/(?P<team_id>\d+)/edit$', TeamEditView.as_view(),

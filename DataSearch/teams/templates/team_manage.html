@@ -1,17 +1,8 @@
 {% extends "main/base.html" %}
 {% load humanize %}
-{#{% load custom_filters %}#}
 {% block content %}
 <div class="white-box">
-    <ol class="breadcrumb">
-        <li>
-            <a href="{% url 'dashboard' %}?show=teams">
-                Dashboard
-            </a>
-        </li>
-        <li class="breadcrumb-item active">Team Members</li>
-    </ol>
-    <h5 class="separator">Manage memberships for team '{{team.name}}'</h5>
+    <h4 class="separator">Manage memberships for team '{{team.name}}'</h4>
 
     <div class="vmargin20">
         {% if team.team_memberships %}
@@ -61,10 +52,11 @@
                 </ul>
             </div>
             <h5>
-                Add members
+                Add members: {{nonmembers | length}} available
             </h5>
             <div class="scroll">
                 <ul class="list-group">
+                    {% if nonmembers %}
                     {% for member in nonmembers %}
                     <li class="list-group-item">
                         <div class="row">
@@ -94,15 +86,24 @@
                         </div>
                     </li>
                     {% endfor %}
+                    {% else %}
+                    <li class="list-group-item">
+                        No users available to add!
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-10"> </div>
-        <div class="col-sm-2">
-            <a class="btn btn-primary" href="{% url 'dashboard' %}?show=teams">Done</a>
+        <div class="col-sm-12">
+            <div class="float-right">
+                <button type="reset" class="btn btn-md btn-success"
+                        onclick="window.location='{% url 'team_list' %}'">
+                    Done
+                </button>
+            </div>
         </div>
     </div>
 

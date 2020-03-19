@@ -22,14 +22,39 @@ from rest_framework import permissions
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.shortcuts import render
-from django.views.generic import FormView
+from django.views.generic import FormView, ListView
 from django.test.client import RequestFactory
 from accounts.models import User
 from teams.forms import TeamManagementForm, Team
 from teams.models import TeamMembership
-from teams.serializers import TeamSerializer, UserSerializer, TeamMembershipSerializer, TeamMembershipModifySerializer
+from teams.serializers import TeamSerializer, UserSerializer, \
+    TeamMembershipSerializer, TeamMembershipModifySerializer
+
+
+class TeamListView(LoginRequiredMixin, ListView):
+    """
+    New class to return a teams list view.
+    This will serve as the management view where users can view their teams,
+    edit their teams, and create new teams.
+    """
+
+    model = Team
+    context_object_name = 'teams'
+    template_name = 'team_list.html'
+
+    def get_queryset(self):
+        """
+        Override the default queryset with a set of teams
+        of which the requesting user is a member.
+        """
+        user = self.request.user
+        return Team.objects.filter(members=user).order_by(
+            'name').select_related(
+                "created_by", "last_modified_by").prefetch_related(
+                    "team_memberships", "team_memberships__member").all()
 
 
 class TeamCreateView(FormView):
