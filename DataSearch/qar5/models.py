@@ -123,7 +123,7 @@ class QappApproval(models.Model):
                                        max_length=255)
     qapp = models.OneToOneField(Qapp, blank=False,
                                 on_delete=models.CASCADE,
-                                primary_key=True)
+                                primary_key=False)
     # Dynamic number of signatures, one-to-many:
 
 
