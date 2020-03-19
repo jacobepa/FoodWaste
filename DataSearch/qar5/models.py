@@ -121,8 +121,9 @@ class QappApproval(models.Model):
                                           max_length=255)
     activity_number = models.CharField(blank=False, null=False,
                                        max_length=255)
-    qapp = models.ForeignKey(Qapp, blank=False,
-                             on_delete=models.CASCADE)
+    qapp = models.OneToOneField(Qapp, blank=False,
+                                on_delete=models.CASCADE,
+                                primary_key=True)
     # Dynamic number of signatures, one-to-many:
 
 
