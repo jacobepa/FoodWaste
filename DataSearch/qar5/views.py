@@ -136,7 +136,7 @@ class QappEdit(LoginRequiredMixin, UpdateView):
         if check_can_edit(qapp, request.user):
             # TODO: Fix return form:
             return render(request, self.template_name,
-                          {'object': qapp, 'form': QappForm(qapp)})
+                          {'object': qapp, 'form': QappForm(instance=qapp)})
 
         reason = 'You don\'t have edit permissions for this QAPP!'
         return HttpResponseRedirect('/qar5/detail/%s' % pk, 401, reason)

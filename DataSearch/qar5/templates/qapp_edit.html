@@ -17,4 +17,13 @@
 {% endblock %}
 
 {% block scripts %}
+<script>
+    $(document).ready(function () {
+        $("#id_date").datetimepicker(
+            {
+                sideBySide: true,
+                format: 'MM/DD/YYYY HH:mm:ss',
+            });
+    });
+</script>
 {% endblock %}
