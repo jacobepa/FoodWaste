@@ -387,10 +387,12 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
-        sectiona = SectionA.objects.get(qapp_id=qapp_id)
-        sectionb_type_id = sectiona.sectionb_type_id
-        sectionb_type = SectionBType.objects.get(id=sectionb_type_id)
-        
+        sectiona = SectionA.objects.filter(qapp_id=qapp_id).first()
+        sectionb_type = ''
+        if sectiona:
+            sectionb_type_id = sectiona.sectionb_type_id
+            sectionb_type = SectionBType.objects.get(id=sectionb_type_id)
+
         existing_section_b = SectionB.objects.filter(qapp=qapp).first()
 
         if existing_section_b:
@@ -413,7 +415,8 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 
         qapp = Qapp.objects.get(id=ctx['qapp_id'])
         existing_section_b = SectionB.objects.filter(qapp=qapp).first()
-        ctx['sectionb_type'] = qapp.sectiona.sectionb_type
+        if qapp.sectiona:
+            ctx['sectionb_type'] = qapp.sectiona.sectionb_type
 
         # Update if existing, otherwise insert new:
         if existing_section_b:
