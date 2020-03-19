@@ -108,7 +108,7 @@ def check_can_edit(qapp, user):
         data_team_map = QappSharingTeamMap.objects.filter(
             qapp=qapp, team=team).first()
         if data_team_map and data_team_map.can_edit:
-            return true
+            return True
 
     # Check if the user is super or owns the qapp:
     if user.is_superuser:
