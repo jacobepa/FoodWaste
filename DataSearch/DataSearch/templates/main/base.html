@@ -80,55 +80,115 @@
     <nav class="nav main-nav clearfix" role="navigation">
         <div class="nav__inner">
             <h2 class="element-invisible">Main menu</h2>
-            <ul class="menu" role="menu" id="navbar">
+
+            <ul class="menu" role="menu" id="navbar_left">
                 {% url 'home' as home_url %}
-                <li {% if self.path == home_url %} class="expanded active-trail menu-item" {% else %} class="menu-item" {% endif %} role="presentation">
-                    <a href="{{home_url}}" {% if self.path == home_url %} class="active-trail menu-link active" {% else %} class="menu-link" {% endif %} role="menuitem">Home</a>
+                <li class="menu-item" role="presentation">
+                    <a href="{{home_url}}" class="menu-link" role="menuitem">Home</a>
                 </li>
 
                 <!-- navbar when user is logged in -->
                 {% if user.is_authenticated %}
-                <!-- 'Existing Data Tracking Tool -->
-                {% url 'tracking_tool' as tracking_tool_url %}
-                <li class="menu-item" role="presentation">
-                    <a href="{{tracking_tool_url}}" class="menu-link" role="menuitem">Existing Data Tracking</a>
-                </li>
-
-                <li class="menu-item" role="presentation">
-                    <a href="/scifinder/" class="menu-link" role="menuitem">SciFinder</a>
-                </li>
-
-                <li class="menu-item" role="presentation">
-                    <a href="/flowsa/" class="menu-link" role="menuitem">FLOWSA</a>
-                </li>
-
-                <li class="menu-item" role="presentation">
-                    <a href="/qar5/" class="menu-link" role="menuitem">QAPP</a>
-                </li>
-
-                <li {% if request.path == go_to_support %} class="dropdown expanded active-trail menu-item"
-                    {% elif request.path == treatment_url %} class="dropdown expanded active-trail menu-item"
-                    {% else %} class="dropdown menu-item" {% endif %} role="presentation">
-                    <a {% if request.path == go_to_support %} class="active-trail menu-link active"
-                       {% elif request.path == user_manual %} class="active-trail menu-link active"
-                       {% elif request.path == events_url %} class="active-trail menu-link active"
-                       {% else %} class="menu-link dropdown-toggle" {% endif %} data-toggle="dropdown" href="javascript:void(0)" role="menuitem">
-                        Help
+                <li class="dropdown menu-item" role="presentation">
+                    <a data-toggle="dropdown" href="javascript:void(0)" class="menu-link dropdown-toggle" role="menuitem">
+                        Project
                     </a>
                     <ul class="dropdown-menu">
-                        {% url 'contact' as contact_url %}
-                        <li><a href="{{contact_url}}">Contact</a></li>
-                        {% url 'support:go_to_support' as go_to_support_url %}
-                        <li><a href="{{go_to_support_url}}">Suggestions</a></li>
-                        {% url 'support:documentation' as documentation_url %}
-                        <li><a href="{{documentation_url}}">User Documentation</a></li>
-                        {% url 'support:events' as events_url %}
-                        <li><a href="{{events_url}}">Upcoming Events</a></li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/">Search Existing Projects</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/">List projects by the organization</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/">Create a project</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/">Edit a project</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/teams/team/">Create a team</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/">Edit a team</a>
+                        </li>
                     </ul>
                 </li>
 
-                <li class="dropdown menu-item navbar-right" role="presentation">
+                
+                <li class="dropdown menu-item" role="presentation">
                     <a data-toggle="dropdown" href="javascript:void(0)" class="menu-link dropdown-toggle" role="menuitem">
+                        Project Activity
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="menu-item">
+                            <a class="menu-link" href="{% url 'tracking_tool' %}">Existing Data tracking tool</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/qar5/">Quality Assurance Project Plan (QAPP) tool</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/scifinder/">SciFinder access</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/flowsa/">FLOWSA data file tool</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                {% if request.user.is_staff %}
+                <li class="dropdown menu-item" role="presentation">
+                    <a data-toggle="dropdown" href="javascript:void(0)" class="menu-link dropdown-toggle" role="menuitem">
+                        Manage
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="menu-item">
+                            <a class="menu-link" href="{% url 'admin:index' %}">Manage accounts</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="{% url 'admin:index' %}">Manage organizations</a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                
+                <!-- Else user is not logged in -->
+                {% else %}
+                {% url 'contact' as contact_url %}
+                <li class="menu-item" role="presentation">
+                    <a href="{{contact_url}}" class="menu-link" role="menuitem">Contact</a>
+                </li>
+
+                {% url 'register' as register_url %}
+                <li {% if self.path == register_url %} class="expanded active-trail menu-item" {% else %} class="menu-item" {% endif %} role="presentation">
+                    <a href="{{register_url}}" {% if self.path == register_url %} class="active-trail menu-link active" {% else %} class="menu-link" {% endif %} role="menuitem">Register</a>
+                </li>
+
+                {% url 'login' as login_url %}
+                <li {% if self.path == login_url %} class="expanded active-trail menu-item" {% else %} class="menu-item" {% endif %} role="presentation">
+                    <a href="{{login_url}}" {% if self.path == login_url %} class="active-trail menu-link active" {% else %} class="menu-link" {% endif %} role="menuitem">Log-In</a>
+                </li>
+                {% endif %}
+            </ul>
+
+            {% if user.is_authenticated %}
+            <ul class="menu float-right" role="menu" id="navbar_right">
+                <li class="dropdown menu-item" role="presentation">
+                    <a class="menu-link dropdown-toggle" data-toggle="dropdown"
+                       href="javascript:void(0)" role="menuitem">
+                        Help/Suggestions
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'support:go_to_support' %}">Suggestions</a></li>
+                        <li><a href="{% url 'support:documentation' %}">User Documentation</a></li>
+                        <li><a href="{% url 'support:events' %}">Upcoming Events</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown menu-item" role="presentation">
+                    <a data-toggle="dropdown" href="javascript:void(0)" class="menu-link dropdown-toggle" role="menuitem">
+                        Welcome
                         {% if user.first_name %}
                         {{user.first_name}}
                         {% else %}
@@ -150,25 +210,8 @@
                         </li>
                     </ul>
                 </li>
-
-                <!-- Else user is not logged in -->
-                {% else %}
-                {% url 'contact' as contact_url %}
-                <li class="menu-item" role="presentation">
-                    <a href="{{contact_url}}" class="menu-link" role="menuitem">Contact</a>
-                </li>
-
-                {% url 'register' as register_url %}
-                <li {% if self.path == register_url %} class="expanded active-trail menu-item" {% else %} class="menu-item" {% endif %} role="presentation">
-                    <a href="{{register_url}}" {% if self.path == register_url %} class="active-trail menu-link active" {% else %} class="menu-link" {% endif %} role="menuitem">Register</a>
-                </li>
-
-                {% url 'login' as login_url %}
-                <li {% if self.path == login_url %} class="expanded active-trail menu-item" {% else %} class="menu-item" {% endif %} role="presentation">
-                    <a href="{{login_url}}" {% if self.path == login_url %} class="active-trail menu-link active" {% else %} class="menu-link" {% endif %} role="menuitem">Log-In</a>
-                </li>
-                {% endif %}
             </ul>
+            {% endif %}
         </div>
     </nav>
 
@@ -180,11 +223,8 @@
         </div>
     </div>
 
-
-
     <section id="main-content" class="main-content clearfix" role="main" tabindex="-1">
         <div class="main-column clearfix">
-
             <!-- main content block - override in partials/sub-templates -->
             <div>
                 {% block content %}

@@ -160,6 +160,8 @@ MEDIA_URL = "/media/"
 # UPLOAD_ROOT will not be accessible from URL, only by the server views.
 UPLOAD_ROOT = os.path.join(BASE_DIR, 'DataSearch', 'uploads')
 
+ENABLE_RSS_FEEDS = False
+
 APP_NAME = 'ExistingData'
 APP_VERSION = '1.0.0'
 APP_DISCLAIMER = '''The information and data presented in this product were obtained
