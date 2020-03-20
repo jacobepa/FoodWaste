@@ -427,6 +427,10 @@ def export_doc_single(request, *args, **kwargs):
         document.add_paragraph(
             qapp_info['section_c'].c2.replace('\r\n', ' '),
             styles['No Spacing'])
+        document.add_heading('C.3 Quality Metrics (QA/QC Checks)', level=2)
+        document.add_paragraph(
+            qapp_info['section_c'].c3.replace('\r\n', ' '),
+            styles['No Spacing'])
     else:
         document.add_heading(
             'C.1 Assessments and Response Actions', level=2)

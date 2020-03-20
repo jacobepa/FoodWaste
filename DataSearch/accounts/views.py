@@ -110,8 +110,9 @@ class UsernameReminderRequestView(FormView):
                         subject = ''.join(subject.splitlines())
                         email = loader.render_to_string(
                             email_template_name, content)
-                        send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                                  [user.email], fail_silently=True)
+                        if not settings.EMAIL_DISABLED:
+                            send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                                      [user.email], fail_silently=True)
                     # Render the done page.
                     return render(request,
                                   'registration/username_reminder_done.html',
@@ -215,9 +216,10 @@ class PasswordResetRequestView(FormView):
                 # Email subject *must not* contain newlines.
                 subject = ''.join(subject.splitlines())
                 email = loader.render_to_string(email_template_name, content)
-
-                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                          [user.email], fail_silently=True)
+                
+                if not settings.EMAIL_DISABLED:
+                    send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                                [user.email], fail_silently=True)
 
             # Render the done page.
             return render(request,
@@ -390,8 +392,9 @@ class UserRegistrationView(FormView):
                 email = loader.render_to_string(
                     self.admin_email_template_name, request_email_context)
                 # This is driven by local_settings.py.
-                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                          settings.USER_APPROVAL_EMAIL, fail_silently=False)
+                if not settings.EMAIL_DISABLED:
+                    send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                                settings.USER_APPROVAL_EMAIL, fail_silently=False)
 
                 # Send an email to the user notifying them that
                 # the account request is under review.
@@ -405,9 +408,10 @@ class UserRegistrationView(FormView):
                 subject = ''.join(subject.splitlines())
                 email = loader.render_to_string(
                     self.user_email_template_name, user_email_context)
-
-                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                          [user.email], fail_silently=False)
+                
+                if not settings.EMAIL_DISABLED:
+                    send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                              [user.email], fail_silently=False)
 
             # Render the activation needed template.
             return render(request, self.template_register_inactive,
@@ -461,8 +465,9 @@ class UserApprovalView(TemplateView):
             subject = ''.join(subject.splitlines())
             email = loader.render_to_string(
                 self.email_template_name, user_email_context)
-            send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                      [user.email], fail_silently=False)
+            if not settings.EMAIL_DISABLED:
+                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                          [user.email], fail_silently=False)
 
         except (TypeError, ValueError, OverflowError, user_model.DoesNotExist):
             user = None
@@ -511,8 +516,9 @@ class UserDenialView(TemplateView):
             # Email subject *must not* contain newlines.
             subject = ''.join(subject.splitlines())
             email = loader.render_to_string(self.email_template_name, context)
-            send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                      [user.email], fail_silently=False)
+            if not settings.EMAIL_DISABLED:
+                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                          [user.email], fail_silently=False)
 
             # Delete the account.
             user.delete()

@@ -72,6 +72,11 @@ class Qapp(models.Model):
             obj.prepared_by = request.user
         return super().save_model(request, obj, form, change)
 
+    def __str__(self):
+        """Override str method to display name instead of stringified obj."""
+        return self.title
+
+
     # def save(user):
     #    """
     #    Overwrite the default save_model method so we can automatically
@@ -163,7 +168,7 @@ class SectionA(models.Model):
     a9_drive_path = models.CharField(blank=False, null=False, max_length=255)
     # Dropdown selection for the SectionB Classificiation
     sectionb_type = models.ForeignKey(SectionBType, blank=True, null=True,
-                                      related_name='sectionb_type',
+                                       related_name='sectionb_type',
                                       on_delete=models.CASCADE)
 
 
@@ -193,15 +198,14 @@ class SectionB(models.Model):
     b4 = models.CharField(blank=False, null=False, max_length=2047)
 
 
-class SectionC():
+class SectionC(models.Model):
     """Class representing the entirety of SectionC for a given QAPP."""
 
-    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
-                                primary_key=True)
-    #c1 = models.CharField(blank=False, null=False, max_length=2047)
-    #c2 = models.CharField(blank=False, null=False, max_length=2047)
+    qapp = models.OneToOneField(
+        Qapp, on_delete=models.CASCADE, primary_key=True)
     c1 = SECTION_C_INFO[0]
     c2 = SECTION_C_INFO[1]
+    c3 = models.CharField(blank=False, null=False, max_length=2047)
 
 
 
@@ -209,8 +213,8 @@ class SectionC():
 class SectionD(models.Model):
     """Class representing the entirety of SectionD for a given QAPP."""
 
-    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
-                                primary_key=True)
+    qapp = models.OneToOneField(
+        Qapp, on_delete=models.CASCADE, primary_key=True)
     d1 = models.CharField(blank=False, null=False, max_length=2047)
     d2 = models.CharField(blank=False, null=False, max_length=2047)
     d3 = models.CharField(blank=False, null=False, max_length=2047)

@@ -25,11 +25,12 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, ListView, \
     TemplateView, UpdateView
 from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
-    SECTION_C_DEFAULTS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
+    SECTION_C_DEFAULTS, C3_QUALITY_METRICS, SECTION_D_INFO, SECTION_E_INFO, \
+    SECTION_F_INFO
 from DataSearch.settings import DATETIME_FORMAT, DEBUG, STATIC_ROOT
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
-    QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionDForm, \
-    RevisionForm, ReferencesForm
+    QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionCForm, \
+   SectionDForm, RevisionForm, ReferencesForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
     SectionA, SectionB, SectionBType, SectionC, SectionD, \
     QappSharingTeamMap, Revision, References
@@ -401,7 +402,6 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         else:
             form = SectionBForm({'qapp': qapp})
 
-        # TODO pass in SectionB Form
         return render(request, self.template_name,
                       {'title': 'QAPP Section B', 'qapp_id': qapp_id,
                        'SECTION_B_INFO': SECTION_B_INFO, 'form': form,
@@ -435,14 +435,50 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 class SectionCView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section C information."""
 
+    template_name = 'SectionC/index.html'
+
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return the index page for QAPP Section C."""
         assert isinstance(request, HttpRequest)
         qapp_id = request.GET.get('qapp_id', None)
-        return render(request, 'SectionC/index.html',
+        qapp = Qapp.objects.get(id=qapp_id)
+
+        existing_section_c = SectionC.objects.filter(qapp=qapp).first()
+
+        if existing_section_c:
+            form = SectionCForm(instance=existing_section_c)
+
+        else:
+            form = SectionCForm({'qapp': qapp})
+
+        return render(request, self.template_name,
                       {'title': 'QAPP Section C', 'qapp_id': qapp_id,
-                       'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS})
+                       'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS,
+                       'form': form, 'c3_info': C3_QUALITY_METRICS})
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a SectionC form filled out."""
+        ctx = {'qapp_id': request.GET.get('qapp_id', None),
+               'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS,
+               'title': 'QAPP Section C', 'c3_info': C3_QUALITY_METRICS}
+
+        qapp = Qapp.objects.get(id=ctx['qapp_id'])
+        existing_section_c = SectionC.objects.filter(qapp=qapp).first()
+
+        # Update if existing, otherwise insert new:
+        if existing_section_c:
+            ctx['form'] = SectionCForm(instance=existing_section_c,
+                                       data=request.POST)
+        else:
+            ctx['form'] = SectionCForm(request.POST)
+
+        if ctx['form'].is_valid():
+            ctx['obj'] = ctx['form'].save(commit=True)
+            ctx['save_success'] = 'Successfully Saved Changes!'
+
+        return render(request, self.template_name, ctx)
 
 
 class SectionDView(LoginRequiredMixin, TemplateView):
@@ -641,10 +677,11 @@ def get_qapp_info(user, qapp_id):
                 qapp_approval_id=ctx['qapp_approval'].id)
         ctx['section_a'] = SectionA.objects.filter(qapp_id=qapp_id).first()
         ctx['section_b'] = SectionB.objects.filter(qapp_id=qapp_id).first()
-        ctx['section_c'] = SectionC()
+        ctx['section_c'] = SectionC.objects.filter(qapp_id=qapp_id).first()
         ctx['section_d'] = SectionD.objects.filter(qapp_id=qapp_id).first()
         ctx['references'] = References.objects.filter(qapp_id=qapp_id).first()
         ctx['revisions'] = Revision.objects.filter(qapp_id=qapp_id)
+        ctx['title'] = str(ctx['qapp'])
         return ctx
 
     return None

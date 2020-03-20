@@ -271,6 +271,10 @@ def export_excel_single(request, *args, **kwargs):
         sheet.cell(row=row, column=1).value = \
             'C.2 - Reports to Management'
         sheet.cell(row=row, column=2).value = qapp_info['section_c'].c2
+        row += 1
+        sheet.cell(row=row, column=1).value = \
+            'C.3 Quality Metrics (QA/QC Checks)'
+        sheet.cell(row=row, column=2).value = qapp_info['section_c'].c3
     row += 2
 
     # ###########################

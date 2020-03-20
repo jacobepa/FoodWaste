@@ -251,6 +251,18 @@ C2_REPORTS_TO_MANAGEMENT = """
     publications undergoing ORD clearance is documented in STICS.
 """
 
+C3_QUALITY_METRICS = """
+    For each process measurement and analytical method, identify the required
+    QC checks (e.g., blanks, control samples, duplicates, matrix spikes,
+    surrogates), the frequencies for performing these checks, associated
+    acceptance criteria, and corrective actions to be performed if
+    acceptance criteria are not met.
+    Any additional project-specific QA objectives
+    (e.g., completeness, mass balance) shall be presented,
+    including acceptance criteria.
+
+"""
+
 SECTION_C_DEFAULTS = {
     'C.1 Assessments and Response Actions': C1_ASSESSMENTS_RESPONSE_ACTIONS,
     'C.2 Reports to Management': C2_REPORTS_TO_MANAGEMENT

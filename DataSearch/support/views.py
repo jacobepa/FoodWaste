@@ -258,7 +258,8 @@ class SuggestionEditView(FormView):
             for att in support_attachments:
                 the_email.attach_file(settings.MEDIA_ROOT + "/" + str(att.attachment))
 
-            the_email.send(fail_silently=False)
+            if not settings.EMAIL_DISABLED:
+                the_email.send(fail_silently=False)
 
             # Go to show detail page next.
             if support_type_name == 'suggestion':
@@ -410,7 +411,6 @@ def list_supports(request, support_type_name):
     title = "Support List"
     # supports = Support.objects.all()
     supports = Support.objects.filter(support_type__the_name__iexact=support_type_name)
-
     return render(request, 'list/list_support_issues.html', locals())
 
 

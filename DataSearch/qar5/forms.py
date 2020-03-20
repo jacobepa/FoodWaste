@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from constants.models import QA_CATEGORY_CHOICES, XMURAL_CHOICES, YES_OR_NO
 from constants.qar5 import SECTION_A_INFO
 from qar5.models import Division, Qapp, QappApproval, QappLead, \
-    QappApprovalSignature, SectionA, SectionB, SectionD, Revision, \
+    QappApprovalSignature, SectionA, SectionB, SectionC, SectionD, Revision, \
     SectionBType, References
 from teams.models import Team, TeamMembership
 
@@ -325,7 +325,35 @@ class SectionBForm(ModelForm):
                   'b2_2', 'b2_3', 'b2_4', 'b2_5', 'b3', 'b4')
 
 
-# No SectionC Necessary, both fields are auto-generated.
+class SectionCForm(ModelForm):
+    """Class representing the entirety of SectionC for a given QAPP."""
+
+    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+                            required=True, label=_("Parent QAPP"),
+                            widget=Textarea(
+                                attrs={'class': 'form-control mb-2',
+                                       'readonly': 'readonly'}))
+
+    # c1 = CharField(
+    #     max_length=2047,
+    #     label=_("C.1 Assessments and Response Actions"),
+    #     required=False, widget=Textarea({'class': 'form-control mb-2'}))
+
+    # c2 = CharField(
+    #     max_length=2047, label=_("C.2 Reports to Management"),
+    #     required=False, widget=Textarea({'class': 'form-control mb-2'}))
+
+    c3 = CharField(
+        max_length=2047,
+        label=_("C.3 Quality Metrics (QA/QC Checks)"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+
+    class Meta:
+        """Meta data for SectionCForm Form."""
+
+        model = SectionC
+        fields = ('qapp', 'c3')
+
 
 class SectionDForm(ModelForm):
     """Class representing the entirety of SectionD for a given QAPP."""
@@ -351,7 +379,7 @@ class SectionDForm(ModelForm):
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
     class Meta:
-        """Meta data for SectionBForm Form."""
+        """Meta data for SectionDForm Form."""
 
         model = SectionD
         fields = ('qapp', 'd1', 'd2', 'd3')
@@ -370,7 +398,7 @@ class ReferencesForm(ModelForm):
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
     class Meta:
-        """Meta data for SectionBForm Form."""
+        """Meta data for References Form."""
 
         model = References
         fields = ('qapp', 'references')
@@ -405,7 +433,7 @@ class RevisionForm(ModelForm):
         required=True, widget=TextInput({'class': 'form-control mb-2'}))
 
     class Meta:
-        """Meta data for SectionBForm Form."""
+        """Meta data for Revision Form."""
 
         model = Revision
         fields = ('qapp', 'revision', 'description',
