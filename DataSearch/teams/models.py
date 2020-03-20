@@ -58,3 +58,7 @@ class TeamMembership(models.Model):
     is_owner = models.BooleanField(blank=False)
     # Indicates if the user can edit projects in the group.
     can_edit = models.BooleanField(blank=False)
+
+    def __str__(self):
+        """Override str method to display name instead of stringified obj."""
+        return '%s in team %s' % (self.member.username, self.team)
