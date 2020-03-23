@@ -165,19 +165,25 @@ def export_doc_single(request, *args, **kwargs):
     # BEGIN COVER PAGE
     # #################################################
     # Coversheet with signatures section:
-    if DEBUG:
-        logo = path.join(STATIC_ROOT, 'EPA_Files', 'logo.png')
-        qual_assur_proj_plan = path.join(
-            STATIC_ROOT, 'images', 'quality_assurance_project_plan.PNG')
-    else:
-        logo = static('logo.png')
-        qual_assur_proj_plan = static('quality_assurance_project_plan.PNG')
-
     # TODO: Add top row logo and blue background label
     run = document.add_paragraph().add_run()
-    run.add_picture(logo, width=Inches(1.5))
-    run.add_text('\t\t\t')
-    run.add_picture(qual_assur_proj_plan, width=Inches(3))
+
+    try:
+        if DEBUG:
+            logo = path.join(STATIC_ROOT, 'EPA_Files', 'loogo.png')
+            qual_assur_proj_plan = path.join(
+                STATIC_ROOT, 'images', 'quality_assurance_project_plan.PNG')
+        else:
+            logo = static('logo.png')
+            qual_assur_proj_plan = static('quality_assurance_project_plan.PNG')
+
+        run.add_picture(logo, width=Inches(1.5))
+        run.add_text('\t\t\t')
+        run.add_picture(qual_assur_proj_plan, width=Inches(3))
+
+    except FileNotFoundError:
+        print('couldn\'t find the static images!')
+
 
     # TODO Make blue_header text white, add blue background with shadow
     # document.add_picture('blue_background.png', width=Inches(4))
