@@ -19,6 +19,7 @@ astroid==2.3.3                  # Currently the library powering pylints capabil
 autopep8==1.5                   # Automatically formats Python code to conform to the PEP 8 style guide.
 bcrypt==3.1.7                   # Modern password hashing for your software and your servers. *May be required for RTP RHEL server
 coverage==5.0.4                 # Measures code coverage, typically during test execution.
+debugpy==1.0.0b3                # Implementation of the Debug Adapter Protocol for Python.
 django-docs==0.3.1              # Allows to serve Sphinx generated docs directly from Django.
 django-filter==2.2.0            # Reusable Django application allows users to filter querysets dynamically.
 django-grappelli==2.14.1        # A jazzy skin for the Django Admin-Interface.
