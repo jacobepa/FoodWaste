@@ -63,7 +63,7 @@ class Qapp(models.Model):
     def save_model(self, request, obj, form, change):
         """
         Overwrite the default save_model method.
-        
+
         So we can automatically set the prepared_by field as current user.
         """
         # Only set prepared_by when it's the first save (create)
@@ -168,7 +168,7 @@ class SectionA(models.Model):
     a9_drive_path = models.CharField(blank=False, null=False, max_length=255)
     # Dropdown selection for the SectionB Classificiation
     sectionb_type = models.ForeignKey(SectionBType, blank=True, null=True,
-                                       related_name='sectionb_type',
+                                      related_name='sectionb_type',
                                       on_delete=models.CASCADE)
 
 

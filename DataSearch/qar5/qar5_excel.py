@@ -132,7 +132,7 @@ def export_excel_single(request, *args, **kwargs):
     sheet.cell(row=row, column=2).value = \
         qapp_info['qapp_approval'].activity_number
     row += 1
-        
+
     # EPA Signatures section
     sheet.cell(row=row, column=1).value = \
         'If Intramural or Extramural, EPA Project Approvals'

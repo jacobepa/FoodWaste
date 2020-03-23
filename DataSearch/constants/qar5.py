@@ -100,7 +100,7 @@ A9_DOCUMENTS_RECORDS = """
 #    Section 5.1 of the ORD Quality Management Plan for QA Category A Projects.
 #"""
 
-SECTION_A_INFO= {
+SECTION_A_INFO = {
     'a3': A3_DISTRIBUTION_LIST,
     'a4': A4_PROJECT_TASK_ORGANIZATION,
     'a5': A5_PROBLEM_DEFINITION_BACKGROUND,
@@ -112,7 +112,7 @@ SECTION_A_INFO= {
 }
 
 SECONDARY_DATA_OPTIONS = (
-    ('Analytical Methods','Analytical Methods'),
+    ('Analytical Methods', 'Analytical Methods'),
     ('Animal Subjects', 'Animal Subjects'),
     ('Cell Culture Models', 'Cell Culture Models'),
     ('Existing Data', 'Existing Data'),
@@ -219,7 +219,7 @@ B4_EXISTING_DATA_TRACKING = """
 """
 
 SECTION_B_INFO = {
-    'b1_0': SECONDARY_DATA_OPTIONS, 'b1_1': B1_SECONDARY_DATA, 
+    'b1_0': SECONDARY_DATA_OPTIONS, 'b1_1': B1_SECONDARY_DATA,
     'b1_2': B1_EXISTING_DATA, 'b1_3': B1_DATA_REQUIREMENTS,
     'b1_4': B1_DATABASES_MAPS_LITERATURE, 'b1_5': B1_NON_QUALITY_CONSTRAINTS,
     'b2_1': B2_SECONDARY_DATA_SOURCES, 'b2_2': B2_PROCESS,
