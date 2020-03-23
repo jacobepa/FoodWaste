@@ -22,6 +22,7 @@ from zipfile import ZipFile
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.templatetags.static import static
+from django.utils.text import slugify
 from DataSearch.settings import DEBUG, STATIC_ROOT
 from qar5.views import get_qar5_for_user, get_qar5_for_team, get_qapp_info
 
@@ -154,7 +155,7 @@ def export_doc_single(request, *args, **kwargs):
     if not qapp_info:
         return HttpResponseRedirect(request)
 
-    filename = '%s.docx' % qapp_info['qapp'].title
+    filename = '%s.docx' % slugify(qapp_info['qapp'].title)
 
     document = Document()
     add_custom_headers(document)

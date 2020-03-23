@@ -11,6 +11,7 @@ import tempfile
 from zipfile import ZipFile
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.utils.text import slugify
 from qar5.models import Qapp
 from qar5.views import get_qapp_info, get_qar5_for_team, get_qar5_for_user
 
@@ -64,7 +65,7 @@ def export_excel_single(request, *args, **kwargs):
     if not qapp_info:
         return HttpResponse(request)
 
-    filename = '%s.xlsx' % qapp_info['qapp'].title
+    filename = '%s.xlsx' % slugify(qapp_info['qapp'].title)
 
     # TODO: Build the excel sheet to be exported
     workbook = Workbook()
@@ -311,6 +312,6 @@ def export_excel_single(request, *args, **kwargs):
     response = HttpResponse(content_type=content_type)
     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
     response['filename'] = filename
-    sheet.title = qapp_info['qapp'].title
+    sheet.title = slugify(qapp_info['qapp'].title)
     workbook.save(response)
     return response

@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import get_template
+from django.utils.text import slugify
 from qar5.views import get_qapp_info, get_qar5_for_team, get_qar5_for_user
 
 
@@ -73,7 +74,7 @@ def export_pdf_single(request, *args, **kwargs):
     if not qapp_info:
         return HttpResponse(request)
 
-    filename = '%s.pdf' % qapp_info['qapp'].title
+    filename = '%s.pdf' % slugify(qapp_info['qapp'].title)
     resp = PDFTemplateResponse(
         request=request,
         template=template_name,
