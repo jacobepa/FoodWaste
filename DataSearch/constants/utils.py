@@ -200,3 +200,4 @@ def download_file(file):
         con_disp = 'attachment; filename="' + file.name + '"'
         response['Content-Disposition'] = con_disp
         return response
+        

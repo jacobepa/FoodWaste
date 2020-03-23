@@ -97,7 +97,7 @@ class QappList(LoginRequiredMixin, ListView):
 def check_can_edit(qapp, user):
     """
     Method used to check if the provided user can edit the provided qapp.
-    All of the user's member teams are checked as well as the user's 
+    All of the user's member teams are checked as well as the user's
     super user status or qapp ownership status.
     """
 
@@ -431,7 +431,7 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 
         return render(request, self.template_name, ctx)
 
-    
+
 class SectionCView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section C information."""
 
@@ -656,7 +656,7 @@ def get_qar5_for_team(team_id, qapp_id=None):
     if qapp_id:
         return Qapp.objects.filter(
             id__in=include_qapps).filter(id=qapp_id).first()
-    
+
     return Qapp.objects.filter(id__in=include_qapps)
 
 

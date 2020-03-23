@@ -93,7 +93,7 @@ def add_custom_headers(document):
     This functionality is necessary so the cover page isn't added
     to the auto-generated Table of Contents.
     """
-    
+
     custom_header_1 = document.styles.add_style(
         'custom_header_1', WD_STYLE_TYPE.PARAGRAPH)
     custom_header_1.font.size = Pt(14)
@@ -149,7 +149,7 @@ def create_toc(document):
 # py-lint: disable=no-member
 def export_doc_single(request, *args, **kwargs):
     """Function to export a single QAPP object as a Word Docx file."""
-    qapp_id = kwargs.get('pk', None) 
+    qapp_id = kwargs.get('pk', None)
     qapp_info = get_qapp_info(request.user, qapp_id)
 
     if not qapp_info:
@@ -208,7 +208,7 @@ def export_doc_single(request, *args, **kwargs):
     add_center_heading(document, str(qapp_info['qapp'].date), level=3)
     # blank line
     add_center_heading(document, 'Prepared By', level=2)
-    add_center_heading(document, 
+    add_center_heading(document,
         '%s %s' % (qapp_info['qapp'].prepared_by.first_name,
                     qapp_info['qapp'].prepared_by.last_name,),
         level=3)
@@ -473,7 +473,7 @@ def export_doc_single(request, *args, **kwargs):
     else:
         document.add_heading('REFERENCES SECTION INCOMPLETE!', level=2)
 
-    content_type='application/vnd.openxmlformats-officedocument.' + \
+    content_type = 'application/vnd.openxmlformats-officedocument.' + \
             'wordprocessingml.document'
     response = HttpResponse(content_type)
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
