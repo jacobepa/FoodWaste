@@ -172,30 +172,83 @@ class SectionA(models.Model):
                                       on_delete=models.CASCADE)
 
 
+#class SectionB(models.Model):
+#    """Class representing the entirety of SectionB for a given QAPP."""
+
+#    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
+#                                primary_key=True)
+#    # B1 Secondary Data will be a dropdown with options from the following: ?
+#    # analytical methods, animal subjects, cell culture models, existing data,
+#    # measurements, model application, model development, software development
+#    # b1_secondary_data =
+#    # b1_1 =
+
+#    b1_2 = models.CharField(blank=False, null=False, max_length=2047)
+#    b1_3 = models.CharField(blank=False, null=False, max_length=2047)
+#    b1_4 = models.CharField(blank=False, null=False, max_length=2047)
+#    b1_5 = models.CharField(blank=False, null=False, max_length=2047)
+
+#    b2_1 = models.CharField(blank=False, null=False, max_length=2047)
+#    b2_2 = models.CharField(blank=False, null=False, max_length=2047)
+#    b2_3 = models.CharField(blank=False, null=False, max_length=2047)
+#    b2_4 = models.CharField(blank=False, null=False, max_length=2047)
+#    b2_5 = models.CharField(blank=False, null=False, max_length=2047)
+
+#    b3 = models.CharField(blank=False, null=False, max_length=2047)
+#    b4 = models.CharField(blank=False, null=False, max_length=2047)
+
+
 class SectionB(models.Model):
-    """Class representing the entirety of SectionB for a given QAPP."""
+    """
+    Class representing the entirety of SectionB for a given QAPP.
+    Instead of creating a Section B class for each of the Section B Types,
+    there will instead be one class with extra nullable fields. There
+    will likely still be multiple forms for the different Section B Types.
+    """
 
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
-    # B1 Secondary Data will be a dropdown with options from the following: ?
-    # analytical methods, animal subjects, cell culture models, existing data,
-    # measurements, model application, model development, software development
-    # b1_secondary_data =
-    # b1_1 =
+    b1_1 = models.CharField(blank=False, null=True, max_length=2047)
+    b1_2 = models.CharField(blank=False, null=True, max_length=2047)
+    b1_3 = models.CharField(blank=False, null=True, max_length=2047)
+    b1_4 = models.CharField(blank=False, null=True, max_length=2047)
+    b1_5 = models.CharField(blank=False, null=True, max_length=2047)
+    b1_6 = models.CharField(blank=False, null=True, max_length=2047)
+    b1_7 = models.CharField(blank=False, null=True, max_length=2047)
+    b1_8 = models.CharField(blank=False, null=True, max_length=2047)
+    b1_9 = models.CharField(blank=False, null=True, max_length=2047)
 
-    b1_2 = models.CharField(blank=False, null=False, max_length=2047)
-    b1_3 = models.CharField(blank=False, null=False, max_length=2047)
-    b1_4 = models.CharField(blank=False, null=False, max_length=2047)
-    b1_5 = models.CharField(blank=False, null=False, max_length=2047)
+    b2_1 = models.CharField(blank=False, null=True, max_length=2047)
+    b2_2 = models.CharField(blank=False, null=True, max_length=2047)
+    b2_3 = models.CharField(blank=False, null=True, max_length=2047)
+    b2_4 = models.CharField(blank=False, null=True, max_length=2047)
+    b2_5 = models.CharField(blank=False, null=True, max_length=2047)
+    b2_6 = models.CharField(blank=False, null=True, max_length=2047)
+    b2_7 = models.CharField(blank=False, null=True, max_length=2047)
+    b2_8 = models.CharField(blank=False, null=True, max_length=2047)
 
-    b2_1 = models.CharField(blank=False, null=False, max_length=2047)
-    b2_2 = models.CharField(blank=False, null=False, max_length=2047)
-    b2_3 = models.CharField(blank=False, null=False, max_length=2047)
-    b2_4 = models.CharField(blank=False, null=False, max_length=2047)
-    b2_5 = models.CharField(blank=False, null=False, max_length=2047)
+    b3_1 = models.CharField(blank=False, null=True, max_length=2047)
+    b3_2 = models.CharField(blank=False, null=True, max_length=2047)
+    b3_3 = models.CharField(blank=False, null=True, max_length=2047)
+    b3_4 = models.CharField(blank=False, null=True, max_length=2047)
+    b3_5 = models.CharField(blank=False, null=True, max_length=2047)
+    b3_6 = models.CharField(blank=False, null=True, max_length=2047)
+    b3_7 = models.CharField(blank=False, null=True, max_length=2047)
+    b3_8 = models.CharField(blank=False, null=True, max_length=2047)
+    b3_9 = models.CharField(blank=False, null=True, max_length=2047)
+    b3_10 = models.CharField(blank=False, null=True, max_length=2047)
 
-    b3 = models.CharField(blank=False, null=False, max_length=2047)
-    b4 = models.CharField(blank=False, null=False, max_length=2047)
+    b4_1 = models.CharField(blank=False, null=True, max_length=2047)
+    b4_2 = models.CharField(blank=False, null=True, max_length=2047)
+    b4_3 = models.CharField(blank=False, null=True, max_length=2047)
+    b4_4 = models.CharField(blank=False, null=True, max_length=2047)
+    b4_5 = models.CharField(blank=False, null=True, max_length=2047)
+
+    b5_1 = models.CharField(blank=False, null=True, max_length=2047)
+    b5_2 = models.CharField(blank=False, null=True, max_length=2047)
+
+    b6_1 = models.CharField(blank=False, null=True, max_length=2047)
+    b6_2 = models.CharField(blank=False, null=True, max_length=2047)
 
 
 class SectionC(models.Model):

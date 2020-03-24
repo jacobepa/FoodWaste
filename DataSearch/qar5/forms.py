@@ -264,65 +264,136 @@ class SectionBForm(ModelForm):
                                widget=Textarea(
                                    attrs={'class': 'form-control mb-2',
                                           'readonly': 'readonly'}))
-    # B1 Secondary Data will be a dropdown with options from the following: ?
-    # analytical methods, animal subjects, cell culture models, existing data,
-    # measurements, model application, model development, software development
-    # b1_secondary_data =
-    # b1_1 =
 
-    # @@@02202020JS - Modifying the labels to get rid of 'existing data',
-    # so the sectionb_type can be appended to labels in the template.
-    # B1_2 and B4 are the only two that changed because of this
+    b1_1 = CharField(
+        max_length=2047, label=_("B.1.1"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
     b1_2 = CharField(
-        max_length=2047, label=_("B.1 Describe"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
+        max_length=2047, label=_("B.1.2"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
     b1_3 = CharField(
-        max_length=2047, label=_("B.1 Specify Requirements"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
+        max_length=2047, label=_("B.1.3"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
     b1_4 = CharField(
-        max_length=2047, label=_("B.1 Identify Databases, Maps, Literature..."),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
+        max_length=2047, label=_("B.1.4"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
     b1_5 = CharField(
-        max_length=2047, label=_("B.1 Identify Non-Quality Constraints"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+        max_length=2047, label=_("B.1.5"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b1_6 = CharField(
+        max_length=2047, label=_("B.1.6"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b1_7 = CharField(
+        max_length=2047, label=_("B.1.7"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b1_8 = CharField(
+        max_length=2047, label=_("B.1.8"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b1_9 = CharField(
+        max_length=2047, label=_("B.1.9"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
 
     b2_1 = CharField(
-        max_length=2047, label=_("B.2 Identify Sources"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
+        max_length=2047, label=_("B.2.1"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
     b2_2 = CharField(
-        max_length=2047, label=_("B.2 Describe Acceptance/Rejection Process"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
+        max_length=2047, label=_("B.2.2"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
     b2_3 = CharField(
-        max_length=2047, label=_("B.2 Discuss Rationale for Selections"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
+        max_length=2047, label=_("B.2.3"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
     b2_4 = CharField(
-        max_length=2047, label=_("B.2 Describe Procedures"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
+        max_length=2047, label=_("B.2.4"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
     b2_5 = CharField(
-        max_length=2047, label=_("B.2 Disclaimer"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+        max_length=2047, label=_("B.2.5"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b2_6 = CharField(
+        max_length=2047, label=_("B.2.6"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b2_7 = CharField(
+        max_length=2047, label=_("B.2.7"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b2_8 = CharField(
+        max_length=2047, label=_("B.2.8"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b3 = CharField(
-        max_length=2047, label=_("B.3 Data Management and Documentation"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_1 = CharField(
+        max_length=2047, label=_("B.3.1"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_2 = CharField(
+        max_length=2047, label=_("B.3.2"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_3 = CharField(
+        max_length=2047, label=_("B.3.3"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_4 = CharField(
+        max_length=2047, label=_("B.3.4"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_5 = CharField(
+        max_length=2047, label=_("B.3.5"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_6 = CharField(
+        max_length=2047, label=_("B.3.6"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_7 = CharField(
+        max_length=2047, label=_("B.3.7"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_8 = CharField(
+        max_length=2047, label=_("B.3.8"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_9 = CharField(
+        max_length=2047, label=_("B.3.9"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b3_10 = CharField(
+        max_length=2047, label=_("B.3.10"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
 
-    b4 = CharField(
-        max_length=2047, label=_("B.4"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+    b4_1 = CharField(
+        max_length=2047, label=_("B.4.1"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b4_2 = CharField(
+        max_length=2047, label=_("B.4.2"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b4_3 = CharField(
+        max_length=2047, label=_("B.4.3"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b4_4 = CharField(
+        max_length=2047, label=_("B.4.4"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b4_5 = CharField(
+        max_length=2047, label=_("B.4.5"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+
+    b5_1 = CharField(
+        max_length=2047, label=_("B.5.1"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b5_2 = CharField(
+        max_length=2047, label=_("B.5.2"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+
+    b6_1 = CharField(
+        max_length=2047, label=_("B.6.1"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    b6_2 = CharField(
+        max_length=2047, label=_("B.6.2"),
+        required=False, widget=Textarea({'class': 'form-control mb-2'}))
+
+    def __init__(self, *args, **kwargs):
+        """
+        Custom override method for init to receive dynamic sets of labels.
+        This allows us to pass in each Section B type while reusing a single
+        form class.
+        """
+        super(SectionBForm, self).__init__(*args, **kwargs)
+        # TODO: Update labels with appropriate text.
+        # self.fields[''].label = "New Label"
 
     class Meta:
         """Meta data for SectionBForm Form."""
 
         model = SectionB
-        fields = ('qapp', 'b1_2', 'b1_3', 'b1_4', 'b1_5', 'b2_1',
-                  'b2_2', 'b2_3', 'b2_4', 'b2_5', 'b3', 'b4')
+        fields = ('qapp', 'b1_1')
 
 
 class SectionCForm(ModelForm):
