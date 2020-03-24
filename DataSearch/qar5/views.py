@@ -24,9 +24,9 @@ from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, ListView, \
     TemplateView, UpdateView
-from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
-    SECTION_C_DEFAULTS, C3_QUALITY_METRICS, SECTION_D_INFO, SECTION_E_INFO, \
-    SECTION_F_INFO
+from constants.qar5 import SECTION_A_INFO, SECTION_C_DEFAULTS, \
+    C3_QUALITY_METRICS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
+from constants.qar5_sectionb import SECTION_B_INFO
 from DataSearch.settings import DATETIME_FORMAT, DEBUG, STATIC_ROOT
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
     QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionCForm, \
@@ -390,22 +390,37 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         qapp = Qapp.objects.get(id=qapp_id)
         sectiona = SectionA.objects.filter(qapp_id=qapp_id).first()
         sectionb_type = ''
-        if sectiona:
+        if sectiona and sectiona.sectionb_type_id:
             sectionb_type_id = sectiona.sectionb_type_id
             sectionb_type = SectionBType.objects.get(id=sectionb_type_id)
+
+        else:
+            form = SectionAForm({'qapp': qapp,
+                                 'a3': SECTION_A_INFO['a3'],
+                                 'a9': SECTION_A_INFO['a9']})
+            error_message = 'Please select a Section B Type from the ' + \
+                'dropdown before moving onto the next page, Section B.'
+            return render(request, 'SectionA/index.html',
+                          {'title': 'QAPP Section A', 'qapp_id': qapp_id,
+                           'SECTION_A_INFO': SECTION_A_INFO, 'form': form,
+                           'error_message': error_message})
 
         existing_section_b = SectionB.objects.filter(qapp=qapp).first()
 
         if existing_section_b:
-            form = SectionBForm(instance=existing_section_b)
+            form = SectionBForm(
+                instance=existing_section_b,
+                section_b_info=SECTION_B_INFO[sectionb_type.name])
 
         else:
-            form = SectionBForm({'qapp': qapp})
+            form = SectionBForm(
+                {'qapp': qapp},
+                section_b_info=SECTION_B_INFO[sectionb_type.name])
 
         return render(request, self.template_name,
                       {'title': 'QAPP Section B', 'qapp_id': qapp_id,
-                       'SECTION_B_INFO': SECTION_B_INFO, 'form': form,
-                       'sectionb_type': sectionb_type})
+                       'SECTION_B_INFO': SECTION_B_INFO[sectionb_type.name],
+                       'form': form, 'sectionb_type': sectionb_type})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):

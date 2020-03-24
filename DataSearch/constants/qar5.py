@@ -1,4 +1,4 @@
-# qar5_section_a.py (constants)
+# qar5.py (constants)
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
