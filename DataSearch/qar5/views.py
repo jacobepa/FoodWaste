@@ -438,7 +438,7 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         if existing_section_b:
             ctx['form'] = SectionBForm(
                 instance=existing_section_b, data=request.POST,
-                section_b_info=SECTION_B_INFO[sectionb_type.name])
+                section_b_info=SECTION_B_INFO[ctx['sectionb_type'].name])
         else:
             ctx['form'] = SectionBForm(
                 request.POST,

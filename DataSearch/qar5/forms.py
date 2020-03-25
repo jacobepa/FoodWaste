@@ -260,10 +260,10 @@ class SectionBForm(ModelForm):
     """Class representing the entirety of SectionB for a given QAPP."""
 
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
-                               required=True, label=_("Parent QAPP"),
-                               widget=Select(
-                                   attrs={'class': 'form-control mb-2',
-                                          'readonly': 'readonly'}))
+                            required=True, label=_("Parent QAPP"),
+                            widget=Select(
+                                attrs={'class': 'form-control mb-2',
+                                        'readonly': 'readonly'}))
 
     def __init__(self, *args, **kwargs):
         """
@@ -272,21 +272,26 @@ class SectionBForm(ModelForm):
         This allows us to pass in each Section B type while reusing a single
         form class.
         """
-        super(SectionBForm, self).__init__(*args)
-        section_b_info = kwargs.get('section_b_info', None)
+        section_b_info = kwargs.pop('section_b_info', None)
+        super(SectionBForm, self).__init__(*args, **kwargs)
         if section_b_info:
             for key, val in section_b_info.items():
                 self.fields[key] = CharField(
                     help_text=val['desc'],
-                    max_length=2047, label=_(val['label']), required=True,
+                    max_length=2047, label=_(val['label']), required=False,
                     widget=Textarea({'class': 'form-control mb-2'}))
 
+    #def char_field(val):
+    #    return CharField(
+    #        help_text=val['desc'],
+    #        max_length=2047, label=_(val['label']), required=False,
+    #        widget=Textarea({'class': 'form-control mb-2'}))
 
     class Meta:
         """Meta data for SectionBForm Form."""
 
         model = SectionB
-        fields = ('qapp',)
+        fields = '__all__'
 
 
 class SectionCForm(ModelForm):
