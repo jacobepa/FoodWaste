@@ -435,10 +435,13 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 
         # Update if existing, otherwise insert new:
         if existing_section_b:
-            ctx['form'] = SectionBForm(instance=existing_section_b,
-                                       data=request.POST)
+            ctx['form'] = SectionBForm(
+                instance=existing_section_b, data=request.POST,
+                section_b_info=SECTION_B_INFO[sectionb_type.name])
         else:
-            ctx['form'] = SectionBForm(request.POST)
+            ctx['form'] = SectionBForm(
+                request.POST,
+                section_b_info=SECTION_B_INFO[ctx['sectionb_type'].name])
 
         if ctx['form'].is_valid():
             ctx['obj'] = ctx['form'].save(commit=True)

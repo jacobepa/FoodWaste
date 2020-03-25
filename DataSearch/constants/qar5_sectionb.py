@@ -21,8 +21,8 @@ MEASUREMENTS_AND_MONITORING = {
     'b1_1': {
         'label': 'B.1.1',
         'desc': 'Identify the specific analyte(s) of interest and the ' + \
-                 'matrix/matrices. Classify each measurement parameter ' + \
-                 'as either critical or needed for information only.'
+                'matrix/matrices. Classify each measurement parameter ' + \
+                'as either critical or needed for information only.'
     },
     'b1_2': {
         'label': 'B.1.2',

@@ -261,7 +261,7 @@ class SectionBForm(ModelForm):
 
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
                                required=True, label=_("Parent QAPP"),
-                               widget=Textarea(
+                               widget=Select(
                                    attrs={'class': 'form-control mb-2',
                                           'readonly': 'readonly'}))
 
@@ -272,19 +272,20 @@ class SectionBForm(ModelForm):
         form class.
         """
         super(SectionBForm, self).__init__(*args)
-        section_b_info = kwargs.get('section_b_info')
-        for key, val in section_b_info.items():
-            self.fields[key] = CharField(
-                help_text=val['desc'],
-                max_length=2047, label=_(val['label']), required=True,
-                widget=Textarea({'class': 'form-control mb-2'}))
+        section_b_info = kwargs.get('section_b_info', None)
+        if section_b_info:
+            for key, val in section_b_info.items():
+                self.fields[key] = CharField(
+                    help_text=val['desc'],
+                    max_length=2047, label=_(val['label']), required=True,
+                    widget=Textarea({'class': 'form-control mb-2'}))
 
 
     class Meta:
         """Meta data for SectionBForm Form."""
 
         model = SectionB
-        fields = ('qapp', 'b1_1')
+        fields = ('qapp',)
 
 
 class SectionCForm(ModelForm):
