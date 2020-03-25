@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.utils.text import slugify
+from constants.qar5_sectionb import SECTION_B_INFO
 from qar5.views import get_qapp_info, get_qar5_for_team, get_qar5_for_user
 
 
@@ -73,6 +74,19 @@ def export_pdf_single(request, *args, **kwargs):
 
     if not qapp_info:
         return HttpResponse(request)
+
+
+    # Prepare a dictionary to replace the sectionb object
+    sectionb_type = qapp_info['section_a'].sectionb_type.name
+    section_b_info = SECTION_B_INFO[sectionb_type]
+    section_b = {}
+    for key in section_b_info:
+        section_b[key] = {}
+        val = getattr(qapp_info['section_b'], key, '')
+        section_b[key]['label'] = section_b_info[key]['label']
+        section_b[key]['value'] = val
+    # Replace the sectionb object with the prepared dictionary
+    qapp_info['section_b'] = section_b
 
     filename = '%s.pdf' % slugify(qapp_info['qapp'].title)
     resp = PDFTemplateResponse(
