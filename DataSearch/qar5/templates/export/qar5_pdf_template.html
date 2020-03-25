@@ -173,7 +173,10 @@
                 <div class="text-left">
                     <h3 stle="color: midnightblue">Section B</h3>
                     {% for key, val in section_b.items %}
-                    <h5 style="color: cornflowerblue">{{val.label}}</h5>
+                    {% if val.heading %}
+                    <h4 style="color: cornflowerblue">{{val.heading}}</h4>
+                    {% endif %}
+                    <h5>{{val.label}}</h5>
                     <p>{{val.value}}</p>
                     {% endfor %}
                 </div>

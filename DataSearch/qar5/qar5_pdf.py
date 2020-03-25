@@ -83,6 +83,8 @@ def export_pdf_single(request, *args, **kwargs):
     for key in section_b_info:
         section_b[key] = {}
         val = getattr(qapp_info['section_b'], key, '')
+        if section_b_info[key].get('heading', False):
+            section_b[key]['heading'] = section_b_info[key]['heading']
         section_b[key]['label'] = section_b_info[key]['label']
         section_b[key]['value'] = val
     # Replace the sectionb object with the prepared dictionary

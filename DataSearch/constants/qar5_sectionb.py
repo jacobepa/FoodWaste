@@ -19,6 +19,7 @@ SECTION_B_TYPES = (
 
 EXISTING_DATA = {
     'b1_1': {
+        'heading': 'B.1 Data Acquisition and Collection',
         'label': 'B.1.1',
         'desc': 'Identify the secondary data needed to ' + \
             'meet the research objective(s).'
@@ -58,6 +59,7 @@ EXISTING_DATA = {
             'Feb. 24, 1997) or Federal Rule of Evidence 702.).'
     },
     'b2_1': {
+        'heading': 'B.2 Data Collection and Evaluation',
         'label': 'B.2.1',
         'desc': 'Identify the source(s) for the secondary data.  ' + \
             'Describe the planning process for data gathering and ' + \
@@ -107,6 +109,7 @@ EXISTING_DATA = {
             'Environmental Protection Agency.'
     },
     'b3_1': {
+        'heading': 'B.3 DATA MANAGEMENT AND DOCUMENTATION',
         'label': 'B.3.1',
         'desc': 'Describe the process for documenting and tracking ' + \
             'sources used and the information that will be recorded for ' + \
@@ -118,6 +121,7 @@ EXISTING_DATA = {
 
 SOFTWARE_DEVELOPMENT = {
     'b1_1': {
+        'heading': 'B.1 FUNCTIONAL REQUIREMENTS',
         'label': 'B.1.1',
         'desc': 'Provide a list of the most important functions ' + \
             'that the software system must address.'
@@ -139,6 +143,7 @@ SOFTWARE_DEVELOPMENT = {
             'requirements as required in the ORD APP inventory.'
     },
     'b2_1': {
+        'heading': 'B.2 SYSTEM DESIGN',
         'label': 'B.2.1',
         'desc': 'Provide an overview of the system design, e.g., block ' + \
             'diagrams showing relationships between major program ' + \
@@ -158,6 +163,7 @@ SOFTWARE_DEVELOPMENT = {
             'application governance process.'
     },
     'b3_1': {
+        'heading': 'B.3 IMPLEMENTATION',
         'label': 'B.3.1',
         'desc': 'Describe how a working software system is developed ' + \
             'from the design specifications. Agile software ' + \
@@ -189,6 +195,7 @@ SOFTWARE_DEVELOPMENT = {
             'to the source code.'
     },
     'b4_1': {
+        'heading': 'B.4 VALIDATION, VERIFICATION, AND TESTING',
         'label': 'B.4.1',
         'desc': 'Describe the testing strategy that will be used along ' + \
             'with the procedures for each planned test. These tests ' + \
@@ -224,6 +231,7 @@ SOFTWARE_DEVELOPMENT = {
             'processes that produced the product.'
     },
     'b5_1': {
+        'heading': 'B.5 DOCUMENTATION, MAINTENANCE, AND USER SUPPORT',
         'label': 'B.5.1',
         'desc': 'Specify the requirements for documentation, methods and ' + \
             'facilities used to maintain, store, secure, and ' + \
@@ -245,6 +253,7 @@ SOFTWARE_DEVELOPMENT = {
 
 MODEL_DEVELOPMENT = {
     'b1_1': {
+        'heading': 'B.1 MODEL DESIGN',
         'label': 'B.1.1',
         'desc': 'Describe the conceptual model, including key ' + \
             'processes, system compartments, system boundaries, ' + \
@@ -266,6 +275,7 @@ MODEL_DEVELOPMENT = {
             'development, etc) with separate QAPPs, if applicable.'
     },
     'b2_1': {
+        'heading': 'B.2 MODEL DEREVATION',
         'label': 'B.2.1',
         'desc': 'Describe the mathematical representation of the ' + \
             'processes of interest. For mechanistic models, state ' + \
@@ -312,6 +322,7 @@ MODEL_DEVELOPMENT = {
             'boundary conditions).'
     },
     'b3_1': {
+        'heading': 'B.3 VALIDATION, VERIFICATION, AND TESTING',
         'label': 'B.3.1',
         'desc': 'Describe the verification procedures that will be used ' + \
             'to assess whether model algorithms are performing as expected.'
@@ -361,6 +372,7 @@ MODEL_DEVELOPMENT = {
             'review that is needed for the model.'
     },
     'b4_1': {
+        'heading': 'B.4 DOCUMENTATION',
         'label': 'B.4.1',
         'desc': 'Specify the requirements, format and location ' + \
             'for project documentation.'
@@ -400,6 +412,7 @@ MODEL_DEVELOPMENT = {
 
 MODEL_APPLICATION = {
     'b1_1': {
+        'heading': 'B.1 MODEL SPECIFICATION',
         'label': 'B.1.1',
         'desc': 'Describe the conceptual model, including key ' + \
             'processes, system compartments, system boundaries, ' + \
@@ -413,6 +426,7 @@ MODEL_APPLICATION = {
             'separate QAPPs (if applicable).'
     },
     'b2_1': {
+        'heading': 'B.2 MODEL SELECTION',
         'label': 'B.2.1',
         'desc': 'Identify requirements for model functionality, e.g., ' + \
             'accuracy, spatial and/or temporal discretization, ' + \
@@ -447,6 +461,7 @@ MODEL_APPLICATION = {
             'the context of the project objectives.'
     },
     'b3_1': {
+        'heading': 'B.3 MODEL PARAMETERIZATION AND CALIBRATION',
         'label': 'B.3.1',
         'desc': 'List or describe the model input parameters ' + \
             'that are needed for the analysis. '
@@ -503,6 +518,7 @@ MODEL_APPLICATION = {
             'acceptance of the parameter value.'
     },
     'b4_1': {
+        'heading': 'B.4 MODEL PERFORMANCE ASSESSMENT',
         'label': 'B.4.1',
         'desc': 'Describe any procedures that will be used to validate ' + \
             'the results of the modeling analysis, e.g. through ' + \
@@ -534,6 +550,7 @@ MODEL_APPLICATION = {
             'discretization on model results.'
     },
     'b5_1': {
+        'heading': 'B.5 INTERPRETATION OF MODEL RESULTS',
         'label': 'B.5.1',
         'desc': 'Describe any statistical procedures that will be used ' + \
             'to summarize the model output.  '
@@ -544,6 +561,7 @@ MODEL_APPLICATION = {
             'to the model output (e.g., for scaling or bias adjustment)'
     },
     'b6_1': {
+        'heading': 'B.6 DOCUMENTATION',
         'label': 'B.6.1',
         'desc': 'Specify the requirements for project documentation ' + \
             '(e.g., model input/output files; results of model ' + \
@@ -560,6 +578,7 @@ MODEL_APPLICATION = {
 
 MEASUREMENTS_AND_MONITORING = {
     'b1_1': {
+        'heading': 'B.1	EXPERIMENTAL DESIGN',
         'label': 'B.1.1',
         'desc': 'Identify the specific analyte(s) of interest and the ' + \
                 'matrix/matrices. Classify each measurement parameter ' + \
@@ -579,6 +598,7 @@ MEASUREMENTS_AND_MONITORING = {
         'desc': 'Identify sampling locations and frequency of sampling.'
     },
     'b2_1': {
+        'heading': 'B.2	SAMPLING PROCEDURES',
         'label': 'B.2.1',
         'desc': 'If non-synthetic (i.e., real-world sample) ' + \
                 'samples are used describe the sampling design that ' + \
@@ -621,6 +641,7 @@ MEASUREMENTS_AND_MONITORING = {
                 'chain-of-custody, as applicable.'
     },
     'b3_1': {
+        'heading': 'B.3	MEASUREMENT PROCEDURES',
         'label': 'B.3.1',
         'desc': 'For field analyses (including in-line measurements), ' + \
                 'describe in detail or reference each field sample ' + \
@@ -644,6 +665,7 @@ MEASUREMENTS_AND_MONITORING = {
             'checks, and detection limits.'
     },
     'b4_1': {
+        'heading': 'B.4	METHOD PERFORMANCE METRICS',
         'label': 'B.4.1',
         'desc': 'For each analysis method QC check (e.g., blanks, ' + \
                 'control samples, duplicates, matrix spikes, surrogates) ' + \
@@ -655,6 +677,7 @@ MEASUREMENTS_AND_MONITORING = {
 
 ANALYTICAL_METHODS = {
     'b1_1': {
+        'heading': 'B.1 EXPERIMENTAL DESIGN',
         'label': 'B.1.1',
         'desc': 'Identify the specific analyte(s) of interest ' + \
             'and the matrix/matrices or limitations to the ' + \
@@ -676,6 +699,7 @@ ANALYTICAL_METHODS = {
             'robustness, and range. '
     },
     'b2_1': {
+        'heading': 'B.2 SAMPLING PROCEDURES',
         'label': 'B.2.1',
         'desc': 'Provide the requirements for samples including those ' + \
             'field collected or made in the laboratory, that will be ' + \
@@ -721,6 +745,7 @@ ANALYTICAL_METHODS = {
         'desc': 'Describe the method for uniquely numbering each sample. '
     },
     'b3_1': {
+        'heading': 'B.3 MEASUREMENT PROCEDURES',
         'label': 'B.3.1',
         'desc': 'Describe in detail or reference each preparation ' + \
             'or analytical procedure, equipment and instrumentation ' + \
@@ -734,6 +759,7 @@ ANALYTICAL_METHODS = {
             'calibration checks, and detection limits. '
     },
     'b4_1': {
+        'heading': 'B.4 METHOD PERFORMANCE METRICS',
         'label': 'B.4.1',
         'desc': 'For each method performance metric (QA/QC check) ' + \
             'specify the frequencies for performing these checks, ' + \
@@ -744,6 +770,7 @@ ANALYTICAL_METHODS = {
 
 CELL_CULTURE_METHODS = {
     'b1_1': {
+        'heading': 'B.1 EXPERIMENTAL DESIGN',
         'label': 'B.1.1',
         'desc': 'Discuss the culture model to be used in ' + \
             'addressing the study objectives.'
@@ -762,6 +789,7 @@ CELL_CULTURE_METHODS = {
         'desc': 'Discuss dependent variables to be measured.'
     },
     'b2_1': {
+        'heading': 'B.2 METHODS AND EXPERIMENTAL DETAIL',
         'label': 'B.2.1',
         'desc': 'Describe the method for determining treatment group ' + \
             'exposures and number of replicates (dose limits; ' + \
@@ -793,6 +821,7 @@ CELL_CULTURE_METHODS = {
             'protocols.  Ensure that appropriate quality control is included.'
     },
     'b3_1': {
+        'heading': 'B.3 EQUIPMENT AND SUPPLIES',
         'label': 'B.3.1',
         'desc': 'List major equipment (make, model).'
     },
@@ -802,6 +831,7 @@ CELL_CULTURE_METHODS = {
             'expiration dates if any).'
     },
     'b4_1': {
+        'heading': 'B.4 DATA COLLECTION AND ANALYSIS',
         'label': 'B.4.1',
         'desc': 'List and describe (analog, electronic, etc.) ' + \
             'datasets to be collected.'
@@ -821,6 +851,7 @@ CELL_CULTURE_METHODS = {
 
 ANIMAL_SUBJECTS = {
     'b1_1': {
+        'heading': 'B.1 EXPERIMENTAL DESIGN',
         'label': 'B.1.1',
         'desc': 'Discuss the choice of animal subjects to be tested, ' + \
             'including ACUP/LAPR references, if applicable in addressing ' + \
@@ -843,6 +874,7 @@ ANIMAL_SUBJECTS = {
         'desc': 'Discuss dependent variables to be measured.'
     },
     'b2_1': {
+        'heading': 'B.2 METHODS AND EXPERIMENTAL DETAIL',
         'label': 'B.2.1',
         'desc': 'Describe the method for determining test group ' + \
             'treatment, number, and size (dose limits; power calculations).'
@@ -876,6 +908,7 @@ ANIMAL_SUBJECTS = {
             'protocols.  Ensure that appropriate quality control is included.'
     },
     'b3_1': {
+        'heading': 'B.3 EQUIPMENT AND SUPPLIES',
         'label': 'B.3.1',
         'desc': 'List major equipment (make, model).'
     },
@@ -885,6 +918,7 @@ ANIMAL_SUBJECTS = {
             'amount, expiration dates if any).'
     },
     'b4_1': {
+        'heading': 'B.4 DATA COLLECTION AND ANALYSIS',
         'label': 'B.4.1',
         'desc': 'List and describe (analog, electronic, ' + \
             'etc.) datasets to be collected .'

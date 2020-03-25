@@ -12,7 +12,7 @@ from django.contrib import admin
 from django.urls import include
 from DataSearch.views import home, contact, about, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
-    ExistingDataEdit, export_pdf, export_excel
+    ExistingDataEdit, export_pdf, export_excel, web_dev_tools
 from DataSearch.settings import MEDIA_ROOT, MEDIA_URL
 
 
@@ -23,6 +23,9 @@ urlpatterns = [
     url(r'^dashboard/?$', home, name='dashboard'),
     url(r'^contact/?$', contact, name='contact'),
     url(r'^about/?$', about, name='about'),
+
+    url(r'^dev/?$', web_dev_tools, name='web_dev_tools'),
+    url(r'^dev/clean_qapps/?$', web_dev_tools, name='web_dev_tools'),
 
     # Begin existingdata URLs.
     # URLs for PDF and Excel exports.

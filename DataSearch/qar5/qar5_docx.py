@@ -338,31 +338,31 @@ def export_doc_single(request, *args, **kwargs):
     if qapp_info['section_a']:
         document.add_heading('A.1 Distribution List', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a3.replace('\r\n', ' '),
+            qapp_info['section_a'].a3,
             styles['No Spacing'])
         document.add_heading('A.2 Project Task Organization', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a4.replace('\r\n', ' '),
+            qapp_info['section_a'].a4,
             styles['No Spacing'])
         document.add_heading('A.3 Problem Definition Background', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a5.replace('\r\n', ' '),
+            qapp_info['section_a'].a5,
             styles['No Spacing'])
         document.add_heading('A.4 Project Description', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a6.replace('\r\n', ' '),
+            qapp_info['section_a'].a6,
             styles['No Spacing'])
         document.add_heading('A.5 Quality Objectives and Criteria', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a7.replace('\r\n', ' '),
+            qapp_info['section_a'].a7,
             styles['No Spacing'])
         document.add_heading('A.6 Special Training Certification', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a8.replace('\r\n', ' '),
+            qapp_info['section_a'].a8,
             styles['No Spacing'])
         document.add_heading('A.7 Documents and Records', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a9.replace('\r\n', ' '),
+            qapp_info['section_a'].a9,
             styles['No Spacing'])
     else:
         document.add_heading('SECTION A INCOMPLETE!', level=2)
@@ -374,6 +374,8 @@ def export_doc_single(request, *args, **kwargs):
         section_b_info = SECTION_B_INFO[sectionb_type]
         for key in section_b_info:
             val = getattr(qapp_info['section_b'], key, '')
+            if section_b_info[key].get('heading', False):
+                document.add_heading(section_b_info[key]['heading'], level=2)
             document.add_heading(section_b_info[key]['label'], level=3)
             document.add_paragraph(val, styles['No Spacing'])
     else:
@@ -385,15 +387,15 @@ def export_doc_single(request, *args, **kwargs):
         document.add_heading(
             'C.1 Assessments and Response Actions', level=2)
         document.add_paragraph(
-            qapp_info['section_c'].c1.replace('\r\n', ' '),
+            qapp_info['section_c'].c1,
             styles['No Spacing'])
         document.add_heading('C.2 Reports to Management', level=2)
         document.add_paragraph(
-            qapp_info['section_c'].c2.replace('\r\n', ' '),
+            qapp_info['section_c'].c2,
             styles['No Spacing'])
         document.add_heading('C.3 Quality Metrics (QA/QC Checks)', level=2)
         document.add_paragraph(
-            qapp_info['section_c'].c3.replace('\r\n', ' '),
+            qapp_info['section_c'].c3,
             styles['No Spacing'])
     else:
         document.add_heading(
@@ -406,17 +408,17 @@ def export_doc_single(request, *args, **kwargs):
         document.add_heading(
             'D.1 Data Review, Verification, and Validation', level=2)
         document.add_paragraph(
-            qapp_info['section_d'].d1.replace('\r\n', ' '),
+            qapp_info['section_d'].d1,
             styles['No Spacing'])
         document.add_heading(
             'D.2 Verification and Validation Methods', level=2)
         document.add_paragraph(
-            qapp_info['section_d'].d2.replace('\r\n', ' '),
+            qapp_info['section_d'].d2,
             styles['No Spacing'])
         document.add_heading(
             'D.3 Reconciliation with User Requirements', level=2)
         document.add_paragraph(
-            qapp_info['section_d'].d3.replace('\r\n', ' '),
+            qapp_info['section_d'].d3,
             styles['No Spacing'])
     else:
         document.add_heading('SECTION D INCOMPLETE!', level=2)

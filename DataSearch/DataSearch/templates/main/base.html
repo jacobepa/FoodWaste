@@ -209,7 +209,10 @@
                         </li>
                         {% if request.user.is_staff %}
                         <li class="menu-item">
-                            <a class="menu-link" href="{% url 'admin:index' %}">Admin</a>
+                            <a class="menu-link" href="{% url 'admin:index' %}">Admin Portal</a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="{% url 'web_dev_tools' %}">Web Dev Tools</a>
                         </li>
                         {% endif %}
                         <li role="separator" class="divider"></li>
