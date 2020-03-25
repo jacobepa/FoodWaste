@@ -171,32 +171,6 @@ class SectionA(models.Model):
                                       on_delete=models.CASCADE)
 
 
-# class SectionB(models.Model):
-#    """Class representing the entirety of SectionB for a given QAPP."""
-
-#    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
-#                                primary_key=True)
-#    # B1 Secondary Data will be a dropdown with options from the following: ?
-#    # analytical methods, animal subjects, cell culture models, existing data,
-#    # measurements, model application, model development, software development
-#    # b1_secondary_data =
-#    # b1_1 =
-
-#    b1_2 = models.CharField(blank=False, null=False, max_length=2047)
-#    b1_3 = models.CharField(blank=False, null=False, max_length=2047)
-#    b1_4 = models.CharField(blank=False, null=False, max_length=2047)
-#    b1_5 = models.CharField(blank=False, null=False, max_length=2047)
-
-#    b2_1 = models.CharField(blank=False, null=False, max_length=2047)
-#    b2_2 = models.CharField(blank=False, null=False, max_length=2047)
-#    b2_3 = models.CharField(blank=False, null=False, max_length=2047)
-#    b2_4 = models.CharField(blank=False, null=False, max_length=2047)
-#    b2_5 = models.CharField(blank=False, null=False, max_length=2047)
-
-#    b3 = models.CharField(blank=False, null=False, max_length=2047)
-#    b4 = models.CharField(blank=False, null=False, max_length=2047)
-
-
 class SectionB(models.Model):
     """
     Class representing the entirety of SectionB for a given QAPP.
@@ -213,10 +187,6 @@ class SectionB(models.Model):
     b1_3 = models.CharField(blank=True, null=True, max_length=2047)
     b1_4 = models.CharField(blank=True, null=True, max_length=2047)
     b1_5 = models.CharField(blank=True, null=True, max_length=2047)
-    b1_6 = models.CharField(blank=True, null=True, max_length=2047)
-    b1_7 = models.CharField(blank=True, null=True, max_length=2047)
-    b1_8 = models.CharField(blank=True, null=True, max_length=2047)
-    b1_9 = models.CharField(blank=True, null=True, max_length=2047)
 
     b2_1 = models.CharField(blank=True, null=True, max_length=2047)
     b2_2 = models.CharField(blank=True, null=True, max_length=2047)
