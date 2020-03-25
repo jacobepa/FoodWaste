@@ -23,6 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.templatetags.static import static
 from django.utils.text import slugify
+from constants.qar5_sectionb import SECTION_B_INFO
 from DataSearch.settings import DEBUG, STATIC_ROOT
 from qar5.views import get_qar5_for_user, get_qar5_for_team, get_qapp_info
 
@@ -367,57 +368,14 @@ def export_doc_single(request, *args, **kwargs):
         document.add_heading('SECTION A INCOMPLETE!', level=2)
 
     # Section B
-    document.add_heading('Section B - Experimental Design', level=1)
+    document.add_heading('Section B', level=1)
+    sectionb_type = qapp_info['section_a'].sectionb_type.name
+    section_b_info = SECTION_B_INFO[sectionb_type]
     if qapp_info['section_b']:
-        document.add_heading(
-            'B.1 Sample/Data Collection, Gathering, or Use', level=2)
-        document.add_heading('B.1.1 Use', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b1_2.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.1.2 Requirements', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b1_3.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.1.3 Databases, Maps, Literature', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b1_4.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.1.4 Non-Quality Constraints', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b1_5.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading(
-            'B.2 Data Analysis / Statistical Design / Data Management',
-            level=2)
-        document.add_heading('B.2.1 Sources', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_1.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.2.2 Acceptance/Rejection Process', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_2.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.2.3 Rationale for Selections', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_3.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.2.4 Procedures', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_4.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.2.5 Disclaimer', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_5.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.3 Data Management and Documentation', level=2)
-        document.add_paragraph(
-            qapp_info['section_b'].b3.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.4 Tracking', level=2)
-        document.add_paragraph(
-            qapp_info['section_b'].b4.replace('\r\n', ' '),
-            styles['No Spacing'])
+        for key in section_b_info:
+            val = getattr(qapp_info['section_b'], key, '')
+            document.add_heading(section_b_info[key]['label'], level=3)
+            document.add_paragraph(val, styles['No Spacing'])
     else:
         document.add_heading('SECTION B INCOMPLETE!', level=2)
 
