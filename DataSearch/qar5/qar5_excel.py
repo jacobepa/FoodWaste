@@ -12,6 +12,7 @@ from zipfile import ZipFile
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils.text import slugify
+from constants.qar5_sectionb import SECTION_B_INFO
 from qar5.models import Qapp
 from qar5.views import get_qapp_info, get_qar5_for_team, get_qar5_for_user
 
@@ -211,54 +212,60 @@ def export_excel_single(request, *args, **kwargs):
     # ###########################
     # Write Section B
     sheet.cell(row=row, column=1).value = \
-        'Section B - Experimental Design'
+        'Section B'
     row += 1
     if qapp_info['section_b']:
-        sheet.cell(row=row, column=1).value = \
-            'B.1 - Sample/Data Collection, Gathering, or Use'
-        row += 1
-        sheet.cell(row=row, column=1).value = 'B.1.1 - Use'
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b1_2
-        row += 1
-        sheet.cell(row=row, column=1).value = 'B.1.2 - Requirements'
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b1_3
-        row += 1
-        sheet.cell(row=row, column=1).value = \
-            'B.1.3 - Databases, Maps, Literature'
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b1_4
-        row += 1
-        sheet.cell(row=row, column=1).value = \
-            'B.1.4 - Non-Quality Constraints'
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b1_5
-        row += 1
-        sheet.cell(row=row, column=1).value = \
-            'B.2 - Data Analysis / Statistical Design / Data Management'
-        row += 1
-        sheet.cell(row=row, column=1).value = 'B.2.1 - Sources'
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_1
-        row += 1
-        sheet.cell(row=row, column=1).value = \
-            'B.2.2 - Acceptance/Rejection Process'
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_2
-        row += 1
-        sheet.cell(row=row, column=1).value = \
-            'B.2.3 - Rationale for Selections'
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_3
-        row += 1
-        sheet.cell(row=row, column=1).value = 'B.2.4 - Procedures'
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_4
-        row += 1
-        sheet.cell(row=row, column=1).value = 'B.2.5 - Disclaimer'
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_5
-        row += 1
-        sheet.cell(row=row, column=1).value = \
-            'B.3 - Data Management and Documentation'
-        row += 1
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b3
-        row += 1
-        sheet.cell(row=row, column=1).value = 'B.4 - Tracking'
-        row += 1
-        sheet.cell(row=row, column=2).value = qapp_info['section_b'].b4
+        sectionb_type = qapp_info['section_a'].sectionb_type.name
+        section_b_info = SECTION_B_INFO[sectionb_type]
+        for key in section_b_info:
+            val = getattr(qapp_info['section_b'], key, '')
+            sheet.cell(row=row, column=1).value = section_b_info[key]['label']
+            sheet.cell(row=row, column=2).value = val
+            row += 1
+        #sheet.cell(row=row, column=1).value = \
+        #    'B.1 - Sample/Data Collection, Gathering, or Use'
+        #sheet.cell(row=row, column=1).value = 'B.1.1 - Use'
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b1_2
+        #row += 1
+        #sheet.cell(row=row, column=1).value = 'B.1.2 - Requirements'
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b1_3
+        #row += 1
+        #sheet.cell(row=row, column=1).value = \
+        #    'B.1.3 - Databases, Maps, Literature'
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b1_4
+        #row += 1
+        #sheet.cell(row=row, column=1).value = \
+        #    'B.1.4 - Non-Quality Constraints'
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b1_5
+        #row += 1
+        #sheet.cell(row=row, column=1).value = \
+        #    'B.2 - Data Analysis / Statistical Design / Data Management'
+        #row += 1
+        #sheet.cell(row=row, column=1).value = 'B.2.1 - Sources'
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_1
+        #row += 1
+        #sheet.cell(row=row, column=1).value = \
+        #    'B.2.2 - Acceptance/Rejection Process'
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_2
+        #row += 1
+        #sheet.cell(row=row, column=1).value = \
+        #    'B.2.3 - Rationale for Selections'
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_3
+        #row += 1
+        #sheet.cell(row=row, column=1).value = 'B.2.4 - Procedures'
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_4
+        #row += 1
+        #sheet.cell(row=row, column=1).value = 'B.2.5 - Disclaimer'
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b2_5
+        #row += 1
+        #sheet.cell(row=row, column=1).value = \
+        #    'B.3 - Data Management and Documentation'
+        #row += 1
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b3
+        #row += 1
+        #sheet.cell(row=row, column=1).value = 'B.4 - Tracking'
+        #row += 1
+        #sheet.cell(row=row, column=2).value = qapp_info['section_b'].b4
     row += 2
 
     # ###########################

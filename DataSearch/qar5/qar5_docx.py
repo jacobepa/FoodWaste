@@ -369,9 +369,9 @@ def export_doc_single(request, *args, **kwargs):
 
     # Section B
     document.add_heading('Section B', level=1)
-    sectionb_type = qapp_info['section_a'].sectionb_type.name
-    section_b_info = SECTION_B_INFO[sectionb_type]
     if qapp_info['section_b']:
+        sectionb_type = qapp_info['section_a'].sectionb_type.name
+        section_b_info = SECTION_B_INFO[sectionb_type]
         for key in section_b_info:
             val = getattr(qapp_info['section_b'], key, '')
             document.add_heading(section_b_info[key]['label'], level=3)
