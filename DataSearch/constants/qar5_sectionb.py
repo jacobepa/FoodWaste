@@ -386,8 +386,8 @@ MODEL_DEVELOPMENT = {
             'version used, and identify any code repositories (e.g., ' + \
             'Bitbucket and GitHub) used to archive and document coding ' + \
             'issues and their resolution. If applicable, see ' + \
-            '“Requirements for Software and Application Development ' + \
-            'Projects” for additional QAPP requirements related the ' + \
+            '"Requirements for Software and Application Development ' + \
+            'Projects" for additional QAPP requirements related the ' + \
             'development of software applications.'
     },
     'b4_5': {
@@ -438,8 +438,8 @@ MODEL_APPLICATION = {
             'including a diagram showing transfer of data between ' + \
             'models.  (For projects that involve model integration ' + \
             '(e.g., embedding one model within another or tight ' + \
-            'coupling of two or more models), see “Requirements ' + \
-            'for Model Development Projects” for additional guidance.)'
+            'coupling of two or more models), see "Requirements ' + \
+            'for Model Development Projects" for additional guidance.)'
     },
     'b2_5': {
         'label': 'B.2.5',
@@ -466,8 +466,8 @@ MODEL_APPLICATION = {
         'label': 'B.3.4',
         'desc': 'Describe procedures for identifying outliers and ' + \
             'handling outliers or missing data (imputation ' + \
-            'procedures). (See “Requirements for Projects Using ' + \
-            'Existing Data” for additional guidance.)'
+            'procedures). (See "Requirements for Projects Using ' + \
+            'Existing Data" for additional guidance.)'
     },
     'b3_5': {
         'label': 'B.3.5',
