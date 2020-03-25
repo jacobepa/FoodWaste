@@ -76,7 +76,6 @@ class Qapp(models.Model):
         """Override str method to display name instead of stringified obj."""
         return self.title
 
-
     # def save(user):
     #    """
     #    Overwrite the default save_model method so we can automatically
@@ -172,7 +171,7 @@ class SectionA(models.Model):
                                       on_delete=models.CASCADE)
 
 
-#class SectionB(models.Model):
+# class SectionB(models.Model):
 #    """Class representing the entirety of SectionB for a given QAPP."""
 
 #    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
@@ -201,6 +200,7 @@ class SectionA(models.Model):
 class SectionB(models.Model):
     """
     Class representing the entirety of SectionB for a given QAPP.
+
     Instead of creating a Section B class for each of the Section B Types,
     there will instead be one class with extra nullable fields. There
     will likely still be multiple forms for the different Section B Types.
@@ -259,8 +259,6 @@ class SectionC(models.Model):
     c1 = SECTION_C_INFO[0]
     c2 = SECTION_C_INFO[1]
     c3 = models.CharField(blank=False, null=False, max_length=2047)
-
-
 
 
 class SectionD(models.Model):

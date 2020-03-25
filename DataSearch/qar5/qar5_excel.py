@@ -57,6 +57,7 @@ def export_excel(request, *args, **kwargs):
         response['Content-length'] = zip_mem.tell()
         return response
 
+
 def export_excel_single(request, *args, **kwargs):
     """Function to export a single QAPP object as an Excel sheet."""
     qapp_id = kwargs.get('pk', None)
@@ -72,7 +73,7 @@ def export_excel_single(request, *args, **kwargs):
     sheet = workbook.active
     row = 1
 
-    #for name, value in qapp_info.items():
+    # for name, value in qapp_info.items():
     #    sheet.cell(row=row, column=1).value = name
     #    sheet.cell(row=row, column=2).value = value
     #    row += 1

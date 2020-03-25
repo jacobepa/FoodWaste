@@ -26,6 +26,7 @@ from django.utils.text import slugify
 from DataSearch.settings import DEBUG, STATIC_ROOT
 from qar5.views import get_qar5_for_user, get_qar5_for_team, get_qapp_info
 
+
 def export_doc(request, *args, **kwargs):
     """Function to export a multiple QAPP objects as Word Docx files."""
     if 'user' in request.path:
@@ -66,20 +67,20 @@ def export_doc(request, *args, **kwargs):
 
 
 def add_custom_heading(document, text, level):
-    """Helper method to easily add centered headers to a docx file"""
+    """Helper method to easily add centered headers to a docx file."""
     heading_style = 'custom_header_%d' % level
     paragraph = document.add_paragraph(text, heading_style)
     return paragraph
 
 
 def add_center_heading(document, text, level):
-    """Helper method to easily add centered headers to a docx file"""
+    """Helper method to easily add centered headers to a docx file."""
     paragraph = add_custom_heading(document, text, level)
     paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
 
 def set_table_row_height(table):
-    """Helper method to set minimum row height and alignment for a table"""
+    """Helper method to set minimum row height and alignment for a table."""
     for row in table.rows:
         row.height_rule = WD_ROW_HEIGHT_RULE.AT_LEAST
         row.height = Inches(0.35)
@@ -90,10 +91,10 @@ def set_table_row_height(table):
 def add_custom_headers(document):
     """
     Helper method to create and inject custom headers into a docx.
+
     This functionality is necessary so the cover page isn't added
     to the auto-generated Table of Contents.
     """
-
     custom_header_1 = document.styles.add_style(
         'custom_header_1', WD_STYLE_TYPE.PARAGRAPH)
     custom_header_1.font.size = Pt(14)
@@ -114,7 +115,7 @@ def add_custom_headers(document):
 
 
 def create_toc(document):
-    """Helper method to set up the Table of Contents page"""
+    """Helper method to set up the Table of Contents page."""
     add_custom_heading(document, 'Table of Contents', level=2)
     paragraph = document.add_paragraph()
     run = paragraph.add_run()
@@ -143,7 +144,6 @@ def create_toc(document):
     r_element.append(fldChar2)
     r_element.append(fldChar4)
     p_element = paragraph._p
-
 
 
 # py-lint: disable=no-member
@@ -183,7 +183,6 @@ def export_doc_single(request, *args, **kwargs):
 
     except FileNotFoundError:
         print('couldn\'t find the static images!')
-
 
     # TODO Make blue_header text white, add blue background with shadow
     # document.add_picture('blue_background.png', width=Inches(4))

@@ -268,6 +268,7 @@ class SectionBForm(ModelForm):
     def __init__(self, *args, **kwargs):
         """
         Custom override method for init to receive dynamic sets of labels.
+
         This allows us to pass in each Section B type while reusing a single
         form class.
         """

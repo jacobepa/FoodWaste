@@ -94,11 +94,11 @@ A9_DOCUMENTS_RECORDS = """
     Section 5.1 of the ORD Quality Management Plan for QA Category A Projects.
 """
 
-#A9_RECORDS_RETENTION = """
+# A9_RECORDS_RETENTION = """
 #    Records retention: Records that are generated under this research effort will
 #    be retained in accordance with EPA Records Schedule 1035, and as required by
 #    Section 5.1 of the ORD Quality Management Plan for QA Category A Projects.
-#"""
+# """
 
 SECTION_A_INFO = {
     'a3': A3_DISTRIBUTION_LIST,
@@ -108,7 +108,7 @@ SECTION_A_INFO = {
     'a7': A7_QUALITY_OBJECTS_CRITERIA,
     'a8': A8_SPECIAL_TRAINING_CERTIFICATION,
     'a9': A9_DOCUMENTS_RECORDS
-    #'A.9 Documents and Records': [A9_DOCUMENTS_RECORDS, A9_RECORDS_RETENTION]
+    # 'A.9 Documents and Records': [A9_DOCUMENTS_RECORDS, A9_RECORDS_RETENTION]
 }
 
 SECONDARY_DATA_OPTIONS = (
@@ -282,7 +282,7 @@ D1_DATA_REVIEW_VERIFICATION_VALIDATION = """
     and output files, and results of calibration and QC checks. Discuss responsibilities
     for conducting data review data generator, verification second reviewer, and
     validation independent reviewer. State criteria for accepting, rejecting, or
-    qualifying data; include project-specific calculations or algorithms. See 
+    qualifying data; include project-specific calculations or algorithms. See
     Agency guidance document titled Guidance on Environmental Data Verification and
     Data Validation.
 """
