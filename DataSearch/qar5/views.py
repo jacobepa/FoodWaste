@@ -97,10 +97,10 @@ class QappList(LoginRequiredMixin, ListView):
 def check_can_edit(qapp, user):
     """
     Method used to check if the provided user can edit the provided qapp.
+
     All of the user's member teams are checked as well as the user's
     super user status or qapp ownership status.
     """
-
     # Check if any of the user's teams have edit privilege:
     user_teams = TeamMembership.objects.filter(
         member=user).values_list('team', flat=True)
@@ -129,8 +129,10 @@ class QappEdit(LoginRequiredMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         """
-        Override default get request so we can verify the user has edit
-        privileges, either through super status or team membership.
+        Override default get request.
+
+        So we can verify the user has edit privileges, either through super
+        status or team membership.
         """
         pk = kwargs.get('pk')
         qapp = Qapp.objects.filter(id=pk).first()
@@ -141,7 +143,6 @@ class QappEdit(LoginRequiredMixin, UpdateView):
 
         reason = 'You don\'t have edit permissions for this QAPP!'
         return HttpResponseRedirect('/qar5/detail/%s' % pk, 401, reason)
-
 
     def form_valid(self, form):
         """Qapp Edit Form validation and redirect."""
@@ -676,12 +677,12 @@ def get_qar5_for_team(team_id, qapp_id=None):
 
 
 def get_qapp_info(user, qapp_id):
-    """Method to return all pieces of a qapp in a dictionary"""
+    """Method to return all pieces of a qapp in a dictionary."""
     ctx = {}
     ctx['qapp'] = get_qar5_for_user(user.id, qapp_id)
 
     # Only return this if the user has access to it via super, owner, or team:
-    #db_user = User.objects.get(id=user.id)
+    # db_user = User.objects.get(id=user.id)
 
     if ctx['qapp'] or user.is_superuser or ctx['qapp'].prepared_by == user:
         ctx['qapp_leads'] = QappLead.objects.filter(qapp_id=qapp_id)

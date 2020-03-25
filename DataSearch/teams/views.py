@@ -37,6 +37,7 @@ from teams.serializers import TeamSerializer, UserSerializer, \
 class TeamListView(LoginRequiredMixin, ListView):
     """
     New class to return a teams list view.
+
     This will serve as the management view where users can view their teams,
     edit their teams, and create new teams.
     """
@@ -46,10 +47,7 @@ class TeamListView(LoginRequiredMixin, ListView):
     template_name = 'team_list.html'
 
     def get_queryset(self):
-        """
-        Override the default queryset with a set of teams
-        of which the requesting user is a member.
-        """
+        """Override default queryset with set of teams which requesting user is member."""
         user = self.request.user
         return Team.objects.filter(members=user).order_by(
             'name').select_related(
