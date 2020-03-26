@@ -29,6 +29,7 @@ from DataSearch.forms import ExistingDataForm
 from DataSearch.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
 from DataSearch.settings import APP_DISCLAIMER
+from qar5.models import SectionA
 from teams.models import Team, TeamMembership
 
 @login_required
@@ -51,6 +52,17 @@ def clean_qapps(request, *args, **kwargs):
     been inserted might need to be cleaned up.
     """
     # TODO: Fix all default data of all sections of all qapps
+    sections_a = SectionA.objects.all()
+    for sect in sections_a:
+        # Clean Section A
+        a3_clean = sect.a3.replace('\r\n', ' ').replace('    ', ' ')
+        a9_clean = sect.a9.replace('\r\n', ' ').replace('    ', ' ')
+        sect.a3 = a3_clean
+        sect.a9 = a9_clean
+        sect.save()
+        # Clean Section B
+        # Clean Section C
+        # Clean Section D
     return render(request, 'web_dev.html', {})
 
 

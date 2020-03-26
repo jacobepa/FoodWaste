@@ -426,9 +426,11 @@ def export_doc_single(request, *args, **kwargs):
     # References
     document.add_heading('References', level=1)
     if qapp_info['references']:
-        document.add_paragraph(
-            qapp_info['references'].references.replace('\r\n\r\n', '\r\n'),
-            styles['No Spacing'])
+        run = document.add_paragraph().add_run()
+        run.add_text(qapp_info['references'].references)
+        # document.add_paragraph(
+        #     qapp_info['references'].references.replace('\r\n\r\n', '\r\n'),
+        #     styles['No Spacing'])
     else:
         document.add_heading('REFERENCES SECTION INCOMPLETE!', level=2)
 
