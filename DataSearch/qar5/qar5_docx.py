@@ -117,7 +117,7 @@ def add_custom_headers(document):
 
 def create_toc(document):
     """Helper method to set up the Table of Contents page."""
-    add_custom_heading(document, 'Table of Contents', level=2)
+    add_custom_heading(document, 'A.2 Table of Contents', level=2)
     paragraph = document.add_paragraph()
     run = paragraph.add_run()
     # creates a new element
@@ -221,7 +221,7 @@ def export_doc_single(request, *args, **kwargs):
     # BEGIN APPROVAL PAGE
     # #################################################
 
-    add_custom_heading(document, 'Approval Page', level=2)
+    add_custom_heading(document, 'A.1 Approval Page', level=2)
     # Signature grid ...
     num_signatures = len(qapp_info['signatures'])
     table = document.add_table(rows=6+num_signatures, cols=12)
@@ -336,31 +336,31 @@ def export_doc_single(request, *args, **kwargs):
     # Section A
     document.add_heading('Section A - Executive Summary', level=1)
     if qapp_info['section_a']:
-        document.add_heading('A.1 Distribution List', level=2)
+        document.add_heading('A.3 Distribution List', level=2)
         document.add_paragraph(
             qapp_info['section_a'].a3,
             styles['No Spacing'])
-        document.add_heading('A.2 Project Task Organization', level=2)
+        document.add_heading('A.4 Project Task Organization', level=2)
         document.add_paragraph(
             qapp_info['section_a'].a4,
             styles['No Spacing'])
-        document.add_heading('A.3 Problem Definition Background', level=2)
+        document.add_heading('A.5 Problem Definition Background', level=2)
         document.add_paragraph(
             qapp_info['section_a'].a5,
             styles['No Spacing'])
-        document.add_heading('A.4 Project Description', level=2)
+        document.add_heading('A.6 Project Description', level=2)
         document.add_paragraph(
             qapp_info['section_a'].a6,
             styles['No Spacing'])
-        document.add_heading('A.5 Quality Objectives and Criteria', level=2)
+        document.add_heading('A.7 Quality Objectives and Criteria', level=2)
         document.add_paragraph(
             qapp_info['section_a'].a7,
             styles['No Spacing'])
-        document.add_heading('A.6 Special Training Certification', level=2)
+        document.add_heading('A.8 Special Training Certification', level=2)
         document.add_paragraph(
             qapp_info['section_a'].a8,
             styles['No Spacing'])
-        document.add_heading('A.7 Documents and Records', level=2)
+        document.add_heading('A.9 Documents and Records', level=2)
         document.add_paragraph(
             qapp_info['section_a'].a9,
             styles['No Spacing'])
@@ -393,10 +393,10 @@ def export_doc_single(request, *args, **kwargs):
         document.add_paragraph(
             qapp_info['section_c'].c2,
             styles['No Spacing'])
-        document.add_heading('C.3 Quality Metrics (QA/QC Checks)', level=2)
-        document.add_paragraph(
-            qapp_info['section_c'].c3,
-            styles['No Spacing'])
+        # document.add_heading('C.3 Quality Metrics (QA/QC Checks)', level=2)
+        # document.add_paragraph(
+        #     qapp_info['section_c'].c3,
+        #     styles['No Spacing'])
     else:
         document.add_heading(
             'C.1 Assessments and Response Actions', level=2)

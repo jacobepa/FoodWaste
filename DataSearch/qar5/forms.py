@@ -294,34 +294,25 @@ class SectionBForm(ModelForm):
         fields = '__all__'
 
 
-class SectionCForm(ModelForm):
-    """Class representing the entirety of SectionC for a given QAPP."""
+# class SectionCForm(ModelForm):
+#     """Class representing the entirety of SectionC for a given QAPP."""
 
-    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
-                            required=True, label=_("Parent QAPP"),
-                            widget=Textarea(
-                                attrs={'class': 'form-control mb-2',
-                                       'readonly': 'readonly'}))
+#     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+#                             required=True, label=_("Parent QAPP"),
+#                             widget=Textarea(
+#                                 attrs={'class': 'form-control mb-2',
+#                                        'readonly': 'readonly'}))
 
-    # c1 = CharField(
-    #     max_length=2047,
-    #     label=_("C.1 Assessments and Response Actions"),
-    #     required=False, widget=Textarea({'class': 'form-control mb-2'}))
+#     c3 = CharField(
+#         max_length=2047,
+#         label=_("C.3 Quality Metrics (QA/QC Checks)"),
+#         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    # c2 = CharField(
-    #     max_length=2047, label=_("C.2 Reports to Management"),
-    #     required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    # class Meta:
+    #     """Meta data for SectionCForm Form."""
 
-    c3 = CharField(
-        max_length=2047,
-        label=_("C.3 Quality Metrics (QA/QC Checks)"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    class Meta:
-        """Meta data for SectionCForm Form."""
-
-        model = SectionC
-        fields = ('qapp', 'c3')
+    #     model = SectionC
+    #     fields = ('qapp', 'c3')
 
 
 class SectionDForm(ModelForm):

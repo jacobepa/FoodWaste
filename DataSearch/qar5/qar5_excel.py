@@ -123,7 +123,7 @@ def export_excel_single(request, *args, **kwargs):
 
     # ###########################
     # Write the Approval Page
-    sheet.cell(row=row, column=1).value = 'Approval Page'
+    sheet.cell(row=row, column=1).value = 'A.1 Approval Page'
     row += 1
     sheet.cell(row=row, column=1).value = 'QA Project Plan Title'
     sheet.cell(row=row, column=2).value = \
@@ -182,30 +182,30 @@ def export_excel_single(request, *args, **kwargs):
     sheet.cell(row=row, column=1).value = 'Section A - Executive Summary'
     row += 1
     if qapp_info['section_a']:
-        sheet.cell(row=row, column=1).value = 'A.1 Distribution List'
+        sheet.cell(row=row, column=1).value = 'A.3 Distribution List'
         sheet.cell(row=row, column=2).value = qapp_info['section_a'].a3
         row += 1
         sheet.cell(row=row, column=1).value = \
-            'A.2 Project Task Organization'
+            'A.4 Project Task Organization'
         sheet.cell(row=row, column=2).value = qapp_info['section_a'].a4
         # TODO: Insert/Display A4 Chart?
         row += 1
         sheet.cell(row=row, column=1).value = \
-            'A.3 Problem Definition Background'
+            'A.5 Problem Definition Background'
         sheet.cell(row=row, column=2).value = qapp_info['section_a'].a5
         row += 1
-        sheet.cell(row=row, column=1).value = 'A.4 Project Description'
+        sheet.cell(row=row, column=1).value = 'A.6 Project Description'
         sheet.cell(row=row, column=2).value = qapp_info['section_a'].a6
         row += 1
         sheet.cell(row=row, column=1).value = \
-            'A.5 Quality Objectives and Criteria'
+            'A.7 Quality Objectives and Criteria'
         sheet.cell(row=row, column=2).value = qapp_info['section_a'].a7
         row += 1
         sheet.cell(row=row, column=1).value = \
-            'A.6 Special Training Certification'
+            'A.8 Special Training Certification'
         sheet.cell(row=row, column=2).value = qapp_info['section_a'].a8
         row += 1
-        sheet.cell(row=row, column=1).value = 'A.7 Documents and Records'
+        sheet.cell(row=row, column=1).value = 'A.9 Documents and Records'
         sheet.cell(row=row, column=2).value = qapp_info['section_a'].a9
     row += 2
 
@@ -240,10 +240,10 @@ def export_excel_single(request, *args, **kwargs):
         sheet.cell(row=row, column=1).value = \
             'C.2 - Reports to Management'
         sheet.cell(row=row, column=2).value = qapp_info['section_c'].c2
-        row += 1
-        sheet.cell(row=row, column=1).value = \
-            'C.3 Quality Metrics (QA/QC Checks)'
-        sheet.cell(row=row, column=2).value = qapp_info['section_c'].c3
+        # row += 1
+        # sheet.cell(row=row, column=1).value = \
+        #     'C.3 Quality Metrics (QA/QC Checks)'
+        # sheet.cell(row=row, column=2).value = qapp_info['section_c'].c3
     row += 2
 
     # ###########################

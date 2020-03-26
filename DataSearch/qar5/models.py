@@ -228,7 +228,7 @@ class SectionC(models.Model):
         Qapp, on_delete=models.CASCADE, primary_key=True)
     c1 = SECTION_C_INFO[0]
     c2 = SECTION_C_INFO[1]
-    c3 = models.CharField(blank=False, null=False, max_length=2047)
+    # c3 = models.CharField(blank=False, null=False, max_length=2047)
 
 
 class SectionD(models.Model):
