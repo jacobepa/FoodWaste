@@ -21,6 +21,10 @@ from django.db import models
 from django.db.models.signals import post_save
 
 
+def get_profile_photo_storage_path(instance, filename):
+    return 'profiles/%s/%s' %(instance.user.id, filename)
+
+
 class CountryBaseManager(models.Manager):
     """
     CountryBaseManager.

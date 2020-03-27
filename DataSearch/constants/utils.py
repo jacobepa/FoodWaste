@@ -26,6 +26,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
 from operator import itemgetter
 
+
 upload_storage = FileSystemStorage(location=settings.UPLOAD_ROOT,
                                    base_url='/uploads')
 
