@@ -68,7 +68,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'django.contrib.sites',
     # Add your apps here to enable them.
     'accounts',
     'branches',
@@ -78,7 +77,6 @@ INSTALLED_APPS = [
     'flowsa',
     'immediate_offices',
     'labs',
-    'notebooks_tab',
     'offices',
     'organization',
     'persons',
@@ -86,7 +84,6 @@ INSTALLED_APPS = [
     'scifinder',
     'qar5',
     'rms',
-    'sop_tab',
     'support',
     'teams',
     'phonenumber_field',

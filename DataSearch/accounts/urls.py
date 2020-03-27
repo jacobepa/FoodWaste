@@ -1,11 +1,28 @@
-from django.conf.urls import url
-from .views import *
+# urls.py (accounts)
+# !/usr/bin/env python3
+# coding=utf-8
+# young.daniel@epa.gov
+# py-lint: disable=invalid-name
+# We disable the invalid name because urlpatterns is the Django default.
+# py-lint: disable=C0301
 
-from django.contrib.auth.views import(
-    LoginView,
-    LogoutView
-)
-import accounts.views
+"""
+Module related to urls for user accounts.
+
+Available functions:
+- Login
+- View/edit profile
+- New user registration
+- Password Management
+- Username management
+"""
+
+from django.conf.urls import url
+from django.contrib.auth.views import LoginView, LogoutView
+from accounts.views import ProfileView, ChangePasswordView, \
+    UserRegistrationView, AccountsAdminView, UserSearchView, \
+    UserUpdateView, PasswordResetRequestView, PasswordResetConfirmView, \
+    UsernameReminderRequestView
 
 urlpatterns = [
     url(r'^profile/$', ProfileView.as_view(), name='profile'),

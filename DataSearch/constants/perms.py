@@ -84,9 +84,7 @@ from django.conf import settings
 
 #Models
 from django.contrib.auth.models import User
-from notebooks_tab.models import *
 from projects.models import *
-from sop_tab.models import *
 from support.models import *
 from organization.models import *
 import rms.models as rms
@@ -176,20 +174,6 @@ qualname_model_ref = {
         "organization":{
             "default":Lab
             },
-        "notebooks_tab": {
-            "default":NotebooksTab,
-            "delete_nb_org":NotebooksTab_Orgs,
-            "nbtab_user_review":getNBUserLab,
-            "show_nb_review":NotebooksTab_Reviews,
-            "file_upload_nbreview":NotebooksTab_Reviews,
-            "switch_file_email_flag_nb_review":getNBAttachmentLab,
-            "switch_is_review_file_flag_nb_review":getNBAttachmentLab,
-            "delete_review_attachment":getNBAttachmentLab,
-            "nbtab_set_sched_review.get":getNBUserAndNBLabs,
-            "nbtab_set_sched_review.post":getNBUserAndNBLabs,
-            "nbtab_create_nb_review.get":getUserNBLabs,
-            "nbtab_create_nb_review.post":getUserNBLabs
-            },
         "projects" : {
             "default":Project,
             "delete_proj_org":Project_Orgs,
@@ -212,14 +196,6 @@ qualname_model_ref = {
         "rms" : {
             "default":getRMS
             },
-        "sop_tab" : {
-            "default":SOPTab,
-            "delete_sop_org":SOPTab_Orgs,
-            "switch_file_email_flag_sop":SOPTabAttachment,
-            "switch_is_review_file_flag_sop":SOPTabAttachment,
-            "switch_is_latest_SOP_sop":SOPTabAttachment,
-            "delete_soptab_attachment":SOPTabAttachment
-            },
         "support" : {
             "default":Support
             }
@@ -230,13 +206,11 @@ parent_model_fields = {
         "about":"",
         "accounts":"user_id",
         'metrics':'',
-        'notebooks_tab':'nbtab_id',
         "organization":'lab_id',
         'projects':'project_id',
         'qlog':'project_log_id',
         'reports':'',
         'rms':'project_id',
-        'sop_tab':'soptab_id',
         'support':'support_id',
         }
 

@@ -78,9 +78,6 @@ from io import BytesIO
 import organization.query_utils as oq
 from django.core import serializers
 
-from sop_tab.models import *
-from notebooks_tab.models import *
-
 from django.shortcuts import render, redirect
 
 from constants.perms import apply_perms
@@ -1031,9 +1028,6 @@ def show_project(request, project_id,**kwargs):
     project_update_history = Project_update_history.objects.filter(project=obj)
     qlogs = ProjectLog.objects.filter(project=obj).order_by('project_log_type', 'qa_log_number_x', 'qa_log_number_y')
 
-    related_sops = SOPTab.objects.filter(projects=obj).order_by('sop_number')
-    related_notebooks = NotebooksTab.objects.filter(projects=obj).order_by('nb_number')
-
     collaborators = obj.collaborators.all()
 
     # Parse weblink to handle multiple links.
@@ -1123,9 +1117,6 @@ def show_project_expanded(request, project_id,**kwargs):
     orgs = Project_Orgs.objects.filter(project=obj)
     project_update_history = Project_update_history.objects.filter(project=obj)
     qlogs = ProjectLog.objects.filter(project=obj).order_by('project_log_type', 'qa_log_number_x', 'qa_log_number_y')
-
-    related_sops = SOPTab.objects.filter(projects=obj).order_by('sop_number')
-    related_notebooks = NotebooksTab.objects.filter(projects=obj).order_by('nb_number')
 
     collaborators = obj.collaborators.all()
 

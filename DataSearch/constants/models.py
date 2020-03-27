@@ -48,6 +48,11 @@ PERMISSION_CHOICES = (('READER', 'READER'), ('EDITOR', 'EDITOR'),
                       ('ADMIN', 'ADMIN'))
 EDITOR_PERMISSION_CHOICES = (('READER', 'READER'), ('EDITOR', 'EDITOR'))
 READER_PERMISSION_CHOICES = (('READER', 'READER'))
+# this is used only i the equipment app - don't know yet whether that app is used in QA Track or not
+METROLOGY_DOC_CHOICES = (
+    ('Other','Other'), ('CP','Calibration Procedure'),
+    ('MD','Metrology Document'), ('TM','Technical Manual'),
+    ('Image','Image'), ('Thumbnail','Thumbnail'), ('Key','Key Image - BIG'))
 
 
 DIVISION_CHOICES = [
