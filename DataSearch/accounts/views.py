@@ -1,652 +1,612 @@
-# views.py (accounts)
-# !/usr/bin/env python3
-# coding=utf-8
-# young.daniel@epa.gov
-# py-lint: disable=line-too-long
-# py-lint: disable=E0012,E1101,R0901,W0703,W0221,W0212,W0613,R0913
+from django.shortcuts import render
+#
+# Views for login/logout and user management
+#
+#
 
-"""
-Views for managing user accounts and profiles.
 
-Available functions:
-- View forgotten username
-- Reset password
-- View user account
-- Password reset process
-"""
-
-from urllib.parse import urlparse
-from django.conf import settings
+import urllib.parse
 from django.db.models import Q
+from organization.models import *
+from django.contrib.sessions.models import Session
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.conf import settings
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.template.response import TemplateResponse
+from django.utils.http import base36_to_int
+from django.utils.translation import ugettext as _
+from django.views.decorators.debug import sensitive_post_parameters
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
 
-# Authorized login.
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, \
-    logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
-
-# Validation.
-from django.core.validators import validate_email
-from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
-from django.forms import ValidationError
-from django.shortcuts import render
-from django.contrib import messages
 from django.views.generic import FormView, TemplateView
-from django.views.decorators.debug import sensitive_post_parameters
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.cache import never_cache
+from .forms import *
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import user_passes_test
+import organization.query_utils as oq
+
+from django.core.validators import validate_email
+from django.http import HttpResponseRedirect, QueryDict
+from django.forms import widgets, ModelForm, ValidationError
+from django.shortcuts import render, render_to_response, get_object_or_404
+from django.contrib import messages
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_bytes
-from django.utils.translation import ugettext_lazy as _
-from django.template import loader
-from django.template.response import TemplateResponse
-from accounts.forms import SetPasswordForm, ProfileUpdateForm, \
-    UsernameReminderRequestForm, PasswordResetRequestForm, ProfileCreationForm
-from accounts.models import State, Sector, Role, Country
+
+# auth
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.tokens import default_token_generator
+from constants.perms import apply_perms
+from django.utils import timezone
 
 
 class UsernameReminderRequestView(FormView):
-    """View for forgotten username."""
-
-    template_name = "registration/username_reminder.html"
+    """
+    View for forgotten username
+    """
     form_class = UsernameReminderRequestForm
     messages = None
+    template_name = "registration/username_reminder.html"
+    template_done = "registration/username_reminder_done.html"
+    # email and subject line templates
+    subject_template_name='registration/username_reminder_subject.txt'
+    email_template_name='registration/username_reminder_email.html'
 
     @staticmethod
     def validate_email_address(email):
-        """
-        :param email:
-        :return:
-        """
+
         try:
             validate_email(email)
             return True
         except ValidationError:
             return False
 
+    @apply_perms
     def post(self, request, *args, **kwargs):
-        """
-        :param request:
-        :param args:
-        :param kwargs:
-        :return:
-        """
         form = self.form_class(request.POST)
         try:
             if form.is_valid():
                 data = form.cleaned_data["email"]
 
-            # Uses the method written above.
-            if self.validate_email_address(data) is True:
-                # Find the users associated with this email.
-                associated_users = User.objects.filter(
-                    Q(email=data) | Q(username=data))
+            if self.validate_email_address(data) is True:                 #uses the method written above
+                # find the users associated with this email that are active
+                associated_users= User.objects.filter(Q(email__iexact=data)&Q(is_active__exact=True))
+                #associated_users= User.objects.filter(Q(email_iexact=data)|Q(username=data))
                 if associated_users.exists():
                     for user in associated_users:
-                        content = {
+                        c = {
                             'email': user.email,
                             'domain': request.META['HTTP_HOST'],
                             'site_name': settings.SITE_NAME,
+                            'app_name': settings.APP_NAME,
                             'user': user,
                             'protocol': 'http'
                         }
-                        subject_template_name = 'registration/username_reminder_subject.txt'
-                        # Copied from django/contrib/admin/templates/
-                        # registration/password_reset_subject.txt to templates
-                        # directory.
-                        email_template_name = 'registration/username_reminder_email.html'
-                        # Copied from django/contrib/admin/templates/
-                        # registration/password_reset_email.html to templates
-                        # directory.
-                        subject = loader.render_to_string(
-                            subject_template_name, content)
-                        # Email subject *must not* contain newlines.
+                        subject = loader.render_to_string(self.subject_template_name, c)
+                        # Email subject *must not* contain newlines
                         subject = ''.join(subject.splitlines())
-                        email = loader.render_to_string(
-                            email_template_name, content)
-                        if not settings.EMAIL_DISABLED:
-                            send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                                      [user.email], fail_silently=True)
-                    # Render the done page.
-                    return render(request,
-                                  'registration/username_reminder_done.html',
-                                  locals())
+                        email = loader.render_to_string(self.email_template_name, c)
+                        send_mail(subject, email, settings.DEFAULT_QATRACK_EMAIL , [user.email], fail_silently=False)
+                    # render the done page
+                    return render(request, self.template_done, locals())
+
 
                 result = self.form_invalid(form)
-                messages.error(request,
-                               'No user is associated with this email address')
+                messages.error(request, 'No active user is associated with this email address')
+                return result
+            else:
+                # email is not valid
+                result = self.form_invalid(form)
+                messages.error(request, 'Please enter a valid email address.')
                 return result
 
-            # Email is not valid.
-            result = self.form_invalid(form)
-            messages.error(request, 'Please enter a valid email address.')
-            return result
-
-        except BaseException as ex:
-            print(ex)
+        except Exception as e:
+            print(e)
         return self.form_invalid(form)
 
 
 class PasswordResetRequestView(FormView):
     """
     View for starting the password reset process.
-
-    This view renders the form to enter a username or email address. Upon
-    successful entry of a user email, an email is sent with password reset
-    instructions and a confirmation message displayed.
+    This view renders the form to enter a username or email address.
+    Upon successful entry of a user/email, an email is sent with password reset instructions
+    and a confirmation message displayed.
     """
-
-    template_name = "registration/password_reset.html"
     form_class = PasswordResetRequestForm
+    template_name = "registration/password_reset.html"
+    template_email_sent = "registration/password_reset_email_sent.html"
+    # email and subject line templates
+    subject_template_name='registration/password_reset_subject.txt'
+    email_template_name='registration/password_reset_email.html'
 
     @staticmethod
     def validate_email_address(email):
-        """
-        :param email:
-        :return:
-        """
+
         try:
             validate_email(email)
             return True
         except ValidationError:
             return False
 
+    @apply_perms
     def post(self, request, *args, **kwargs):
-        """
-        :param request:
-        :param args:
-        :param kwargs:
-        :return:
-        """
+
         form = self.form_class(request.POST)
         try:
-            # Make sure the user entered something into the form.
+            # make sure the user entered something into the form
             if form.is_valid():
-                temp_data = form.cleaned_data["email_or_username"]
+                data = form.cleaned_data["email_or_username"]
             else:
                 result = self.form_invalid(form)
-                messages.error(request,
-                               'Please enter a valid email address or '
-                               'username')
+                messages.error(request, 'Please enter a valid email address or username')
                 return result
 
-            # Determine if the email address or username matches an account.
-            if self.validate_email_address(temp_data) is True:
-                # User entered an email address.
-                associated_users = User.objects.filter(
-                    Q(email=temp_data) | Q(username=temp_data))
+            # determine if the email address or username matches an account AND the account is active.
+            # We don't want to confuse people by letting them reset pw if they don't have an active
+            # account because then they will reset their pw but receive an error when they try to log in.
+            if self.validate_email_address(data) is True:
+                # user entered an email address
+                associated_users= User.objects.filter((Q(email__iexact=data)|Q(username__iexact=data))&Q(is_active__exact=True))
                 if associated_users.exists() is False:
                     result = self.form_invalid(form)
-                    messages.error(request,
-                                   'No user is associated with this email '
-                                   'address')
+                    messages.error(request, 'No active user is associated with this email address')
                     return result
             else:
-                associated_users = User.objects.filter(username=temp_data)
+                associated_users= User.objects.filter(Q(username__iexact=data)&Q(is_active__exact=True))
                 if associated_users.exists() is False:
                     result = self.form_invalid(form)
-                    messages.error(request,
-                                   'This username does not exist in the '
-                                   'system.')
+                    messages.error(request, 'This username does not exist or is inactive in the system.')
                     return result
 
-            # Send an email to the user with a password reset token.
+            # send an email to the user with a password reset token
             for user in associated_users:
-                content = {
+                c = {
                     'email': user.email,
                     'domain': request.META['HTTP_HOST'],
                     'site_name': settings.SITE_NAME,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'app_name': settings.APP_NAME,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                     'user': user,
                     'token': default_token_generator.make_token(user),
                     'protocol': 'http',
                 }
-                subject_template_name = \
-                    'registration/password_reset_subject.txt'
-                email_template_name = 'registration/password_reset_email.html'
 
-                subject = loader.render_to_string(
-                    subject_template_name, content)
-                # Email subject *must not* contain newlines.
+                subject = loader.render_to_string(self.subject_template_name, c)
+                # Email subject *must not* contain newlines
                 subject = ''.join(subject.splitlines())
-                email = loader.render_to_string(email_template_name, content)
+                email = loader.render_to_string(self.email_template_name, c)
+                send_mail(subject, email, settings.DEFAULT_QATRACK_EMAIL , [user.email], fail_silently=False)
 
-                if not settings.EMAIL_DISABLED:
-                    send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                                [user.email], fail_silently=True)
+            # render the done page
+            print("RENDER THE DONE PAGE")
+            return render(request, self.template_email_sent, locals())
 
-            # Render the done page.
-            return render(request,
-                          'registration/password_reset_email_sent.html',
-                          locals())
-
-        except BaseException as ex:
-            print(ex)
+        except Exception as e:
+            print(e)
         return self.form_invalid(form)
 
 
 class PasswordResetConfirmView(FormView):
     """
-    This view handles the actual password reset for user forgot their password.
+    This view handles the actual password reset for a user that has forgotten their
+    password.
+    The view first checks the hash in a password reset link and then
+    presents a form to enter a new password
 
-    The view first checks the hash in a password reset link and then presents a
-    form to enter a new password.
     """
-
-    template_name = "registration/password_reset_confirm.html"
+    template_confirm = "registration/password_reset_confirm.html"
+    template_no_token = "registration/password_reset_confirm_no_token.html"
+    template_done = "registration/password_reset_done.html"
     form_class = SetPasswordForm
 
-    def get(self, request, uidb64=None, token=None):
-        """Responds to link from password reset email."""
+    @apply_perms
+    def get(self, request, uidb64=None, token=None, **kwargs):
+        """
+        Responds to link from password reset email
+        """
         form = self.form_class(None)
         if uidb64 is None or token is None:
-            return render(request, 'registration/password_reset_confirm_no_token.html', {'form': form})
-        usermodel = get_user_model()
+            return render(request, self.template_no_token, locals())
+        else:
+            UserModel = get_user_model()
+            try:
+                uid = urlsafe_base64_decode(uidb64)
+                user = UserModel._default_manager.get(pk=uid)
+            except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+                user = None
+            if user is None or default_token_generator.check_token(user, token) is False:
+                return render(request, self.template_no_token, locals())
 
-        try:
-            uid = urlsafe_base64_decode(uidb64)
-            user = usermodel._default_manager.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, usermodel.DoesNotExist):
-            user = None
+        return render(request, self.template_confirm, locals())
 
-        if user is None or default_token_generator.check_token(user, token) is False:
-            return render(request, 'registration/password_reset_confirm_no_token.html',
-                          {'form': form, 'usermodel': usermodel, 'uid': uid})
-
-        return render(request, 'registration/password_reset.html',
-                      {'form': form, 'usermodel': usermodel, 'uid': uid, 'user': user})
-
-    def post(self, request, *arg, **kwargs):
-        # py-lint: disable=keyword-arg-before-vararg
-        """
-        :param request:
-        :param arg:
-        :param kwargs:
-        :return:
-        """
+    @apply_perms
+    def post(self, request, uidb64=None, token=None, *arg, **kwargs):
         form = self.form_class(request.POST)
-        uidb64 = kwargs.get('uuidb64', None)
-        token = kwargs.get('token', None)
-        usermodel = get_user_model()
-        assert uidb64 is not None and token is not None
+
+        UserModel = get_user_model()
+        assert uidb64 is not None and token is not None  # checked by URLconf
         try:
             uid = urlsafe_base64_decode(uidb64)
-            user = usermodel._default_manager.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, usermodel.DoesNotExist):
+            user = UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
             user = None
-        if user is not None and default_token_generator.check_token(user,
-                                                                    token):
+        if user is not None and default_token_generator.check_token(user, token):
             if form.is_valid():
-                new_password = form.cleaned_data['new_password2']
+                new_password= form.cleaned_data['new_password2']
                 user.set_password(new_password)
                 user.save()
 
-                return render(request, 'registration/password_reset_done.html', locals())
-
-            messages.error(
-                request, 'Password reset was unsuccessful. Please try again')
+                return render(request, self.template_done, locals())
+            else:
+                print('Form Not Valid')
+                messages.error(request, 'Password reset was unsuccessful. Please try again')
+                return self.form_invalid(form)
+        else:
+            messages.error(request,'The reset password link is no longer valid.')
             return self.form_invalid(form)
-
-        messages.error(request, 'The reset password link is no longer valid.')
-        return self.form_invalid(form)
 
 
 class ProfileView(FormView):
-    """View of the user account information from the dashboard."""
-
+    """
+    View of the user account information
+    """
     form_class = ProfileUpdateForm
+    template_profile = "main/profile.html"
+
+    def _setup_organization_select(self, user):
+        # get the organization data
+        office_list = oq.get_office_list(user, as_json=True)
+        lab_list = oq.get_lab_list(user, None, as_json=True)
+        division_list = oq.get_division_list(user, None, None, as_json=True)
+        branch_list = oq.get_branch_list(user, None, None, None, as_json=True)
+
+        # formatting for the organization selector
+        office_required = True
+        lab_required = True
+        division_required = True
+        label_class = "col-sm-3"
+        input_container_class = "col-sm-9"
+
+        return (office_list, lab_list, division_list, branch_list,
+                office_required, lab_required, division_required, label_class, input_container_class,)
 
     @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
+    @apply_perms
+    def get(self, request, **kwargs):
         """
-        Display the user profile.
+        Display the user profile
+        """
+        user = request.user
+        (office_list, lab_list, division_list, branch_list,
+         office_required, lab_required, division_required,
+         label_class, input_container_class,) = self._setup_organization_select(user)
+        selected_office = user.userprofile.office
+        selected_lab = user.userprofile.lab
+        selected_division = user.userprofile.division
+        selected_branch = user.userprofile.branch
+        show_inactive_orgs = 'on'
 
-        :param request:
-        """
-        form = ProfileUpdateForm(instance=request.user)
-        return render(request, 'main/profile.html', {'form': form})
+        form = self.form_class(instance=user, is_admin_view=False, user=request.user)
+
+        print("USER IS ACTIVE",user.is_active)
+        return render(request, self.template_profile, locals())
 
     @method_decorator(login_required)
+    @apply_perms
     def post(self, request, *args, **kwargs):
-        """Save the changes to the user form."""
-        user = User.objects.get(username=request.user.username)
+        """
+        Save the changes to the user form
+        """
+        user = request.user
+        (office_list, lab_list, division_list, branch_list,
+         office_required, lab_required, division_required,
+         label_class, input_container_class,) = self._setup_organization_select(user)
+#        selected_office = user.userprofile.office
+#        selected_lab = user.userprofile.lab
+#        selected_division = user.userprofile.division
+#        selected_branch = user.userprofile.branch
+
+        office_id = request.POST.get("office", None)
+        lab_id = request.POST.get("lab", None)
+        division_id = request.POST.get("division", None)
+        branch_id = request.POST.get("branch", None)
+        show_inactive_orgs = request.POST.get("show_inactive_orgs", None)
+
+        selected_office = Office.objects.get(id=office_id) if oq._valid_org_id(office_id) else None
+        selected_lab = Lab.objects.get(id=lab_id) if oq._valid_org_id(lab_id) else None
+        selected_division = Division.objects.get(id=division_id) if oq._valid_org_id(division_id) else None
+        selected_branch = Branch.objects.get(id=branch_id) if oq._valid_org_id(branch_id) else None
+
+        if not kwargs["is_admin"]:
+            # disabled fields are not passed with the form, so add a few things to the POST
+            updated_post = request.POST.copy()
+            if user.userprofile.office is not None:
+                updated_post['office'] = user.userprofile.office.id
+            if user.userprofile.lab is not None:
+                updated_post['lab'] = user.userprofile.lab.id
+#            if user.userprofile.division is not None:
+#                updated_post['division'] = user.userprofile.division.id
+#            if user.userprofile.branch is not None:
+#                updated_post['branch'] = user.userprofile.branch.id
+#            updated_post['is_superuser'] = user.is_superuser
+#            updated_post['user_type'] = user.userprofile.user_type
+            updated_post['is_staff'] = user.is_staff
+            updated_post['permissions'] = user.userprofile.permissions
+#            updated_post['is_reviewer'] = user.userprofile.is_reviewer
+            # updated_post['is_technical_lead'] = user.userprofile.is_technical_lead
+#            updated_post['can_edit'] = user.userprofile.can_edit
+#            updated_post['can_create_users'] = user.userprofile.can_create_users
+
+            form = self.form_class(updated_post, instance=user, is_admin_view=False, user=request.user)
+        else:
+            form = self.form_class(request.POST, instance=user, is_admin_view=False, user=request.user)
+
+        if form.is_valid():
+            # save the user information and get a pointer to the User object
+            user = form.save()
+            # if the password information was changed, make sure the current password is
+            # correct
+            success = True
+        else:
+            form = self.form_class(instance=user, is_admin_view=False, user=request.user)
+
+        return render(request, self.template_profile, locals())
+
+
+class ChangePasswordView(FormView):
+    """
+    View of the user account information
+    """
+    form_class = ChangePasswordForm
+    template_profile = "main/password_change.html"
+
+    @method_decorator(login_required)
+    @apply_perms
+    def get(self, request, **kwargs):
+        """
+        Display the user profile
+        """
+        form = ChangePasswordForm(instance=request.user)
+        return render(request, self.template_profile, locals())
+
+    @method_decorator(login_required)
+    @apply_perms
+    def post(self, request, *args, **kwargs):
+        """
+        Save the changes to the user form
+        """
+        user = request.user
         form = self.form_class(request.POST, instance=user)
         if form.is_valid():
-            # Save the user information and get a pointer to the User object.
+            # save the user information and get a pointer to the User object
             user = form.save()
-        # If password info changed, make sure current password is correct.
-        success = True
+            # if the password information was changed, make sure the current password is
+            # correct
+            success = True
 
-        return render(request, 'main/profile.html',
-                      {'user': user, 'form': form, 'success': success})
+        return render(request, self.template_profile, locals())
 
 
 class UserRegistrationView(FormView):
     """
-    View for starting the password reset process.
-
-    This view renders the form to enter a username or email address. Upon
-    successful entry of a user/email, an email is sent with password reset
-    instructions and a confirmation message displayed.
+    View for registering a new user.  Restricted to super users
     """
-
-    template_register = "registration/register.html"
-    template_register_inactive = "registration/register_inactive.html"
-    # Email and subject line for the message sent to the app admins.
-    admin_subject_template_name = 'registration/register_request_admin_subject.txt'
-    admin_email_template_name = 'registration/register_request_admin_email.html'
-    # Email and subject line for the message sent to the potential app user.
-    user_subject_template_name = 'registration/register_request_user_subject.txt'
-    user_email_template_name = 'registration/register_request_user_email.html'
     form_class = ProfileCreationForm
+    template_register = "registration/register.html"
 
+    def _setup_organization_select(self, user):
+        # get the organization data
+        office_list = oq.get_office_list(user, as_json=True)
+        lab_list = oq.get_lab_list(user, None, as_json=True)
+        division_list = oq.get_division_list(user, None, None, as_json=True)
+        branch_list = oq.get_branch_list(user, None, None, None, as_json=True)
+
+        # formatting for the organization selector
+        office_required = True
+        lab_required = True
+        division_required = True
+        label_class = "col-sm-3"
+        input_container_class = "col-sm-9"
+
+        return (office_list, lab_list, division_list, branch_list,
+                office_required, lab_required, division_required, label_class, input_container_class)
+
+    @method_decorator(login_required)
+    @apply_perms
     def get(self, request, *args, **kwargs):
-        """Render the user registration template."""
-        form = ProfileCreationForm()
-        return render(request, self.template_register, {'form': form})
+        """
+        Render the user registration template
+        """
 
+        user = request.user
+        (office_list, lab_list, division_list, branch_list, office_required,
+         lab_required, division_required, label_class, input_container_class) = self._setup_organization_select(user)
+        selected_office = user.userprofile.office
+
+#        if not request.user.is_superuser:
+#            # only super users can register new users
+#            return HttpResponseRedirect(reverse('home'))
+
+        form = self.form_class(user=request.user)
+        return render(request, self.template_register, locals())
+
+    @method_decorator(login_required)
+    @apply_perms
     def post(self, request, *args, **kwargs):
-        """Process the user's registration request."""
+        """
+        Process the user's registration request
+        """
+#        if not request.user.is_superuser:
+#            # only super users can register new users
+#            return HttpResponseRedirect(reverse('home'))
+
         postdata = request.POST.copy()
-        form = ProfileCreationForm(postdata)
+        postdata["date_joined"] = timezone.now()
+        form = self.form_class(postdata, user=request.user)
+
+        office_id = request.POST.get("office", None)
+        lab_id = request.POST.get("lab", None)
+        division_id = request.POST.get("division", None)
+        branch_id = request.POST.get("branch", None)
+        show_inactive_orgs = request.POST.get("show_inactive_orgs", None)
 
         if form.is_valid():
-            # Save the user information and get a pointer to the User object.
+            # save the user information and get a pointer to the User object
             user = form.save()
+            success = True
 
-            # Get values for the foreign key values.
-            role = Role.objects.get(id=user.userprofile.role_id)
-            sector = Sector.objects.get(id=user.userprofile.sector_id)
-            try:
-                state = State.objects.get(id=user.userprofile.state_id)
-            except BaseException:
-                state = None
-            country = Country.objects.get(id=user.userprofile.country_id)
+            return HttpResponseRedirect('/accounts/manage/user/' + str(user.id))
+        else:
+            user = request.user
+            (office_list, lab_list, division_list, branch_list, office_required,
+             lab_required, division_required, label_class, input_container_class) = self._setup_organization_select(
+                user)
 
-            # NOTE: Disable this on dev machines to test account creation:
-            if not settings.EMAIL_DISABLED:
-                # Send an activation email.
-                request_email_context = {
-                    'APP_NAME': settings.APP_NAME,
-                    'email': settings.EMAIL_HOST_USER,
-                    'domain': request.META['HTTP_HOST'],
-                    'site_name': settings.SITE_NAME,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'user': user,
-                    'sector': sector,
-                    'role': role,
-                    'state': state,
-                    'country': country,
-                    'protocol': 'http',
-                }
-                subject = loader.render_to_string(
-                    self.admin_subject_template_name, request_email_context)
-                # Email subject *must not* contain newlines.
-                subject = ''.join(subject.splitlines())
-                email = loader.render_to_string(
-                    self.admin_email_template_name, request_email_context)
-                # This is driven by local_settings.py.
-                if not settings.EMAIL_DISABLED:
-                    send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                                settings.USER_APPROVAL_EMAIL, fail_silently=False)
+            selected_office = Office.objects.get(id=office_id) if oq._valid_org_id(office_id) else None
+            selected_lab = Lab.objects.get(id=lab_id) if oq._valid_org_id(lab_id) else None
+            selected_division = Division.objects.get(id=division_id) if oq._valid_org_id(division_id) else None
+            selected_branch = Branch.objects.get(id=branch_id) if oq._valid_org_id(branch_id) else None
 
-                # Send an email to the user notifying them that
-                # the account request is under review.
-                user_email_context = {
-                    'APP_NAME': settings.APP_NAME,
-                    'email': user.email
-                }
-                subject = loader.render_to_string(
-                    self.user_subject_template_name, user_email_context)
-                # Email subject *must not* contain newlines
-                subject = ''.join(subject.splitlines())
-                email = loader.render_to_string(
-                    self.user_email_template_name, user_email_context)
-
-                if not settings.EMAIL_DISABLED:
-                    send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                              [user.email], fail_silently=False)
-
-            # Render the activation needed template.
-            return render(request, self.template_register_inactive,
-                          {'APP_NAME': settings.APP_NAME})
-            # py-lint: disable=E1101
-        return render(request, self.template_register, {'form': form})
+            return render(request, self.template_register, locals())
 
 
-class UserApprovalView(TemplateView):
+class AccountsAdminView(TemplateView):
     """
-    View for activating a user.
-
-    This view can only be accessed by an administrator. Typically accessed
-    from the registration request email.
+    Main entry point for account management page
     """
-
-    template_name = "registration/register_approved.html"
-    template_name_no_uid = "registration/register_approved_no_uid.html"
-    # Email and subject line for approval email.
-    subject_template_name = 'registration/register_approved_subject.txt'
-    email_template_name = 'registration/register_approved_email.html'
+    template_register = "main/manage_accounts.html"
 
     @method_decorator(login_required)
-    def get(self, request, uidb64=None):
-        """Activate a user, given a valid token in the url."""
-        if not request.user.is_superuser:
-            return render(request, self.template_name_no_uid, locals())
-
-        if uidb64 is None:
-            return render(request, self.template_name_no_uid, locals())
-
-        user_model = get_user_model()
-        try:
-            uid = urlsafe_base64_decode(uidb64)
-            user = user_model._default_manager.get(pk=uid)
-            user.is_active = True
-            user.save()
-
-            # Notify the user.
-            user_email_context = {
-                'APP_NAME': settings.APP_NAME,
-                'email': user.email,
-                'username': user.username,
-                'protocol': 'http',
-                'domain': request.META['HTTP_HOST']
-            }
-
-            subject = loader.render_to_string(
-                self.subject_template_name, user_email_context)
-            # Email subject *must not* contain newlines.
-            subject = ''.join(subject.splitlines())
-            email = loader.render_to_string(
-                self.email_template_name, user_email_context)
-            if not settings.EMAIL_DISABLED:
-                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                          [user.email], fail_silently=False)
-
-        except (TypeError, ValueError, OverflowError, user_model.DoesNotExist):
-            user = None
-
-        if user is None:
-            return render(request, self.template_name_no_uid, locals())
-        return render(request, self.template_name, locals())
+    @apply_perms
+    def get(self, request, *args, **kwargs):
+        """
+        Render the user registration template
+        """
+#        if not request.user.is_superuser:
+#            # only super users can access the admin views
+#            return HttpResponseRedirect(reverse('home'))
+        return render(request, self.template_register, locals())
 
 
-class UserDenialView(TemplateView):
-    """
-    View for starting the password reset process.
-
-    This view renders the form to enter a username or email address.
-    Upon successful entry of a user/email, an email is sent with password reset instructions
-    and a confirmation message displayed.
-    """
-
-    template_name = "registration/register_denied.html"
-    template_name_no_uid = "registration/register_denied_no_uid.html"
-    # Email and subject line for denial message.
-    subject_template_name = 'registration/register_denied_subject.txt'
-    email_template_name = 'registration/register_denied_email.html'
+class UserSearchView(TemplateView):
+    template_register = "main/manage_search_users.html"
 
     @method_decorator(login_required)
-    def get(self, request, uidb64=None):
-        """Activate a user, given a valid token in the url."""
-        if not request.user.is_superuser:
-            return render(request, self.template_name_no_uid, locals())
-
-        if uidb64 is None:
-            return render(request, self.template_name_no_uid, locals())
-
-        user_model = get_user_model()
-        try:
-            uid = urlsafe_base64_decode(uidb64)
-            user = user_model._default_manager.get(pk=uid)
-            username = user.username
-            # Notify the user of the denial.
-            context = {
-                'APP_NAME': settings.APP_NAME,
-                'username': username,
-            }
-            subject = loader.render_to_string(
-                self.subject_template_name, context)
-            # Email subject *must not* contain newlines.
-            subject = ''.join(subject.splitlines())
-            email = loader.render_to_string(self.email_template_name, context)
-            if not settings.EMAIL_DISABLED:
-                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                          [user.email], fail_silently=False)
-
-            # Delete the account.
-            user.delete()
-            return render(request, self.template_name, locals())
-
-        except (TypeError, ValueError, OverflowError, user_model.DoesNotExist):
-            user = None
-            return render(request, self.template_name_no_uid, locals())
+    @apply_perms
+    def get(self, request, *args, **kwargs):
+        user_perms = request.user.userprofile.permissions
+        user_lab = request.user.userprofile.lab_id
+        return render(request, self.template_register, locals())
 
 
-class UserActivationView(TemplateView):
+class UserUpdateView(TemplateView):
     """
-    View for starting the password reset process.
-
-    This view renders form to enter a username or email address. Upon
-    successful entry of a user/email, an email is sent with password reset
-    instructions and a confirmation message displayed.
     """
+    form_class = ProfileUpdateForm
+    template_profile = "main/manage_edit_user.html"
 
-    template_name = "registration/register_activated.html"
+    def _setup_organization_select(self, user):
+        # get the organization data
+        office_list = oq.get_office_list(user, as_json=True)
+        lab_list = oq.get_lab_list(user, None, as_json=True)
+        division_list = oq.get_division_list(user, None, None, as_json=True)
+        branch_list = oq.get_branch_list(user, None, None, None, as_json=True)
 
-    def get(self, request, uidb64=None, token=None):
-        """Activate a user, given a valid token in the url."""
-        if uidb64 is None or token is None:
-            return render(request, 'registration/register_activate_no_token.html', locals())
+        # formatting for the organization selector
+        office_required = True
+        lab_required = True
+        division_required = True
+        label_class = "col-sm-3"
+        input_container_class = "col-sm-9"
 
-        usermodel = get_user_model()
-        try:
-            uid = urlsafe_base64_decode(uidb64)
-            user = usermodel._default_manager.get(pk=uid)
-            user.is_active = True
-            user.save()
+        return (office_list, lab_list, division_list, branch_list,
+                office_required, lab_required, division_required, label_class, input_container_class)
 
-        except (TypeError, ValueError, OverflowError, usermodel.DoesNotExist):
-            user = None
+    @method_decorator(login_required)
+    @apply_perms
+    def get(self, request, *args, **kwargs):
+        """
+        Display the user profile
+        """
+        id = self.kwargs['user_id']
+#        if id is None or (request.user.id != id and not request.user.is_superuser):
+#            # only super users can edit someone else's profile
+#            return HttpResponseRedirect(reverse('home'))
 
-        if user is None or default_token_generator.check_token(user, token) is False:
-            return render(request, 'registration/register_activate_no_token.html', locals())
+        edit_user = User.objects.get(id=id)
 
-        return render(request, self.template_name, locals())
+        # Fixed this to get lists according to the request user, not the edit_user.
+        # Request user should be an admin, they be able to change what org a user belongs to.
+        (office_list, lab_list, division_list, branch_list, office_required,
+         lab_required, division_required, label_class, input_container_class) = self._setup_organization_select(request.user)
+
+        selected_office = edit_user.userprofile.office
+        selected_lab = edit_user.userprofile.lab
+        selected_division = edit_user.userprofile.division
+        selected_branch = edit_user.userprofile.branch
+
+        # Check "Show Inactive organization units" only if current org is inactive.
+        if selected_lab and selected_lab.is_active == False:
+            show_inactive_orgs = 'on'
+        elif selected_division and selected_division.is_active == False:
+            show_inactive_orgs = 'on'
+        elif selected_branch and selected_branch.is_active == False:
+            show_inactive_orgs = 'on'
+
+        form = self.form_class(instance=edit_user, is_admin_view=True, user=request.user)
+        return render(request, self.template_profile, locals())
+
+    @method_decorator(login_required)
+    @apply_perms
+    def post(self, request, *args, **kwargs):
+        """
+        Save the changes to the user form
+        """
+        id = self.kwargs['user_id']
+#        if id is None or (request.user.id != id and not request.user.is_superuser):
+#            # only super users can edit someone else's profile
+#            return HttpResponseRedirect(reverse('home'))
+
+        edit_user = User.objects.get(id=id)
+        (office_list, lab_list, division_list, branch_list, office_required,
+         lab_required, division_required, label_class, input_container_class) = self._setup_organization_select(
+            edit_user)
+#        selected_office = edit_user.userprofile.office
+#        selected_lab = edit_user.userprofile.lab
+#        selected_division = edit_user.userprofile.division
+#        selected_branch = edit_user.userprofile.branch
+
+        office_id = request.POST.get("office", None)
+        lab_id = request.POST.get("lab", None)
+        division_id = request.POST.get("division", None)
+        branch_id = request.POST.get("branch", None)
+        show_inactive_orgs = request.POST.get("show_inactive_orgs", None)
 
 
-@sensitive_post_parameters()
-@csrf_protect
-@never_cache
-def login(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME,
-          authentication_form=AuthenticationForm, current_app=None, extra_context=None):
-    """Displays the login form and handles the login action."""
-    redirect_to = request.GET.get(redirect_field_name, )
+        selected_office = Office.objects.get(id=office_id) if oq._valid_org_id(office_id) else None
+        selected_lab = Lab.objects.get(id=lab_id) if oq._valid_org_id(lab_id) else None
+        selected_division = Division.objects.get(id=division_id) if oq._valid_org_id(division_id) else None
+        selected_branch = Branch.objects.get(id=branch_id) if oq._valid_org_id(branch_id) else None
 
-    layout_name = "datasearch Log-In and/or Register Screen"
-    error = None
+        form = self.form_class(request.POST, instance=edit_user, is_admin_view=True, user=request.user)
 
-    if request.method == "POST":
-        # If this is a new user, then we return the registration form.
-        if 'user_action' in request.POST and request.POST[
-                'user_action'] == 'register':
-            form = ProfileCreationForm(
-                initial={
-                    'username': request.POST['username'],
-                    'password1': request.POST['password']}
-            )
-            return render(request, "registration/register.html", locals())
-
-        # Otherwise, assume the user is trying to login.
-        form = authentication_form(data=request.POST)
         if form.is_valid():
-            netloc = urlparse(redirect_to)[1]
+            print("HERE")
+            # save the user information and get a pointer to the User object
+            edit_user = form.save()
+            success = True
 
-            # Use default setting if redirect_to is empty.
-            if not redirect_to:
-                redirect_to = settings.LOGIN_REDIRECT_URL
-
-            # Do not allow redirection to different host.
-            elif netloc and netloc != request.get_host():
-                redirect_to = settings.LOGIN_REDIRECT_URL
-
-            # Okay, security checks complete. Log the user in.
-            auth_login(request, form.get_user())
-
-            if request.session.test_cookie_worked():
-                request.session.delete_test_cookie()
-
-            return HttpResponseRedirect(redirect_to)
-
-        error = "invalid username or password"
-
-    else:
-        form = authentication_form(request)
-
-    request.session.set_test_cookie()
-
-    current_site = get_current_site(request)
-
-    context = {
-        'error': error,
-        'form': form,
-        redirect_field_name: redirect_to,
-        'site': current_site,
-        'site_name': current_site.name,
-        'layout_name': layout_name
-    }
-    if extra_context is not None:
-        context.update(extra_context)
-    return TemplateResponse(request, template_name, context)
-
-
-def logout(request, next_page=None, template_name='registration/logout.html',
-           redirect_field_name=REDIRECT_FIELD_NAME, current_app=None, extra_context=None):
-    """Logs out the user and displays 'You are logged out' message."""
-    auth_logout(request)
-    redirect_to = request.GET.get(redirect_field_name, )
-    if redirect_to:
-        netloc = urlparse(redirect_to)[1]
-        # Security check -- do not allow redirection to a different host.
-        if not (netloc and netloc != request.get_host()):
-            return HttpResponseRedirect(redirect_to)
-
-    if next_page is None:
-        current_site = get_current_site(request)
-        context = {
-            'site': current_site,
-            'site_name': current_site.name,
-            'title': _('Logged out')
-        }
-        if extra_context is not None:
-            context.update(extra_context)
-        return TemplateResponse(request, template_name, context)
-
-    # Redirect to this page until the session has been cleared.
-    return HttpResponseRedirect(next_page or request.path)
+        #return render(request, self.template_profile, locals())
+        url = '/accounts/manage/user/%s/' % str(id)
+        return HttpResponseRedirect(url)

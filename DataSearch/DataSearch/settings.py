@@ -71,7 +71,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     # Add your apps here to enable them.
     'accounts',
-    'audits',
     'branches',
     'constants',
     'DataSearch',

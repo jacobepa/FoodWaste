@@ -1,12 +1,9 @@
-{% extends "main/base.html" %}
-
+{% extends 'base/site_base.html' %}
+{% load staticfiles %}
 {% block content %}
-
-<div class="splash">
-    <div class="well login">
-        <h3>Thank you for using {{APP_NAME}}.</h3>
-        Click <a href="{% url 'login' %}">here</a> to log in again.
-    </div>
-</div>
-
+<section id="main-content" class="main-content clearfix" lang="en" role="main" tabindex="-1">
+    <p>
+        Thank you for using {{APP_NAME}}.  Click <a href="{% url 'login' %}">here</a> to log in again.
+    </p>
+</section>
 {% endblock %}

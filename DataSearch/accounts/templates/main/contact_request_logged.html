@@ -1,0 +1,33 @@
+{% extends "site_base.html" %}
+{% block content %}
+	<div class="col-sm-12">
+		<h1 class="center_header_green">QA Track</h1>
+		<hr>
+	</div>
+
+	<div class="col-sm-12">
+		<div class="text-center">
+			<div class="btn-library">
+				<a class="btn btn-md btn-success" href={% url 'login' %} role="button">Login</a>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="col-sm-12">
+		<p><h5>Thank You For Your Request. A response to your inquiry will be sent shortly.</h5></p>
+	</div>
+	<div class="col-sm-4">
+		<div class="reg">Your Name <div class="orange">{{contact_request.the_name}}</div></div>
+	</div>
+	<div class="col-sm-4">
+		<div class="reg">Your Email <div class="orange">{{contact_request.email_address}}</div></div>
+	</div>
+	<div class="col-sm-4">
+		<div class="reg">Subject <div class="orange">{{contact_request.request_subject.the_name}}</div></div>
+	</div>
+	<div class="col-sm-12">
+		<div class="reg">More Information <div class="orange">{{contact_request.the_description}}</div></div>
+	</div>
+		<div class="col-sm-12">
+{% endblock %}

@@ -22,8 +22,6 @@ from time import gmtime, strftime, localtime
 
 from accounts.models import *
 
-from audits.models import *
-
 from constants.models import *
 from constants.utils import *
 
@@ -80,7 +78,6 @@ from io import BytesIO
 import organization.query_utils as oq
 from django.core import serializers
 
-from audits_tab.models import *
 from sop_tab.models import *
 from notebooks_tab.models import *
 
@@ -995,10 +992,7 @@ def delete_project_attachment_log(request, obj_id,**kwargs):
     the_count = ProjectLog.objects.filter(project=project).count()
     project_attachments = ProjectAttachment.objects.filter(project_log=obj)
 
-    if obj.project_log_type.the_name == "Audit":
-        return render(request, 'show/show_log_audit.html', locals())
-    else:
-        return render(request, 'show/show_project_log.html', locals())
+    return render(request, 'show/show_project_log.html', locals())
 
 
 
@@ -1041,7 +1035,6 @@ def show_project(request, project_id,**kwargs):
     project_update_history = Project_update_history.objects.filter(project=obj)
     qlogs = ProjectLog.objects.filter(project=obj).order_by('project_log_type', 'qa_log_number_x', 'qa_log_number_y')
 
-    related_audits = AuditsTab.objects.filter(projects=obj).order_by('audit_id')
     related_sops = SOPTab.objects.filter(projects=obj).order_by('sop_number')
     related_notebooks = NotebooksTab.objects.filter(projects=obj).order_by('nb_number')
 
@@ -1135,7 +1128,6 @@ def show_project_expanded(request, project_id,**kwargs):
     project_update_history = Project_update_history.objects.filter(project=obj)
     qlogs = ProjectLog.objects.filter(project=obj).order_by('project_log_type', 'qa_log_number_x', 'qa_log_number_y')
 
-    related_audits = AuditsTab.objects.filter(projects=obj).order_by('audit_id')
     related_sops = SOPTab.objects.filter(projects=obj).order_by('sop_number')
     related_notebooks = NotebooksTab.objects.filter(projects=obj).order_by('nb_number')
 
@@ -2539,8 +2531,6 @@ def create_project_log(request, obj_id, tlp_id, send_error=None,**kwargs):
                 project_log.date_reviewed = None
             if project_log.date_approved == '':
                 project_log.date_approved = None
-            if project_log.audit_date == '':
-                project_log.audit_date = None
             if project_log.qa_review_date == '':
                 project_log.qa_review_date = None
 
@@ -2624,7 +2614,6 @@ def clone_project_log(request, project_log_id,**kwargs):
     new_project_log.user=pl.user
     new_project_log.technical_lead=pl.technical_lead
     new_project_log.reviewer=pl.reviewer
-    new_project_log.audit_type=pl.audit_type
     new_project_log.the_name=pl.the_name
     new_project_log.title=pl.title
     new_project_log.the_description=pl.the_description
@@ -2639,7 +2628,6 @@ def clone_project_log(request, project_log_id,**kwargs):
     new_project_log.qapp = pl.qapp
     new_project_log.product_category = pl.product_category
     new_project_log.organization=pl.organization
-    new_project_log.audit_location=pl.audit_location
     new_project_log.software_status=pl.software_status
     new_project_log.public_or_private=pl.public_or_private
     new_project_log.last_modified_by = user.username
@@ -2725,7 +2713,6 @@ def clone_project_log_y(request, project_log_id,**kwargs):
     new_project_log.user=pl.user
     new_project_log.technical_lead=pl.technical_lead
     new_project_log.reviewer=pl.reviewer
-    new_project_log.audit_type=pl.audit_type
     new_project_log.the_name=pl.the_name
     new_project_log.title=pl.title
     new_project_log.the_description=pl.the_description
@@ -2738,7 +2725,6 @@ def clone_project_log_y(request, project_log_id,**kwargs):
     new_project_log.lco_tracking_number=pl.lco_tracking_number
     new_project_log.qa_review_required=pl.qa_review_required
     new_project_log.organization=pl.organization
-    new_project_log.audit_location=pl.audit_location
     new_project_log.software_status=pl.software_status
     new_project_log.public_or_private=pl.public_or_private
 
@@ -2915,8 +2901,6 @@ def create_project_log_no_tlp(request, obj_id, send_error=None,**kwargs):
                 project_log.date_reviewed = None
             if project_log.date_approved == '':
                 project_log.date_approved = None
-            if project_log.audit_date == '':
-                project_log.audit_date = None
             if project_log.date_review_requested == '':
                 project_log.date_review_requested = None
 
@@ -3056,13 +3040,6 @@ def edit_project_log(request, project_log_id,**kwargs):
     label_class = "col-sm-4"
     input_container_class = "col-sm-8"
 
-#    if profile.user_type == "SUPER" or profile.can_edit == "Y":
-    error_message = "You can edit QA Activities and Audits"
-#    else:
-#        error_message = "You are not authorized to edit QA Activities or Audits."
-#        back_link = "/projects/qlog/search/"
-#        return render(request, 'error.html', locals())
-
     title = "Update QA Activity"
 
     selected_office = project_log.office;
@@ -3082,12 +3059,8 @@ def edit_project_log(request, project_log_id,**kwargs):
     y_plus_one = int(pl_qa_log_number_y) + 1
     clone_y = project.qa_id + '-' + pl_qa_log_number_type + '-' + str(pl_qa_log_number_x) + '-' + str(y_plus_one)
 
-    if project_log.project_log_type.the_name == "Audit":
-        the_post_form = ProjectLogAuditFormAsync(data=request.POST, files=request.FILES, instance=project_log)
-        the_form = ProjectLogAuditFormAsync(instance=project_log)
-    else:
-        the_post_form = ProjectLogFormAsync(data=request.POST, files=request.FILES, instance=project_log)
-        the_form = ProjectLogFormAsync(instance=project_log)
+    the_post_form = ProjectLogFormAsync(data=request.POST, files=request.FILES, instance=project_log)
+    the_form = ProjectLogFormAsync(instance=project_log)
 
     if request.method == "POST":
         form = the_post_form
@@ -3118,13 +3091,6 @@ def edit_project_log(request, project_log_id,**kwargs):
 
             if project_log.title == '':
                 project_log.title = project.title
-
-            if project_log.audit_date == '':
-                project_log.audit_date = None
-            if project_log.date_audit_report_submitted == '':
-                project_log.date_audit_report_submitted = None
-            if project_log.date_audit_closed == '':
-                project_log.date_audit_closed = None
 
             if project_log.date_responses_received == '':
                 project_log.date_responses_received = None
@@ -3682,13 +3648,7 @@ def show_project_log(request, project_log_id,**kwargs):
                     att.restricted = True
                     att.restricted_qapp = True
 
-
-
-
-    if obj.project_log_type.the_name == "Audit":
-        return render(request, 'show/show_log_audit.html', locals())
-    else:
-        return render(request, 'show/show_project_log.html', locals())
+    return render(request, 'show/show_project_log.html', locals())
 
 
 @login_required
@@ -3761,10 +3721,7 @@ def show_project_log_expanded(request, project_log_id,**kwargs):
                     att.restricted = True
                     att.restricted_qapp = True
 
-    if obj.project_log_type.the_name == "Audit":
-        return render(request, 'show/show_log_audit.html', locals())
-    else:
-        return render(request, 'show/show_project_log.html', locals())
+    return render(request, 'show/show_project_log.html', locals())
 
 
 @login_required
@@ -4085,18 +4042,6 @@ def result_search_project_log(request,**kwargs):
             query = query & (Q(lco_tracking_number__icontains=lco_tracking_number))
             query_show = query_show + "STICS Clearance Tracking Number contains " + str(lco_tracking_number) + ", "
 
-    if 'aud' in request.GET:
-        aud = request.GET['aud']
-        if aud:
-            query = query & (Q(auditor__icontains=aud))
-            query_show = query_show + "Auditor contains " + str(aud) + ", "
-
-    if 'ao' in request.GET:
-        ao = request.GET['ao']
-        if ao:
-            query = query & (Q(auditor_organization__icontains=ao))
-            query_show = query_show + "Auditor Organization contains " + str(ao) + ", "
-
     if 'comments' in request.GET:
         comments = request.GET['comments']
         if comments:
@@ -4166,12 +4111,7 @@ def result_search_project_log(request,**kwargs):
             sheet.write(0, 13, 'Reviewer First')
 
             sheet.write(0, 14, 'Reviewer Last')
-            sheet.write(0, 15, 'Audit Type')
-            sheet.write(0, 16, 'Audit Date')
-            sheet.write(0, 17, 'Audit Location')
 
-            sheet.write(0, 18, 'Auditor')
-            sheet.write(0, 19, 'Audit Organization')
             sheet.write(0, 20, 'Recommendation')
             sheet.write(0, 21, 'Date Received')
 
@@ -4242,16 +4182,6 @@ def result_search_project_log(request,**kwargs):
                     sheet.write(i, 13, '')
                     sheet.write(i, 14, '')
 
-                if obj.audit_type is not None:
-                    sheet.write(i, 15, obj.audit_type.the_name)
-                else:
-                    sheet.write(i, 15, '')
-
-                sheet.write(i, 16, obj.audit_date, style=styles["date"])
-                sheet.write(i, 17, obj.audit_location)
-
-                sheet.write(i, 18, obj.auditor)
-                sheet.write(i, 19, obj.auditor_organization)
                 sheet.write(i, 20, obj.recommendation)
                 sheet.write(i, 21, obj.date_received, style=styles["date"])
 

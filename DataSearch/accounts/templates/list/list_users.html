@@ -1,0 +1,34 @@
+{% extends "site_base.html" %}
+{% load humanize %}
+{% block content %}
+<div class="col-sm-2">
+{% if users %}
+
+	<p><h3>Users</h3></p>
+	
+	<table class="example table-autosort:0 table-stripeclass:alternate table-autofilter" id="users_table">
+		<thead id="users_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Username</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+	  	</tr>
+		</thead>
+	
+		<tbody id="users_body">
+			
+			{% for obj in users %}
+				<tr>
+					<td><a href={% url 'admin_edit_account' obj.id %}>{{obj.username}}</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--[if IE 8]> 				 <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+{% load staticfiles %}
+	<meta charset="utf-8" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- For third-generation iPad with high-resolution Retina display: -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/favicons/apple-touch-icon-144x144-precomposed.png">
+    <!-- For iPhone with high-resolution Retina display: -->
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/favicons/apple-touch-icon-114x114-precomposed.png">
+    <!-- For first- and second-generation iPad: -->
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/favicons/apple-touch-icon-72x72-precomposed.png">
+    <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+    <link rel="apple-touch-icon-precomposed" href="img/favicons/apple-touch-icon-precomposed.png">
+    <link rel="icon" href="img/favicons/favicon.ico" type="image/x-icon">
+
+  	<title>QA Track Website</title>
+	<!-- EPA All 5 CSS Files From http://www2.epa.gov/webguide/epa-web-standards -->
+    <link href="{% static 'css/epa.css' %}" rel="stylesheet">
+	<link href="{% static 'css/style.css' %}" rel="stylesheet">
+	<!-- Bootstrap -->
+    <link href="{% static 'bootstrap-3.1.1/dist/css/bootstrap.css' %}" rel="stylesheet">
+	<!-- Justified Navigation -->
+	<link href="{% static 'bootstrap-3.1.1/docs/examples/justified-nav/justified-nav.css' %}" rel="stylesheet">
+	<!-- Side Menubar -->
+	<link href="{% static 'bootstrap-3.1.1/docs/examples/dashboard/dashboard.css' %}" rel="stylesheet">
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="{% static 'bootstrap-3.1.1/dist/js/html5shiv.js' %}"></script>
+      <script src="{% static 'bootstrap-3.1.1/dist/js/respond.min.js' %}"></script>
+    <![endif]-->
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'bootstrap-3.1.1/dist/js/jquery.min.js' %}"></script>
+	<script src="{% static 'bootstrap-3.1.1/dist/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/vendor/custom.modernizr.js' %}"></script>
+	<script src="{% static 'js/jquery-ui.min.js' %}"></script>
+
+	<script type="text/javascript" src="{% static 'jQuery-File-Upload/js/vendor/jquery.ui.widget.js' %}"></script>
+	<script type="text/javascript" src="{% static 'jQuery-File-Upload/js/jquery.iframe-transport.js' %}"></script>
+	<script type="text/javascript" src="{% static 'jQuery-File-Upload/js/jquery.fileupload.js' %}"></script>
+	<link rel="stylesheet" href="{% static 'jquery-ui-1.11.0/jquery-ui.css' %}">
+	<link rel="stylesheet" href="{% static 'jQuery-File-Upload/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'jQuery-File-Upload/css/jquery.fileupload.css' %}">
+
+</head>
+<body class="html not-front not-logged-in no-sidebars page-node page-node-67 node-type-page og-context og-context-node og-context-node-31 section-webguide resource-directory">
+	
+	<header class="masthead clearfix" role="banner">
+		
+		<div class="site-slogan"></div>
+		<div class="site-slogan">{{APP_NAME}} Version {{APP_VERSION}}</div>
+	</header>
+	
+	<section id="main-content" class="main-content clearfix" lang="en" role="main" tabindex="-1">
+		<div class="region-preface clearfix">
+			<div id="block-views-hublinks-block" class="block block-views">
+				<div class="view view-hublinks view-id-hublinks view-display-id-block view-dom-id-02fca48e70c71344f1a5d898f9944b5a">
+					<ul class="menu pipeline">
+						<li class="menu-item">
+							<a href="/">{{APP_NAME}} Version {{APP_VERSION}} - Tracking For Projects, QA Activities, and More! -  With QA Metrics and QA Reporting, works best with Google Chrome or Firefox Web Browsers.</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="main-column clearfix">
+			<h3 class="page-title"><div class="text-center"><img src="{% static 'PDCA-cycle.gif' %}" width="300px"/></div></h3>
+		</div>
+		<div class="pane-content">
+
+			<div class="col-sm-12">
+				<div class="text-center">
+					<div class="btn-library">
+						<a class="btn btn-md btn-info" href={% url 'what_is_qatrack' %} role="button">What is QA Track?</a>
+						<a class="btn btn-md btn-success" href={% url 'login' %} role="button">Login</a>
+						<a class="btn btn-md btn-info" href={% url 'qa_track_version' %} role="button">Version</a>
+					</div>
+				</div>
+			</div>
+
+
+    				
+
+	</section>
+	
+
+
+	
+	<footer class="main-footer clearfix" role="contentinfo">
+        
+        	<h3>Login Required</h3>
+        	<h6 class="subheader">With respect to this multimedia document, neither Developer nor any of their employees, makes any warranty, express or implied, including the warranties of merchantability and fitness for a particular purpose, or assumes any legal liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus, product, or process disclosed, or represents that its use would not infringe privately owned rights.</h6>
+    </footer>
+ 
+</body>

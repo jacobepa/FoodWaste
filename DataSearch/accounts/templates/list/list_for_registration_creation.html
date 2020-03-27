@@ -1,0 +1,34 @@
+{% extends "site_base.html" %}
+{% load humanize %}
+{% block content %}
+<div class="col-sm-2">
+{% if labs %}
+
+	<p><h3>Labs To Register To</h3></p>
+	
+	<table class="example table-autosort:0 table-stripeclass:alternate table-autofilter" id="labs_table">
+		<thead id="labs_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Lab</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+	  	</tr>
+		</thead>
+	
+		<tbody id="labs_body">
+			
+			{% for obj in labs %}
+				<tr>
+					<td><a href={% url 'register_new_user' obj.id %}>{{obj.abbreviation}}</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+
+
+
+{% endblock %}

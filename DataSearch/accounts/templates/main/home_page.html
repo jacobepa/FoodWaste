@@ -1,0 +1,7 @@
+{% extends "site_base.html" %}
+{% load humanize %}
+{% block content %}
+<h3>You do not have the permission to {{permission_denial}}.</h3>
+<h3>Click {{return_link}} to go index page or click your browser's Back button.</h3>
+
+{% endblock %}

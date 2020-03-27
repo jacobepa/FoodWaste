@@ -1,8 +1,8 @@
 {% extends 'base/site_base_accounts_admin.html' %}
 {% load staticfiles %}
 {% block account_admin_content %}
-<h3>New User Registration</h3>
-<form class="form-horizontal" method="post" action="{% url 'register' %}" novalidate>
+<h3>Profile information for {{edit_user.username}}</h3>
+<form class="form-horizontal" method="post" action="{% url 'user_edit' id %}" novalidate>
     {% if form.errors %}
     <div class="alert alert-danger">
         <h5>Please correct the following errors</h5>
@@ -15,15 +15,11 @@
     {% endif %}
     {% if success %}
     <div class="alert alert-success">
-        The user has been created. <span class="glyphicon glyphicon-ok"></span>
+        The user profile has been updated. <span class="glyphicon glyphicon-ok"></span>
     </div>
     {% endif %}
 
     {% csrf_token %}
-
-    <h5>Please verify the person is not an existing user before registering a new user.</h5>
-
-    <h5>NOTE: Usernames and passwords are case-sensitive.</h5>
 
     <h5 class="separator">Personal Information</h5>
 
@@ -33,6 +29,20 @@
         </label>
         <div class="col-sm-9">
             {{form.username}}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{form.last_login.label_tag}}</label>
+        <div class="col-sm-9">
+            {{form.last_login}}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{form.date_joined.label_tag}}</label>
+        <div class="col-sm-9">
+            {{form.date_joined}}
         </div>
     </div>
 
@@ -69,14 +79,16 @@
     </div>
 
     <!--
+    <h5 class="separator">Previous Security Information</h5>
+
     <div class="form-group">
         <label class="col-sm-3 control-label">{{form.is_staff.label_tag}}</label>
         <div class="col-sm-9">
             {{form.is_staff}}
         </div>
     </div>
-    -->
 
+    -->
     <div class="form-group">
         <label class="col-sm-3 control-label">{{form.is_active.label_tag}}</label>
         <div class="col-sm-9">
@@ -143,9 +155,10 @@
         <div class="col-sm-9"> </div>
         <div class="col-sm-3">
             <input class="btn btn-primary" type="submit" value="Save" />
-            <a class="btn btn-warning" href="{% url 'accounts_manage' %}">Cancel</a>
+            <a class="btn btn-warning" href="{% url 'user_select' %}">Cancel</a>
         </div>
     </div>
 
 </form>
+
 {% endblock %}

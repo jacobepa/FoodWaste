@@ -1,6 +1,5 @@
 from accounts.models import *
 from constants.models import *
-from audits.models import *
 
 import offices.models as om
 import labs.models as lm
@@ -509,7 +508,6 @@ class ProjectLog(models.Model):
     # legacy fields
     technical_lead_old = models.ForeignKey(Person, on_delete=models.CASCADE, null=True, blank=True, related_name='technical_lead')
     reviewer_old = models.ForeignKey(Person, on_delete=models.CASCADE, null=True, blank=True, related_name='reviewer')
-    audit_type = models.ForeignKey(AuditType, on_delete=models.CASCADE, null=True, blank=True)
     review_type = models.ForeignKey(ReviewType, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255, db_index=True)
@@ -542,8 +540,6 @@ class ProjectLog(models.Model):
     product_category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True, blank=True)
 
     organization = models.CharField(blank=True, null=True, max_length=255, db_index=True)
-    audit_location = models.CharField(blank=True, null=True, max_length=255, db_index=True)
-    audit_date = models.DateField(blank=True, null=True)
 
     software_status = models.CharField(blank=True, null=True, max_length=45, choices=STATUS_CHOICES)
     public_or_private = models.CharField(blank=True, null=True, max_length=25, choices=PUBLIC_CHOICES)
@@ -552,8 +548,6 @@ class ProjectLog(models.Model):
     is_finding_resolved = models.CharField(blank=True, null=True, max_length=25, choices=YN_CHOICES)
     the_finding = models.CharField(blank=True, null=True, max_length=255)
 
-    auditor = models.CharField(blank=True, null=True, max_length=255, db_index=True)
-    auditor_organization = models.CharField(blank=True, null=True, max_length=255, db_index=True)
 
     qa_review_date = models.DateField(blank=True, null=True, db_index=True)
     qa_review_email_list = models.TextField(blank=True, null=True, db_index=True)
@@ -561,8 +555,6 @@ class ProjectLog(models.Model):
     qa_review_comment = models.TextField(blank=True, null=True, db_index=True)
 
     are_corrective_actions_completed = models.CharField(blank=True, null=True, max_length=25, choices=YNNA_CHOICES)
-    date_audit_report_submitted = models.DateField(blank=True, null=True, db_index=True)
-    date_audit_closed = models.DateField(blank=True, null=True, db_index=True)
     date_responses_received = models.DateField(null=True, blank=True, db_index=True)
 
     class Meta:

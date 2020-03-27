@@ -913,49 +913,6 @@
         {% endif %}
     </div>
 
-
-    <div class="col one_hundred">
-        {% if related_audits %}
-
-        <p><h3>Related Audits</h3></p>
-
-        <table class="example table-autosort table-stripeclass:alternate table-autofilter" id="auditstab_table">
-            <thead id="auditstab_head">
-            <tr>
-                <th class="table-sortable:alphanumeric">Audit ID</th>
-                <th class="table-sortable:alphanumeric">Audit Type</th>
-                <th class="table-sortable:alphanumeric">Title</th>
-                <th class="table-sortable:alphanumeric">Description</th>
-                <th class="table-sortable:date">Date Audit Started</th>
-            </tr>
-            <tr>
-                <th class="table-filterable"></th>
-                <th class="table-filterable"></th>
-                <th class="table-filterable"></th>
-                <th class="table-filterable"></th>
-                <th class="table-filterable"></th>
-            </tr>
-
-            </thead>
-
-            <tbody id="auditstab_body">
-
-            {% for obj in related_audits %}
-            <tr>
-                <td><a href="{% url 'show_audits_tab' obj.id %}">{{obj.audit_id}}</a></td>
-                <td>{{obj.audit_type.the_name}}</td>
-                <td>{{obj.title}}</td>
-                <td>{{obj.the_description}}</td>
-                <td>{{obj.audit_date|date:"Y-m-d"}}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p><h3>No Related Audits Entered Yet</h3></p>
-        {% endif %}
-    </div>
-
     <div class="col one_hundred">
         {% if related_sops %}
 

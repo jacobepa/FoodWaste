@@ -18,7 +18,6 @@
 				<a class="btn btn-md btn-success" href={% url 'create_review_type' %} role="button">Create Review Type</a>
 				<a class="btn btn-md btn-success" href={% url 'create_priority' %} role="button">Create Support Priority</a>
 				<a class="btn btn-md btn-success" href={% url 'create_support_type' %} role="button">Create Support Type</a>
-				<a class="btn btn-md btn-success" href={% url 'create_audit_type' %} role="button">Create Audit Type</a>
 				<a class="btn btn-md btn-danger" href={% url 'logout' %} role="button">Logout</a>
 			</div>
 		</div>
@@ -572,45 +571,4 @@
 {% endif %}
 </div>
 
-<div class="col-sm-6">
-{% if audit_types %}
-
-	<p><h3>Finding/Audit Types</h3></p>
-	
-	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="audit_types_table">
-		<thead id="audit_types_head">
-		<tr>
-			<th class="table-sortable:alphanumeric">Type</th>
-			<th class="table-sortable:alphanumeric">Is Active</th>
-			
-			<th class="table-header">Edit</th>						
-			<th class="table-header">Show</th>
-		</tr>
-		<tr>
-			<th class="table-filterable"></th>
-			<th class="table-filterable"></th>
-
-			<th class="table-header"></th>			
-			<th class="table-header"></th>
-	  	</tr>
-		
-		</thead>
-	
-		<tbody id="audit_types_body">
-			
-			{% for obj in audit_types %}
-				<tr>
-					<td>{{obj.the_name}}</td>
-					<td>{{obj.is_active}}</td>
-
-					<td><a href={% url 'edit_audit_type' obj.id %}>Edit</a></td>
-					<td><a href={% url 'show_audit_type' obj.id %}>Show</a></td>
-				</tr>
-			{% endfor %}
-			</tbody>
-	</table>
-	{% else %}
-	<table><tr><td>No Finding/Audit Types Yet.</td></tr></table>
-{% endif %}
-</div>
 {% endblock %}

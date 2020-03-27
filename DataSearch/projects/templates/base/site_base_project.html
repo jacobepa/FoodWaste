@@ -21,7 +21,6 @@
                             <a class="list-group-item" href="{% url 'edit_project' obj.id %}">Edit this project</a>
                             <a class="list-group-item" href="{% url 'create_project_log_no_tlp' obj.id %}">Add QA Activity to this project</a>
                             <div title="Click to create an SOP for this project. The form will be auto-populated with the project as well as the organization information UNLESS this project belongs to an inactive organization. Inactive organizations must be manually entered."><a class="list-group-item" href="{% url 'create_sop_tab_item' obj.id %}">Add SOP to this project [?]</a></div>
-                            <div title="Click to create an Audit for this project. The form will be auto-populated with the project as well as the organization information UNLESS this project belongs to an inactive organization. Inactive organizations must be manually entered."><a class="list-group-item" href="{% url 'create_audits_tab_item' obj.id %}">Add Audit to this project [?]</a></div>
                             <a class="list-group-item" href="{% url 'link_organization_proj' obj.id %}">Link ORD Organization to this project</a>
                         {% endif %}
                     {% endif %}

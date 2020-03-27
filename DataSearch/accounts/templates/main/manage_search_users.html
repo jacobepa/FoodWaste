@@ -1,0 +1,53 @@
+{% extends 'base/site_base_accounts_admin.html' %}
+{% load staticfiles %}
+{% block account_admin_content %}
+
+<h3>Update an Existing User</h3>
+<p>
+    Use the search box below to select a user
+</p>
+
+<div class="vmargin20">
+    <form novalidate autocomplete="off">
+        <div class="form-group">
+            <select id="user_search" class="form-control jasc-user-select" data-placeholder="Search people...">
+            </select>
+        </div>
+        <div>
+            <a id="edit_link" href="{% url 'user_select' %}" disabled class="btn btn-success">Edit</a>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+
+        {% if user_perms == 'ADMIN' %}
+            $('.jasc-user-select').asyncSelect({
+                url: '/api/users',
+                displayValue:function(item){ return item.last_name + ", " + item.first_name + ' (' + item.email + ')' }
+            });
+        {% else %}
+            $('.jasc-user-select').asyncSelect({
+                url: '/api/lab_users/',
+                displayValue:function(item){ return item.last_name + ", " + item.first_name + ' (' + item.email + ')' }
+            });
+        {% endif %}
+
+        var base_uri = "{% url 'user_select' %}";
+
+        $("#user_search").on('change',function() {
+            var id = $(this).val();
+            if (id != '' && id != null) {
+                $("#edit_link").attr("href", base_uri + id);
+                $("#edit_link").attr("disabled",false);
+            } else {
+                $("#edit_link").attr("disabled",true);
+            }
+        });
+
+    })
+</script>
+
+{% endblock %}

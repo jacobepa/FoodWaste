@@ -1,0 +1,29 @@
+{% extends 'base/site_base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Account Management Actions</div>
+            <div class="list-group">
+                {% if kwargs.allow_create %}
+                    {% url 'user_select' as select_user_url %}
+                    <a class="list-group-item {% if select_user_url in request.path %}active{% endif %}"
+                       href="{% url 'user_select' %}">Update an existing user</a>
+                    {% url 'register' as register_url %}
+                    <a class="list-group-item {% if request.path == register_url %}active{% endif %}"
+                       href="{% url 'register' %}">Register new user</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        {% block account_admin_content %}
+        {% endblock %}
+    </div>
+</div>
+
+
+
+{% endblock %}

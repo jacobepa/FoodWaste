@@ -1,29 +1,29 @@
-# admin.py (accounts)
-# !/usr/bin/env python3
-# coding=utf-8
-# young.daniel@epa.gov
-
-"""
-Defines classes used to generate 'Accounts' Django Admin portion of website.
-
-There should be Admin class for each Model that can be modified by admin user.
-
-Available functions:
-- None for this module -- TBD (would like added to manage in Django Admin)
-"""
-
 from django.contrib import admin
-from accounts.models import UserProfile
 
-
+from accounts.models import *
+		
 class UserProfileAdmin(admin.ModelAdmin):
-    """Assigns 'USER ID' number, once user registers with HELP."""
-
-    list_display = ("user_id", )
-    search_fields = ("user__username",)
+    list_display = ("user_id", "user", "permissions", "display_in_dropdowns")
+    search_fields = ("user__username", "user__id", "user__first_name", "user__last_name")
     exclude = ('created_by', 'last_modified_by',)
-    list_filter = ("user_id",)
+    list_filter = ("permissions","display_in_dropdowns", "can_edit", "is_reviewer", "user_type", "can_create_users",)
     list_per_page = 25
 
-
 admin.site.register(UserProfile, UserProfileAdmin)
+
+# Not in use.
+# class RequestSubjectAdmin(admin.ModelAdmin):
+#     list_display = ("the_name", )
+#     exclude = ('created_by', 'last_modified_by')
+#     list_filter = ("the_name", )
+#     list_per_page = 25
+#
+# admin.site.register(RequestSubject, RequestSubjectAdmin)
+#
+# class ContactRequestAdmin(admin.ModelAdmin):
+#     list_display = ("request_subject", "the_name", "email_address" )
+#     exclude = ('created_by', 'last_modified_by')
+#     list_filter = ("request_subject","the_name", )
+#     list_per_page = 25
+#
+# admin.site.register(ContactRequest, ContactRequestAdmin)
