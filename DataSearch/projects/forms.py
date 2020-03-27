@@ -390,9 +390,9 @@ class ProjectFormAsync(forms.ModelForm):
                                               widget=forms.TextInput(attrs={'class': 'form-control date-control'}), required=True)
 
     qapp_status = forms.ModelChoiceField(label=_("QAPP Status"), queryset=QappStatus.objects.none(), widget=forms.Select(attrs={'class': 'form-control'}), required=True)
-    restrict_qapp_files = forms.TypedChoiceField(label=_("Restrict access to QAPP QA activity attachments"), choices=BOOLEAN_YES_NO,
+    restrict_qapp_files = forms.TypedChoiceField(label=_("Restrict access to QAPP QA activity attachments"), choices=YES_OR_NO,
                                      widget=forms.Select(attrs={'class': 'form-control'}), required=True, help_text="If yes, access to any files attached to QAPP QA activities for this project will be restricted to project editors and users associated with the project. In addition, any files marked as the latest approved QAPP for this project will NOT be posted on ORD@Work. See user manual for more details.")
-    restrict_ext_package_files = forms.TypedChoiceField(label=_("Restrict access to EP QA activity attachments"), choices=BOOLEAN_YES_NO,
+    restrict_ext_package_files = forms.TypedChoiceField(label=_("Restrict access to EP QA activity attachments"), choices=YES_OR_NO,
                                      widget=forms.Select(attrs={'class': 'form-control'}), required=True, help_text="If yes, access to any files attached to the latest Extramural Package QA activity for this project will be restricted to project editors and users associated with the project. See user manual for more details.")
     qapp_approval_date = forms.CharField(label=_("QAPP Approval Date"),
                                          widget=forms.TextInput(attrs={'class': 'form-control date-control'}), required=False)

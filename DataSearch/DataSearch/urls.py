@@ -66,8 +66,9 @@ urlpatterns = [
     # Begin other module import URLs.
     url(r'^accounts/', include('accounts.urls')),
     url(r'^flowsa/', include('flowsa.urls', namespace='flowsa')),
-    url(r'^scifinder/', include('scifinder.urls', namespace='scifinder')),
+    url(r'^projects/', include('projects.urls')),
     url(r'^qar5/', include('qar5.urls')),
+    url(r'^scifinder/', include('scifinder.urls', namespace='scifinder')),
     url(r'^support/', include('support.urls')),
     url(r'^teams/', include('teams.urls')),
 ]

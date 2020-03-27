@@ -137,6 +137,27 @@ class UserProfile(models.Model):
     country = models.ForeignKey(Country, null=True, blank=True,
                                 on_delete=models.CASCADE)
 
+    # New fields from QATRACK profile, seemingly required for projects
+    email_address_epa = models.CharField(
+        blank=True, null=True, max_length=255)
+    email_address_other = models.CharField(
+        blank=True, null=True, max_length=255)
+    is_reviewer = models.CharField(
+        blank=True, null=True, max_length=5, choices=YN_CHOICES)
+    is_technical_lead = models.CharField(
+        blank=True, null=True, max_length=5, choices=YN_CHOICES)
+    can_edit = models.CharField(
+        blank=True, null=True, max_length=5, choices=YN_CHOICES)
+    can_create_users = models.CharField(
+        blank=True, null=True, max_length=5, choices=YN_CHOICES)
+    display_in_dropdowns = models.CharField(
+        default='Y', max_length=2, choices=YN_CHOICES, db_index=True)
+    date_epa_separation = models.DateField(
+        null=True, blank=True, db_index=True)
+    permissions = models.CharField(
+        blank=False, null=False, max_length=45,
+        choices=PERMISSION_CHOICES, default="READER")
+
     def __str__(self):
         """Method to stringify a User Profile."""
         return self.user.last_name + ', ' + self.user.first_name
