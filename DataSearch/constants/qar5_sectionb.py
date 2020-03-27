@@ -122,12 +122,12 @@ EXISTING_DATA = {
 SOFTWARE_DEVELOPMENT = {
     'b1_1': {
         'heading': 'B.1	FUNCTIONAL REQUIREMENTS',
-        'label': 'B.1.1',
+        'label': 'B.1.1 Functional Requirements',
         'desc': 'Provide a list of the most important functions ' + \
             'that the software system must address.'
     },
     'b1_2': {
-        'label': 'B.1.2',
+        'label': 'B.1.2 Requirements Design',
         'desc': 'Identify requirements for functionality, external ' + \
             'interfaces (includes graphical user interfaces and ' + \
             'interfaces which are needed for other programs to call ' + \
@@ -138,65 +138,65 @@ SOFTWARE_DEVELOPMENT = {
             'verified and validated.'
     },
     'b1_3': {
-        'label': 'B.1.3',
+        'label': 'B.1.3 Hardware Minimum Requirements',
         'desc': 'Specify computer hardware and operating system ' + \
             'requirements as required in the ORD APP inventory.'
     },
     'b2_1': {
         'heading': 'B.2	SYSTEM DESIGN',
-        'label': 'B.2.1',
+        'label': 'B.2.1 System Design',
         'desc': 'Provide an overview of the system design, e.g., block ' + \
             'diagrams showing relationships between major program ' + \
             'modules, hardware devices, and data input/output.'
     },
     'b2_2': {
-        'label': 'B.2.2',
+        'label': 'B.2.2 Components and Subcomponents',
         'desc': 'Describe the components and subcomponents of the ' + \
             'software design, including databases and internal ' + \
             'interfaces. The description should link the software ' + \
             'structure to the functional requirements.'
     },
     'b2_3': {
-        'label': 'B.2.3',
+        'label': 'B.2.3 Rationale of Hardware/Software',
         'desc': 'Provide the rationale for selecting the proposed ' + \
             'hardware and software tools as addressed in the ' + \
             'application governance process.'
     },
     'b3_1': {
         'heading': 'B.3	IMPLEMENTATION',
-        'label': 'B.3.1',
+        'label': 'B.3.1 Design Specifications',
         'desc': 'Describe how a working software system is developed ' + \
             'from the design specifications. Agile software ' + \
             'development is recommended.'
     },
     'b3_2': {
-        'label': 'B.3.2',
+        'label': 'B.3.2 Requirements for Functionality',
         'desc': 'Describe how the requirements for functionality, ' + \
             'external interfaces, performance, and design ' + \
             'constraints will be verified and validated.'
     },
     'b3_3': {
-        'label': 'B.3.3',
+        'label': 'B.3.3 Software Implementation',
         'desc': 'Describe how release and delivery of the product is ' + \
             'managed, including versions for alpha and beta testing, ' + \
             'user acceptance testing (UAT), and training materials for users.'
     },
     'b3_4': {
-        'label': 'B.3.4',
+        'label': 'B.3.4 Software Configuration Management (SCM)',
         'desc': 'Describe the procedures for controlling, documenting, ' + \
             'and archiving all significant changes to software and ' + \
             'hardware. Recommend the use of bitbucket or GitHub ' + \
             'depending on scenario.'
     },
     'b3_5': {
-        'label': 'B.3.5',
+        'label': 'B.3.5 Software Maintenance',
         'desc': 'Identify the archiving software used for controlling, ' + \
             'documenting, saving, and recovering changes made ' + \
             'to the source code.'
     },
     'b4_1': {
         'heading': 'B.4	VALIDATION, VERIFICATION, AND TESTING',
-        'label': 'B.4.1',
+        'label': 'B.4.1 V&V and IV&V',
         'desc': 'Describe the testing strategy that will be used along ' + \
             'with the procedures for each planned test. These tests ' + \
             'can include routines that assess validation and ' + \
@@ -205,7 +205,7 @@ SOFTWARE_DEVELOPMENT = {
             'testing, acceptance testing, and alpha and beta testing.'
     },
     'b4_2': {
-        'label': 'B.4.2',
+        'label': 'B.4.2 GUI',
         'desc': 'Describe the review process for the software’s ' + \
             'graphical user interface and output reports.  Ensure ' + \
             'that summary or synthesis statements accurately represent ' + \
@@ -214,14 +214,14 @@ SOFTWARE_DEVELOPMENT = {
             'citations and references, and spelling and grammar.'
     },
     'b4_3': {
-        'label': 'B.4.3',
+        'label': 'B.4.3 I/O Testing',
         'desc': 'Describe the procedure for checking the correctness of ' + \
             'outputs and validity of model inputs, e.g., checks that ' + \
             'input parameters are realistic and/or do not violate ' + \
             'the applicability domain of the model.'
     },
     'b4_4': {
-        'label': 'B.4.4',
+        'label': 'B.4.4 User/Agency Expectations',
         'desc': 'Describe how it will be determined if the developed ' + \
             'software product conforms to customer and Agency ' + \
             'requirements, and whether the software product fulfills ' + \
@@ -232,7 +232,7 @@ SOFTWARE_DEVELOPMENT = {
     },
     'b5_1': {
         'heading': 'B.5	DOCUMENTATION, MAINTENANCE, AND USER SUPPORT',
-        'label': 'B.5.1',
+        'label': 'B.5.1 Documentation',
         'desc': 'Specify the requirements for documentation, methods and ' + \
             'facilities used to maintain, store, secure, and ' + \
             'document-controlled versions and related artifacts of ' + \
@@ -243,7 +243,7 @@ SOFTWARE_DEVELOPMENT = {
             'programming interface).'
     },
     'b5_2': {
-        'label': 'B.5.2',
+        'label': 'B.5.2 Support',
         'desc': 'Describe the procedures for maintenance and user ' + \
             'support when software or data generated by the project will ' + \
             'be distributed or deployed outside of the ORD laboratory ' + \
