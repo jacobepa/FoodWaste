@@ -678,19 +678,19 @@ MEASUREMENTS_AND_MONITORING = {
 ANALYTICAL_METHODS = {
     'b1_1': {
         'heading': 'B.1	EXPERIMENTAL DESIGN',
-        'label': 'B.1.1',
+        'label': 'B.1.1 Analyte(s) of Interest',
         'desc': 'Identify the specific analyte(s) of interest ' + \
             'and the matrix/matrices or limitations to the ' + \
             'range of detection under study.'
     },
     'b1_2': {
-        'label': 'B.1.2',
+        'label': 'B.1.2 Analytical Approach',
         'desc': 'Identify the analytical approach that will be used ' + \
             'and how it will be optimized for this study. Also ' + \
             'describe any tests of interference and analyte stability.'
     },
     'b1_3': {
-        'label': 'B.1.3',
+        'label': 'B.1.3 Performance Metrics',
         'desc': 'Identify the method performance metrics (QA/QC checks) ' + \
             'that will be used to evaluate the method, including the ' + \
             'procedures used. These metrics could include (but are not ' + \
@@ -700,67 +700,67 @@ ANALYTICAL_METHODS = {
     },
     'b2_1': {
         'heading': 'B.2	SAMPLING PROCEDURES',
-        'label': 'B.2.1',
+        'label': 'B.2.1 Requirements for Samples',
         'desc': 'Provide the requirements for samples including those ' + \
             'field collected or made in the laboratory, that will be ' + \
             'used to test the method, including matrix and ' + \
             'presence/concentration of analytes). '
     },
     'b2_2': {
-        'label': 'B.2.2',
+        'label': 'B.2.2 Requirements for Synthetic Samples',
         'desc': 'If synthetic (i.e., laboratory-prepared) samples are ' + \
             'used, describe the preparation of these samples.'
     },
     'b2_3': {
-        'label': 'B.2.3',
+        'label': 'B.2.3 Requirements for Non-Synthetic Samples',
         'desc': 'If non-synthetic (i.e., real-world sample) samples are ' + \
             'used describe the sampling design that will be used and the ' + \
             'steps taken to assure that representative samples are collected.'
     },
     'b2_4': {
-        'label': 'B.2.4',
+        'label': 'B.2.4 Non-Synthetic Sampling SOPs',
         'desc': 'If non-synthetic (i.e., real-world sample) samples are ' + \
             'used discuss or reference each sampling procedure.'
     },
     'b2_5': {
-        'label': 'B.2.5',
+        'label': 'B.2.5 Synthetic Sampling SOPs',
         'desc': 'If non-synthetic (i.e., real-world sample) samples are ' + \
             'used If non-synthetic (i.e., real-world sample) samples are used.'
     },
     'b2_6': {
-        'label': 'B.2.6',
+        'label': 'B.2.6 Non-Synthetic Package/Shipping',
         'desc': 'If non-synthetic (i.e., real-world sample) samples are ' + \
             'used describe procedures for packing and shipping samples, ' + \
             'and provisions for maintaining chain-of-custody, as applicable.'
     },
     'b2_7': {
-        'label': 'B.2.7',
+        'label': 'B.2.7 Sample Preservation',
         'desc': 'Specify sample preservation requirements (e.g., ' + \
             'refrigeration, acidification, etc.) and holding times.  ' + \
             'If a holding time study will be conducted, ' + \
             'describe the parameters of this study.'
     },
     'b2_8': {
-        'label': 'B.2.8',
+        'label': 'B.2.8 Numbering',
         'desc': 'Describe the method for uniquely numbering each sample. '
     },
     'b3_1': {
         'heading': 'B.3	MEASUREMENT PROCEDURES',
-        'label': 'B.3.1',
+        'label': 'B.3.1 Calibration QA/QC',
         'desc': 'Describe in detail or reference each preparation ' + \
             'or analytical procedure, equipment and instrumentation ' + \
             'to be used, if known. Include steps for preparation, ' + \
             'calibration, measurement, quality control, and reporting.'
     },
     'b3_2': {
-        'label': 'B.3.2',
+        'label': 'B.3.2 Detection Limits',
         'desc': 'Include specific calibration procedures, including ' + \
             'linearity checks and initial and continuing ' + \
             'calibration checks, and detection limits. '
     },
     'b4_1': {
         'heading': 'B.4	METHOD PERFORMANCE METRICS',
-        'label': 'B.4.1',
+        'label': 'B.4.1 QA/QC Checks',
         'desc': 'For each method performance metric (QA/QC check) ' + \
             'specify the frequencies for performing these checks, ' + \
             'associated acceptance criteria, and corrective actions to ' + \
@@ -771,78 +771,78 @@ ANALYTICAL_METHODS = {
 CELL_CULTURE_METHODS = {
     'b1_1': {
         'heading': 'B.1	EXPERIMENTAL DESIGN',
-        'label': 'B.1.1',
+        'label': 'B.1.1 Culture Model',
         'desc': 'Discuss the culture model to be used in ' + \
             'addressing the study objectives.'
     },
     'b1_2': {
-        'label': 'B.1.2',
+        'label': 'B.1.2 Stressors Tested',
         'desc': 'Discuss the choice of chemicals, materials, or ' + \
             'other stressors to be tested in addressing the study objectives.'
     },
     'b1_3': {
-        'label': 'B.1.3',
+        'label': 'B.1.3 Independent Variables',
         'desc': 'Discuss independent variables to be manipulated. '
     },
     'b1_4': {
-        'label': 'B.1.4',
+        'label': 'B.1.4 Dependent Variables',
         'desc': 'Discuss dependent variables to be measured.'
     },
     'b2_1': {
         'heading': 'B.2	METHODS AND EXPERIMENTAL DETAIL',
-        'label': 'B.2.1',
+        'label': 'B.2.1 Treatment Group Exposures',
         'desc': 'Describe the method for determining treatment group ' + \
             'exposures and number of replicates (dose limits; ' + \
             'power calculations).'
     },
     'b2_2': {
-        'label': 'B.2.2',
+        'label': 'B.2.2 Study Controls',
         'desc': 'Describe study controls (blinding; standard ' + \
             'curves; positive/negative controls; etc.).'
     },
     'b2_3': {
-        'label': 'B.2.3',
+        'label': 'B.2.3 Sample Collection',
         'desc': 'Provide details of sample collection, ' + \
             'identification, storage, analysis etc.'
     },
     'b2_4': {
-        'label': 'B.2.4',
+        'label': 'B.2.4 Project Personnel/Collaborators',
         'desc': 'List project personnel/collaborators and their roles.'
     },
     'b2_5': {
-        'label': 'B.2.5',
+        'label': 'B.2.5 SOPs Protocols',
         'desc': 'List and attach all operating procedures or protocols ' + \
             'and ensure that they include adequate quality control.'
     },
     'b2_6': {
-        'label': 'B.2.6',
+        'label': 'B.2.6 Procedures not Covered',
         'desc': 'Describe the procedures to be used for any activities ' + \
             'that are not covered by existing operating procedures or ' + \
             'protocols.  Ensure that appropriate quality control is included.'
     },
     'b3_1': {
         'heading': 'B.3	EQUIPMENT AND SUPPLIES',
-        'label': 'B.3.1',
+        'label': 'B.3.1 Equipment',
         'desc': 'List major equipment (make, model).'
     },
     'b3_2': {
-        'label': 'B.3.2',
+        'label': 'B.3.2 Supplies',
         'desc': 'List critical supplies (name, source, amount, ' + \
             'expiration dates if any).'
     },
     'b4_1': {
         'heading': 'B.4	DATA COLLECTION AND ANALYSIS',
-        'label': 'B.4.1',
+        'label': 'B.4.1 Datasets Collected',
         'desc': 'List and describe (analog, electronic, etc.) ' + \
             'datasets to be collected.'
     },
     'b4_2': {
-        'label': 'B.4.2',
+        'label': 'B.4.2 Data Verification',
         'desc': 'Describe data verification procedures used ' + \
             'to ensure reporting of accurate data.'
     },
     'b4_3': {
-        'label': 'B.4.3',
+        'label': 'B.4.3 Statistical Analysis',
         'desc': 'Describe planned statistical analysis following ' + \
             'guidance of: https://intranet.ord.epa.gov/nheerl/' + \
             'cop-statistics-study-design-experimental'
@@ -852,7 +852,7 @@ CELL_CULTURE_METHODS = {
 ANIMAL_SUBJECTS = {
     'b1_1': {
         'heading': 'B.1	EXPERIMENTAL DESIGN',
-        'label': 'B.1.1',
+        'label': 'B.1.1 Animal Subjects Tested',
         'desc': 'Discuss the choice of animal subjects to be tested, ' + \
             'including ACUP/LAPR references, if applicable in addressing ' + \
             'the study objectives. (ACUP = Animal Care and Use Protocol, ' + \
@@ -861,75 +861,75 @@ ANIMAL_SUBJECTS = {
             'care and use ethics requirements.)'
     },
     'b1_2': {
-        'label': 'B.1.2',
+        'label': 'B.1.2 Chemicals, Materials, Stressors',
         'desc': 'Discuss the choice of chemicals, materials, or other ' + \
             'stressors to be tested in addressing the study objectives.'
     },
     'b1_3': {
-        'label': 'B.1.3',
+        'label': 'B.1.3 Independent Variables',
         'desc': 'Discuss independent variables to be manipulated. '
     },
     'b1_4': {
-        'label': 'B.1.4',
+        'label': 'B.1.4 Dependent Variables',
         'desc': 'Discuss dependent variables to be measured.'
     },
     'b2_1': {
         'heading': 'B.2	METHODS AND EXPERIMENTAL DETAIL',
-        'label': 'B.2.1',
+        'label': 'B.2.1 Determining Test Group',
         'desc': 'Describe the method for determining test group ' + \
             'treatment, number, and size (dose limits; power calculations).'
     },
     'b2_2': {
-        'label': 'B.2.2',
+        'label': 'B.2.2 Method for Test Group',
         'desc': 'Describe the method for test group assignment and ' + \
             'identification for individual animal subjects ' + \
             '(randomization; tagging, group housing).'
     },
     'b2_3': {
-        'label': 'B.2.3',
+        'label': 'B.2.3 Study Controls',
         'desc': 'Describe study controls (blinding; standard curves; ' + \
             'positive/negative controls; control, sentinel, ' + \
             'and sham animals, etc.).'
     },
     'b2_4': {
-        'label': 'B.2.4',
+        'label': 'B.2.4 Sample Collection',
         'desc': 'Provide details of sample collection, ' + \
             'identification, storage, analysis etc.'
     },
     'b2_5': {
-        'label': 'B.2.5',
+        'label': 'B.2.5 SOPs',
         'desc': 'List and attach all operating procedures or protocols ' + \
             'and ensure that they include adequate quality control.'
     },
     'b2_6': {
-        'label': 'B.2.6',
+        'label': 'B.2.6 Other SOPs',
         'desc': 'Describe the procedures to be used for any activities ' + \
             'that are not covered by existing operating procedures or ' + \
             'protocols.  Ensure that appropriate quality control is included.'
     },
     'b3_1': {
         'heading': 'B.3	EQUIPMENT AND SUPPLIES',
-        'label': 'B.3.1',
+        'label': 'B.3.1 Equipment',
         'desc': 'List major equipment (make, model).'
     },
     'b3_2': {
-        'label': 'B.3.2',
+        'label': 'B.3.2 Supplies',
         'desc': 'List critical supplies (name, source, ' + \
             'amount, expiration dates if any).'
     },
     'b4_1': {
         'heading': 'B.4	DATA COLLECTION AND ANALYSIS',
-        'label': 'B.4.1',
+        'label': 'B.4.1 Datasets',
         'desc': 'List and describe (analog, electronic, ' + \
             'etc.) datasets to be collected .'
     },
     'b4_2': {
-        'label': 'B.4.2',
+        'label': 'B.4.2 V&V',
         'desc': 'Describe data verification procedures used to ' + \
             'ensure reporting of accurate data'
     },
     'b4_3': {
-        'label': 'B.4.3',
+        'label': 'B.4.3 Statistical Analysis',
         'desc': 'Describe planned statistical analysis following ' + \
             ' + \guidance of: https://intranet.ord.epa.gov/' + \
             'nheerl/cop-statistics-study-design-experimental'
