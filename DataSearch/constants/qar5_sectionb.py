@@ -254,21 +254,21 @@ SOFTWARE_DEVELOPMENT = {
 MODEL_DEVELOPMENT = {
     'b1_1': {
         'heading': 'B.1	MODEL DESIGN',
-        'label': 'B.1.1',
+        'label': 'B.1.1 Conceptual Model',
         'desc': 'Describe the conceptual model, including key ' + \
             'processes, system compartments, system boundaries, ' + \
             'temporal and spatial scales, and fluxes into ' + \
             'and out of the problem domain.'
     },
     'b1_2': {
-        'label': 'B.1.2',
+        'label': 'B.1.2 Existing model(s)',
         'desc': 'If the project builds upon a previously developed ' + \
             'model, describe the existing model and identify what ' + \
             'modifications and enhancements are needed to meet ' + \
             'project objectives.'
     },
     'b1_3': {
-        'label': 'B.1.3',
+        'label': 'B.1.3 Model Development Relationship',
         'desc': 'Describe how the model development fits into a larger ' + \
             'project and its relationship to related efforts (e.g., ' + \
             'field or lab studies, software or application ' + \
@@ -276,7 +276,7 @@ MODEL_DEVELOPMENT = {
     },
     'b2_1': {
         'heading': 'B.2	MODEL DEREVATION',
-        'label': 'B.2.1',
+        'label': 'B.2.1 Mathematical Representation',
         'desc': 'Describe the mathematical representation of the ' + \
             'processes of interest. For mechanistic models, state ' + \
             'the governing equation and describe what each term in ' + \
@@ -286,13 +286,13 @@ MODEL_DEVELOPMENT = {
             'effect on the modeled outcome.'
     },
     'b2_2': {
-        'label': 'B.2.2',
+        'label': 'B.2.2 Statistical | Numerical Approaches',
         'desc': 'Describe the statistical and/or numerical approaches ' + \
             'that will be used to derive, implement, ' + \
             'and parameterize/calibrate the model.'
     },
     'b2_3': {
-        'label': 'B.2.3',
+        'label': 'B.2.3 Empirical | Statistical Models',
         'desc': 'For empirical/statistical models (e.g., regression, ' + \
             'classification or clustering), describe the ' + \
             'calibration/training dataset that will be used ' + \
@@ -300,7 +300,7 @@ MODEL_DEVELOPMENT = {
             'regression coefficients or weights).'
     },
     'b2_4': {
-        'label': 'B.2.4',
+        'label': 'B.2.4 Potential Data Sources',
         'desc': 'Identify potential data sources of measured/observed ' + \
             'values. State the criteria that will be used to assess ' + \
             'whether or not the reported data are of sufficient ' + \
@@ -308,14 +308,14 @@ MODEL_DEVELOPMENT = {
             'and handling outliers or missing data (imputation procedures).'
     },
     'b2_5': {
-        'label': 'B.2.5',
+        'label': 'B.2.5 Calibration Procedures',
         'desc': 'Describe the calibration procedures (e.g., weighting ' + \
             'functions, optimization algorithms, etc.), and state ' + \
             'the goodness-of-fit criteria for acceptance of ' + \
             'the model parameter value.'
     },
     'b2_6': {
-        'label': 'B.2.6',
+        'label': 'B.2.6 Numerical Errors Checks',
         'desc': 'For mechanistic models, describe any procedures that ' + \
             'will be used to check for numerical errors (e.g., ' + \
             'checks for mass balance errors or violations of ' + \
@@ -323,75 +323,75 @@ MODEL_DEVELOPMENT = {
     },
     'b3_1': {
         'heading': 'B.3	VALIDATION, VERIFICATION, AND TESTING',
-        'label': 'B.3.1',
+        'label': 'B.3.1 Verification Procedures',
         'desc': 'Describe the verification procedures that will be used ' + \
             'to assess whether model algorithms are performing as expected.'
     },
     'b3_2': {
-        'label': 'B.3.2',
+        'label': 'B.3.2 Validation Procedures',
         'desc': 'Describe the validation procedures that will be used to ' + \
             'assess whether model results are representative ' + \
             'of measured or observed data.'
     },
     'b3_3': {
-        'label': 'B.3.3',
+        'label': 'B.3.3 Data Sources',
         'desc': 'Identify potential data sources of measured/observed ' + \
             'values. State the criteria that will be used to assess ' + \
             'whether or not the reported data are of sufficient quality.'
     },
     'b3_4': {
-        'label': 'B.3.4',
+        'label': 'B.3.4 Outliers | Missing Data',
         'desc': 'Describe procedures for identifying outliers and ' + \
             'handling outliers or missing data (imputation procedures).'
     },
     'b3_5': {
-        'label': 'B.3.5',
+        'label': 'B.3.5 Additional Testing',
         'desc': 'Describe any additional testing that will be ' + \
             'conducted, e.g., comparison of model accuracy or ' + \
             'computational efficiency against existing models.'
     },
     'b3_6': {
-        'label': 'B.3.6',
+        'label': 'B.3.6 SOPs Model Parameter Sensitivity Analysis',
         'desc': 'Describe any procedures that will be used for ' + \
             'model parameter sensitivity analysis.'
     },
     'b3_7': {
-        'label': 'B.3.7',
+        'label': 'B.3.7 SOPs Parameter Uncertainty',
         'desc': 'Describe any procedures that will be used to evaluate ' + \
             'the impact of parameter uncertainty on model results'
     },
     'b3_8': {
-        'label': 'B.3.8',
+        'label': 'B.3.8 SOPs Tuning Parameters | Spatial/Temporal Discretization',
         'desc': 'Describe any procedures that will be used to assess ' + \
             'the impact of tuning parameters or spatial/temporal ' + \
             'discretization on model results.'
     },
     'b3_9': {
-        'label': 'B.3.9',
+        'label': 'B.3.9 Peer Review Process',
         'desc': 'Describe the level of internal and external peer ' + \
             'review that is needed for the model.'
     },
     'b4_1': {
         'heading': 'B.4	DOCUMENTATION',
-        'label': 'B.4.1',
+        'label': 'B.4.1 Project Documentation',
         'desc': 'Specify the requirements, format and location ' + \
             'for project documentation.'
     },
     'b4_2': {
-        'label': 'B.4.2',
+        'label': 'B.4.2 Calibration Datasets | SOPs',
         'desc': 'Include model development documentation that may ' + \
             'include derivations of governing equations and ' + \
             'descriptions of calibration datasets and procedures.'
     },
     'b4_3': {
-        'label': 'B.4.3',
+        'label': 'B.4.3 I/O Data',
         'desc': 'Include model performance assessment documentation ' + \
             'that may include model input/output files used for ' + \
             'verification, verification and testing; and quantitative ' + \
             'or qualitative analysis of model performance.'
     },
     'b4_4': {
-        'label': 'B.4.4',
+        'label': 'B.4.4 Source Code SCM',
         'desc': 'Include a description of documentation related to ' + \
             'the development of scripts and/or source code to implement ' + \
             'the model should specify the programming environment and ' + \
@@ -403,7 +403,7 @@ MODEL_DEVELOPMENT = {
             'development of software applications.'
     },
     'b4_5': {
-        'label': 'B.4.5',
+        'label': 'B.4.5 Disclaimers',
         'desc': 'Describe how model assumptions, constraints and ' + \
             'applicability domain will be documented in associated ' + \
             'publications and user guidance materials.'
@@ -413,39 +413,39 @@ MODEL_DEVELOPMENT = {
 MODEL_APPLICATION = {
     'b1_1': {
         'heading': 'B.1	MODEL SPECIFICATION',
-        'label': 'B.1.1',
+        'label': 'B.1.1 Conceptual Model',
         'desc': 'Describe the conceptual model, including key ' + \
             'processes, system compartments, system boundaries, ' + \
             'temporal and spatial scales, and fluxes into and ' + \
             'out of the problem domain.'
     },
     'b1_2': {
-        'label': 'B.1.2',
+        'label': 'B.1.2 Modeling Analysis',
         'desc': 'Describe how the modeling analysis fits into a larger ' + \
             'project and its relationship to other efforts with ' + \
             'separate QAPPs (if applicable).'
     },
     'b2_1': {
         'heading': 'B.2	MODEL SELECTION',
-        'label': 'B.2.1',
+        'label': 'B.2.1 Model Functionality Requirements',
         'desc': 'Identify requirements for model functionality, e.g., ' + \
             'accuracy, spatial and/or temporal discretization, ' + \
             'run time, linkage to other models, etc.'
     },
     'b2_2': {
-        'label': 'B.2.2',
+        'label': 'B.2.2 Hardware OS Specs',
         'desc': 'Specify computer hardware and operating system ' + \
             'requirements, if applicable.'
     },
     'b2_3': {
-        'label': 'B.2.3',
+        'label': 'B.2.3 SOPs Model Evaluation',
         'desc': 'Describe model evaluation procedures, such as ' + \
             'comparisons to other available models, assessment of ' + \
             'previous applications of the model, and any ' + \
             'validation/verification activities.'
     },
     'b2_4': {
-        'label': 'B.2.4',
+        'label': 'B.2.4 I/O Model Coupling',
         'desc': 'Employ more than one model loosely coupled together ' + \
             '(i.e., output from one or more models serving as input to ' + \
             'another model), provide an overview of the system design, ' + \
@@ -456,77 +456,77 @@ MODEL_APPLICATION = {
             'for Model Development Projects" for additional guidance.)'
     },
     'b2_5': {
-        'label': 'B.2.5',
+        'label': 'B.2.5 Model Assumptions',
         'desc': 'Discuss the appropriateness of model assumptions in ' + \
             'the context of the project objectives.'
     },
     'b3_1': {
         'heading': 'B.3	MODEL PARAMETERIZATION AND CALIBRATION',
-        'label': 'B.3.1',
+        'label': 'B.3.1 Model Input Parameters',
         'desc': 'List or describe the model input parameters ' + \
             'that are needed for the analysis. '
     },
     'b3_2': {
-        'label': 'B.3.2',
+        'label': 'B.3.2 Data Sources',
         'desc': 'Identify potential data sources of measured/observed ' + \
             'values for model parameters that will be obtained ' + \
             'from secondary sources.'
     },
     'b3_3': {
-        'label': 'B.3.3',
+        'label': 'B.3.3 Assessment Criteria',
         'desc': 'State the criteria that will be used to assess whether ' + \
             'or not the reported data are of sufficient quality.'
     },
     'b3_4': {
-        'label': 'B.3.4',
+        'label': 'B.3.4 Outliers | Missing Data',
         'desc': 'Describe procedures for identifying outliers and ' + \
             'handling outliers or missing data (imputation ' + \
             'procedures). (See "Requirements for Projects Using ' + \
             'Existing Data" for additional guidance.)'
     },
     'b3_5': {
-        'label': 'B.3.5',
+        'label': 'B.3.5 Tools or Algorithms',
         'desc': 'Identify the tools or algorithms that will be used to ' + \
             'estimate the parameter values, or model parameters that ' + \
             'will be computationally estimated.  '
     },
     'b3_6': {
-        'label': 'B.3.6',
+        'label': 'B.3.6 Rationale',
         'desc': 'Discuss the rationale for using the selected estimation ' + \
             'approaches and characterize the range of applicability ' + \
             'of these estimation approaches.'
     },
     'b3_7': {
-        'label': 'B.3.7',
+        'label': 'B.3.7 Calibration Dataset ',
         'desc': 'Identify potential sources for a calibration dataset ' + \
             'for model parameters that will be estimated ' + \
             'through model calibration.  '
     },
     'b3_8': {
-        'label': 'B.3.8',
+        'label': 'B.3.8 Criteria',
         'desc': 'State the criteria that will be used to assess whether ' + \
             'or not the dataset is of sufficient quality.  '
     },
     'b3_9': {
-        'label': 'B.3.9',
+        'label': 'B.3.9 Calibration SOPs',
         'desc': 'Describe the calibration procedures (e.g., ' + \
             'weighting functions, optimization algorithms, etc.).'
     },
     'b3_10': {
-        'label': 'B.3.10',
+        'label': 'B.3.10 Goodness-of-fit Criteria',
         'desc': 'State the goodness-of-fit criteria for ' + \
             'acceptance of the parameter value.'
     },
     'b4_1': {
         'heading': 'B.4	MODEL PERFORMANCE ASSESSMENT',
-        'label': 'B.4.1',
+        'label': 'B.4.1 V&V | IV&V SOPs',
         'desc': 'Describe any procedures that will be used to validate ' + \
             'the results of the modeling analysis, e.g. through ' + \
             'comparisons of the model predictions against observed ' + \
             'data collected in field or laboratory studies.'
     },
     'b4_2': {
-        'label': 'B.4.2',
+        'label': 'B.4.2  V&V | IV&V Source Code',
         'desc': 'Describe any verification procedures that will be used ' + \
             'to assess whether these programs are performing as ' + \
             'expected, if additional code or scripts are to be ' + \
@@ -534,42 +534,42 @@ MODEL_APPLICATION = {
             'model output, or couple models together).'
     },
     'b4_3': {
-        'label': 'B.4.3',
+        'label': 'B.4.3 Model Parameter Sensitivity Analysis',
         'desc': 'Describe any procedures that will be used for ' + \
             'model parameter sensitivity analysis.'
     },
     'b4_4': {
-        'label': 'B.4.4',
+        'label': 'B.4.4 Parameter Uncertainty',
         'desc': 'Describe any procedures that will be used to evaluate ' + \
             'the impact of parameter uncertainty on model results.'
     },
     'b4_5': {
-        'label': 'B.4.5',
+        'label': 'B.4.5 Tuning Parameters | Spatial/Temporal Discretization',
         'desc': 'Describe any procedures that will be used to assess the ' + \
             'impact of tuning parameters or spatial/temporal ' + \
             'discretization on model results.'
     },
     'b5_1': {
         'heading': 'B.5	INTERPRETATION OF MODEL RESULTS',
-        'label': 'B.5.1',
+        'label': 'B.5.1 Statistical SOPs',
         'desc': 'Describe any statistical procedures that will be used ' + \
             'to summarize the model output.  '
     },
     'b5_2': {
-        'label': 'B.5.2',
+        'label': 'B.5.2 Data Transformations',
         'desc': 'Describe any data transformations that will be applied ' + \
             'to the model output (e.g., for scaling or bias adjustment)'
     },
     'b6_1': {
         'heading': 'B.6	DOCUMENTATION',
-        'label': 'B.6.1',
+        'label': 'B.6.1 I/O Requirements',
         'desc': 'Specify the requirements for project documentation ' + \
             '(e.g., model input/output files; results of model ' + \
             'performance assessment; scripts or source code; ' + \
             'post-processed model output).'
     },
     'b6_2': {
-        'label': 'B.6.2',
+        'label': 'B.6.2 Ammendments to QAPP',
         'desc': 'Identify QAPP elements that may need to be ' + \
             'updated as the project moves forward and describe the ' + \
             'procedures for QAPP amendment and distribution.'
