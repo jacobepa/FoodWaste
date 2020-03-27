@@ -20,25 +20,25 @@ SECTION_B_TYPES = (
 EXISTING_DATA = {
     'b1_1': {
         'heading': 'B.1	DATA ACQUISITION AND COLLECTION',
-        'label': 'B.1.1',
+        'label': 'B.1.1 Existing Data',
         'desc': 'Identify the secondary data needed to ' + \
             'meet the research objective(s).'
     },
     'b1_2': {
-        'label': 'B.1.2',
+        'label': 'B.1.2 Data Use',
         'desc': 'Describe how the existing data/ information will be ' + \
             'used in the research effort (e.g., augment or replace ' + \
             'existing data/ information, verify or validate ' + \
             'existing data/ information.'
     },
     'b1_3': {
-        'label': 'B.1.3',
+        'label': 'B.1.3 Data Requirements',
         'desc': 'Specify requirements relating to the type of data, ' + \
             'the age of data, geographical representation, temporal ' + \
             'representation, and technological representation, as applicable.'
     },
     'b1_4': {
-        'label': 'B.1.4',
+        'label': 'B.1.4 Databases, Maps, Literature',
         'desc': 'Identify databases, maps and literature, and list ' + \
             'as applicable to the research effort:\r\n(1) Information and ' + \
             'data used to site or time sampling events (meteorology, ' + \
@@ -48,7 +48,7 @@ EXISTING_DATA = {
             'output;\r\n(5) Census data;\r\n(6) GIS data.'
     },
     'b1_5': {
-        'label': 'B.1.5',
+        'label': 'B.1.5 Non-Quality Constraints',
         'desc': 'Identify any non-quality constraints on the secondary ' + \
             'data/ information that affect its use in the research ' + \
             'effort (e.g., legal, programmatic, privacy/ ' + \
@@ -60,7 +60,7 @@ EXISTING_DATA = {
     },
     'b2_1': {
         'heading': 'B.2	DATA COLLECTION AND EVALUATION',
-        'label': 'B.2.1',
+        'label': 'B.2.1 Existing Data Sources',
         'desc': 'Identify the source(s) for the secondary data.  ' + \
             'Describe the planning process for data gathering and ' + \
             'how the project ensures that data or information collected ' + \
@@ -68,19 +68,19 @@ EXISTING_DATA = {
             'needs of the research effort.'
     },
     'b2_2': {
-        'label': 'B.2.2',
+        'label': 'B.2.2 Criteria for Acceptance or Rejection',
         'desc': 'Describe the process for acceptance/ rejection and ' + \
             'inclusion/ exclusion of secondary data to support research ' + \
             'objectives (e.g., to exclude potential bias).'
     },
     'b2_3': {
-        'label': 'B.2.3',
+        'label': 'B.2.3 Rational Selection of Existing Data',
         'desc': 'Discuss the rationale for selecting the source(s) ' + \
             'identified.  If a hierarchy of sources exists for the ' + \
             'gathering of secondary data, specify that hierarchy.'
     },
     'b2_4': {
-        'label': 'B.2.4',
+        'label': 'B.2.4 SOPs Determine Quality of Data',
         'desc': 'Describe the procedures for determining the quality of ' + \
             'the secondary data. Identify criteria for evaluating data ' + \
             'or information quality (e.g., using EPA’s five General ' + \
@@ -92,7 +92,7 @@ EXISTING_DATA = {
             'additional evaluation for quality.'
     },
     'b2_5': {
-        'label': 'B.2.5',
+        'label': 'B.2.5 Disclaimer Existing Data',
         'desc': 'If the quality of the secondary data will not be ' + \
             'evaluated by EPA, state this in the QAPP and require one ' + \
             'of the following disclaimer statements to be added to any ' + \
@@ -110,7 +110,7 @@ EXISTING_DATA = {
     },
     'b3_1': {
         'heading': 'B.3	DATA MANAGEMENT AND DOCUMENTATION',
-        'label': 'B.3.1',
+        'label': 'B.3.1 Data Tracking and Storage',
         'desc': 'Describe the process for documenting and tracking ' + \
             'sources used and the information that will be recorded for ' + \
             'the secondary data collected (e.g., data source, ' + \
