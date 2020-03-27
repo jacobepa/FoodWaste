@@ -1,0 +1,117 @@
+{% extends "base/site_base_rms_project.html" %}
+{% load humanize %}
+
+{% block project_content %}
+<h3>Search Existing Projects</h3>
+<div>
+    To search for projects, select your search criteria below, and then click the "Search" button.
+</div>
+<div class="vmargin20">
+    <form class="form-horizontal" action="{% url 'result_search_rms_project' %}" method="get">
+
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                <input type="submit" value="Search" name="start" class="btn btn-md btn-success">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Has ORD QA Planning Form(s)</label>
+            <div class="col-sm-8">
+                <select class="form-control" name="has_attachments" value="">
+                    <option value="">--</option>
+                    <option value="N">N</option>
+                    <option value="Y">Y</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Title</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="title" value="{{title}}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="{{label_class}} control-label"
+                   for="program">RMS Program:</label>
+            <div class="{{input_container_class}}">
+                <select id="id_program" name="program" class="form-control">
+                    <option value="">ALL PROGRAMS</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">EPA ID</label>
+            <div class="col-sm-8"><input class="form-control" type="text" name="epa_id" value="{{epa_id}}"></div>
+        </div>
+
+        <!--<div class="form-group">-->
+            <!--<label class="col-sm-4 control-label">Project Start Date => From Date</label>-->
+            <!--<div class="col-sm-8">-->
+                <!--<input class="form-control" type="text" name="start_date_from" value="{{start_date_from}}" id="datepicker1">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+            <!--<label class="col-sm-4 control-label">Project Start Date => To Date</label>-->
+            <!--<div class="col-sm-8">-->
+                <!--<input class="form-control" type="text" name="start_date_to" value="{{start_date_to}}" id="datepicker2">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+            <!--<label class="col-sm-4 control-label">Project End Date => From Date</label>-->
+            <!--<div class="col-sm-8">-->
+                <!--<input class="form-control" type="text" name="end_date_from" value="{{end_date_from}}" id="datepicker3">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+            <!--<label class="col-sm-4 control-label">Project End Date => To Date</label>-->
+            <!--<div class="col-sm-8">-->
+                <!--<input class="form-control" type="text" name="end_date_to" value="{{end_date_to}}" id="datepicker4">-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                <input type="submit" value="Search" name="start" class="btn btn-md btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Javscript to dynamically update the selection lists
+    console.log('YO!');
+
+    var program_list = {{program_list|safe}};
+
+    // functions to generate the label in the select list
+    var program_label = function (v) { return (v.acronym + " - " + v.title); };
+
+    var fill_select = function(element_id, list, selected_id, label_fn) {
+        $(element_id).find('option:not(:first)').remove();
+        $.each(list, function( i, v ) {
+            console.log("In Each");
+            if (v.id == selected_id) {
+                $(element_id).append($("<option></option>")
+                .attr("value",v.id).attr("selected",true)
+                .text(label_fn(v)));
+            } else {
+                $(element_id).append($("<option></option>").attr("value",v.id)
+                .text(label_fn(v)));
+            }
+        });
+    };
+
+    // fill the program list
+    fill_select('#id_program', program_list, 0, program_label);
+
+});
+</script>
+
+{% endblock %}

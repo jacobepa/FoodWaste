@@ -1,0 +1,440 @@
+{% extends "base/site_base_project.html" %}
+{% block project_content %}
+{% load staticfiles %}
+<h3>Create a project</h3>
+<p>
+    Enter the project information below, and then click the "Create" button.
+    Fields marked with an asterisk are required.
+    Note that you will be able to add files to the project and link the project to related ORD organizations after the project is created.
+</p>
+
+<div class="vmargin20" id='create_project_container'>
+    <form class="form-horizontal" enctype="multipart/form-data" method="post" action="." role="form" novalidate autocomplete="off">
+
+        {% csrf_token %}
+
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <h5>Please correct the following errors</h5>
+            {% for field in form %}
+            {% if field.errors %}
+            <div>{{field.label_tag}} {{ field.errors|striptags }}</div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.title.label_tag}}</div>
+
+                <div class="help-block">{{form.title.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.title}}</div>
+                {% if form.title.errors %}<div class="alert alert-danger">{{form.title.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.the_description.label_tag}}</div>
+
+                <div class="help-block">{{form.the_description.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.the_description}}</div>
+                {% if form.the_description.errors %}<div class="alert alert-danger">{{form.the_description.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.project_status.label_tag}}</div>
+
+                <div class="help-block">{{form.project_status.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.project_status}}</div>
+                {% if form.project_status.errors %}<div class="alert alert-danger">{{form.project_status.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                {% if form.alt_id.help_text %}
+                <div title="{{form.alt_id.help_text}}">[?] {{form.alt_id.label_tag}}</div>
+                {% else %}
+                <div>{{form.alt_id.label_tag}}</div>
+                {% endif %}
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.alt_id}}</div>
+                {% if form.alt_id.errors %}<div class="alert alert-danger">{{form.alt_id.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                {% if form.previous_id.help_text %}
+                <div title="{{form.previous_id.help_text}}">[?] {{form.previous_id.label_tag}}</div>
+                {% else %}
+                <div>{{form.previous_id.label_tag}}</div>
+                {% endif %}
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.previous_id}}</div>
+                {% if form.previous_id.errors %}<div class="alert alert-danger">{{form.previous_id.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.person.label_tag}}</div>
+
+                <div class="help-block">{{form.person.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.person}}</div>
+                {% if form.person.errors %}<div class="alert alert-danger">{{form.person.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.collaborators.label_tag}}</div>
+
+                <div class="help-block">{{form.collaborators.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.collaborators}}</div>
+                {% if form.collaborators.errors %}<div class="alert alert-danger">{{form.collaborators.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.qa_manager.label_tag}}</div>
+
+                <div class="help-block">{{form.qa_manager.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.qa_manager}}</div>
+                {% if form.qa_manager.errors %}<div class="alert alert-danger">{{form.qa_manager.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.previous_qams.label_tag}}</div>
+
+                <div class="help-block">{{form.previous_qams.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.previous_qams}}</div>
+                {% if form.previous_qams.errors %}<div class="alert alert-danger">{{form.previous_qams.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        {% include 'organization_select.html' %}
+
+        <!-- RAPS -->
+        {% include 'main/project_rap_group_fields.html' %}
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.programs.label_tag}}</div>
+
+                <div class="help-block">{{form.program.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.programs}}</div>
+                {% if form.programs.errors %}<div class="alert alert-danger">{{form.programs.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.qa_category.label_tag}}</div>
+
+                <div class="help-block">{{form.qa_category.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.qa_category}}</div>
+                {% if form.qa_category.errors %}<div class="alert alert-danger">{{form.qa_category.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.nrmrl_qapp_requirement.label_tag}}</div>
+
+                <div class="help-block">{{form.nrmrl_qapp_requirement.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.nrmrl_qapp_requirement}}</div>
+                {% if form.nrmrl_qapp_requirement.errors %}<div class="alert alert-danger">{{form.nrmrl_qapp_requirement.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.project_type.label_tag}}</div>
+
+                <div class="help-block">{{form.project_type.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.project_type}}</div>
+                {% if form.project_type.errors %}<div class="alert alert-danger">{{form.project_type.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div id="accordion">
+            <!--<div class="form-group">
+                <label class="col-sm-4 control-label">
+                    <div>{{form.extramural_vehicle.label_tag}}</div>
+
+                    <div class="help-block">{{form.extramural_vehicle.help_text}}</div>
+                </label>
+                <div class="col-sm-8">
+                    <div>{{form.extramural_vehicle}}</div>
+                    {% if form.extramural_vehicle.errors %}<div class="alert alert-danger">{{form.extramural_vehicle.errors.as_text}}</div>{% endif %}
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-4 control-label">
+                    <div>{{form.vehicle_type.label_tag}}</div>
+
+                    <div class="help-block">{{form.vehicle_type.help_text}}</div>
+                </label>
+                <div class="col-sm-8">
+                    <div>{{form.vehicle_type}}</div>
+                    {% if form.vehicle_type.errors %}<div class="alert alert-danger">{{form.vehicle_type.errors.as_text}}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">
+                    {% if form.institution_name.help_text %}
+                    <div title="{{form.institution_name.help_text}}">[?] {{form.institution_name.label_tag}}</div>
+                    {% else %}
+                    <div>{{form.institution_name.label_tag}}</div>
+                    {% endif %}
+                </label>
+                <div class="col-sm-8">
+                    <div>{{form.institution_name}}</div>
+                    {% if form.institution_name.errors %}<div class="alert alert-danger">{{form.institution_name.errors.as_text}}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">
+                    {% if form.vehicle_number.help_text %}
+                    <div title="{{form.vehicle_number.help_text}}">[?] {{form.vehicle_number.label_tag}}</div>
+                    {% else %}
+                    <div>{{form.vehicle_number.label_tag}}</div>
+                    {% endif %}
+                </label>
+                <div class="col-sm-8">
+                    <div>{{form.vehicle_number}}</div>
+                    {% if form.vehicle_number.errors %}<div class="alert alert-danger">{{form.vehicle_number.errors.as_text}}</div>{% endif %}
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.date_project_identified.label_tag}}</div>
+
+                <div class="help-block">{{form.date_project_identified.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.date_project_identified}}</div>
+                {% if form.date_project_identified.errors %}<div class="alert alert-danger">{{form.date_project_identified.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.qapp_status.label_tag}}</div>
+
+                <div class="help-block">{{form.qapp_status.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.qapp_status}}</div>
+                {% if form.qapp_status.errors %}<div class="alert alert-danger">{{form.qapp_status.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                {% if form.restrict_qapp_files.help_text %}
+                <div title="{{form.restrict_qapp_files.help_text}}">[?] {{form.restrict_qapp_files.label_tag}}</div>
+                {% else %}
+                <div>{{form.restrict_qapp_files.label_tag}}</div>
+                {% endif %}
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.restrict_qapp_files}}</div>
+                {% if form.restrict_qapp_files.errors %}<div class="alert alert-danger">{{form.restrict_qapp_files.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                {% if form.restrict_ext_package_files.help_text %}
+                <div title="{{form.restrict_ext_package_files.help_text}}">[?] {{form.restrict_ext_package_files.label_tag}}</div>
+                {% else %}
+                <div>{{form.restrict_ext_package_files.label_tag}}</div>
+                {% endif %}
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.restrict_ext_package_files}}</div>
+                {% if form.restrict_ext_package_files.errors %}<div class="alert alert-danger">{{form.restrict_ext_package_files.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.qapp_approval_date.label_tag}}</div>
+
+                <div class="help-block">{{form.qapp_approval_date.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.qapp_approval_date}}</div>
+                {% if form.qapp_approval_date.errors %}<div class="alert alert-danger">{{form.qapp_approval_date.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                {% if form.last_qapp_review_date.help_text %}
+                <div title="{{form.last_qapp_review_date.help_text}}">[?] {{form.last_qapp_review_date.label_tag}}</div>
+                {% else %}
+                <div>{{form.last_qapp_review_date.label_tag}}</div>
+                {% endif %}
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.last_qapp_review_date}}</div>
+                {% if form.last_qapp_review_date.errors %}<div class="alert alert-danger">{{form.last_qapp_review_date.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.qmp_required.label_tag}}</div>
+
+                <div class="help-block">{{form.qmp_required.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.qmp_required}}</div>
+                {% if form.qmp_required.errors %}<div class="alert alert-danger">{{form.qmp_required.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <div>{{form.qmp_approval_date.label_tag}}</div>
+
+                <div class="help-block">{{form.qmp_approval_date.help_text}}</div>
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.qmp_approval_date}}</div>
+                {% if form.qmp_approval_date.errors %}<div class="alert alert-danger">{{form.qmp_approval_date.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                {% if form.weblink.help_text %}
+                    <div title="{{form.weblink.help_text}}">[?] {{form.weblink.label_tag}}</div>
+                    {% else %}
+                    <div>{{form.weblink.label_tag}}</div>
+                    {% endif %}
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.weblink}}</div>
+                {% if form.weblink.errors %}<div class="alert alert-danger">{{form.weblink.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                {% if form.participating_organizations.help_text %}
+                    <div title="{{form.participating_organizations.help_text}}">[?] {{form.participating_organizations.label_tag}}</div>
+                    {% else %}
+                    <div>{{form.participating_organizations.label_tag}}</div>
+                    {% endif %}
+            </label>
+            <div class="col-sm-8">
+                <div>{{form.participating_organizations}}</div>
+                {% if form.participating_organizations.errors %}<div class="alert alert-danger">{{form.participating_organizations.errors.as_text}}</div>{% endif %}
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                <input type="submit" value="Create" class="btn btn-success">
+            </div>
+        </div>
+
+        <input type="hidden" name="create_finish" value="true"/>
+
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $(".chosen-select").chosen({});
+
+        $('.jasc-program-select').asyncSelect({
+            url: '/api/programs',
+            displayValue:'the_name'
+        });
+
+        $('.jasc-org-select').asyncSelect({
+            url: '/api/participating_orgs',
+            displayValue:'company'
+        });
+
+        $('.jasc-user-select').asyncSelect({
+            url: '/api/dropdown_users',
+            displayValue:function(item){ return item.last_name + ", " + item.first_name + ' (' + item.email + ')' }
+        });
+
+        $(".date-control").datepicker({ dateFormat: "yy-mm-dd" });
+
+        $("#id_project_type").change(function() {
+             if ($(this).val() != '1') {
+                 $("#accordion").hide();
+             } else {
+                 $("#accordion").show();
+             }
+        });
+
+        // Auto expand collapsible fields (just ORD RAP as of writing) if they have a value
+        $('#create_project_container .collapse').each(function(){
+            var hasVals = false;
+            $(this).find('input').each(function(){
+                if($(this).val() !== ''){
+                    hasVals = true;
+                }
+            })
+            if(hasVals){
+                $(this).attr('class','collapse in')
+                $(this).attr('aria-expanded','true')
+            }
+        });
+    });
+</script>
+{% endblock %}
+

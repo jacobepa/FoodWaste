@@ -1,0 +1,29 @@
+{% extends 'base/site_base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Audit Actions</div>
+            <div class="list-group">
+                <a class="list-group-item"   href={% url 'go_to_global_audits' %}>Create QA Finding</a>
+                <a class="list-group-item"   href={% url 'list_labs_for_audit_last_30' %}>Audits Last 30</a>
+                <a class="list-group-item"   href={% url 'list_labs_for_audit_last_60' %}>Audits Last 60</a>
+                <a class="list-group-item"   href={% url 'list_labs_for_audit_last_90' %}>Audits Last 90</a>
+                <a class="list-group-item"   href={% url 'list_labs_for_audit_last_180' %}>Audits Last 180</a>
+                <a class="list-group-item"   href={% url 'search_audits' %}>Search Audits</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        {% block audit_content %}
+        {% endblock %}
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+

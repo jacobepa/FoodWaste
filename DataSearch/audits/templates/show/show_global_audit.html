@@ -1,0 +1,86 @@
+{% extends "site_base_audit.html" %}
+{% load humanize %}
+
+{% block content %}
+<h3>Show Finding/Audit</h3>
+
+<div class="col-sm-12">
+	<div class="reg">Audit Title<div class="orange">{{obj.the_name}}</div></div>
+</div>
+<div class="col-sm-12">
+	<div class="reg">Type<div class="orange">{{obj.audit_type.the_name}}</div></div>
+</div>
+<div class="col-sm-6">
+	<div class="reg">Audit Start Date<div class="orange">{{obj.date_started|date:"Y-m-d"}}</div></div>
+</div>
+<div class="col-sm-6">
+	<div class="reg">Audit End Date<div class="orange">{{obj.date_ended|date:"Y-m-d"}}</div></div>
+</div>
+<div class="col-sm-12">
+	<div class="reg">Comments For Audit<div class="orange">{{obj.the_description}}</div></div>
+</div>
+<div class="col-sm-12">
+	<div class="reg">Website Reference<div class="orange"><a href={{obj.weblink}}>{{obj.weblink}}</a></div></div>
+</div>
+
+	<div class="col-sm-12">
+		<div class="text-center">
+			<div class="btn-library">
+				<a class="btn btn-md btn-info" href={% url 'edit_global_audit' obj.id %} role="button">Edit Finding/Audit</a>
+				<a class="btn btn-md btn-success" href={% url 'add_finding_to_global_audit' obj.id %} role="button">Add Finding To Finding/Audit</a>
+			</div>
+		</div>
+	</div>
+
+<div class="col-sm-12">
+
+<div class="col-sm-12">
+{% if findings %}
+
+	<p><h3>{{obj.the_name}} Findings</h3></p>
+	
+	<table class="example table-autosort:6 table-stripeclass:alternate table-autofilter" id="findings_table">
+		<thead id="findings_head">
+		<tr>
+			<th class="table-sortable:numeric">Ordering</th>
+			<th class="table-header">Finding</th>
+			<th class="table-sortable:date">Date Ordered</th>
+			<th class="table-sortable:date">Date Closed</th>
+			<th class="table-header">Comments</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-header"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="findings_body">
+			
+			{% for obj in findings %}
+				<tr>
+					<td>{{obj.ordering}}</td>
+					<td width="200">{{obj.write_up}}</td>
+					<td>{{obj.date_started|date:"Y-m-d"}}</td>
+					<td>{{obj.date_ended|date:"Y-m-d"}}</td>
+					<td width="300">{{obj.the_description}}</td>
+					<td><a href={% url 'edit_audit_finding' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_audit_finding' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Findings Yet.</td></tr></table>
+{% endif %}
+</div>
+{% endblock %}

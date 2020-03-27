@@ -1,0 +1,45 @@
+{% extends "base/site_base_project.html" %}
+{% load humanize %}
+
+{% block project_content %}
+<h3>Search Programs</h3>
+<div>
+    To search for existing programs, type your search criteria into the field below, and the list will be filtered to match your criteria.
+</div>
+<div class="vmargin20">
+    <div class="form-horizontal">
+        <div id="program_list">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Program Name</label>
+                <div class="col-sm-10">
+                    <input class="form-control search" type="text" name="a" value="{{a}}">
+                </div>
+            </div>
+
+            <h4>Existing Programs</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Name</th>
+                    <th>Projects Within Program</th>
+                </tr>
+                <tbody class="list">
+                    {% for program in programs %}
+                    <tr>
+                        <td class="name"><a href="{% url 'show_program' program.id %}"> {{program.the_name}}</a></td>
+                        <td class="count">{{program.project_set.count}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+     </div>
+</div>
+
+<script type="text/javascript">
+    var options = {
+        valueNames: [ 'name']
+    };
+
+    var programList = new List('program_list', options);
+</script>
+{% endblock %}

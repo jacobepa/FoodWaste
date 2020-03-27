@@ -1,0 +1,23 @@
+{% extends "base/site_base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Training Actions</div>
+            <div class="list-group">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        {% block training_content %}
+        {% endblock %}
+    </div>
+</div>
+
+
+{% endblock %}
+

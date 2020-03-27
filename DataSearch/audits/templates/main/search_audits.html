@@ -1,0 +1,166 @@
+{% extends "site_base_audit.html" %}
+{% load humanize %}
+
+{% block content %}
+
+<form action="/audits/search/result/" method="get">
+
+<div class="row cols-2">
+	<label>ORD Labs (Leave Blank To Search All Labs)</label>
+	<select name="k" value="{{k}}" class="form-control">
+		<option value=""> </option>
+		{% for instance in labs %}
+			<option value="{{instance.abbreviation}}">{{instance.abbreviation}}</option>
+		{% endfor %}
+	</select>
+</div>
+<div class="row cols-2">
+	<label>Division Abbreviation</label>
+	<input type="text" name="a" value="{{a}}" class="form-control">
+</div>
+<div class="row cols-2">
+	<label>Branch Abbreviation</label>
+	<input type="text" name="b" value="{{b}}" class="form-control">
+</div>
+<div class="row cols-2">
+	<label>Project Lead Last Name</label>
+	<input type="text" name="t" value="{{t}}" class="form-control">
+</div>
+<div class="row cols-2">
+	<label>Project Lead First Name</label>
+	<input type="text" name="v" value="{{v}}" class="form-control">
+</div>
+
+<div class="row cols-2">
+	<label>Audit Project Lead Last Name</label>
+	<input type="text" name="c" value="{{c}}" class="form-control">
+</div>
+<div class="row cols-2">
+	<label>Audit Project Lead First Name</label>
+	<input type="text" name="d" value="{{d}}" class="form-control">
+</div>
+<div class="row cols-2">
+	<label>Reviewer Last Name</label>
+	<input type="text" name="e" value="{{e}}" class="form-control">
+</div>
+<div class="row cols-2">
+	<label>Reviewer First Name</label>
+	<input type="text" name="f" value="{{f}}" class="form-control">
+</div>
+<div class="row cols-2">
+	<div class="col-sm-12"><label>Date Audit Received => From Date</label></div>
+	<div class="col-sm-4">Month<input type="text" name="g1" value="{{g1}}" class="form-control"></div>
+	<div class="col-sm-4">Day<input type="text" name="g2" value="{{g2}}" class="form-control"></div>
+	<div class="col-sm-4">4 Digit Year<input type="text" name="g3" value="{{g3}}" class="form-control"></div>
+</div>
+<div class="row cols-2">
+	<div class="col-sm-12"><label>Date Audit Received => To Date</label></div>
+	<div class="col-sm-4">Month<input type="text" name="h1" value="{{h1}}" class="form-control"></div>
+	<div class="col-sm-4">Day<input type="text" name="h2" value="{{h2}}" class="form-control"></div>
+	<div class="col-sm-4">4 Digit Year<input type="text" name="h3" value="{{h3}}" class="form-control"></div>
+</div>
+<div class="row cols-2">
+	<div class="col-sm-12"><label>Date Audit Reviewed => From Date</label></div>
+	<div class="col-sm-4">Month<input type="text" name="j1" value="{{j1}}" class="form-control"></div>
+	<div class="col-sm-4">Day<input type="text" name="j2" value="{{j2}}" class="form-control"></div>
+	<div class="col-sm-4">4 Digit Year<input type="text" name="j3" value="{{j3}}" class="form-control"></div>
+</div>
+<div class="row cols-2">
+	<div class="col-sm-12"><label>Date Audit Reviewed => To Date</label></div>
+	<div class="col-sm-4">Month<input type="text" name="k1" value="{{k1}}" class="form-control"></div>
+	<div class="col-sm-4">Day<input type="text" name="k2" value="{{k2}}" class="form-control"></div>
+	<div class="col-sm-4">4 Digit Year<input type="text" name="k3" value="{{k3}}" class="form-control"></div>
+</div>
+<div class="row cols-2">
+	<div class="col-sm-12"><label>Date Audit Approved => From Date</label></div>
+	<div class="col-sm-4">Month<input type="text" name="m1" value="{{m1}}" class="form-control"></div>
+	<div class="col-sm-4">Day<input type="text" name="m2" value="{{m2}}" class="form-control"></div>
+	<div class="col-sm-4">4 Digit Year<input type="text" name="m3" value="{{m3}}" class="form-control"></div>
+</div>
+<div class="row cols-2">
+	<div class="col-sm-12"><label>Date Audit Approved => To Date</label></div>
+	<div class="col-sm-4">Month<input type="text" name="n1" value="{{n1}}" class="form-control"></div>
+	<div class="col-sm-4">Day<input type="text" name="n2" value="{{n2}}" class="form-control"></div>
+	<div class="col-sm-4">4 Digit Year<input type="text" name="n3" value="{{n3}}" class="form-control"></div>
+</div>
+<div class="row cols-2">
+	<label>Title</label>
+	<input type="text" name="p" value="{{p}}" class="form-control">
+</div>
+<div class="row cols-2">
+	<label>Project QA ID</label>
+	<input type="text" name="q" value="{{q}}" class="form-control">
+</div>
+
+<div class="col-sm-12">
+	<input type="submit" value="Start Report" name="start" class="btn btn-md btn-success">
+</div>
+</form>
+
+<div class="col-sm-12">
+	<div id="container" style="width:100%; height:800px;"></div>
+	<div id="sliders">
+	<table>
+		<tr><td>Alpha Angle</td><td><input id="R0" type="range" min="0" max="45" value="15"/> <span id="R0-value" class="value"></span></td></tr>
+	    <tr><td>Beta Angle</td><td><input id="R1" type="range" min="0" max="45" value="15"/> <span id="R1-value" class="value"></span></td></tr>
+	</table>
+</div>
+
+</div>
+
+<div class="col-sm-12">
+{% if qlogs %}
+
+	<p><h3>Audits Count {{the_count}} From Query {{query_show}}</h3></p>
+	
+	<table class="example table-autosort:7 table-stripeclass:alternate table-autofilter" id="qlogs_table">
+		<thead id="qlogs_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Lab</th>
+			<th class="table-sortable:alphanumeric">Division</th>
+			<th class="table-sortable:alphanumeric">Branch</th>
+			<th class="table-sortable:alphanumeric">Project QA ID</th>
+			
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Result</th>
+			<th class="table-sortable:numeric">Audit Project Lead</th>
+			<th class="table-sortable:numeric">Audit Reviewer</th>
+
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="qlogs_body">
+			
+			{% for obj in qlogs %}
+				<tr>
+					<td>{{obj.division.lab.abbreviation}}</td>
+					<td>{{obj.division.abbreviation}}</td>
+					<td>{{obj.branch.abbreviation}}</td>
+					<td>{{obj.project.qa_id}}</td>
+					
+					<td>{{obj.project_log_type.the_name}}</td>
+					<td>{{obj.review_type.the_name}}</td>
+					<td>{{obj.technical_lead.last_name}}, {{obj.technical_lead.first_name}}</td>
+					<td>{{obj.reviewer.last_name}}, {{obj.reviewer.first_name}}</td>
+
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+{% endblock %}

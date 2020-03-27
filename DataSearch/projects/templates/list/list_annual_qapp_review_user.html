@@ -1,0 +1,66 @@
+{% extends "base/site_base_qapp_review.html" %}
+{% load humanize %}
+{% block qapp_review_content %}
+
+<div>
+	<p><h3>{{ title }}</h3></p>
+
+	{% if hasResults %}
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="support_table">
+		<thead id="support_head">
+		<tr>
+            <th class="table-sortable:alphanumeric">Office</th>
+			<th class="table-sortable:alphanumeric">Center</th>
+            <th class="table-sortable:alphanumeric">Division</th>
+			<th class="table-sortable:alphanumeric">Project</th>
+			<th class="table-sortable:date">Approval or Last Review Date</th>
+            <th class="table-sortable:alphanumeric">Project Lead</th>
+            <th class="table-sortable:alphanumeric">QAPP Reviewer</th>
+            <th class="table-sortable:alphanumeric">Email Sent</th>
+
+		</tr>
+		<tr>
+            <th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+            <th class="table-filterable"></th>
+
+	  	</tr>
+
+		</thead>
+		<tbody id="support_body">
+			
+			{% for obj in AnnualQAPPReviews %}
+				<tr>
+                    <td>{{obj.office}}</td>
+                    <td>{{obj.lab}}</td>
+                    <td>{{obj.division}}</td>
+                    <td><a href={% url 'show_project' obj.id %}>{{obj.qa_id}}</a></td>
+					<td>{{obj.qapp_date|date:"Y-m-d"}}</td>
+                    <td>{{obj.project_lead}}</td>
+                    <td>{{obj.reviewer}}</td>
+					<td>{{obj.last_email_sent|date:"Y-m-d"}}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	<form class="form-horizontal" action="{% url 'list_annual_qapp_review_user' %}" method="post">
+		{% csrf_token %}
+		<div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                <input class="btn btn-success" type="submit" value="Export to Excel" name="export" class="button">
+            </div>
+        </div>
+    </form>
+	{% else %}
+	<table><tr><td>No Projects Found for This Query.</td></tr></table>
+	{% endif %}
+</div>
+
+{% endblock %}

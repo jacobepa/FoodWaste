@@ -1,0 +1,29 @@
+{% extends "base/site_base_project.html" %}
+{% block project_content %}
+{% load staticfiles %}
+<h3>Create a project</h3>
+<p>
+    To start a new project, select the organization with which the project is associated,
+    and then click the "Create" button.
+</p>
+
+<div class="vmargin20">
+    {% if error %}
+    <div class="alert alert-danger">{{error}}</div>
+    {% endif %}
+    <form class="form-horizontal" enctype="multipart/form-data" method="post" action="." role="form" novalidate>
+
+        {% csrf_token %}
+
+        {% include 'organization_select.html' %}
+        <div class="form-group">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <input type="submit" value="Create" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+

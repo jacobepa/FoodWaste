@@ -1,0 +1,33 @@
+{% extends "base/site_base_organization.html" %}
+{% load humanize %}
+
+{% block organization_content %}
+<h3>EPA Offices</h3>
+{% if error_message %}<div class="alert alert-danger">{{error_message}}</div>{% endif %}
+<div>
+
+    {% if office_list %}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Office Name</th>
+            <th>Abbreviation</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {% for obj in office_list %}
+        <tr>
+            <td><a href="{% url 'office_show' obj.id %}"> {{obj.office}}</a></td>
+            <td>{{obj.abbreviation}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+    {% endif %}
+    <a class="btn btn-success" href="{% url 'office_create' %}">Create a new office</a>
+
+</div>
+{% endblock %}

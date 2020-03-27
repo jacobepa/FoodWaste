@@ -1,0 +1,175 @@
+{% extends "base/site_base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div>
+
+	<h3>QA Activity Search Results</h3>
+
+	<h4>Found {{the_count}} QA Activities ({{query_show}})</h4></p>
+	<div><a href="{% url 'search_project_log' %}" class="btn btn-sm btn-link" role="button">New Search</a></div>
+    <p>To refine your search, use your browser's back button.</p>
+	{% if objs %}
+    <div>
+        <table class="example table-autosort table-stripeclass:alternate table-autofilter" id="qlogs_table">
+		<thead id="qlogs_head">
+		<tr>
+            <th class="table-sortable:alphanumeric">Center</th>
+			<th class="table-sortable:alphanumeric">Div</th>
+			<th class="table-sortable:alphanumeric">Br</th>
+			<th class="table-sortable:alphanumeric">QA Activity POC:</th>
+			<th class="table-sortable:alphanumeric">Reviewer</th>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:date">Received</th>
+			<th class="table-sortable:date">Reviewed</th>
+			<th class="table-sortable:date">Approved</th>
+			<th class="table-sortable:alphanumeric">Title</th>
+
+			<th class="table-sortable:alphanumeric">Project</th>
+			<th class="table-sortable:alphanumeric">RAP Projects/Tasks</th>
+			<th class="table-sortable:alphanumeric">Project Lead</th>
+			<th class="table-sortable:alphanumeric">QA Activity Number</th>
+			<th class="table-sortable:alphanumeric">Previous ID</th>
+			<th class="table-sortable:alphanumeric">Alternate ID</th>
+
+			<th class="table-header">QA Activity Review</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-filterable"></th>
+      <th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-header"></th>
+	  	</tr>
+
+		</thead>
+
+		<tbody id="qlogs_body">
+
+			{% for obj in objs %}
+				<tr>
+                    <td>{{obj.lab.abbreviation}}</td>
+					<td>{{obj.division.abbreviation}}</td>
+					<td>{{obj.branch.abbreviation}}</td>
+
+					<td>
+						{% if obj.technical_lead %}
+						{{obj.technical_lead.last_name}}, {{obj.technical_lead.first_name}} ({{obj.technical_lead.email}})
+						{% endif %}
+					</td>
+					<td>{{obj.reviewer.last_name}}, {{obj.reviewer.first_name}}</td>
+					<td>{{obj.project_log_type.the_name}}</td>
+					<td>{{obj.date_received|date:"Y-m-d"}}</td>
+					<td>{{obj.date_reviewed|date:"Y-m-d"}}</td>
+					<td>{{obj.date_approved|date:"Y-m-d"}}</td>
+					<td width="200">{{obj.title}}</td>
+					{% if obj.project.id %}
+						<td><a href={% url 'show_project' obj.project.id %}>{{obj.project.qa_id}}</a></td>
+					{% endif %}
+          <td>
+            <div  style="text-align:left;padding:5px;">
+              {% for row in obj.rap %}
+                <div style="padding-bottom:10px;">
+                  {{row.title}}
+                  {{row.values}}
+                </div>
+              {% endfor %}
+            </div>
+          </td>
+					<td>{% if obj.project.person %}<a href={% url 'activity_summary_user' obj.project.person.id %}>{{obj.project.person.last_name}}, {{obj.project.person.first_name}}</a>{% endif %}</td>
+					<td><a href={% url 'show_project_log' obj.id %}>{{obj.qa_log_number}}</a></td>
+					<td>{{obj.previous_id}}</td>
+					<td>{{obj.alt_id}}</td>
+					{% if kwargs.allow_edit %}
+					<td><a href={% url 'edit_review' obj.id %}>
+						{% if obj.review_type %}
+						Edit
+						{% else %}
+						Create
+						{% endif %}</a>
+						{% if obj.date_approved %}
+						<br>or<br><a href={% url 'pdf_qlog' obj.id %}>PDF</a>
+						{% endif %}
+					</td>
+					{% else %}
+					<td><a href={% url 'edit_review' obj.id %}>
+						{% if obj.date_approved %}
+						<a href={% url 'pdf_qlog' obj.id %}>PDF</a>
+						{% endif %}
+					</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+    </div>
+
+	{% else %}
+{% endif %}
+</div>
+
+<script>
+    $(document).ready(
+                function() {
+                     $("#id_lab").change(function() {
+                             if ($(this).val() == '') {
+                                 $("#division").html("<option>All Divisions</option>");
+                             }
+                             else {
+                                 var url = "/projects/ajax/divisions/" + $(this).val() + "/ajax_lookup_divisions";
+                                 var lab = $(this).val();
+                                 $.getJSON(url, function(divisions) {
+                                     var options = '<option value="">All Divisions</option>';
+                                     for (var i = 0; i < divisions.length; i++) {
+                                        options += '<option value="' + divisions[i].fields['abbreviation'] + '">' + divisions[i].fields['abbreviation'] + '</option>';
+                                     }
+                                     $("#division").html(options);
+                                     $("#division").attr('disabled', false);
+                                 });
+                             }
+                         });
+
+
+    });
+
+</script>
+<script>
+    $(document).ready(
+                function() {
+                     $("#division").change(function() {
+                             if ($(this).val() == '') {
+                                 $("#id_branch").html("<option>All Branches</option>");
+                             }
+                             else {
+                                 var url = "/projects/ajax/branches/" + $(this).val() + "/ajax_lookup_branches";
+                                 var division = $(this).val();
+                                 $.getJSON(url, function(branches) {
+                                     var options = '<option value="">All Branches</option>';
+                                     for (var i = 0; i < branches.length; i++) {
+                                        options += '<option value="' + branches[i].fields['abbreviation'] + '">' + branches[i].fields['abbreviation'] + '</option>';
+                                     }
+                                     $("#id_branch").html(options);
+                                     $("#id_branch").attr('disabled', false);
+                                 });
+                             }
+                         });
+
+
+    });
+
+</script>
+{% endblock %}

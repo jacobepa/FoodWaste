@@ -1,0 +1,232 @@
+{% extends "site_base_office.html" %}
+{% load humanize %}
+
+{% block content %}
+<h3>Show Lab</h3>
+
+<div class="col-sm-12">
+	<div class="reg">Name<div class="orange">{{obj.the_name}}</div></div>
+</div>
+<div class="col-sm-12">
+	<div class="reg">Abbreviation<div class="orange">{{obj.abbreviation}}</div></div>
+</div>
+<div class="col-sm-12">
+	<div class="reg">Description<div class="orange">{{obj.the_description}}</div></div>
+</div>
+<div class="col-sm-12">
+	<div class="reg">Website Reference<div class="orange"><a href={{obj.weblink}}>{{obj.weblink}}</a></div></div>
+</div>
+
+<div class="col-sm-12">
+{% if labs %}
+
+	<p><h3>Labs</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="labs_table">
+		<thead id="labs_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Office</th>
+			<th class="table-sortable:alphanumeric">Lab</th>
+			<th class="table-sortable:alphanumeric">Abbreviation</th>
+			<th class="table-header">Immediate Offices</th>
+			<th class="table-header">Divisions</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="labs_body">
+			
+			{% for obj in labs %}
+				<tr>
+					<td>{{obj.office.abbreviation}}</td>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.abbreviation}}</td>
+					<td>{% for io in obj.immediateoffice_set.all %}
+						<table><tr><td>{{io.the_name}}</td></tr></table>
+						{% endfor %}</td>
+						
+					<td>{% for d in obj.division_set.all %}
+						<table><tr><td>{{d.abbreviation}}</td></tr></table>
+						{% endfor %}</td>
+
+					<td><a href={% url 'edit_lab' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_lab' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+
+<div class="col-sm-12">
+{% if divisions %}
+
+	<p><h3>Divisions</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="labs_table">
+		<thead id="labs_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Office</th>
+			<th class="table-sortable:alphanumeric">Lab</th>
+			<th class="table-sortable:alphanumeric">Division</th>
+			<th class="table-header">Abbreviation</th>
+			
+			<th class="table-header">Branches</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="labs_body">
+			
+			{% for obj in labs %}
+				<tr>
+					<td>{{obj.office.abbreviation}}</td>
+					<td>{{obj.lab.the_name}}</td>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.abbreviation}}</td>
+					<td>{% for io in obj.immediateoffice_set.all %}
+						<table><tr><td>{{io.the_name}}</td></tr></table>
+						{% endfor %}</td>
+						
+					<td>{% for d in obj.division_set.all %}
+						<table><tr><td>{{d.abbreviation}}</td></tr></table>
+						{% endfor %}</td>
+
+					<td><a href={% url 'edit_lab' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_lab' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+<div class="col size-9of10">
+{% if objs %}
+
+	<p><h3></h3></p>
+	
+	<table class="example1 table-autosort:8 table-stripeclass:alternate table-autofilter" id="projects_table">
+		<thead id="projects_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Lab</th>
+			<th class="table-sortable:alphanumeric">Division</th>
+			<th class="table-sortable:alphanumeric">Branch</th>
+			<th class="table-sortable:alphanumeric">Asset Number</th>
+			
+			<th class="table-sortable:alphanumeric">Decal Number</th>
+			<th class="table-sortable:alphanumeric">Description 1</th>
+			<th class="table-sortable:alphanumeric">Description 2</th>
+			<th class="table-sortable:alphanumeric">Manufacturer</th>
+			
+			<th class="table-sortable:alphanumeric">Model Number</th>
+			<th class="table-sortable:alphanumeric">Serial Number</th>
+			<th class="table-sortable:alphanumeric">Acquisition Amount</th>
+			<th class="table-sortable:alphanumeric">Acquisition Date</th>
+			
+			<th class="table-sortable:alphanumeric">Purchasing Authority</th>
+			<th class="table-sortable:alphanumeric">Funding Source</th>	
+			<th class="table-sortable:alphanumeric">In Service Date</th>
+			<th class="table-sortable:alphanumeric">Inventory Date</th>
+			
+			<th class="table-sortable:alphanumeric">Building</th>
+			<th class="table-sortable:alphanumeric">Accountable</th>
+			<th class="table-sortable:alphanumeric">Custodial</th>
+			<th class="table-sortable:alphanumeric">Maintenance</th>
+			
+			<th class="table-sortable:alphanumeric">Calibration</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			
+			<th class="table-filterable"></th>
+			<th class="table-header"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			
+			<th class="table-filterable"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="projects_body">
+			
+			{% for obj in objs %}
+				<tr>
+					<td><a href={% url 'show_lab_with_assets' obj.lab.id %}>{{obj.lab.abbreviation}}</a></td>
+					<td>{{obj.division.abbreviation}}</td>
+					<td>{% if obj.branch %}{{obj.branch.abbreviation}}{% else %}TBD{% endif %}</td>
+					<td><a href={% url 'show_asset' obj.building.id %}>{{obj.asset_number }}</a></td>
+					
+					<td>{{obj.decal_number }}</td>
+					<td>{{obj.description_1 }}</td>
+					<td>{{obj.description_2 }}</td>
+					<td><a href={% url 'show_manufacturer' obj.manufacturer.id %}>{{obj.manufacturer.the_name }}</a></td>
+					
+					<td style="width:20px">{{obj.model_number }}</td>
+					<td style="width:20px">{{obj.serial_number }}</td>
+					<td>{{obj.acquisition_amount }}</td>
+					<td>{{obj.acquisition_date|date:'Y-m-d' }}</td>
+					
+					<td>{{obj.purchasing_authority.the_name }}</td>
+					<td style="width:20px">{{obj.funding_source.the_name }}</td>
+					<td>{{obj.in_service_date|date:'Y-m-d' }}</td>
+					<td>{{obj.inventory_date|date:'Y-m-d' }}</td>
+					
+					<td><a href={% url 'show_building' obj.building.id %}>{{obj.building.the_name }}, Room: {{obj.building.room_number}}</a></td>
+					<td>{{obj.accountable_property_officer.the_name }}</td>
+					<td>{{obj.custodial_property_officer.the_name }}</td>
+					<td>TBD</td>
+					
+					<td>TBD</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+{% endblock %}

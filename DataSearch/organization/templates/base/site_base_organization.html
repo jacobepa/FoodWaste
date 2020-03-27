@@ -1,0 +1,39 @@
+{% extends 'base/site_base.html' %}
+{% load staticfiles %}
+{% block content %}
+<style>
+.is_active_checkbox{margin-left:0!important}
+</style>
+<script type="text/javascript">
+    function deleteOrg(url, name){
+        $("<div></div>").appendTo('body')
+           .html('<div><h3>Are you sure you want to delete ' + name +
+                   '? All dependent organizations will also be deleted. This operation cannot be undone!</h3></div>')
+           .dialog({
+                title: "CONFIRM DELETE" ,
+                width:500, height:300,
+                modal:true,
+                resizable: false,
+                show: { effect: 'drop', direction: "left" },
+                hide:{effect:'blind'},
+
+                buttons: {
+                    Delete: function() {
+                         $(location).attr('href', url)
+                     },
+                    Cancel: function() {
+                        $( this ).dialog( "close" );
+                    }
+               }
+           });
+        return false; // so that the href won't try to redirect
+    };
+</script>
+
+<h2>Manage Organizations</h2>
+
+{% block organization_content %}
+{% endblock %}
+
+{% endblock %}
+

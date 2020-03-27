@@ -1,0 +1,157 @@
+{% extends "site_base_audit.html" %}
+{% load humanize %}
+
+{% block content %}
+<h3>Current Selected Lab=>{{lab.abbreviation}} Division=>{{division.abbreviation}} {% if obj.abbreviation %} Branch=>{{obj.abbreviation}}{% endif %}</h3>
+<div class="col-sm-2">
+{% if labs %}
+
+	<p><h3>Labs</h3></p>
+	
+	<table class="example table-autosort:1 table-stripeclass:alternate table-autofilter" id="labs_table">
+		<thead id="labs_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Lab</th>
+			
+
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+
+	  	</tr>
+		</thead>
+	
+		<tbody id="labs_body">
+			
+			{% for obj in labs %}
+				<tr>
+					<td><a href={% url 'list_divisions_for_audit_last_30' obj.id %}>{{obj.abbreviation}}</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+
+<div class="col-sm-2">
+{% if divisions %}
+
+	<p><h3>Divisions</h3></p>
+	
+	<table class="example table-autosort:1 table-stripeclass:alternate table-autofilter" id="divisions_table">
+		<thead id="divisions_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Div</th>
+			
+
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+
+	  	</tr>
+		</thead>
+	
+		<tbody id="divisions_body">
+			
+			{% for obj in divisions %}
+				<tr>
+					<td><a href={% url 'list_branches_for_audit_last_30' obj.id %}>{{obj.abbreviation}}</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+
+
+<div class="col-sm-2">
+{% if branches %}
+
+	<p><h3>Branches</h3></p>
+	
+	<table class="example table-autosort:1 table-stripeclass:alternate table-autofilter" id="branches_table">
+		<thead id="branches_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Branch</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="branches_body">
+			
+			{% for obj in branches %}
+				<tr>
+					<td><a href={% url 'list_branches_for_audit_two_last_30' obj.id %}>{{obj.abbreviation}}</a></td>
+					
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+
+
+<div class="col-sm-12">
+{% if objs %}
+
+	<p><h3>{{the_count}} Audits</h3></p>
+	
+	<table class="example table-autosort:7 table-stripeclass:alternate table-autofilter" id="qlogs_table">
+		<thead id="qlogs_head">
+		<tr>
+			<th class="table-header">Project</th>
+			<th class="table-sortable:alphanumeric">QA ID</th>
+			<th class="table-sortable:alphanumeric">Title</th>
+			<th class="table-sortable:alphanumeric">QA Log No.</th>
+			<th class="table-sortable:alphanumeric">Type</th>
+			
+			<th class="table-sortable:alphanumeric">Received</th>
+			<th class="table-sortable:alphanumeric">Reviewed</th>
+			<th class="table-sortable:alphanumeric">Approved</th>
+
+
+		</tr>
+		<tr>
+			<th class="table-header"></th>
+			<th class="table-filterable"></th>
+			<th class="table-header"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="qlogs_body">
+			
+			{% for obj in objs %}
+				<tr>
+					<td width="200"><a href={% url 'show_project' obj.project.id %}>{{obj.project.title}}</a></td>
+					<td><a href={% url 'show_project' obj.project.id %}>{{obj.project.qa_id}}</a></td>
+					<td width="200">{{obj.title}}</td>
+					<td>{{obj.project_log_type.the_name}}</td>
+					<td><a href={% url 'show_project_log' obj.id %}>{{obj.qa_log_number}}</a></td>
+					<td>{{obj.date_received|date:"Y-m-d"}}</td>
+					<td>{{obj.date_reviewed|date:"Y-m-d"}}</td>
+					<td>{{obj.date_approved|date:"Y-m-d"}}</td>
+
+					
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<p><h3>No Audits Found</h3></p>
+{% endif %}
+</div>
+{% endblock %}

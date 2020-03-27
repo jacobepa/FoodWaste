@@ -1,0 +1,616 @@
+{% extends "site_base_office.html" %}
+{% load humanize %}
+{% block content %}
+
+<div class="col-sm-12">
+		<div class="text-center">
+			<div class="btn-library">
+				<a class="btn btn-md btn-success" href={% url 'create_nrmrl' %} role="button">Create QAPP Req.</a>
+				<a class="btn btn-md btn-success" href={% url 'create_program' %} role="button">Create Program</a>
+				<a class="btn btn-md btn-success" href={% url 'create_project_category' %} role="button">Create Project Category</a>
+				<a class="btn btn-md btn-success" href={% url 'create_project_log_type' %} role="button">Create QA Activity Type</a>
+				<a class="btn btn-md btn-success" href={% url 'create_project_status' %} role="button">Create Project Status</a>
+				<a class="btn btn-md btn-success" href={% url 'create_project_type' %} role="button">Create Project Type</a>
+				<a class="btn btn-md btn-success" href={% url 'create_qa_category' %} role="button">Create QA Category</a>
+				<a class="btn btn-md btn-success" href={% url 'create_qapp_status' %} role="button">Create QAPP Status</a>
+				<a class="btn btn-md btn-success" href={% url 'create_vehicle_type' %} role="button">Create Vehicle Type</a>
+				<a class="btn btn-md btn-success" href={% url 'create_person_status' %} role="button">Create Person Status</a>
+				<a class="btn btn-md btn-success" href={% url 'create_review_type' %} role="button">Create Review Type</a>
+				<a class="btn btn-md btn-success" href={% url 'create_priority' %} role="button">Create Support Priority</a>
+				<a class="btn btn-md btn-success" href={% url 'create_support_type' %} role="button">Create Support Type</a>
+				<a class="btn btn-md btn-success" href={% url 'create_audit_type' %} role="button">Create Audit Type</a>
+				<a class="btn btn-md btn-danger" href={% url 'logout' %} role="button">Logout</a>
+			</div>
+		</div>
+	</div>
+
+
+<div class="col-sm-6">
+{% if nrmrls %}
+
+	<p><h3>QAPP Requirements</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="nrmrls_table">
+		<thead id="nrmrls_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">QAPP Requirement</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="nrmrls_body">
+			
+			{% for obj in nrmrls %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_nrmrl' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_nrmrl' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No QAPP Requirements Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if programs %}
+
+	<p><h3>Programs</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="programs_table">
+		<thead id="programs_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Program</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="programs_body">
+			
+			{% for obj in programs %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_program' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_program' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Programs Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if project_categories %}
+
+	<p><h3>Project Categories</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="project_categories_table">
+		<thead id="project_categories_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="project_categories_body">
+			
+			{% for obj in project_categories %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_project_category' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_project_category' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Project Categories Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if project_log_types %}
+
+	<p><h3>QA Activity (QA Activity) Types</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="project_log_types_table">
+		<thead id="project_log_types_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="project_log_types_body">
+			
+			{% for obj in project_log_types %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_project_log_type' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_project_log_type' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No QA Activity (QA Activity) Types Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if project_statuses %}
+
+	<p><h3>Project Statuses</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="project_statuses_table">
+		<thead id="project_statuses_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="project_statuses_body">
+			
+			{% for obj in project_statuses %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_project_status' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_project_status' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Project Statuses Yet.</td></tr></table>
+{% endif %}
+</div>
+	
+<div class="col-sm-6">
+{% if project_types %}
+
+	<p><h3>Project Types</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="project_types_table">
+		<thead id="project_types_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="project_types_body">
+			
+			{% for obj in project_types %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_project_type' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_project_type' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Project Types Yet.</td></tr></table>
+{% endif %}
+</div>
+
+
+<div class="col-sm-6">
+{% if qa_categories %}
+
+	<p><h3>QA Categories</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="qa_categories_table">
+		<thead id="qa_categories_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Category</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="qa_categories_body">
+			
+			{% for obj in qa_categories %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_qa_category' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_qa_category' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No QA Categories Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if qapp_statuses %}
+
+	<p><h3>QAPP Statuses</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="qapp_statuses_table">
+		<thead id="qapp_statuses_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="qapp_statuses_body">
+			
+			{% for obj in qapp_statuses %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_qapp_status' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_qapp_status' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No QAPP Statuses Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if vehicle_types %}
+
+	<p><h3>Vehicle Types</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="vehicle_types_table">
+		<thead id="vehicle_types_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="vehicle_types_body">
+			
+			{% for obj in vehicle_types %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_vehicle_type' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_vehicle_type' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Vehicle Types Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if person_statuses %}
+
+	<p><h3>Person Status</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="person_statuses_table">
+		<thead id="person_statuses_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="person_statuses_body">
+			
+			{% for obj in person_statuses %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_person_status' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_person_status' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Person Statuses Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if review_types %}
+
+	<p><h3>Review Types</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="review_types_table">
+		<thead id="review_types_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="review_types_body">
+			
+			{% for obj in review_types %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_review_type' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_review_type' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Review Types Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if priorities %}
+
+	<p><h3>Support Priorities</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="priorities_table">
+		<thead id="priorities_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Priority</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="priorities_body">
+			
+			{% for obj in priorities %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_priority' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_priority' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Support Priorities Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if support_types %}
+
+	<p><h3>Support Types</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="support_types_table">
+		<thead id="support_types_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Priority</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="support_types_body">
+			
+			{% for obj in support_types %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_support_type' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_support_type' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Support Types Yet.</td></tr></table>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if audit_types %}
+
+	<p><h3>Finding/Audit Types</h3></p>
+	
+	<table class="example table-autosort:5 table-stripeclass:alternate table-autofilter" id="audit_types_table">
+		<thead id="audit_types_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Is Active</th>
+			
+			<th class="table-header">Edit</th>						
+			<th class="table-header">Show</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>			
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="audit_types_body">
+			
+			{% for obj in audit_types %}
+				<tr>
+					<td>{{obj.the_name}}</td>
+					<td>{{obj.is_active}}</td>
+
+					<td><a href={% url 'edit_audit_type' obj.id %}>Edit</a></td>
+					<td><a href={% url 'show_audit_type' obj.id %}>Show</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Finding/Audit Types Yet.</td></tr></table>
+{% endif %}
+</div>
+{% endblock %}

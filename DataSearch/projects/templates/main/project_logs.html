@@ -1,0 +1,85 @@
+{% extends "base/site_base_qlog.html" %}
+{% load humanize %}
+
+{% block qlog_content %}
+
+<div>
+	{% if objs %}
+	<h3>QA Activity Search Results</h3>
+
+	<h4>Found {{the_count}} QA Activities ({{query_show}})</h4></p>
+	<table class="example table-autosort:9 table-stripeclass:alternate table-autofilter" id="qlogs_table">
+		<thead id="qlogs_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Div</th>
+			<th class="table-sortable:alphanumeric">Br</th>
+			<th class="table-sortable:alphanumeric">Project Lead</th>
+			<th class="table-sortable:alphanumeric">QA Activity POC:</th>
+			<th class="table-sortable:alphanumeric">Reviewer</th>
+			<th class="table-sortable:alphanumeric">Type</th>
+			<th class="table-sortable:alphanumeric">Received</th>
+			<th class="table-sortable:alphanumeric">Reviewed</th>
+			<th class="table-sortable:alphanumeric">Approved</th>
+			<th class="table-sortable:alphanumeric">Title</th>
+
+			<th class="table-sortable:alphanumeric">Project</th>
+
+			<th class="table-header">Show</th>
+			<th class="table-header">PDF</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+
+			<th class="table-header"></th>
+			<th class="table-header"></th>
+		</tr>
+
+		</thead>
+
+		<tbody id="qlogs_body">
+
+		{% for obj in objs %}
+		<tr>
+			<td>{{obj.division.abbreviation}}</td>
+			<td>{{obj.branch.abbreviation}}</td>
+			<td>{{obj.project.person.last_name}}, {{obj.project.person.first_name}}</td>
+			<td>{{obj.technical_lead.last_name}}, {{obj.technical_lead.first_name}}</td>
+			<td>{{obj.reviewer.last_name}}, {{obj.reviewer.first_name}}</td>
+			<td>{{obj.project_log_type.the_name}}</td>
+			<td>{{obj.date_received|date:"Y-m-d"}}</td>
+			<td>{{obj.date_reviewed|date:"Y-m-d"}}</td>
+			<td>{{obj.date_approved|date:"Y-m-d"}}</td>
+			<td width="200">{{obj.title}}</td>
+
+			<td><a href={% url 'show_project' obj.project.id %}>{{obj.project.qa_id}}</a></td>
+			<td><a href={% url 'show_project_log' obj.id %}>Show</a></td>
+			<td><a href={% url 'pdf_qlog' obj.id %}>PDF</a></td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	{% else %}
+	<h3>QA Activities</h3>
+	<div>
+		In the 'QA Activities' section of QA Track, you can manage QA Activities that are associated
+		with a project.  QA Activities include products, QAPPs, audits, and other activities related
+		to the QA process.
+	</div>
+	<div>
+		Select an option from the "QA Activity Actions" box to begin.
+	</div>
+
+	{% endif %}
+</div>
+{% endblock %}

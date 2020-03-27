@@ -1,0 +1,98 @@
+{% extends "base/site_base_project.html" %}
+{% block project_content %}
+<h3>Create a Program</h3>
+<div>
+    Enter the program name and status below, and then click the "Create" button to continue.
+    Fields marked with an asterisk are required.
+</div>
+<br>
+</br>
+<div>
+    Please ensure that your program does not already exist by checking the search list below. As you type text into the
+    Program field, the list will be filtered to show entries that match what you have typed.
+</div>
+
+<div>
+    {{ form.non_field_errors }}
+    <div class="alert">{{error_message}}</div>
+</div>
+<form class="form-horizontal" enctype="multipart/form-data" method="post" action="." role="form" novalidate>
+
+    {% csrf_token %}
+
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <h5>Please correct the following errors</h5>
+        {% for field in form %}
+        {% if field.errors %}
+        <div>{{field.label_tag}} {{ field.errors|striptags }}</div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success">
+        The progam has been created. <span class="glyphicon glyphicon-ok"></span>
+    </div>
+    {% endif %}
+
+    <div id="program_list">
+
+        {% for field in form %}
+        <div class="form-group">
+            <label class="col-sm-2 control-label">
+                <div>{{field.label_tag}}</div>
+                <div class="help-block">{{field.help_text}}</div>
+            </label>
+            <div class="col-sm-10">
+                {{field}}
+                {% if field.errors %}<div class="alert alert-danger">{{field.errors.as_text}}</div>{% endif %}
+            </div>
+
+
+        </div>
+        {% endfor %}
+        <div class="form-group">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-10">
+                <input type="submit" value="Create" class="btn btn-success">
+            </div>
+        </div>
+
+
+        <div>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Existing Program Names</th>
+                    <th>Projects Within Program</th>
+                </tr>
+                <tbody class="list">
+                    {% for program in programs %}
+                    <tr>
+                        <td class="name">{{program.the_name}}</td>
+                        <td class="count">{{program.project_set.count}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+//    $(".chosen-select").chosen({});
+    var options = {
+        valueNames: [ 'name']
+    };
+
+    var programList = new List('program_list', options);
+</script>
+
+
+
+{% endblock %}
+
+
+
+
+

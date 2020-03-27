@@ -1,0 +1,125 @@
+{% extends "base/site_base_organization.html" %}
+{% load humanize %}
+
+{% block organization_content %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'office_list' %}">EPA</a></li>
+    <li><a href="{% url 'office_show' office.id %}">{{office.abbreviation}}</a></li>
+    {% if lab %}
+    <li>{{lab.abbreviation}}</li>
+    {% endif %}
+</ol>
+{% if lab %}
+<h3>{{lab.abbreviation}} - {{lab.lab}}</h3>
+{% else %}
+<h3>Create Center</h3>
+{% endif %}
+
+{% if error_message %}<div class="alert alert-danger">{{error_message}}</div>{% endif %}
+
+{% if success %}
+    <div class="alert alert-success">
+        The Center has been updated. <span class="glyphicon glyphicon-ok"></span>
+    </div>
+{% endif %}
+
+{% if form.errors %}
+<div class="alert alert-danger">
+    <h5>Please correct the following errors</h5>
+    {% for field in form %}
+    {% if field.errors %}
+    <div>{{field.label_tag}} {{ field.errors|striptags }}</div>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+
+<form class="form-horizontal" method="post" action=".">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            <div>{{field.label_tag}}</div>
+            <div class="help-block">{{field.help_text}}</div>
+        </label>
+        <div class="col-sm-10 {%if field.name == "is_active"%}checkbox{%endif%}">
+            {{field}}
+        </div>
+    </div>
+    {% endfor %}
+    <div class="form-group">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            {% if is_editing %}
+            <button class="btn btn-success">Save</button>
+            {% if lab %}
+            <a class="btn btn-warning" href="{% url 'lab_show' lab.id %}">Cancel</a>
+            {% endif %}
+            {% else %}
+            <a class="btn btn-success" href="{% url 'lab_edit' lab.id %}">Edit</a>
+            <a class="btn btn-success" href="{% url 'division_create' lab.id %}">Create a new Division</a>
+            {% endif %}
+        </div>
+    </div>
+    {% if lab %}
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            <div>Associated Divisions:</div>
+        </label>
+        <div class="col-sm-10">
+            {% if division_list %}
+            <table class="table table-bordered table-autosort:0">
+                <thead>
+                    <tr>
+                        <th class="table-sortable:alphanumeric">Name</th>
+                        <th class="table-sortable:alphanumeric">Abbreviation</th>
+                        <th class="table-sortable:alphanumeric">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for division in division_list %}
+                    <tr>
+                        <td><a href="{% url 'division_show' division.id %}"> {{division.division}}</a></td>
+                        <td>{{division.abbreviation}}</td>
+                        <td>
+                            {% if division.is_active %}
+                            Active
+                            {% else %}
+                            Inactive
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if division.is_active %}
+                            <a href="{% url 'division_toggle_active' division.id %}">Change to Inactive</a><br/>
+                            {% else %}
+                            <a href="{% url 'division_toggle_active' division.id %}">Change to Active</a><br/>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-success" href="{% url 'division_create' lab.id %}">Create a new division</a>
+            {% else %}
+            <br><br>
+            <h5>This organization has no associated divisions.</h5>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</form>
+<script>
+$(document).ready(function(){
+    {% if is_editing == True %}
+    $('.jasc-user-select').asyncSelect({
+        url: '/api/dropdown_users',
+        displayValue:function(item){ return item.last_name + ", " + item.first_name + ' (' + item.email + ')' }
+    })
+    {% endif %}
+})
+</script>
+
+
+{% endblock %}

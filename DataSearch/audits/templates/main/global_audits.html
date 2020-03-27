@@ -1,0 +1,105 @@
+{% extends "site_base_audit.html" %}
+{% load humanize %}
+
+{% block content %}
+<h3>Current Selected Lab=>{{lab.abbreviation}} Division=>{{division.abbreviation}} {% if obj.abbreviation %} Branch=>{{obj.abbreviation}}{% endif %}</h3>
+<div class="col-sm-4">
+{% if labs %}
+
+	<p><h3>Labs</h3></p>
+	
+	<table class="example table-autosort:1 table-stripeclass:alternate table-autofilter" id="labs_table">
+		<thead id="labs_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Lab</th>
+			<th class="table-header">Create QA Finding For Lab</th>
+			
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-header"></th>
+	  	</tr>
+		</thead>
+	
+		<tbody id="labs_body">
+			
+			{% for obj in labs %}
+				<tr>
+					<td><a href={% url 'list_divisions_for_global_audit' obj.id %}>{{obj.abbreviation}}</a></td>
+					<td><a href={% url 'create_global_audit_for_lab' obj.id %}>Create QA Finding For Lab</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+
+<div class="col-sm-4">
+{% if divisions %}
+
+	<p><h3>Divisions</h3></p>
+	
+	<table class="example table-autosort:1 table-stripeclass:alternate table-autofilter" id="divisions_table">
+		<thead id="divisions_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Div</th>
+			
+			<th class="table-header">Create QA Finding For Division</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-header"></th>
+	  	</tr>
+		</thead>
+	
+		<tbody id="divisions_body">
+			
+			{% for obj in divisions %}
+				<tr>
+					<td><a href={% url 'list_branches_for_global_audit' obj.id %}>{{obj.abbreviation}}</a></td>
+					<td><a href={% url 'create_global_audit_for_division' obj.lab.id obj.id %}>Create QA Finding For Division</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+
+
+<div class="col-sm-4">
+{% if branches %}
+
+	<p><h3>Branches</h3></p>
+	
+	<table class="example table-autosort:1 table-stripeclass:alternate table-autofilter" id="branches_table">
+		<thead id="branches_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">Branch</th>
+			<th class="table-header">Create QA Finding For Branch</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-header"></th>
+	  	</tr>
+		
+		</thead>
+	
+		<tbody id="branches_body">
+			
+			{% for obj in branches %}
+				<tr>
+					<td><a href={% url 'list_branches_for_global_audit' obj.id %}>{{obj.abbreviation}}</a></td>
+					<td><a href={% url 'create_global_audit_for_branch' obj.lab.id obj.division.id obj.id %}>Create QA Finding For Branch</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+{% endif %}
+</div>
+
+
+
+{% endblock %}

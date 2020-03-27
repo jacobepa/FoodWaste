@@ -1,0 +1,40 @@
+[
+{
+  "fields": {
+    "created": "2014-05-18T12:22:31.852Z",
+    "ordering": "1.0",
+    "created_by": "don",
+    "modified": "2014-05-18T12:32:58.750Z",
+    "last_modified_by": "don",
+    "weblink": "http://www2.epa.gov/epa-research",
+    "abbreviation": "ORD",
+    "the_name": "Office of Research and Development",
+    "user": [
+      "don"
+    ],
+    "the_description": "Research in Air, Chemical Safety, Climate Change, Ecosystems, Health, Homeland Security, Human Health Risk Assessment, Land and Waste Management, Sustainability, and Water",
+    "attachment": ""
+  },
+  "model": "offices.office",
+  "pk": 1
+},
+{
+  "fields": {
+    "created": "2015-09-01T17:19:55.467Z",
+    "ordering": "7.0",
+    "created_by": "dyoung11",
+    "modified": "2015-09-01T17:19:55.467Z",
+    "last_modified_by": "dyoung11",
+    "weblink": "http://intranet.ord.epa.gov/about/organization/osim",
+    "abbreviation": "OSIM",
+    "the_name": " Office of Science Information Management",
+    "user": [
+      "dyoung11"
+    ],
+    "the_description": "The Office of Science Information Management (OSIM) can help scientists, managers, and administrative staff address their information management (IM) and information technology (IT) needs. OSIM has wide-ranging expertise and is located in most of ORD's labs, centers, and offices.\r\n\r\nIn partnership with EPA' s Office of Environmental Information (OEI), OSIM helps support: \r\n\r\n    applications development and maintenance\r\n    information management\r\n    information technology\r\n    program management\r\n",
+    "attachment": ""
+  },
+  "model": "offices.office",
+  "pk": 3
+}
+]

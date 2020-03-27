@@ -1,0 +1,17 @@
+This is an automated email notification from ORD QA TRACK to alert you to do an annual review of the Quality Assurance Project Plan (QAPP) listed above. You are receiving this email because you are listed as the Point of Contact for this QAPP. The current project QA Manager is cc'd on this email. The Project Lead needs to review the QAPP and decide if the QAPP is still current, needs to be revised/updated, or is no longer in use and should be archived.
+
+Please use this email to inform your QA Manager about the status of the QAPP requiring the annual review, as follows:
+
+1. Click on "Forward" from the action buttons at the top of this email.
+2. Move to the "To:" field and enter the name of your QA Manager.
+3. Put your cursor back in the area of the original email.
+4. Type an "X" in the column with the most appropriate response for the QAPP.
+5. Click on "Send."
+
+List of Responses
+[  ] I have reviewed the QAPP and no revisions are necessary.  [Project Status: Active; QAPP Status: Approved]
+[  ] I have reviewed the QAPP and will provide you with a revision.  [Project Status: Active; QAPP Status: In Revision]
+[  ] QAPP no longer in use, data collection has been completed, but products are being prepared.  [Project Status: Inactive]
+[  ] QAPP no longer in use, data collection and analysis have been completed, and all expected products have been completed.  [Project Status: Archived]
+
+If the review is not complete by the 15th of the following month, you will receive another reminder. If you have any questions, please contact your QA Manager. Thank you.

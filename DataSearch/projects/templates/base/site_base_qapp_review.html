@@ -1,0 +1,34 @@
+{% extends 'base/site_base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Annual QAPP Review Actions<br><br>
+                <span style="font-size:smaller">
+                Projects are listed as needing review if the following conditions are met:<br><br>
+                    <ul>
+                        <li>Project Status = active</li>
+                        <li>QAPP Status = QAPP Approved</li>
+                        <li>Project must have either a QAPP Approval Date or a Latest Annual QAPP Review Date</li>
+                        <li>Project's Latest Annual QAPP Review Date is over a year ago OR if that field is blank, the QAPP Approval Date must be over a year ago</li>
+                        <li>Project's most recent QAPP activity must have an Approval Date</li>
+                    </ul>
+                </span>
+            </div>
+            <div class="list-group">
+{#                <a class="list-group-item" href="{% url 'list_annual_qapp_review_user' %}">Show My Projects Needing Review</a>#}
+{#                <a class="list-group-item" href="{% url 'list_annual_qapp_review' %}">Show All Projects Needing Review</a>#}
+                <a class="list-group-item" href="{% url 'search_qapp_annual_review' %}">View Projects Needing Review</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        {% block qapp_review_content %}
+        {% endblock %}
+    </div>
+</div>
+
+{% endblock %}
+

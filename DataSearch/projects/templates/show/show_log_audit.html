@@ -1,0 +1,518 @@
+{% extends "base/site_base_qlog_show.html" %}
+{% load humanize %}
+
+{% block qlog_content %}
+<script>
+        $(document).ready(function () {
+            var ul = $('#upload ul');
+            // Change this to the location of your server-side upload handler:
+            var url = '/projects/qlog/file/upload/{{obj.id}}/';
+
+            $('#drop a').click(function(){
+                // Simulate a click on the file input button
+                // to show the file browser dialog
+                $(this).parent().find('input').click();
+            });
+
+            // Initialize the jQuery File Upload plugin
+            $('#upload').fileupload({
+                // This element will accept file drag/drop uploading
+                dropZone: $('#drop'),
+
+                // This function is called when a file is added to the queue;
+                // either via the browse button, or via drag/drop:
+                add: function (e, data) {
+
+
+                var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
+                ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
+
+                // Append the file name and file size
+                tpl.find('p').text(data.files[0].name)
+                         .append('<i>' + formatFileSize(data.files[0].size) + '</i>');
+
+                // Add the HTML to the UL element
+                data.context = tpl.appendTo(ul);
+
+                // Initialize the knob plugin
+                tpl.find('input').knob();
+
+                // Listen for clicks on the cancel icon
+                tpl.find('span').click(function(){
+
+                if(tpl.hasClass('working')){
+                    jqXHR.abort();
+                }
+
+                tpl.fadeOut(function(){
+                    tpl.remove();
+                });
+
+            });
+
+            // Automatically upload the file once it is added to the queue
+            var jqXHR = data.submit();
+        },
+
+
+      progress: function(e, data){
+
+            // Calculate the completion percentage of the upload
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+
+            // Update the hidden input field and trigger a change
+            // so that the jQuery knob plugin knows to update the dial
+            data.context.find('input').val(progress).change();
+
+            if(progress == 100){
+                data.context.removeClass('working');
+            }
+        },
+
+        fail:function(e, data){
+            // Something has gone wrong!
+            data.context.addClass('error');
+        }
+
+    });
+
+    // Prevent the default action when a file is dropped on the window
+    $(document).on('drop dragover', function (e) {
+        e.preventDefault();
+    });
+
+    // Helper function that formats the file sizes
+    function formatFileSize(bytes) {
+        if (typeof bytes !== 'number') {
+            return '';
+        }
+
+        if (bytes >= 1000000000) {
+            return (bytes / 1000000000).toFixed(2) + ' GB';
+        }
+
+        if (bytes >= 1000000) {
+            return (bytes / 1000000).toFixed(2) + ' MB';
+        }
+
+        return (bytes / 1000).toFixed(2) + ' KB';
+    }
+
+    var cancel = function(){
+        $("#id_file_upload").dialog("close");
+    };
+
+    var dialogOpts = {
+        modal : true,
+        title: "Upload Attachments",
+        closeOnEscape : true,
+        buttons : {
+            "Cancel" : cancel
+        },
+        autoOpen : false
+    };
+
+    $('#id_file_upload').dialog(dialogOpts);
+    $('#id_upload_btn').on('click', function(){
+        $("#id_file_upload").dialog("open");
+    });
+
+});
+</script>
+
+<h3>QA Activity</h3>
+
+<form class="form-horizontal" method="post" action=".">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Project Lead</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{{obj.project.person.last_name}}, {{obj.project.person.first_name}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">QA Activity POC</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{{obj.technical_lead.last_name}}, {{obj.technical_lead.first_name}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Office</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{{obj.division.office.abbreviation}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Center</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{{obj.division.lab.abbreviation}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Division</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{{obj.division.abbreviation}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Branch</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{{obj.branch.abbreviation}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Reviewer</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{{obj.reviewer.last_name}}, {{obj.reviewer.first_name}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Project Title</label>
+        <div class="col-sm-9">
+			<textarea class="form-control" type="text" disabled >{{obj.project.title}}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Comments</label>
+        <div class="col-sm-9">
+			<textarea class="form-control" type="text" disabled >
+                {{obj.the_description}}
+            </textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Project QA ID</label>
+        <div class="col-sm-9">
+            {% if obj.project.qa_id %}
+            <a class="form-control" href="{% url 'show_project' obj.project.id %}">
+                {{obj.project.qa_id}}
+            </a>
+            {% else %}
+            No Project Number
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">QA Activity Number</label>
+        <div class="col-sm-9">
+            <a class="form-control"
+               href="{% url 'edit_project_log' obj.id %}">{{obj.qa_log_number}}</a>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">QA Activity</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{{obj.project_log_type.the_name}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Review Recommendation</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{% if obj.review_type.the_name %}{{obj.review_type.the_name}}{% else %}NA{% endif %}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">QA Activity Title</label>
+        <div class="col-sm-9">
+            <textarea class="form-control" type="text" disabled>{% if obj.title %}{{obj.title}}{% else %}NA{% endif %}"</textarea>
+        </div>
+    </div>
+
+
+
+    <!--- XXXX -->
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Number of findings</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value="{% if obj.number_of_finding %}{{obj.number_of_finding}}{% else %}NA{% endif %}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+		<label class="col-sm-3 control-label">Date Review Requested</label>
+		<div class="col-sm-9">
+			<input class="form-control" type="text" disabled
+				   value='{% if obj.date_review_requested %}{{obj.date_review_requested|date:"Y-m-d"}}{% else %}NA{% endif %}'/>
+		</div>
+	</div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Date Received</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value='{% if obj.date_received %}{{obj.date_received|date:"Y-m-d"}}{% else %}NA{% endif %}'/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Date Reviewed</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value='{% if obj.date_reviewed %}{{obj.date_reviewed|date:"Y-m-d"}}{% else %}NA{% endif %}'/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Date Approved</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value='{% if obj.date_approved %}{{obj.date_approved|date:"Y-m-d"}}{% else %}NA{% endif %}'/>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Date of Audit</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value='{% if obj.audit_date %}{{obj.audit_date|date:"Y-m-d"}}{% else %}NA{% endif %}'/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Audit Type</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value='{{obj.audit_type.the_name}}'/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Audit Location</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value='{{obj.audit_location}}'/>
+        </div>
+    </div>
+
+    {% if obj.software_status %}
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Software Status</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value='{{obj.software_status}}'/>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if obj.organization %}
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Organization Audited</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" disabled
+                   value='{{obj.organization}}'/>
+        </div>
+    </div>
+
+    {% endif %}
+
+    <div class="form-group">
+        <label title="URLs to related projects in QA Track and/or any associated project websites can be entered here. Separate multiple links with a space." class="col-sm-3 control-label">[?] Links</label>
+        <div class="col-sm-9">
+            {% if weblinks_list %}
+            {% for url in weblinks_list %}
+            <a class="form-control" href="{{url}}">
+                <span class="text-blue-link">{{url}}</span>
+            </a>
+            {% endfor %}
+            {% else %}
+            <input type="text" disabled class="form-control">
+            {% endif %}
+        </div>
+    </div>
+
+    <p>
+    <h3 title="Click to expand/collapse. This table displays a log of each time any of the following fields are updated: Date Approved, Review Recommendation, QA Activity POC, Reviewer; or if the user enters a comment for the Update History; or if the user creates or edits the QA activity review."><a href="#project_updatehistory_div" data-toggle="collapse">Update History [?]</a></h3>
+      </p>
+
+    <div id="project_updatehistory_div" class="collapse" style="padding-bottom:20px;">
+    <table class="example table-autosort:6 table-stripeclass:alternate table-autofilter" id="projectlog_update_history_table">
+      <thead id="projectlog_update_history_head">
+      <tr>
+          <th class="table-header">Date Approved</th>
+          <th class="table-header">Review Recommendation</th>
+          <th class="table-header">QA Activity POC</th>
+          <th class="table-header">Reviewer</th>
+          <th class="table-header">Comment</th>
+          <th class="table-header">Updated By</th>
+          <th class="table-header">Date Updated</th>
+      </tr>
+      </thead>
+
+      <tbody id="projeclot_update_history_body">
+        {% for obj in projectlog_update_history %}
+      <tr>
+          <td>{{obj.date_approved|date:"Y-m-d"}}</td>
+          <td>{{obj.review_type.the_name}}</td>
+          <td>{{obj.technical_lead.last_name}}, {{obj.technical_lead.first_name}}</td>
+          <td>{{obj.reviewer.last_name}}, {{obj.reviewer.first_name}}</td>
+          <td style="text-align: left">{{obj.comments}}</td>
+          {% if obj.user %}
+          <td>{{obj.user.last_name}}, {{obj.user.first_name}}</td>
+          {% else %}
+          <td>QA Track</td>
+          {% endif %}
+          <td>{{obj.created|date:"Y-m-d"}}</td>
+
+      </tr>
+      {% endfor %}
+
+      </tbody>
+  </table>
+    </div>
+
+</form>
+
+
+
+<div class="vmargin20">
+    {% if project_attachments %}
+    <a id="attachments"></a>
+    <h3 title="Click to expand/collapse."><a href="#project_activityfiles_div" data-toggle="collapse">QA Activity Files [?]</a></h3>
+    {% if expand_files %}
+    <div id="project_activityfiles_div" class="collapse in" style="padding-bottom:20px;">
+    {% else %}
+    <div id="project_activityfiles_div" class="collapse" style="padding-bottom:20px;">
+    {% endif %}
+
+    <table class="example table-autosort:11 table-stripeclass:alternate table-autofilter" id="project_attachments_table">
+        <thead id="project_attachments_head">
+        <tr>
+            <th class="table-sortable:alphanumeric">Image</th>
+            <th class="table-sortable:alphanumeric">Filename  ({{project_attachments.count}})</th>
+            <th class="table-sortable:alphanumeric">QA Activity ID</th>
+
+            <th class="table-header">Delete</th>
+        </tr>
+        <tr>
+            <th class="table-header"></th>
+            <th class="table-filterable"></th>
+            <th class="table-filterable"></th>
+
+            <th class="table-header"></th>
+        </tr>
+
+        </thead>
+
+        <tbody id="project_attachments_body">
+
+        {% for obj in project_attachments %}
+        <tr>
+            <td><img src="{{obj.icon_to_use}}" height="50px" width="50px"></td>
+            <td class='filename_td'><a href="{{MEDIA_URL}}{{obj.attachment|urlencode}}">{{obj.the_name}}</a></td>
+            <td>{{obj.project_log.qa_log_number}}</td>
+
+            <td><a href={% url 'delete_project_attachment_log' obj.id %}>Delete</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    {% endif %}
+</div>
+
+{% if obj.id %}
+<div id="id_file_upload" class="">
+
+    <form id="upload" method="post"action={% url 'file_upload_project_log' obj.id %} enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <div id="drop">
+        Drop Files ONLY Here
+
+        <a>Browse</a>
+        <input type="file" name="upl" multiple />
+    </div>
+    <ul>
+        <!-- The file uploads will be shown here -->
+    </ul>
+    <button type="submit" class="btn btn-primary start">
+        <span>Finish</span>
+    </button>
+
+    </form>
+</div>
+<form class="form-horizontal" method="get" action="{% url 'edit_review' obj.id %}">
+	<div class="form-group">
+		<div class="col-sm-4"></div>
+		<div class="col-sm-8">
+			<input class="btn btn-success" type="submit"
+				   value="{% if has_review %}Edit{% else %}Create{% endif %} QA Review" name="start" class="button">
+            <a id="id_upload_btn" class="btn btn-warning">Attach Files</a>
+		</div>
+	</div>
+</form>
+{% endif %}
+
+<div class="">
+    {% if qa_reviews %}
+
+    <p><h3>{{qa_reviews_count}} QA Reviews</h3></p>
+
+    <table class="example table-autosort:9 table-stripeclass:alternate table-autofilter" id="qa_reviews_table">
+        <thead id="qa_reviews_head">
+        <tr>
+            <th class="table-sortable:alphanumeric">Reviewer Last</th>
+            <th class="table-sortable:alphanumeric">Reviewer First</th>
+            <th class="table-sortable:date">Date Reviewed</th>
+            <th class="table-sortable:date">Date Approved</th>
+            <th class="table-sortable:alphanumeric">QA Activity</th>
+
+            <th class="table-sortable:alphanumeric">Comments</th>
+        </tr>
+        <tr>
+            <th class="table-filterable"></th>
+            <th class="table-filterable"></th>
+            <th class="table-filterable"></th>
+            <th class="table-filterable"></th>
+
+            <th class="table-filterable"></th>
+        </tr>
+
+        </thead>
+
+        <tbody id="qlogs_body">
+
+        {% for obj in qa_reviews %}
+        <tr>
+            <td>{{obj.reviewer.last_name}}</td>
+            <td>{{obj.reviewer.first_name}}</td>
+            <td>{{obj.date_reviewed|date:"Y-m-d"}}</td>
+            <td>{{obj.date_approved|date:"Y-m-d"}}</td>
+            <td>{{obj.review_type.the_name}}</td>
+            <td>{{obj.recommendation}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+{% endblock %}

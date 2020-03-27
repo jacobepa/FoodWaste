@@ -1,0 +1,79 @@
+{% extends 'base/site_base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Project Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_project' %}">Search existing projects</a>
+                <a class="list-group-item" href="{% url 'search_project_dbissue' %}">Search projects with database completeness issues</a>
+                <a class="list-group-item" href="{% url 'search_project_seplead' %}">&nbsp;&nbsp;&nbsp;&nbsp;Search projects with separated project lead only</a>
+                <a class="list-group-item" href="{% url 'show_project_tree' %}">Listing of projects by organization</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_project' %}">Create a project</a>
+                {% endif %}
+
+                {% if obj.id %}
+                    {% if not lab_list %}
+                        {% if kwargs.allow_edit %}
+                            <a class="list-group-item" href="{% url 'edit_project' obj.id %}">Edit this project</a>
+                            <a class="list-group-item" href="{% url 'create_project_log_no_tlp' obj.id %}">Add QA Activity to this project</a>
+                            <div title="Click to create an SOP for this project. The form will be auto-populated with the project as well as the organization information UNLESS this project belongs to an inactive organization. Inactive organizations must be manually entered."><a class="list-group-item" href="{% url 'create_sop_tab_item' obj.id %}">Add SOP to this project [?]</a></div>
+                            <div title="Click to create an Audit for this project. The form will be auto-populated with the project as well as the organization information UNLESS this project belongs to an inactive organization. Inactive organizations must be manually entered."><a class="list-group-item" href="{% url 'create_audits_tab_item' obj.id %}">Add Audit to this project [?]</a></div>
+                            <a class="list-group-item" href="{% url 'link_organization_proj' obj.id %}">Link ORD Organization to this project</a>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+
+        </div>
+        <div class="panel panel-primary">
+            <div class = "panel-heading">Program Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_program' %}">Search existing programs</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_program' %}">Create a program</a>
+                    {% if program.id %}
+                        <a class="list-group-item" href="{% url 'edit_program' program.id %}">Edit this program</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <!--<div class="panel panel-primary">
+            <div class = "panel-heading">Extramural Vehicle Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_vehicle' %}">Search existing extramural vehicles</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_vehicle' %}">Create an extramural vehicle</a>
+                    {% if vehicle.id %}
+                        <a class="list-group-item" href="{% url 'edit_vehicle' vehicle.id %}">Edit this extramural vehicle</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>-->
+
+        <div class="panel panel-primary">
+            <div class = "panel-heading">EPA Non-ORD Organization Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_participating_organization' %}">Search existing EPA non-ORD organizations</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_participating_organization' %}">Create an EPA non-ORD organization</a>
+                    {% if organization.id %}
+                        <a class="list-group-item" href="{% url 'edit_participating_organization' organization.id %}">Edit this EPA non-ORD organization</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        {% block project_content %}
+        {% endblock %}
+    </div>
+</div>
+
+
+
+{% endblock %}

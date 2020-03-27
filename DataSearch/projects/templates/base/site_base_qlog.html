@@ -1,0 +1,27 @@
+{% extends 'base/site_base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">QA Activity Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_project_log' %}">Search existing QA Activities</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_project_log_no_project' %}">Create a QA Activity</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        {% block qlog_content %}
+         (Products, QAPPs, Audits)
+        {% endblock %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+

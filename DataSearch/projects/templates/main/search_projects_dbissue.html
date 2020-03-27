@@ -1,0 +1,89 @@
+{% extends "base/site_base_project.html" %}
+{% load humanize %}
+
+{% block project_content %}
+<h3>Search Projects with Database Completeness Issues</h3>
+<div>
+    Use this search to find projects that may need an approved QAPP. The search ignores projects that have a QAPP Status of:
+    <p><br>
+    <ul>
+    <li>QAPP Not Required</li>
+    <li>ORD does not have QA Lead</li>
+    <li>Implementing Existing Approved QAPP</li>
+    </ul>
+    <p><br>
+    The search looks for the following:
+    <p><br>
+    <ul>
+        <li>A QAPP activity</li>
+        <li>A Review Recommendation of Approved or Approved with minor revisions.</li>
+        <li>Date Approved</li>
+        <li>A Word file identified as the Latest Approved QAPP</li>
+        <li>A PDF file identified as the Latest Approved QAPP</li>
+    </ul>
+    <p><br>
+    The search will also alert you to the need for a new Project Lead if the Project Lead is no longer an EPA employee. Use the "Search projects with separated project lead only" to search for this issue regardless of QAPP status.
+    <p><br>
+
+    To search for projects, select an organization, then click the "Search" button.
+</div>
+<div class="vmargin20">
+    <form class="form-horizontal" action="{% url 'result_search_project_dbissue' %}" method="get">
+
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-1">
+                <input type="submit" value="Search" name="start" class="btn btn-md btn-success">
+            </div>
+            <label class="col-sm-2 control-label" title="To select multiple statuses, use Ctrl-click.">[?] Project Status</label>
+            <div class="col-sm-5">
+                <select class="form-control"  multiple="multiple" size=4 style="height: 100%;" name="project_status" value="{{project_status}}">
+                    {% for instance in project_statuses %}
+                    <option {% if instance.id == selected_status.id %}selected{% endif%} value="{{instance.id}}">
+                        {{instance.the_name}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                Organization
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="id_org">
+            {% include 'organization_select.html' %}
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Export Results To Excel</label>
+            <div class="col-sm-8">
+                <label class="radio-inline"><input type="radio" id="bottom_Y" name="excel" value="Y" onclick="excelClick(this)">Yes</label>
+                <label class="radio-inline active"><input type="radio" id="bottom_N" name="excel" value="N" checked="" onclick="excelClick(this)">No</label>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    function excelClick(radio){
+       var target_id = '';
+
+        if (radio.name === 'excel'){
+            target_id = 'bottom_'
+        } else if (radio.name === 'excel2'){
+            target_id = 'top_'
+        }
+        else {
+            return;
+        }
+
+        target_id += radio.value;
+
+        $('#' + target_id).prop('checked', true);
+    }
+</script>
+
+{% endblock %}

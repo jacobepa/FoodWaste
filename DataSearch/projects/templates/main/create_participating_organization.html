@@ -1,0 +1,92 @@
+{% extends "base/site_base_project.html" %}
+{% block project_content %}
+<h3>Create an EPA Non-ORD Organization</h3>
+<div>
+    <p>Enter the EPA non-ORD organization information below, and then click the "Create" button to continue.
+    Fields marked with an asterisk are required.</p>
+    <br/>
+    <p>Please ensure that your EPA non-ORD organization does not already exist by checking the search list below. As you type text into the
+    Organization Name field, the list will be filtered to show entries that match what you have typed.</p>
+</div>
+<div>
+    {{ form.non_field_errors }}
+    <div class="alert">{{error_message}}</div>
+</div>
+<form class="form-horizontal" enctype="multipart/form-data" method="post" action="." role="form" novalidate>
+
+    {% csrf_token %}
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <h5>Please correct the following errors</h5>
+        {% for field in form %}
+        {% if field.errors %}
+        <div>{{field.label_tag}} {{ field.errors|striptags }}</div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+     {% if success %}
+    <div class="alert alert-success">
+        The EPA non-ORD organization has been created. <span class="glyphicon glyphicon-ok"></span>
+    </div>
+    {% endif %}
+
+    <div id="participating_org_list">
+    {% for field in form %}
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            {% if field.help_text %}
+            <div title="{{field.help_text}}">[?] {{field.label_tag}}</div>
+            {% else %}
+            <div>{{field.label_tag}}</div>
+            {% endif %}
+
+        </label>
+        <div class="col-sm-9">
+            {{field}}
+            {% if field.errors %}<div class="alert alert-danger">{{field.errors.as_text}}</div>{% endif %}
+        </div>
+
+
+    </div>
+
+
+    {% endfor %}
+    <div class="form-group">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9">
+            <input type="submit" value="Create" class="btn btn-success">
+        </div>
+    </div>
+
+    <h4>Existing EPA Non-ORD Organizations</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Organization</th>
+                    <th>Total Projects</th>
+                </tr>
+                <tbody class="list">
+                {% for participating_organization in participating_organizations %}
+                <tr>
+                    <td class="name">
+                        <a href="{% url 'show_participating_organization' participating_organization.id %}">
+                            {{participating_organization.company}}
+                        </a>
+                    </td>
+                    <td class="count">{{participating_organization.project_set.count}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+</form>
+
+<script type="text/javascript">
+    var options = {
+        valueNames: [ 'name']
+    };
+
+    var participating_org_list = new List('participating_org_list', options);
+</script>
+
+{% endblock %}

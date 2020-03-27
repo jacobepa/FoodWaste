@@ -1,0 +1,214 @@
+{% extends "base/site_base_qlog.html" %}
+{% block qlog_content %}
+{% load staticfiles %}
+<h3>Create a QA Activity for project '{{project.title}}'</h3>
+<p>
+    Enter the QA Activity information below, and then click the "Create" button. Fields marked with an asterisk are
+    required. Existing QA Activities for this project are displayed at the bottom of the page.
+</p>
+
+<form class="form-horizontal" enctype="multipart/form-data" method="post" action="." role="form" novalidate>
+
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% if error_message %}
+    <div class="alert-danger">{{error_message}}</div>
+    {% endif %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <h5>Please correct the following errors</h5>
+            {% for field in form %}
+            {% if field.errors %}
+            <div>{{field.label_tag}} {{ field.errors|striptags }}</div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+    <div class="form-group">
+        <label class="col-sm-4 control-label">
+            {% if form.project_log_type.help_text %}
+            <div title="{{form.project_log_type.help_text}}">[?] {{form.project_log_type.label_tag}}</div>
+            {% else %}
+            <div>{{form.project_log_type.label_tag}}</div>
+            {% endif %}
+        </label>
+        <div class="col-sm-8">
+            <div>{{form.project_log_type}}</div>
+            {% if form.project_log_type.errors %}<div class="alert alert-danger">{{form.project_log_type.errors.as_text}}</div>{% endif %}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4 control-label">
+            {% if form.technical_lead.help_text %}
+            <div title="{{form.technical_lead.help_text}}">[?] {{form.technical_lead.label_tag}}</div>
+            {% else %}
+            <div>{{form.technical_lead.label_tag}}</div>
+            {% endif %}
+        </label>
+        <div class="col-sm-8">
+            <div>{{form.technical_lead}}</div>
+            {% if form.technical_lead.errors %}<div class="alert alert-danger">{{form.technical_lead.errors.as_text}}</div>{% endif %}
+        </div>
+    </div>
+
+    {% include 'organization_select.html' %}
+
+    {% for field in form %}
+    {% if field.name == 'qapp' %}<div id="accordion">{% endif %}
+    {% if field.label != 'QA Activity Type' and field.name != 'technical_lead' %}
+    {% if field.name != 'office' and field.name != 'lab' and field.name != 'division' and field.name != 'branch' %}
+    <div class="form-group">
+        <label class="col-sm-4 control-label">
+            {% if field.help_text %}
+            <div title="{{field.help_text}}">[?] {{field.label_tag}}</div>
+            {% else %}
+            <div>{{field.label_tag}}</div>
+            {% endif %}
+        </label>
+        <div class="col-sm-8">
+            <div>{{field}}</div>
+            {% if field.errors %}<div class="alert alert-danger">{{field.errors.as_text}}</div>{% endif %}
+        </div>
+    </div>
+
+    {% endif %}
+    {% endif %}
+    {% if field.name == 'qapp' %}</div>{% endif %}
+    {% endfor %}
+
+    <div>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-8"><input type="submit" value="Create" class="btn btn-success"></div>
+    </div>
+
+</form>
+
+<p><br></p><br>
+{% if project_logs %}
+<div class="vmargin20">
+
+    <h3>Existing Project QA Activities</h3>
+
+    <table class="example table-autosort:0 table-stripeclass:alternate table-autofilter" id="project_logs_table">
+        <thead id="project_logs_head">
+        <tr>
+            <th class="table-sortable:alphanumeric">QA Log No.</th>
+            <th class="table-header">Title</th>
+            <th class="table-sortable:alphanumeric">Type</th>
+            <th class="table-sortable:alphanumeric">Recommendation</th>
+
+        </tr>
+        <tr>
+            <th class="table-filterable"></th>
+            <th class="table-header"></th>
+            <th class="table-filterable"></th>
+            <th class="table-filterable"></th>
+
+
+        </tr>
+
+        </thead>
+
+        <tbody id="project_logs_body">
+
+        {% for obj in project_logs %}
+        <tr>
+            <td><a href={% url 'show_project_log' obj.id %}>{{obj.qa_log_number}}</a></td>
+            <td width="200">{{obj.title}}</td>
+            <td>{{obj.project_log_type.the_name}}</td>
+            <td>{{obj.review_type.the_name}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+
+<script>
+    $(document).ready(function() {
+        $('.jasc-user-select').asyncSelect({
+            url: '/api/dropdown_users',
+            displayValue:function(item){ return item.last_name + ", " + item.first_name + ' (' + item.email + ')' }
+        });
+    })
+</script>
+<script>
+    $(document).ready(function() {
+
+      var is_active = function(id_list, list){
+        var el;
+        if(id_list[id_list.length - 1] == ''){ return true }
+
+        switch(id_list.length){
+            //as of writing there's no flag for active offices or labs
+            case 3: //testing for division
+              el =  $.grep(list, function(v) {
+                  return v.id == id_list[2] && v.lab_id == id_list[1] && v.office_id == id_list[0]
+              })
+              return el[0] && el[0].is_active
+
+            case 4: //testing for branch
+              el = $.grep(list, function(v) {
+                  return v.id == id_list[3] && v.division_id == id_list[2] && v.lab_id == id_list[1] && v.office_id == id_list[0]
+              })
+              return (el[0] && el[0].is_active)
+
+            default:
+              return true
+        }
+
+      }
+
+        var poc_list = {{poc_list|safe}};
+        var division_list = {{division_list|safe}};
+        var branch_list = {{branch_list|safe}};
+
+        var errors = '{{form.errors}}'.length > 0;
+        if(!errors){
+          var project_lead = {{project.person_id|default:0}};
+          var PocOption = $('#id_technical_lead').find('option[value="'+project_lead+'"]')
+          if(PocOption.length){
+            PocOption.attr('selected', true);
+            changeSelects(project_lead)
+          }
+        }
+
+        $("#id_technical_lead").on('change',function() {
+           var poc_id = this.value;
+           changeSelects(poc_id)
+        });
+
+      function changeSelects(poc_id){
+         var poc = $.grep(poc_list, function(v) {return v.user_id == poc_id; })[0];
+
+         if( !is_active([poc.office_id,poc.lab_id,poc.division_id], division_list)
+          || !is_active([poc.office_id,poc.lab_id,poc.division_id,poc.branch_id], branch_list)){
+          $("#id_show_inactive").prop("checked",true)
+         }
+
+         $('#id_office').val(poc.office_id);
+         $('#id_office').change();
+         $('#id_lab').val(poc.lab_id);
+         $('#id_lab').change();
+         $('#id_division').val(poc.division_id);
+         $('#id_division').change();
+         $('#id_branch').val(poc.branch_id);
+      }
+
+      $("#id_project_log_type").change(function() {
+         if ($(this).val() == '3') {
+             $("#accordion").hide();
+         }
+         else {
+             $("#accordion").show();
+         }
+     });
+    });
+</script>
+
+{% endblock %}
