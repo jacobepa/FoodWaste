@@ -11,7 +11,6 @@ import urllib.parse
 from organization.models import *
 from projects.models import Project
 from django.contrib.sessions.models import Session
-from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.conf import settings
 from django.core.mail import send_mail

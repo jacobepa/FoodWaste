@@ -1,0 +1,128 @@
+<!--
+widget to select discipline and subdiscipline
+Uses javascript to update the selection lists
+-->
+<div>
+    <div class="form-group">
+        <div title="Discipline and subdiscipline are used to categorize SOPs for display on ORD@Work.">
+        <label class="{{label_class}} control-label {% if discipline_required %}required{% endif %}"
+               for="discipline">
+            [?] Discipline:
+        </label>
+        </div>
+        <div class="{{input_container_class}}">
+            <select id="id_discipline" name="discipline" class="form-control" {{org_disabled}}>
+                <option value="">---</option>
+            </select>
+        </div>
+    </div>
+
+    {% if not no_subdiscipline %}
+    <div class="form-group">
+        <label class="{{label_class}} control-label"
+               for="subdiscipline">
+            Subdiscipline:
+        </label>
+        <div class="{{input_container_class}}">
+            <select id="id_subdiscipline" name="subdiscipline" class="form-control" {{org_disabled}}>
+                <option value="">---</option>
+            </select>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <input type="text" id="disciplinedirty" value="0" style="display:none"/>
+    <input type="text" id="prev_discipline_id" value="-1" style="display:none"/>
+    <input type="text" id="prev_subdiscipline_id" value="-1" style="display:none"/>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // Javscript to dynamically update the selection lists
+
+    var fill_select = function(element_id, list, selected_id, label_fn) {
+        $(element_id).find('option:not(:first)').remove();
+        $.each(list, function( i, v ) {
+            if (v.id == selected_id) {
+                $(element_id).append($("<option></option>")
+                .attr("value",v.id).attr("selected",true)
+                .text(label_fn(v)));
+            } else {
+                $(element_id).append($("<option></option>").attr("value",v.id)
+                .text(label_fn(v)));
+            }
+        });
+    };
+
+    var disciplinedirty = document.getElementById('disciplinedirty');
+    var formIsDisciplineDirty = +disciplinedirty.value;
+
+    var passed_discipline_id = '{{selected_discipline.id}}';
+    var passed_subdiscipline_id = '{{selected_subdiscipline.id}}';
+    var selected_discipline_id = formIsDisciplineDirty ? -1 : passed_discipline_id;
+    var selected_subdiscipline_id = formIsDisciplineDirty ? -1 : passed_subdiscipline_id;
+
+    var discipline_list = {{discipline_list|safe}};
+    var subdiscipline_list = {{subdiscipline_list|safe}};
+
+    // functions to generate the label in the select list
+    var discipline_label = function (v) { return (v.discipline); };
+    var subdiscipline_label = function (v) { return (v.subdiscipline); };
+
+    // using hidden form fields to preserve values
+    // so they can be restored correctly when page is
+    // returned to via the Back button
+    var prev_discipline = document.getElementById('prev_discipline_id');
+    var prev_discipline_id = prev_discipline.value;
+    var prev_subdiscipline = document.getElementById('prev_subdiscipline_id');
+    var prev_subdiscipline_id = prev_subdiscipline.value;
+
+    // If the user hit "back", use the org values
+    // they selected for previous search
+    if (prev_discipline_id !== '-1'){
+        selected_discipline_id = parseInt(prev_discipline_id);
+    } else if (discipline_list.length == 1) {
+        selected_subdiscipline_id = discipline_list[0].id
+    }
+    if (prev_subdiscipline_id !== '-1'){
+        selected_subdiscipline_id = parseInt(prev_subdiscipline_id);
+    } else if (subdiscipline_list.length == 1) {
+        selected_subdiscipline_id = subdiscipline_list[0].id
+    }
+
+    // fill the discipline list to start
+    fill_select('#id_discipline', discipline_list, selected_discipline_id, discipline_label);
+    if (selected_discipline_id != '') {
+        var discipline_subdisciplines = $.grep(subdiscipline_list, function(v) { return v.discipline_id == selected_discipline_id; });
+        fill_select('#id_subdiscipline', discipline_subdisciplines, selected_subdiscipline_id, subdiscipline_label);
+    }
+
+    // set change handlers for the selection lists
+    $("#id_discipline").change(function(element) {
+        var discipline_id = $("#id_discipline").val();
+
+        $("#id_subdiscipline").find('option:not(:first)').remove();
+
+        prev_discipline.value = discipline_id || -1;
+        prev_subdiscipline.value = -1;
+
+        if (discipline_id != '') {
+            var discipline_subdisciplines = $.grep(subdiscipline_list, function(v) { return v.discipline_id == discipline_id; });
+            fill_select('#id_subdiscipline', discipline_subdisciplines, '', subdiscipline_label);
+        }
+
+        disciplinedirty.value = 1;
+
+    });
+    $("#id_subdiscipline").change(function(element) {
+        var discipline_id = $("#id_discipline").val();
+        var subdiscipline_id = $("#id_subdiscipline").val() || -1;
+        prev_discipline.value = discipline_id;
+        prev_subdiscipline.value = subdiscipline_id || -1;
+        disciplinedirty.value = 1;
+    });
+
+});
+</script>

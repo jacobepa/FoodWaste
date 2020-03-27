@@ -1,0 +1,183 @@
+{% extends "base/site_base_nb_tab.html" %}
+{% load staticfiles %}
+
+{% block nb_tab_content %}
+<h3>Search Notebook Custodians and Contributors</h3>
+
+<p>
+This action allows QAMs to search for notebook custodians and contributors and their review status. By default the form is set up to search for custodians/contributors
+who have not had a review in the last year. For each custodian/contributor, it shows whether they need a review, the date of their last review, the result of their last review, and the last date an email was sent regarding scheduling a review.
+</p>
+<br/>
+<p>After conducting the search, the QAM may click on the name of a custodian or contributor to view their notebooks and past reviews, schedule a review, or record the results of a review.</p>
+<br/>
+<div>
+    Select your criteria then click the "Search" button.
+</div>
+</p>
+
+<div class="vmargin20">
+
+    <form class="form-horizontal" action="{% url 'result_search_nb_periodic_review' %}" method="get">
+
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                <input class="btn btn-success" type="submit" value="Search" name="start">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#id_lead_org" data-toggle="collapse">Custodian/Contributor Organization</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="id_lead_org" class="collapse in">
+            <div id="id_org">
+                {% include 'organization_select.html' %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#custodian_contrib" data-toggle="collapse">Custodian/Contributor Name</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="custodian_contrib" class="collapse">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Last Name</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="person_last" value="{{person_last}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">First Name</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="person_first" value="{{person_first}}">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#role" data-toggle="collapse" title="Select Custodian to search for people who are a custodian for at least one notebook. Select Contributor to search for people who are a contributor for at least one notebook. Select both checkboxes to search for people who are either notebook custodians or contributors.">Custodian/Contributor Role [?]</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="role" class="collapse">
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Role:</label>
+                <div class="col-sm-8">
+                    <label><input name="roles" type="checkbox" id="custodian" value="custodian" checked> Custodian</label><br>
+                    <label><input name="roles" type="checkbox" id="contributor" value="contributor" checked> ORD Contributor</label><br>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#qamgroup" data-toggle="collapse">Notebook QA Manager</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="qamgroup" class="collapse">
+
+          <div class="form-group">
+              <label class="col-sm-4 control-label">QA Manager Last Name</label>
+              <div class="col-sm-8">
+                  <input class="form-control" type="text" name="qa_manager_last" value="{{qa_manager_last}}">
+              </div>
+          </div>
+          <div class="form-group">
+              <label class="col-sm-4 control-label">First Name</label>
+              <div class="col-sm-8">
+                  <input class="form-control" type="text" name="qa_manager_first" value="{{qa_manager_first}}">
+              </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#review_status" data-toggle="collapse">Last Review Status</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="review_status" class="collapse">
+
+          <div class="form-group">
+              <label class="col-sm-4 control-label">Review Status</label>
+              <div class="col-sm-8">
+                  <select class='form-control' multiple name='review_status' style="max-height:80px;">
+                    {% for status in review_status %}
+                      <option value={{status.id}}>{{status.the_name}}</option>
+                    {% endfor %}
+                  </select>
+              </div>
+          </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#reviewdategroup" data-toggle="collapse"
+                  title="By default it shows custodians and contributors who have not been reviewed in the last year or who have never been reviewed.">
+                  Last Review Date [?]
+                </a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+
+        <div id="reviewdategroup" class="collapse in">
+              <div class="form-group" title="Only include custodians and contrbutors reviewed after this date">
+                <label class="col-sm-4 control-label">[?] Date of Last Review =&gt; From:</label>
+                  <div class="col-sm-8">
+                      <input class="form-control" type="text" name="review_date_f" value="{{review_date_f}}" id="datepicker1">
+                  </div>
+              </div>
+              <div class="form-group"  title="Only include custodians and contrbutors reviewed before this date">
+                  <label class="col-sm-4 control-label">[?] Date of Last Review =&gt; To:</label>
+                  <div class="col-sm-8">
+                      <input class="form-control" type="text" name="review_date_t" value="{{review_date_t|default:default_date}}" id="datepicker2">
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="col-sm-4 control-label">
+                  </label>
+                  <div class="col-sm-8 checkbox" title='Check this box to include custodians and contributors who have never been reviewed if a "From Date" is not indicated.'>
+                      <label><input id="id_show_never" name="show_never_reviewed" checked="checked" type="checkbox">Include custodians and contributors who have never been reviewed [?]</label>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="col-sm-4 control-label">
+                  </label>
+                  <div class="col-sm-8 checkbox" title='Check this box to find only custodians and contributors to whom emails have been sent to schedule a review.'>
+                      <label><input id="id_show_review_requested" name="show_review_requested" type="checkbox">Include only custodians and contributors who have a review requested [?]</label>
+                  </div>
+              </div>
+          </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Export Results To Excel</label>
+            <div class="col-sm-8">
+                <label class="radio-inline"><input type="radio" id="bottom_Y" name="excel" value="Y">Yes</label>
+                <label class="radio-inline active"><input type="radio" id="bottom_N" name="excel" value="N" checked="">No</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                <input class="btn btn-success" type="submit" value="Search" name="start">
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+
+{% endblock %}

@@ -133,10 +133,10 @@ class ProfileCreationForm(forms.ModelForm):
 
 #    is_staff = forms.TypedChoiceField(label=_("Can log in to Django Admin Tool"),
 #                                      widget=forms.Select(attrs={'class':'form-control'}),
-#                                      choices=BOOLEAN_YES_NO, required=False)
+#                                      choices=YES_OR_NO, required=False)
     is_active = forms.TypedChoiceField(label=_("Can log in to QA Track"),
                                        widget=forms.Select(attrs={'class':'form-control'}),
-                                       choices=BOOLEAN_YES_NO, required=False)
+                                       choices=YES_OR_NO, required=False)
 #
 #    # Changed initial value from SUPER USER to SINGLE LAB
 #    # I think SUPER USER was default only because it was the first choice in dropdown.
@@ -161,7 +161,7 @@ class ProfileCreationForm(forms.ModelForm):
 #                                      choices=YN_CHOICES, required=False)
 #    is_superuser = forms.TypedChoiceField(label=_("Can access Manage tab"),
 #                                          widget=forms.Select(attrs={'class': 'form-control'}),
-#                                          choices=BOOLEAN_YES_NO, required=False)
+#                                          choices=YES_OR_NO, required=False)
 #    can_create_users = forms.TypedChoiceField(label=_("Can create users"),
 #                                              widget=forms.Select(attrs={'class':'form-control'}),
 #                                              choices=YN_CHOICES, required=False)
@@ -275,11 +275,11 @@ class ProfileUpdateForm(forms.ModelForm):
 
 #    is_staff = forms.TypedChoiceField(label=_("Can log in to Django Admin Tool"),
 #                                      widget=forms.Select(attrs={'class':'form-control'}),
-#                                      choices=BOOLEAN_YES_NO, required=False)
+#                                      choices=YES_OR_NO, required=False)
 #
     is_active = forms.TypedChoiceField(label=_("Can log in to QA Track"),
                                        widget=forms.Select(attrs={'class':'form-control'}),
-                                       choices=BOOLEAN_YES_NO, required=False)
+                                       choices=YES_OR_NO, required=False)
 #
 #    user_type = forms.TypedChoiceField(label=_("User type"),
 #                                       widget=forms.Select(attrs={'class':'form-control'}),
@@ -301,7 +301,7 @@ class ProfileUpdateForm(forms.ModelForm):
 #                                      choices=YN_CHOICES, required=False)
 #    is_superuser = forms.TypedChoiceField(label=_("Can access Manage tab"),
 #                                          widget=forms.Select(attrs={'class': 'form-control'}),
-#                                          choices=BOOLEAN_YES_NO, required=False)
+#                                          choices=YES_OR_NO, required=False)
 #    can_create_users = forms.TypedChoiceField(label=_("Can create users"),
 #                                              widget=forms.Select(attrs={'class':'form-control'}),
 #                                              choices=YN_CHOICES, required=False)
@@ -558,7 +558,6 @@ class PasswordChangeForm(SetPasswordForm):
         if not self.user.check_password(old_password):
             raise forms.ValidationError(_("Your old password was entered incorrectly. Please enter it again."))
         return old_password
-PasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']
 
 class AdminPasswordChangeForm(forms.Form):
     """

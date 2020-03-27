@@ -1,0 +1,54 @@
+{% extends "base/site_base_nb_tab.html" %}
+{% load staticfiles %}
+
+{% block nb_tab_content %}
+
+<div style='margin-top:20px;'>
+  <h4>Create Review:</h4>
+
+  <p>
+    Create a Notebook Review to record the results after a review is performed. A Review applies to a single Notebook and either the custodian or a single contributor. Fields marked with an asterisk are required.
+    Note that you will be able to add files to a Review after the Review record is created.
+  </p>
+    <br>
+
+  <form class="form-horizontal" enctype="multipart/form-data" action="." method="post" role='form' >
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group">
+          <label class="col-sm-3 control-label" style='text-align:left'>
+              {% if field.help_text %}
+              <div title="{{field.help_text}}">[?] {{field.label_tag}}</div>
+              {% else %}
+              <div>{{field.label_tag}}</div>
+              {% endif %}
+          </label>
+          <div class="col-sm-9">
+              {{field}}
+              {% if field.errors %}<div class="alert alert-danger">{{field.errors.as_text}}</div>{% endif %}
+          </div>
+      </div>
+    {% endfor %}
+    <div class="form-group" style='text-align:left'>
+        <label class="col-sm-3 control-label"></label>
+        <div class="col-sm-9">
+          <input class="btn btn-success" type="submit" value="Create">
+        </div>
+    </div>
+  </form>
+
+</div>
+
+<script>
+$(document).ready(function(){
+    $('.jasc-user-select').asyncSelect({
+        url: '/api/dropdown_users',
+        displayValue:function(item){ return item.last_name + ", " + item.first_name + ' (' + item.email + ')' }
+    })
+
+$(".chosen-select").chosen({});
+$(".date-control").datepicker({ dateFormat: "yy-mm-dd" });
+})
+</script>
+
+{% endblock %}

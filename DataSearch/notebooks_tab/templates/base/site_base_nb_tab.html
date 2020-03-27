@@ -1,0 +1,93 @@
+
+{% extends "base/site_base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Notebook Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_nb_tab' %}">Search existing Notebooks</a>
+                <a class="list-group-item" href="{% url 'search_nb_sepcustodian' %}">Search Notebooks with separated Notebook Custodian</a>
+
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_nb_tab_item' 0 %}">Create record for new Notebook</a>
+                {% endif %}
+
+                <a class="list-group-item" href="{% url 'search_nb_periodic_review' %}">Search Notebook Custodians and Contributors</a>
+
+                {% if kwargs.allow_edit %}
+                    {# SHOW THESE ACTIONS ONLY WHEN VIEWING A Notebook #}
+                    {% if title == 'Show Notebook' %}
+                        <a class="list-group-item" href="{% url 'edit_nb_tab_item' obj.id %}">Edit this Notebook record</a>
+                    {% endif %}
+                    {% if show_nb_review %}
+                        <a class="list-group-item" href="{% url 'create_nb_review' nb_id=nb_id user_id=0 %}">Create a Review for This Notebook</a>
+                    {%endif%}
+                    {% if show_user_review %}
+                        <a class="list-group-item" href="{% url 'create_nb_review' nb_id=0 user_id=user_id %}">Create a Review for This Custodian/Contributor</a>
+                    {%endif%}
+                    {% if show_review_edit %}
+                        <a class="list-group-item" href="{% url 'edit_nb_review' review_id=r.id %}">Edit this Review Record</a>
+                    {%endif%}
+                    {% if title == 'Show Notebook' %}
+                        <a class="list-group-item" href="{% url 'link_organization_nb' obj.id %}">Link ORD Organization to this notebook</a>
+                    {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class = "panel-heading">Review Checklists</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% static 'checklists/NERL Checklist.pdf'%}">NERL (PDF)</a>
+                <a class="list-group-item" href="{% static 'checklists/NERL Checklist.docx'%}">NERL (Word doc)</a>
+                <a class="list-group-item" href="{% static 'checklists/NHEERL EPHD Checklist.docx'%}">NHEERL EPHD (Word doc)</a>
+                <a class="list-group-item" href="{% static 'checklists/NHEERL TAD Checklist.docx'%}">NHEERL TAD (Word doc)</a>
+
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class = "panel-heading">Program Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_program' %}">Search existing programs</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_program' %}">Create a program</a>
+                {% endif %}
+                {% if kwargs.allow_edit %}
+                    {% if program.id %}
+                        <a class="list-group-item" href="{% url 'edit_program' program.id %}">Edit this program</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class = "panel-heading">EPA Non-ORD Organization Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_participating_organization' %}">Search existing EPA non-ORD organizations</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_participating_organization' %}">Create an EPA non-ORD organization</a>
+                {% endif %}
+                {% if kwargs.allow_edit %}
+                    {% if organization.id %}
+                        <a class="list-group-item" href="{% url 'edit_participating_organization' organization.id %}">Edit this EPA non-ORD organization</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-9">
+        {% block nb_tab_content %}
+        {% endblock %}
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,378 @@
+{% extends "base/site_base_nb_tab.html" %}
+{% load staticfiles %}
+
+{% block nb_tab_content %}
+<h3>Search Existing Notebooks</h3>
+<div>
+    To search for Notebooks, click on the links below to expand search fields, select your search criteria,
+    and then click the "Search" button.
+</div>
+
+<div class="vmargin20">
+
+    <form class="form-horizontal" action="{% url 'result_search_nb_tab' %}" method="get">
+
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-1">
+                <input class="btn btn-success" type="submit" value="Search" name="start" class="button">
+            </div>
+            <label class="col-sm-2 control-label" title="To select multiple statuses, use Ctrl-click.">[?] Status</label>
+            <div class="col-sm-5">
+                <select class="form-control"  multiple="multiple" size=3 style="height: 100%;" name="notebook_status" value="{{notebook_status}}">
+                    {% for instance in notebook_statuses %}
+                        <option {% if instance.the_name == 'Active' %}selected{% endif%} value="{{instance.id}}">{{instance.the_name}}</option>
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#id_lead_org" data-toggle="collapse">Lead Organization</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="id_lead_org" class="collapse in">
+            <div id="id_org">
+                {% include 'organization_select2.html' %}
+            </div>
+        </div>
+
+{# start group  #}
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#custodian_contrib" data-toggle="collapse">Notebook Custodian/Contributor</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="custodian_contrib" class="collapse in">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Last Name</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="person_last" value="{{person_last}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">First Name</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="person_first" value="{{person_first}}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Search for name in the following roles:</label>
+                <div class="col-sm-8">
+                    <label><input name="roles" type="checkbox" id="custodian" value="custodian" checked> Custodian</label><br>
+                    <label><input name="roles" type="checkbox" id="contributor" value="contributor"> ORD Contributor</label><br>
+
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Non-ORD Contributor Email</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="non_ord_contrib" value="{{non_ord_contrib}}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                  <label class="col-sm-4 control-label">
+                  </label>
+                  <div class="col-sm-8 checkbox" title='Check this box to find only notebooks for which emails have been sent to schedule a review.'>
+                      <label><input id="id_show_review_requested" name="show_review_requested" type="checkbox">Notebook has review requested for custodian/contributors [?]</label>
+                  </div>
+            </div>
+        </div>
+{#  end group  #}
+
+{# start group  #}
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#id_qa_id_title" data-toggle="collapse">Notebook Number/Title/IDs</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="id_qa_id_title" class="collapse">
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Notebook Number</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="nb_number" value="{{nb_number}}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Title</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="title" value="{{title}}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Alternate ID</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="alt_id" value="{{alt_id}}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Previous ID</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="previous_id" value="{{previous_id}}">
+                </div>
+            </div>
+
+{#            <div class="form-group">#}
+{#                <label class="col-sm-4 control-label">Keyword</label>#}
+{#                <div class="col-sm-8">#}
+{#                    <input class="form-control" type="text" name="keywords" value="{{keywords}}">#}
+{#                </div>#}
+{#            </div>#}
+
+        </div>
+{#  end group  #}
+
+{# start group  #}
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#type_review_status" data-toggle="collapse">Notebook Type</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="type_review_status" class="collapse">
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Notebook Type</label>
+                <div class="col-sm-8">
+                    <select class="form-control"  multiple="multiple" size=3 style="height: 100%;" name="nb_type" value="{{nb_type}}">
+                        {% for instance in nb_types %}
+                        <option value="{{instance.id}}">{{instance.the_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+        </div>
+{#  end group  #}
+
+{#  start group  #}
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#qam_supervisor" data-toggle="collapse">QA Manager/Supervisor or Mentor</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="qam_supervisor" class="collapse">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">QA Manager Last Name</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="qa_manager_last" value="{{qa_manager_last}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">First Name</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="qa_manager_first" value="{{qa_manager_first}}">
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Supervisor or Mentor Last Name</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="supervisor_mentor_last" value="{{supervisor_mentor_last}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">First Name</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="supervisor_mentor_first" value="{{supervisor_mentor_first}}">
+                </div>
+            </div>
+        </div>
+{#  end group  #}
+
+    <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#id_dates" data-toggle="collapse">Dates</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="id_dates" class="collapse">
+
+            <h4>Date Issued</h4>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">From Date</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="date_issued_f" value="{{date_issued_f}}" id="datepicker1">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">To Date</label>
+                <div class="col-sm-8">
+                    <input class="form-control hasDatePicker" type="text" name="date_issued_t" value="{{date_issued_t}}" id="datepicker2">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label"> </label>
+                <div class="col-sm-8">
+                    <label><input name="no_date_issued" type="checkbox" value=1> No Date Issued</label>
+                </div>
+            </div>
+            <!--
+            <h4>Date of Last Review</h4>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">From Date</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="date_reviewed_f" value="{{date_reviewed_f}}" id="datepicker3">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">To Date</label>
+                <div class="col-sm-8">
+                    <input class="form-control hasDatePicker" type="text" name="date_reviewed_t" value="{{date_reviewed_t}}" id="datepicker4">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label"> </label>
+                <div class="col-sm-8">
+                    <label><input name="no_date_reviewed" type="checkbox" value=1> No Date of Last Review</label>
+                </div>
+            </div>
+            -->
+
+            <h4>Date of Final Use</h4>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">From Date</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="date_final_use_f" value="{{date_final_use_f}}" id="datepicker5">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">To Date</label>
+                <div class="col-sm-8">
+                    <input class="form-control hasDatePicker" type="text" name="date_final_use_t" value="{{date_final_use_t}}" id="datepicker6">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label"> </label>
+                <div class="col-sm-8">
+                    <label><input name="no_date_final_use" type="checkbox" value=1> No Date of Final Use</label>
+                </div>
+            </div>
+
+            <h4>Date Archived</h4>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">From Date</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="date_archived_f" value="{{date_archived_f}}" id="datepicker7">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">To Date</label>
+                <div class="col-sm-8">
+                    <input class="form-control hasDatePicker" type="text" name="date_archived_t" value="{{date_archived_t}}" id="datepicker8">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label"> </label>
+                <div class="col-sm-8">
+                    <label><input name="no_date_archived" type="checkbox" value=1> No Date Archived</label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#id_toggle_program" data-toggle="collapse">Project/Program</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="id_toggle_program" class="collapse">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Project ID</label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="project_id" value="{{project_id}}">
+                        <option value=""></option>
+                        {% for instance in projects %}
+                        <option value="{{instance.qa_id}}">{{instance.qa_id}} {{instance.title}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Program</label>
+                <div class="col-sm-8">
+                    <select class="form-control" multiple name="search_programs" value="{{search_programs}}">
+                        {% for instance in programs %}
+                        <option value="{{instance.id}}">{{instance.the_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#id_external_org" data-toggle="collapse">Related Organizations</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="id_external_org" class="collapse">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">EPA Non-ORD Organization</label>
+                <div class="col-sm-8">
+                    <select class="form-control"  multiple name="external_org" value="{{external_org}}">
+                        {% for instance in external_orgs %}
+                        <option value="{{instance.id}}">{{instance.company}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">ORD Organization</label>
+                <div class="col-sm-8"></div>
+            </div>
+            <div id="id_org">
+                {% include 'organization_select.html' %}
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <a href="#id_toggle_comments" data-toggle="collapse">Comments</a>
+            </label>
+            <div class="col-sm-8"></div>
+        </div>
+        <div id="id_toggle_comments" class="collapse">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Comments</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="comments" value="{{comments}}">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Export Results To Excel</label>
+            <div class="col-sm-8">
+                <label class="radio-inline"><input type="radio" id="bottom_Y" name="excel" value="Y">Yes</label>
+                <label class="radio-inline active"><input type="radio" id="bottom_N" name="excel" value="N" checked="">No</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                <input class="btn btn-success" type="submit" value="Search" name="start" class="button">
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}
+

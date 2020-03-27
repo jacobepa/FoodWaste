@@ -1,0 +1,122 @@
+{% extends "base/site_base_nb_tab.html" %}
+{% load staticfiles %}
+
+{% block nb_tab_content %}
+<style>
+.no_review{
+  color:#aaa;
+}
+table.example td{
+padding:10px;
+}
+</style>
+<h3>Custodian, Contributors, and Reviews for Notebook {{nb.nb_number}}</h3>
+<p>
+  Custodians and contributors are marked as needing review if they do not have any notebook which has been reviewed in the last year.
+</p>
+
+<div class="vmargin20">
+<h4 style='margin-top:30px;'>Notebook Information</h4>
+
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Notebook Number</label>
+        <div class="col-sm-5">
+            <input type="textarea" disabled class="form-control" value="{{nb.nb_number}}" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Title</label>
+        <div class="col-sm-5">
+            <input type="textarea" disabled class="form-control" value="{{nb.title|default:""}}" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">QAM</label>
+        <div class="col-sm-5">
+            <input type="textarea" disabled class="form-control" value="{{nb.qa_manager.userprofile.full_name}}" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Supervisor/Mentor</label>
+        <div class="col-sm-5">
+            <input type="textarea" disabled class="form-control" value="{{nb.supervisor_mentor.userprofile.full_name}}" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-5">
+            <a href={% url 'show_nb_tab' nb.id %}>See full notebook record</a>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="vmargin20">
+<h4 style='margin-top:30px;'>Custodian and Contributors</h4>
+
+	<table class="example table-autosort:0 table-stripeclass:alternate table-autofilter main_table" id="support_table" style="table-layout:fixed">
+{#    <table class="example table-stripeclass:alternate table-autofilter" id="support_table">#}
+
+		<thead id="support_head">
+		<tr>
+
+      <th class="table-sortable:alphanumeric">Custodian/Contributor</th>
+			<th class="table-sortable:alphanumeric">Role</th>
+      <th class="table-sortable:alphanumeric">Needs Notebook Review<br> (All Notebooks)</th>
+      <th class="table-sortable:date">Date Last Reviewed<br> (This Notebook)</th>
+      <th class="table-sortable:alphanumeric">Review Status<br>(This Notebook)</th>
+      <th class="table-sortable:date">Email Last Sent<br> (This Notebook)</th>
+      <th class="table-sortable:alphanumeric">Request Review</th>
+
+		</tr>
+		</thead>
+		<tbody id="support_body">
+      {% for user in users %}
+      <tr {%if user.needs_review == 'N'%}class='no_review'{%endif%}>
+          <td><a href={% url 'nbtab_user_review' user.user_id %}>{{user.user.userprofile.full_name}}</a></td>
+          <td>{{user.role}}</td>
+          <td>{{user.needs_review}}</td>
+          <td>{{user.this_nb_review.date_reviewed|default:"Never"}}</td>
+          <td>{{user.this_nb_review.status.the_name|default:""}}</td>
+          <td>{{user.this_nb_review.email_last_sent|default:"Never"}}</td>
+          <td><a href={% url 'nbtab_set_sched_review' user.user_id nb.id %}>{{user.sr.schedule_review|default:"N"}}</a></td>
+        </tr>
+        {% endfor %}
+			</tbody>
+	</table>
+
+
+
+</div>
+
+<div class="vmargin20">
+
+<h4 style='margin-top:30px;'>Reviews</h4>
+
+<table class="example table-autosort:2 table-stripeclass:alternate table-autofilter sub_table" id="support_table" style="margin-bottom:0">
+  <thead>
+    <tr>
+      <th class="table-sortable:alphanumeric">Details</th>
+      <th class="table-sortable:alphanumeric">Custodian/Contributor</th>
+      <th class="table-sortable:date">Review Date</th>
+      <th class="table-sortable:alphanumeric">Review Status</th>
+      <th class="table-sortable:alphanumeric">Reviewer</th>
+    </tr>
+  </thead>
+{% for review in nb.reviews %}
+  <tr>
+    <td class='nb_type'><a href={% url 'show_nb_review' review.id %}>Details</a></td>
+    <td class='nb_type'>{{review.user.userprofile.full_name}}</td>
+    <td class='nb_title'>{{review.date_reviewed}}</td>
+    <td class='nb_title'>{{review.status}}</td>
+    <td class='nb_title'>{{review.reviewer.userprofile.full_name}}</td>
+  </tr>
+{% endfor %}
+</table>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base/site_base.html" %}
+{% load humanize %}
+
+{% block content %}
+
+<style>
+.sub_table td {
+  max-width:100px;
+  word-wrap: break-word;
+}
+table.main_table td{
+  padding:10px 5px;
+}
+table td.sub_table_container{
+  padding:10px;
+}
+</style>
+
+<h3>Custodians and Contributors for Active Notebooks</h3>
+
+
+{% if users|length %}
+<h4>Found {{users|length}} Custodians/Contributors with Criteria: ({{nb_annual_criteria}})</h4></p>
+	<table class="example table-autosort:0 table-stripeclass:alternate table-autofilter main_table" id="main_table" style="table-layout:fixed">
+{#    <table class="example table-stripeclass:alternate table-autofilter" id="support_table">#}
+
+		<thead id="support_head">
+		<tr>
+
+      <th class="table-sortable:alphanumeric">C/C</th>
+			<th class="table-sortable:alphanumeric">C/C Center</th>
+			<th class="table-sortable:alphanumeric">C/C Division</th>
+			<th class="table-sortable:alphanumeric">C/C Branch</th>
+      <th class="table-sortable:date">Date Last Reviewed</th>
+      <th class="table-sortable:alphanumeric">Last Review Status</th>
+      <th class="table-sortable:date">Email Last Sent</th>
+      <th class="table-sortable:alphanumeric" style="width:600px">Notebook</th>
+
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+      <th class=""></th>
+    </tr>
+		</thead>
+		<tbody id="support_body">
+      {% for user in users %}
+        <tr>
+          <td><a id='{{user.user_id}}' href={% url 'nbtab_user_review' user.user_id %}>{{user.user.userprofile.full_name}}</a></td>
+          <td>{{user.user.userprofile.lab.abbreviation}}</td>
+          <td>{{user.user.userprofile.division.abbreviation}}</td>
+          <td>{{user.user.userprofile.branch.abbreviation}}</td>
+          <td>{{user.recent_review.date_reviewed|default:"Never"}}</td>
+          <td>{{user.recent_review.status|default:""}}</td>
+          <td>{{user.recent_email.email_last_sent|default:"Never"}}</td>
+          <td class='sub_table_container'>
+            <div>
+              <table class="example table-autosort:0 table-autosort-desc table-stripeclass:alternate sub_table" id="nb_table_{{user.user_id}}" style="margin-bottom:0">
+              <thead>
+                <tr>
+                  <th class="table-sortable:alphanumeric">Notebook</th>
+                  <th class="table-sortable:alphanumeric">Notebook Type</th>
+                  <th class="table-sortable:alphanumeric">Title</th>
+                  <th class="table-sortable:alphanumeric">Role</th>
+                  <th class="table-sortable:alphanumeric">Supervisor/Mentor</th>
+                  <th class="table-sortable:alphanumeric">QA Manager</th>
+                  <th class="table-sortable:alphanumeric">Request Review</th>
+                </tr>
+              </thead>
+            {% for nb in user.notebooks %}
+              <tr>
+                <td><a href={% url 'show_nb_tab' nb.id %}>{{nb.nb_number}}</a></td>
+                <td class='nb_type'>{{nb.nb_type}}</td>
+                <td class='nb_title'>{{nb.title|default:""}}</td>
+                <td class='nb_title'>{{nb.role}}</td>
+                <td class='nb_supervisor'>{{nb.supervisor_mentor.userprofile.full_name|default:""}}</td>
+                <td class='nb_manager'>{{nb.qa_manager.userprofile.full_name|default:""}}</td>
+                {% if nb.status_id == 1 or nb.sr.schedule_review == 'Y' %}
+                  <td class='nb_review_sched'><a href={% url 'nbtab_set_sched_review' user.user_id nb.id user.user_id %}>{{nb.sr.schedule_review|default:"N"}}</a></td>
+                {% else %}
+                  <td class='nb_review_sched' title="Cannot request review of inactive or archived notebook.">{{nb.sr.schedule_review|default:"N"}}</td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+            </table>
+            </div>
+          </td>
+        </tr>
+
+        {% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Custodians Needing Notebook Review Found for This Query Where ({{nb_annual_criteria}})</td></tr></table>
+	{% endif %}
+
+
+</tr>
+
+{% endblock %}

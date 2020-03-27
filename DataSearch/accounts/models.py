@@ -60,7 +60,7 @@ class UserProfile(models.Model):
     can_edit = models.CharField(blank=True, null=True, max_length=5, choices=YN_CHOICES)
     can_create_users = models.CharField(blank=True, null=True, max_length=5, choices=YN_CHOICES)
 
-    display_in_dropdowns = models.CharField(default='Y', max_length=2, choices=YN_CHOICES, db_index=True)
+    display_in_dropdowns = models.CharField(default='Y', max_length=4, choices=YN_CHOICES, db_index=True)
     date_epa_separation = models.DateField(null=True, blank=True, db_index=True)
 
     permissions = models.CharField(blank=False, null=False, max_length=45, choices=PERMISSION_CHOICES, default="READER")

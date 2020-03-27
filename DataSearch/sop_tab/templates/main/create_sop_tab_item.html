@@ -1,0 +1,109 @@
+{% extends "base/site_base_sop_tab.html" %}
+{% load staticfiles %}
+
+{% block sop_tab_content %}
+<h3>Create an SOP</h3>
+
+<p>
+    Enter the SOP information below, and then click the "Create" button.
+    Fields marked with an asterisk are required.
+    Note that you will be able to add files to the SOP and link the SOP to related ORD organizations after the SOP is created.
+</p>
+<br>
+<form class="form-horizontal" enctype="multipart/form-data" method="post" action="." role="form" novalidate autocomplete="off">
+
+    {% csrf_token %}
+
+    {% if form.errors %}
+
+    <div class="alert alert-danger">
+        <h5>Please correct the following errors</h5>
+        {% for field in form %}
+        {% if field.errors %}
+        <div>{{field.label_tag}} {{ field.errors|striptags }}</div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+        <label class="col-sm-4 control-label">
+            <div>Lead Organization</div>
+        </label>
+        <div class="col-sm-8"><br></div>
+    </div>
+    {% include 'organization_select.html' %}
+    <p><br></p>
+
+
+
+
+    <div class="form-group">
+        <div class="col-sm-8"><br></div>
+    </div>
+    {% include 'discipline_select.html' %}
+    <p><br></p>
+
+
+
+
+    {# LEAVE OUT LEAD ORG AND DISCIPLINE AS THAT'S HANDLED ABOVE #}
+    {% for field in form %}
+    {% if field.name != 'office' and field.name != 'lab' and field.name != 'division' and field.name != 'branch' and field.name != 'discipline' and field.name != 'subdiscipline' %}
+    <div class="form-group">
+        <label class="col-sm-4 control-label">
+            {% if field.help_text %}
+            <div title="{{field.help_text}}">[?] {{field.label_tag}}</div>
+            {% else %}
+            <div>{{field.label_tag}}</div>
+            {% endif %}
+        </label>
+        <div class="col-sm-8">
+            {{field}}
+            {% if field.errors %}<div class="alert alert-danger">{{field.errors.as_text}}</div>{% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <div class="form-group">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            <input type="submit" value="Create" class="btn btn-success">
+        </div>
+    </div>
+
+</form>
+
+<script>
+$(document).ready(function(){
+    $('.jasc-project-select').asyncSelect({
+        url: '/api/projects',
+        displayValue: function(item){return item.qa_id + ": " + item.title}
+    })
+
+    $('.jasc-program-select').asyncSelect({
+        url: '/api/programs',
+        displayValue:'the_name'
+    })
+
+    $('.jasc-org-select').asyncSelect({
+        url: '/api/participating_orgs',
+        displayValue:'company'
+    })
+
+    $('.jasc-sop-select').asyncSelect({
+        url: '/api/sops',
+        displayValue:function(item){ return item.sop_number + " " + item.full_title}
+    })
+
+    $('.jasc-user-select').asyncSelect({
+        url: '/api/dropdown_users',
+        displayValue:function(item){ return item.last_name + ", " + item.first_name + ' (' + item.email + ')' }
+    })
+
+$(".date-control").datepicker({ dateFormat: "yy-mm-dd" });
+})
+</script>
+
+{% endblock %}

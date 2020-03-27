@@ -814,10 +814,6 @@ def result_search_qapp_annual_review(request,**kwargs):
     else:
         hasResults = False
 
-    # return HttpResponse(qapp_annual_SQL)
-
-    # return render_to_response('list/list_biennial_sop_review.html', locals(), context_instance=RequestContext(request))
-
     ############
     # Check if user wants to export to Excel. Only do if there are results.
     if 'excel' in request.GET and the_count>0:

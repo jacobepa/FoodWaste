@@ -1,0 +1,24 @@
+This is an automated email notification from ORD QA TRACK to alert you to do a biennial review of the Standard Operating Procedure (SOP) listed above. You are receiving this email because you are identified in the ORD QA Tracking System as the SOP contact for an SOP (intramural or extramural), or as the previous approving QA manager of the SOP. The current QA manager of the SOP lead organization is cc'd on this email. The SOP contact needs to review the SOP and decide if it is still current, needs to be revised/updated, or is no longer in use and should be archived.
+
+If you are the SOP contact, please use this email to inform your QA Manager about the status of the SOP requiring the biennial review, as follows:
+
+1. Click on "Forward" from the action buttons at the top of this email.
+2. Move to the "To:" field and enter the name of your QA Manager.
+3. Put your cursor back in the area of the original email.
+4. Type an "X" in the column with the most appropriate response for the SOP.
+5. Click on "Send" from the action buttons at the top of the email.
+
+Your QA Manager will now be able to better assist you with the management of your SOP.
+
+List of Responses
+[  ] I have reviewed the SOP and no revisions are necessary.
+[  ] I have reviewed the SOP and will provide you with a revision.
+[  ] This SOP is no longer in use.
+
+If the review is not complete by the 15th of the following month, you will receive another reminder. If you have any questions, please contact your QA Manager. Thank you.
+
+
+
+
+
+

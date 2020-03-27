@@ -1,0 +1,24 @@
+{% extends "base/site_base_nb_tab.html" %}
+{% load humanize %}
+
+{% block nb_tab_content %}
+<h3>Notebooks</h3>
+<div>
+    In the 'Notebooks' section of QA track, you can manage Notebooks.
+</div>
+<div>
+    <p>Select an option from the "Notebook Actions" box to begin.</p><br>
+</div>
+<div>
+    <h5>On a periodic basis, a Notebook custodian or contributor may need to have at least one of their active notebooks reviewed to check they are following standard documentation procedures. If a QAM requests a review, a notification email is sent immediately to initiate scheduling the review. A reminder email is sent on the 15th of each successive month until the review has been performed.</h5>
+
+    <h6>Sample Notification Email that gets sent out:</h6>
+
+ {% autoescape off %}
+    {% for line in f %}
+        <p>{{ line }}</p>
+    {% endfor %}
+ {% endautoescape %}
+
+</div>
+{% endblock %}

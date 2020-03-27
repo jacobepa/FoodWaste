@@ -1,0 +1,118 @@
+{% extends "base/site_base_nb_tab.html" %}
+{% load staticfiles %}
+
+{% block nb_tab_content %}
+<style>
+.no_review{
+  color:#aaa;
+}
+table.example td{
+padding:10px;
+}
+</style>
+<h3>Notebooks and Reviews for {{nb_user.user.userprofile.full_name}}</h3>
+<div style='margin-bottom:20px;'>
+  <div class='row' style='padding:5px 0'>
+    <div class='col-md-3'>Needs Review:</div>
+    <div class='col_md_9'> {{nb_user.needs_review}}</div>
+  </div>
+  <div class='row' style='padding:5px 0'>
+    <div class='col-md-3'>Last Review:</div>
+    <div class='col_md_9'> {{nb_user.recent_review.date_reviewed|default:"Never"}}</div>
+  </div>
+  <div class='row' style='padding:5px 0'>
+    <div class='col-md-3'>Last Review Status:</div>
+    <div class='col_md_9'> {{nb_user.recent_review.status|default:""}}</div>
+  </div>
+  <div class='row' style='padding:5px 0'>
+    <div class='col-md-3'>Email Last Sent:</div>
+    <div class='col_md_9'> {{nb_user.recent_email.email_last_sent|default:"Never"}}</div>
+  </div>
+
+</div>
+
+<p>
+  <ul>
+  <li>To request a review, toggle N to Y in the "Request Review" column. A notification will be emailed immediately to this custodian/contributor as well as the QA manager and supervisor/mentor. A reminder will be sent on the 15th of each successive month until the review has been performed. Reviews may only be requested for active notebooks.</li>
+  <li>To cancel a review request and stop email reminders, toggle Y to N in the "Request Review" column. A review request will automatically be cancelled if the notebook no longer has Active status.</li>
+  <li>To create a review to record the results, click on the "Create a Review for This Custodian/Contributor" action. Once the review is recorded, Y will automatically be toggled back to N under the "Request Review" column.</li>
+  </ul>
+</p>
+<br>
+
+<h5>No email notifications will be sent out for a notebook review UNLESS the QAM toggles "Request Review" to Y for a notebook.</h5>
+
+<br>
+
+<h4>Notebooks</h4>
+
+<table class="example table-autosort:0 table-stripeclass:alternate table-autofilter sub_table" id="support_table" style="margin-bottom:0">
+  <thead>
+    <tr>
+      <th class="table-sortable:alphanumeric">Notebook</th>
+      <th class="table-sortable:alphanumeric">Notebook Type</th>
+      <th class="table-sortable:alphanumeric">Title</th>
+      <th class="table-sortable:alphanumeric">Role</th>
+      <th class="table-sortable:date">Last Reviewed</th>
+      <th class="table-sortable:alphanumeric">Last Review Status</th>
+      <th class="table-sortable:date">Email Last Sent</th>
+      <th class="table-sortable:alphanumeric">Supervisor/Mentor</th>
+      <th class="table-sortable:alphanumeric">QA Manager</th>
+      <th class="table-sortable:alphanumeric">Notebook Status</th>
+      <th class="table-sortable:alphanumeric">Request Review</th>
+    </tr>
+  </thead>
+{% for nb in nb_user.notebooks %}
+  <tr>
+    <td><a href={% url 'show_nb_tab' nb.id %}>{{nb.nb_number}}</a></td>
+    <td class='nb_type'>{{nb.nb_type}}</td>
+    <td class='nb_title'>{{nb.title|default:""}}</td>
+    <td class='nb_role'>{{nb.role}}</td>
+    <td class='nb_date_reviewed'>{{nb.review.date_reviewed|default:"Never"}}</td>
+    <td class='nb_status'>{{nb.review.status.the_name|default:""}}</td>
+    <td class='nb_email'>{{nb.sr.email_last_sent|default:"Never"}}</td>
+    <td class='nb_supervisor'>{{nb.supervisor_mentor.userprofile.full_name|default:""}}</td>
+    <td class='nb_manager'>{{nb.qa_manager.userprofile.full_name|default:""}}</td>
+    <td class='nb_status'>{{nb.status}}</td>
+
+    {% if kwargs.allow_edit %}
+    {% if nb.status_id == 1 or nb.sr.schedule_review == 'Y' %}
+      <td class='nb_review_sched'><a href={% url 'nbtab_set_sched_review' nb_user.user_id nb.id %}>{{nb.sr.schedule_review|default:"N"}}</a></td>
+    {% else %}
+      <td class='nb_review_sched' title="Cannot request review of inactive or archived notebook.">{{nb.sr.schedule_review|default:"N"}}</td>
+    {% endif %}
+    {% else %}
+    <td class='nb_review_sched'>{{nb.sr.schedule_review|default:"N"}}</td>
+    {% endif %}
+  </tr>
+{% endfor %}
+</table>
+
+<h4 style='margin-top:30px;'>Reviews</h4>
+
+<table class="example table-autosort:2 table-stripeclass:alternate table-autofilter sub_table" id="support_table" style="margin-bottom:0">
+  <thead>
+    <tr>
+      <th class="table-sortable:alphanumeric">Details</th>
+      <th class="table-sortable:alphanumeric">Notebook</th>
+      <th class="table-sortable:date">Review Date</th>
+      <th class="table-sortable:alphanumeric">Review Status</th>
+      <th class="table-sortable:alphanumeric">Reviewer</th>
+    </tr>
+  </thead>
+{% for review in nb_user.reviews %}
+  <tr>
+    <td class='nb_type'><a href={% url 'show_nb_review' review.id %}>Details</a></td>
+    <td class='nb_type'>{{review.nbtab.nb_number}}</td>
+    <td class='nb_title'>{{review.date_reviewed}}</td>
+    <td class='nb_title'>{{review.status|default:""}}</td>
+    <td class='nb_title'>{{review.reviewer.userprofile.full_name}}</td>
+  </tr>
+{% endfor %}
+</table>
+
+<script>
+$(".date-control").datepicker({ dateFormat: "yy-mm-dd" });
+</script>
+
+{% endblock %}

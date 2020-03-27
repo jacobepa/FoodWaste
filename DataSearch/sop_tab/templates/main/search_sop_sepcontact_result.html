@@ -1,0 +1,78 @@
+{% extends "base/site_base_sop_tab.html" %}
+{% load humanize %}
+{% block sop_tab_content %}
+<h3>SOPs with Separated SOP Contact</h3>
+
+<div>
+{% if objs %}
+	<h4>Found {{the_count}} SOPs with Separated SOP Contact ({{query_show}})</h4></p>
+
+	<table class="example table-autosort:0 table-stripeclass:alternate table-autofilter" id="soptab_table">
+		<thead id="soptab_head">
+		<tr>
+			<th class="table-sortable:alphanumeric">SOP Number</th>
+			<th class="table-sortable:alphanumeric">Previous ID</th>
+			<th class="table-sortable:alphanumeric">Alternate ID</th>
+			<th class="table-sortable:alphanumeric">Full Title</th>
+			<th class="table-sortable:alphanumeric">Status</th>
+			<th class="table-sortable:alphanumeric">Intramural or Extramural</th>
+			<th class="table-sortable:alphanumeric">SOP Contact</th>
+			<th class="table-sortable:date">SOP Contact Separation Date</th>
+			<th class="table-sortable:alphanumeric">Approving QA Manager</th>
+			<th class="table-sortable:alphanumeric">Approving Line Manager</th>
+            <th class="table-sortable:date">Date Approved</th>
+			<th class="table-sortable:date">Date Effective</th>
+			<th class="table-sortable:date">Date Reviewed</th>
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+	  	</tr>
+
+		</thead>
+
+		<tbody id="sop_body">
+
+			{% for obj in objs %}
+				<tr>
+                    <td><a href={% url 'show_sop_tab' obj.id %}>{{obj.sop_number}}</a></td>
+
+                    <td>{{obj.previous_id}}</td>
+					<td>{{obj.alt_id}}</td>
+					<td>{{obj.full_title}}</td>
+					<td>{{obj.sop_status}}</td>
+					<td>{{obj.mural_type}}</td>
+
+					<td>{{obj.sop_contact.first_name}} {{obj.sop_contact.last_name}}</td>
+					<td>{{obj.sop_contact.userprofile.date_epa_separation|date:"Y-m-d"}}</td>
+
+					<td>{{obj.approving_manager.first_name}} {{obj.approving_manager.last_name}}</td>
+					<td>{{obj.approving_line_manager.first_name}} {{obj.approving_line_manager.last_name}}</td>
+
+					<td>{{obj.date_approved|date:"Y-m-d"}}</td>
+					<td>{{obj.date_effective|date:"Y-m-d"}}</td>
+					<td>{{obj.date_reviewed|date:"Y-m-d"}}</td>
+
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No SOPs Found For This Query.</td></tr>
+	<tr><td>({{query_show}})</td></tr></table>
+{% endif %}
+</div>
+
+
+{% endblock %}

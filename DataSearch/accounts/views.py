@@ -9,7 +9,6 @@ import urllib.parse
 from django.db.models import Q
 from organization.models import *
 from django.contrib.sessions.models import Session
-from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.conf import settings
 from django.core.mail import send_mail
@@ -36,7 +35,7 @@ import organization.query_utils as oq
 from django.core.validators import validate_email
 from django.http import HttpResponseRedirect, QueryDict
 from django.forms import widgets, ModelForm, ValidationError
-from django.shortcuts import render, render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.decorators import method_decorator

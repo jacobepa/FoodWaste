@@ -1,0 +1,87 @@
+{% extends "base/site_base_nb_tab.html" %}
+{% load humanize %}
+
+{% block nb_tab_content %}
+
+<style>
+.sub_table td {
+  max-width:100px;
+  word-wrap: break-word;
+}
+table.main_table td{
+  padding:10px 5px;
+}
+table td.sub_table_container{
+  padding:10px;
+}
+</style>
+
+<h3>Notebook Custodians and Contributors</h3>
+
+
+
+{% if users|length %}
+<h4>Found {{users|length}} Custodians/Contributors with Criteria: ({{nb_annual_criteria}})</h4></p>
+
+<p>
+Click on a custodian/contributor name to:<br>
+	<ul>
+	<li>request a review</li>
+	<li>create a review to record the results</li>
+	<li>view the user's notebooks and past reviews</li>
+</ul>
+</p>
+
+<br/>
+
+	<table class="example table-autosort:0 table-stripeclass:alternate table-autofilter main_table" id="main_table" style="table-layout:fixed">
+{#    <table class="example table-stripeclass:alternate table-autofilter" id="support_table">#}
+
+		<thead id="support_head">
+		<tr>
+
+      <th class="table-sortable:alphanumeric">C/C</th>
+			<th class="table-sortable:alphanumeric">C/C Center</th>
+			<th class="table-sortable:alphanumeric">C/C Division</th>
+			<th class="table-sortable:alphanumeric">C/C Branch</th>
+      <th class="table-sortable:date">Needs Review</th>
+      <th class="table-sortable:date">Date Last Reviewed</th>
+      <th class="table-sortable:alphanumeric">Last Review Status</th>
+      <th class="table-sortable:date">Email Last Sent</th>
+
+		</tr>
+		<tr>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+			<th class="table-filterable"></th>
+    </tr>
+		</thead>
+		<tbody id="support_body">
+      {% for user in users %}
+        <tr>
+          <td><a id='{{user.user_id}}' href={% url 'nbtab_user_review' user.user_id %}>{{user.user.userprofile.full_name}}</a></td>
+          <td>{{user.user.userprofile.lab.abbreviation}}</td>
+          <td>{{user.user.userprofile.division.abbreviation}}</td>
+          <td>{{user.user.userprofile.branch.abbreviation}}</td>
+          <td>{{user.needs_review}}</td>
+          <td>{{user.recent_review.date_reviewed|default:"Never"}}</td>
+          <td>{{user.recent_review.status|default:""}}</td>
+          <td>{{user.recent_email.email_last_sent|default:"Never"}}</td>
+        </tr>
+
+        {% endfor %}
+			</tbody>
+	</table>
+	{% else %}
+	<table><tr><td>No Custodians Needing Notebook Review Found for This Query Where ({{nb_annual_criteria}})</td></tr></table>
+	{% endif %}
+
+
+</tr>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base/site_base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">SOP Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_sop_tab' %}">Search existing SOPs</a>
+                <a class="list-group-item" href="{% url 'search_sop_sepcontact' %}">Search SOPs with separated SOP Contact</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_sop_tab_item' 0 %}">Create record for new SOP</a>
+                {% endif %}
+                <a class="list-group-item" href="{% url 'search_sop_biennial_review' %}">View SOPs needing review</a>
+                <a class="list-group-item" href="{% static 'SOPCoverSheet.pdf'%}">Download SOP review cover sheet template</a>
+
+
+                {# SHOW THESE ACTIONS ONLY WHEN VIEWING AN SOP #}
+                {% if title == 'Show SOP' %}
+                    {% if kwargs.allow_edit %}
+                        <div title="Edit all fields of the SOP record."><a class="list-group-item" href="{% url 'edit_sop_tab_item' obj.id %}">Edit this SOP record</a></div>
+                        {#<div title="Quickly edit key fields of the SOP record. Does not allow editing of organizations, people, projects, or related SOPs fields."><a class="list-group-item" href="{% url 'quick_edit_sop_tab_item' obj.id %}">Quick Edit this SOP record [?]</a></div>#}
+                        <div title="Sets the status of this SOP to Archived."><a class="list-group-item" href="{% url 'archive_sop_tab_item' obj.id %}">Archive this SOP record [?]</a></div>
+                        <div title="Sets the status of this version of the SOP to Archived and creates a new version with values from this SOP. The version number is autoincremented. All values are copied except for comments, date fields, attachments, review history, and correspondence."><a class="list-group-item" href="{% url 'create_new_sop_version' obj.id %}">Generate record for new version of this SOP [?]</a></div>
+
+                        <a class="list-group-item" href="{% url 'link_organization_sop' obj.id %}">Link ORD Organization to this SOP record</a>
+                    {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class = "panel-heading">Program Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_program' %}">Search existing programs</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_program' %}">Create a program</a>
+                    {% if program.id %}
+                        <a class="list-group-item" href="{% url 'edit_program' program.id %}">Edit this program</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class = "panel-heading">EPA Non-ORD Organization Actions</div>
+            <div class="list-group">
+                <a class="list-group-item" href="{% url 'search_participating_organization' %}">Search existing EPA non-ORD organizations</a>
+                {% if kwargs.allow_create %}
+                    <a class="list-group-item" href="{% url 'create_participating_organization' %}">Create an EPA non-ORD organization</a>
+                    {% if organization.id %}
+                        <a class="list-group-item" href="{% url 'edit_participating_organization' organization.id %}">Edit this EPA non-ORD organization</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        {% block sop_tab_content %}
+        {% endblock %}
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+
