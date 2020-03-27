@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='audittype',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
     ]

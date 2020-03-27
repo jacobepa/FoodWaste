@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='projectattachment',
             name='qapp_review_file',
-            field=models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Yes'), (b'N', b'No')]),
+            field=models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Yes'), (b'N', b'No')]),
         ),
     ]

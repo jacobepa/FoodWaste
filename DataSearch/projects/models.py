@@ -55,7 +55,7 @@ class ProjectStatus(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
 
     sort_number = models.IntegerField(null=True, blank=True)
 
@@ -74,7 +74,7 @@ class ProjectType(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
 
     class Meta:
         ordering = ['the_name',]
@@ -91,7 +91,7 @@ class QappStatus(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
 
     class Meta:
         ordering = ['the_name',]
@@ -108,7 +108,7 @@ class QaCategory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
     class Meta:
         ordering = ['the_name',]
 
@@ -124,7 +124,7 @@ class Program(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
     class Meta:
         ordering = ['the_name',]
 
@@ -140,7 +140,7 @@ class NRMRLQAPPRequirement(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
 
     sort_number = models.IntegerField(null=True, blank=True)
 
@@ -159,7 +159,7 @@ class VehicleType(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
     class Meta:
         ordering = ['the_name',]
 
@@ -178,7 +178,7 @@ class ExtramuralVehicle(models.Model):
     institution_name = models.CharField(blank=True, null=True, max_length=255)
     vehicle_type = models.ForeignKey(VehicleType, on_delete=models.CASCADE, null=True, blank=True)
     vehicle_number = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
     class Meta:
         ordering = ['the_name',]
 
@@ -194,7 +194,7 @@ class ProjectCategory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
     class Meta:
         ordering = ['the_name',]
 
@@ -355,7 +355,7 @@ class Project(models.Model):
 
     public_or_private = models.CharField(blank=True, null=True, max_length=25, choices=PUBLIC_CHOICES)
 
-    suspend_reminder = models.CharField(default='N', max_length=2, choices=YN_CHOICES)
+    suspend_reminder = models.CharField(default='N', max_length=4, choices=YN_CHOICES)
 
     class Meta:
         ordering = ["qa_id",]
@@ -425,7 +425,7 @@ class ProjectLogType(models.Model):
     abbreviation = models.CharField(blank=True, null=True, max_length=25)
 
     next_major_number = models.IntegerField(null=True, blank=True)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
 
     class Meta:
         ordering = ['the_name',]
@@ -442,7 +442,7 @@ class ProductCategory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
-    is_active = models.CharField(blank=True, null=True, max_length=2, choices=YN_CHOICES)
+    is_active = models.CharField(blank=True, null=True, max_length=4, choices=YN_CHOICES)
 
     sort_number = models.IntegerField(null=True, blank=True)
 
@@ -584,14 +584,14 @@ class ProjectAttachment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
     project_log = models.ForeignKey(ProjectLog, on_delete=models.CASCADE, null=True, blank=True)
 
-    is_qapp_review_file = models.CharField(default='N', max_length=2, choices=YN_CHOICES)
+    is_qapp_review_file = models.CharField(default='N', max_length=4, choices=YN_CHOICES)
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
     the_size = models.CharField(blank=True, null=True, max_length=255)
     where_from = models.CharField(blank=True, null=True, max_length=255)
 
-    is_latest_qapp_doc = models.CharField(default='N', max_length=2, choices=YN_CHOICES)
-    is_latest_qapp_pdf = models.CharField(default='N', max_length=2, choices=YN_CHOICES)
+    is_latest_qapp_doc = models.CharField(default='N', max_length=4, choices=YN_CHOICES)
+    is_latest_qapp_pdf = models.CharField(default='N', max_length=4, choices=YN_CHOICES)
 
     class Meta:
         ordering = ['the_name',]

@@ -16,12 +16,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='nrmrlqapprequirement',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
         migrations.AlterField(
             model_name='program',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
         migrations.AlterField(
             model_name='project',
@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectcategory',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
         migrations.AlterField(
             model_name='projectlog',
@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectlogtype',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
         migrations.AlterField(
             model_name='projectrequest',
@@ -126,26 +126,26 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectstatus',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
         migrations.AlterField(
             model_name='projecttype',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
         migrations.AlterField(
             model_name='qacategory',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
         migrations.AlterField(
             model_name='qappstatus',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
         migrations.AlterField(
             model_name='vehicletype',
             name='is_active',
-            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True),
+            field=models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True),
         ),
     ]

@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('last_modified_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
                 ('abbreviation', models.CharField(max_length=15, null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('weblink', models.CharField(max_length=255, null=True, blank=True)),
                 ('ordering', models.DecimalField(null=True, max_digits=10, decimal_places=1, blank=True)),
                 ('the_description', models.TextField(null=True, blank=True)),

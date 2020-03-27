@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('created_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('last_modified_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('user', models.ForeignKey(on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                 ('created_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('last_modified_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('user', models.ForeignKey(on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -156,7 +156,7 @@ class Migration(migrations.Migration):
                 ('created_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('last_modified_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('user', models.ForeignKey(on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -228,7 +228,7 @@ class Migration(migrations.Migration):
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
                 ('abbreviation', models.CharField(max_length=25, null=True, blank=True)),
                 ('next_major_number', models.IntegerField(null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('user', models.ForeignKey(on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -307,7 +307,7 @@ class Migration(migrations.Migration):
                 ('created_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('last_modified_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('user', models.ForeignKey(on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -323,7 +323,7 @@ class Migration(migrations.Migration):
                 ('created_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('last_modified_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('user', models.ForeignKey(on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -339,7 +339,7 @@ class Migration(migrations.Migration):
                 ('created_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('last_modified_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('user', models.ForeignKey(on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -355,7 +355,7 @@ class Migration(migrations.Migration):
                 ('created_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('last_modified_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('user', models.ForeignKey(on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -404,7 +404,7 @@ class Migration(migrations.Migration):
                 ('created_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('last_modified_by', models.CharField(max_length=255, null=True, blank=True)),
                 ('the_name', models.CharField(max_length=255, null=True, blank=True)),
-                ('is_active', models.CharField(blank=True, max_length=2, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
+                ('is_active', models.CharField(blank=True, max_length=4, null=True, choices=[(b'', b''), (b'Y', b'Y'), (b'N', b'N')])),
                 ('user', models.ForeignKey(on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={

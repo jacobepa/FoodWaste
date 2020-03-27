@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('created_by', models.CharField(blank=True, max_length=255, null=True)),
                 ('last_modified_by', models.CharField(blank=True, max_length=255, null=True)),
                 ('the_name', models.CharField(blank=True, max_length=255, null=True)),
-                ('is_active', models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=2, null=True)),
+                ('is_active', models.CharField(blank=True, choices=[('', ''), ('Y', 'Yes'), ('N', 'No')], max_length=4, null=True)),
                 ('sort_number', models.IntegerField(blank=True, null=True)),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],

@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='suspend_reminder',
-            field=models.CharField(default=b'N', max_length=2, choices=[(b'', b''), (b'Y', b'Yes'), (b'N', b'No')]),
+            field=models.CharField(default=b'N', max_length=4, choices=[(b'', b''), (b'Y', b'Yes'), (b'N', b'No')]),
         ),
     ]

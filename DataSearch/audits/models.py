@@ -20,7 +20,7 @@ class AuditType(models.Model):
 	
 	the_name = models.CharField(null=True, blank=True, max_length=255)
 	abbreviation = models.CharField(null=True, blank=True, max_length=15)
-	is_active = models.CharField(null=True, blank=True, max_length=2, choices=YN_CHOICES)
+	is_active = models.CharField(null=True, blank=True, max_length=4, choices=YN_CHOICES)
 	
 	weblink = models.CharField(blank=True, null=True, max_length=255)
 	ordering = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=1)
