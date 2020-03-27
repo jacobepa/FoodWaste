@@ -260,99 +260,59 @@ class SectionBForm(ModelForm):
     """Class representing the entirety of SectionB for a given QAPP."""
 
     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
-                               required=True, label=_("Parent QAPP"),
-                               widget=Textarea(
-                                   attrs={'class': 'form-control mb-2',
-                                          'readonly': 'readonly'}))
-    # B1 Secondary Data will be a dropdown with options from the following: ?
-    # analytical methods, animal subjects, cell culture models, existing data,
-    # measurements, model application, model development, software development
-    # b1_secondary_data =
-    # b1_1 =
+                            required=True, label=_("Parent QAPP"),
+                            widget=Select(
+                                attrs={'class': 'form-control mb-2',
+                                        'readonly': 'readonly'}))
 
-    # @@@02202020JS - Modifying the labels to get rid of 'existing data',
-    # so the sectionb_type can be appended to labels in the template.
-    # B1_2 and B4 are the only two that changed because of this
-    b1_2 = CharField(
-        max_length=2047, label=_("B.1 Describe"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+    def __init__(self, *args, **kwargs):
+        """
+        Custom override method for init to receive dynamic sets of labels.
 
-    b1_3 = CharField(
-        max_length=2047, label=_("B.1 Specify Requirements"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+        This allows us to pass in each Section B type while reusing a single
+        form class.
+        """
+        section_b_info = kwargs.pop('section_b_info', None)
+        super(SectionBForm, self).__init__(*args, **kwargs)
+        if section_b_info:
+            for key, val in section_b_info.items():
+                self.fields[key] = CharField(
+                    help_text=val['desc'],
+                    max_length=2047, label=_(val['label']), required=False,
+                    widget=Textarea({'class': 'form-control mb-2'}))
 
-    b1_4 = CharField(
-        max_length=2047, label=_("B.1 Identify Databases, Maps, Literature..."),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    b1_5 = CharField(
-        max_length=2047, label=_("B.1 Identify Non-Quality Constraints"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    b2_1 = CharField(
-        max_length=2047, label=_("B.2 Identify Sources"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    b2_2 = CharField(
-        max_length=2047, label=_("B.2 Describe Acceptance/Rejection Process"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    b2_3 = CharField(
-        max_length=2047, label=_("B.2 Discuss Rationale for Selections"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    b2_4 = CharField(
-        max_length=2047, label=_("B.2 Describe Procedures"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    b2_5 = CharField(
-        max_length=2047, label=_("B.2 Disclaimer"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    b3 = CharField(
-        max_length=2047, label=_("B.3 Data Management and Documentation"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    b4 = CharField(
-        max_length=2047, label=_("B.4"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+    #def char_field(val):
+    #    return CharField(
+    #        help_text=val['desc'],
+    #        max_length=2047, label=_(val['label']), required=False,
+    #        widget=Textarea({'class': 'form-control mb-2'}))
 
     class Meta:
         """Meta data for SectionBForm Form."""
 
         model = SectionB
-        fields = ('qapp', 'b1_2', 'b1_3', 'b1_4', 'b1_5', 'b2_1',
-                  'b2_2', 'b2_3', 'b2_4', 'b2_5', 'b3', 'b4')
+        fields = '__all__'
 
 
-class SectionCForm(ModelForm):
-    """Class representing the entirety of SectionC for a given QAPP."""
+# class SectionCForm(ModelForm):
+#     """Class representing the entirety of SectionC for a given QAPP."""
 
-    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
-                            required=True, label=_("Parent QAPP"),
-                            widget=Textarea(
-                                attrs={'class': 'form-control mb-2',
-                                       'readonly': 'readonly'}))
+#     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
+#                             required=True, label=_("Parent QAPP"),
+#                             widget=Textarea(
+#                                 attrs={'class': 'form-control mb-2',
+#                                        'readonly': 'readonly'}))
 
-    # c1 = CharField(
-    #     max_length=2047,
-    #     label=_("C.1 Assessments and Response Actions"),
-    #     required=False, widget=Textarea({'class': 'form-control mb-2'}))
+#     c3 = CharField(
+#         max_length=2047,
+#         label=_("C.3 Quality Metrics (QA/QC Checks)"),
+#         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
-    # c2 = CharField(
-    #     max_length=2047, label=_("C.2 Reports to Management"),
-    #     required=False, widget=Textarea({'class': 'form-control mb-2'}))
+    # class Meta:
+    #     """Meta data for SectionCForm Form."""
 
-    c3 = CharField(
-        max_length=2047,
-        label=_("C.3 Quality Metrics (QA/QC Checks)"),
-        required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    class Meta:
-        """Meta data for SectionCForm Form."""
-
-        model = SectionC
-        fields = ('qapp', 'c3')
+    #     model = SectionC
+    #     fields = ('qapp', 'c3')
 
 
 class SectionDForm(ModelForm):

@@ -7,6 +7,9 @@
         {% if save_success %}
         <h3 id="save_success" class="text-success col-md-12 text-center">{{save_success}}</h3>
         {% endif %}
+        {% if error_message%}
+        <h3 id="error_message" class="text-danger col-md-12 text-center">{{error_message}}</h3>
+        {% endif %}
         <div class="border rounded p-3 row">
             {% include 'EPA_QAPP_Header_Partial.html' %}
             <div class="col-md-12">

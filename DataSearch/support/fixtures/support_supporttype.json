@@ -87,7 +87,8 @@
          "the_description":null,
          "weblink":null,
          "ordering":null
-      },
+      }
+   },
    {
       "model":"support.supporttype",
       "pk":7,

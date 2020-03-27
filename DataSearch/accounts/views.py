@@ -216,7 +216,7 @@ class PasswordResetRequestView(FormView):
                 # Email subject *must not* contain newlines.
                 subject = ''.join(subject.splitlines())
                 email = loader.render_to_string(email_template_name, content)
-                
+
                 if not settings.EMAIL_DISABLED:
                     send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
                                 [user.email], fail_silently=True)
@@ -408,7 +408,7 @@ class UserRegistrationView(FormView):
                 subject = ''.join(subject.splitlines())
                 email = loader.render_to_string(
                     self.user_email_template_name, user_email_context)
-                
+
                 if not settings.EMAIL_DISABLED:
                     send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
                               [user.email], fail_silently=False)

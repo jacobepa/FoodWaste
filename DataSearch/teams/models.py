@@ -40,7 +40,6 @@ class Team(models.Model):
         return self.name
 
 
-
 class TeamMembership(models.Model):
     """Object describing user's membership on a project team."""
 

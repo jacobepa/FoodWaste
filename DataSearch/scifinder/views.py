@@ -82,7 +82,7 @@ def scifinder_download(request, *args, **kwargs):
     else:
         # Export the upload specified, if it belongs to the user:
         file = Upload.objects.get(id=upload_id)
-        
+
         if file.uploaded_by == request.user:
             return download_file(file)
 

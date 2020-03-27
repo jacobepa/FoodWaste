@@ -14,6 +14,7 @@ from os import path, remove
 from wkhtmltopdf.views import PDFTemplateResponse
 from xhtml2pdf import pisa
 from zipfile import ZipFile
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -28,7 +29,41 @@ from DataSearch.forms import ExistingDataForm
 from DataSearch.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
 from DataSearch.settings import APP_DISCLAIMER
+from qar5.models import SectionA
 from teams.models import Team, TeamMembership
+
+@login_required
+@staff_member_required
+def web_dev_tools(request, *args, **kwargs):
+    """
+    Method to redirect a user to a webpage with various custom admin
+    functionality. For example, there will be a button to remove extra
+    new line characters and spaces from QAPP data.
+    """
+    return render(request, 'web_dev.html', {})
+
+
+@login_required
+@staff_member_required
+def clean_qapps(request, *args, **kwargs):
+    """
+    Method to remove extra new line characters and spaces from QAPP data.
+    This has been fixed in the constants, but any strings that have already
+    been inserted might need to be cleaned up.
+    """
+    # TODO: Fix all default data of all sections of all qapps
+    sections_a = SectionA.objects.all()
+    for sect in sections_a:
+        # Clean Section A
+        a3_clean = sect.a3.replace('\r\n', ' ').replace('    ', ' ')
+        a9_clean = sect.a9.replace('\r\n', ' ').replace('    ', ' ')
+        sect.a3 = a3_clean
+        sect.a9 = a9_clean
+        sect.save()
+        # Clean Section B
+        # Clean Section C
+        # Clean Section D
+    return render(request, 'web_dev.html', {})
 
 
 def get_existing_data_all():

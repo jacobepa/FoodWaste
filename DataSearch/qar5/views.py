@@ -24,12 +24,12 @@ from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, ListView, \
     TemplateView, UpdateView
-from constants.qar5 import SECTION_A_INFO, SECTION_B_INFO, \
-    SECTION_C_DEFAULTS, C3_QUALITY_METRICS, SECTION_D_INFO, SECTION_E_INFO, \
-    SECTION_F_INFO
+from constants.qar5 import SECTION_A_INFO, SECTION_C_DEFAULTS, \
+    C3_QUALITY_METRICS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
+from constants.qar5_sectionb import SECTION_B_INFO
 from DataSearch.settings import DATETIME_FORMAT, DEBUG, STATIC_ROOT
 from qar5.forms import QappForm, QappApprovalForm, QappLeadForm, \
-    QappApprovalSignatureForm, SectionAForm, SectionBForm, SectionCForm, \
+    QappApprovalSignatureForm, SectionAForm, SectionBForm, \
    SectionDForm, RevisionForm, ReferencesForm
 from qar5.models import Qapp, QappApproval, QappLead, QappApprovalSignature, \
     SectionA, SectionB, SectionBType, SectionC, SectionD, \
@@ -97,10 +97,10 @@ class QappList(LoginRequiredMixin, ListView):
 def check_can_edit(qapp, user):
     """
     Method used to check if the provided user can edit the provided qapp.
-    All of the user's member teams are checked as well as the user's 
+
+    All of the user's member teams are checked as well as the user's
     super user status or qapp ownership status.
     """
-
     # Check if any of the user's teams have edit privilege:
     user_teams = TeamMembership.objects.filter(
         member=user).values_list('team', flat=True)
@@ -129,8 +129,10 @@ class QappEdit(LoginRequiredMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         """
-        Override default get request so we can verify the user has edit
-        privileges, either through super status or team membership.
+        Override default get request.
+
+        So we can verify the user has edit privileges, either through super
+        status or team membership.
         """
         pk = kwargs.get('pk')
         qapp = Qapp.objects.filter(id=pk).first()
@@ -141,7 +143,6 @@ class QappEdit(LoginRequiredMixin, UpdateView):
 
         reason = 'You don\'t have edit permissions for this QAPP!'
         return HttpResponseRedirect('/qar5/detail/%s' % pk, 401, reason)
-
 
     def form_valid(self, form):
         """Qapp Edit Form validation and redirect."""
@@ -390,22 +391,37 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         qapp = Qapp.objects.get(id=qapp_id)
         sectiona = SectionA.objects.filter(qapp_id=qapp_id).first()
         sectionb_type = ''
-        if sectiona:
+        if sectiona and sectiona.sectionb_type_id:
             sectionb_type_id = sectiona.sectionb_type_id
             sectionb_type = SectionBType.objects.get(id=sectionb_type_id)
+
+        else:
+            form = SectionAForm({'qapp': qapp,
+                                 'a3': SECTION_A_INFO['a3'],
+                                 'a9': SECTION_A_INFO['a9']})
+            error_message = 'Please select a Section B Type from the ' + \
+                'dropdown before moving onto the next page, Section B.'
+            return render(request, 'SectionA/index.html',
+                          {'title': 'QAPP Section A', 'qapp_id': qapp_id,
+                           'SECTION_A_INFO': SECTION_A_INFO, 'form': form,
+                           'error_message': error_message})
 
         existing_section_b = SectionB.objects.filter(qapp=qapp).first()
 
         if existing_section_b:
-            form = SectionBForm(instance=existing_section_b)
+            form = SectionBForm(
+                instance=existing_section_b,
+                section_b_info=SECTION_B_INFO[sectionb_type.name])
 
         else:
-            form = SectionBForm({'qapp': qapp})
+            form = SectionBForm(
+                {'qapp': qapp},
+                section_b_info=SECTION_B_INFO[sectionb_type.name])
 
         return render(request, self.template_name,
                       {'title': 'QAPP Section B', 'qapp_id': qapp_id,
-                       'SECTION_B_INFO': SECTION_B_INFO, 'form': form,
-                       'sectionb_type': sectionb_type})
+                       'SECTION_B_INFO': SECTION_B_INFO[sectionb_type.name],
+                       'form': form, 'sectionb_type': sectionb_type})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -420,10 +436,13 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 
         # Update if existing, otherwise insert new:
         if existing_section_b:
-            ctx['form'] = SectionBForm(instance=existing_section_b,
-                                       data=request.POST)
+            ctx['form'] = SectionBForm(
+                instance=existing_section_b, data=request.POST,
+                section_b_info=SECTION_B_INFO[ctx['sectionb_type'].name])
         else:
-            ctx['form'] = SectionBForm(request.POST)
+            ctx['form'] = SectionBForm(
+                request.POST,
+                section_b_info=SECTION_B_INFO[ctx['sectionb_type'].name])
 
         if ctx['form'].is_valid():
             ctx['obj'] = ctx['form'].save(commit=True)
@@ -431,7 +450,7 @@ class SectionBView(LoginRequiredMixin, TemplateView):
 
         return render(request, self.template_name, ctx)
 
-    
+
 class SectionCView(LoginRequiredMixin, TemplateView):
     """Class for processing QAPP Section C information."""
 
@@ -444,41 +463,33 @@ class SectionCView(LoginRequiredMixin, TemplateView):
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
 
-        existing_section_c = SectionC.objects.filter(qapp=qapp).first()
-
-        if existing_section_c:
-            form = SectionCForm(instance=existing_section_c)
-
-        else:
-            form = SectionCForm({'qapp': qapp})
+        # existing_section_c = SectionC.objects.filter(qapp=qapp).first()
+        # if existing_section_c:
+        #     form = SectionCForm(instance=existing_section_c)
+        # else:
+        #     form = SectionCForm({'qapp': qapp})
 
         return render(request, self.template_name,
                       {'title': 'QAPP Section C', 'qapp_id': qapp_id,
                        'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS,
-                       'form': form, 'c3_info': C3_QUALITY_METRICS})
+                       'c3_info': C3_QUALITY_METRICS})
 
-    @method_decorator(login_required)
-    def post(self, request, *args, **kwargs):
-        """Process the post request with a SectionC form filled out."""
-        ctx = {'qapp_id': request.GET.get('qapp_id', None),
-               'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS,
-               'title': 'QAPP Section C', 'c3_info': C3_QUALITY_METRICS}
-
-        qapp = Qapp.objects.get(id=ctx['qapp_id'])
-        existing_section_c = SectionC.objects.filter(qapp=qapp).first()
-
-        # Update if existing, otherwise insert new:
-        if existing_section_c:
-            ctx['form'] = SectionCForm(instance=existing_section_c,
-                                       data=request.POST)
-        else:
-            ctx['form'] = SectionCForm(request.POST)
-
-        if ctx['form'].is_valid():
-            ctx['obj'] = ctx['form'].save(commit=True)
-            ctx['save_success'] = 'Successfully Saved Changes!'
-
-        return render(request, self.template_name, ctx)
+    # @method_decorator(login_required)
+    # def post(self, request, *args, **kwargs):
+    #     """Process the post request with a SectionC form filled out."""
+    #     ctx = {'qapp_id': request.GET.get('qapp_id', None),
+    #            'SECTION_C_DEFAULTS': SECTION_C_DEFAULTS,
+    #            'title': 'QAPP Section C', 'c3_info': C3_QUALITY_METRICS}
+    #     qapp = Qapp.objects.get(id=ctx['qapp_id'])
+    #     existing_section_c = SectionC.objects.filter(qapp=qapp).first()
+    #     if existing_section_c:
+    #         ctx['form'] = SectionCForm(instance=existing_section_c,
+    #                                    data=request.POST)
+    #         ctx['form'] = SectionCForm(request.POST)
+    #     if ctx['form'].is_valid():
+    #         ctx['obj'] = ctx['form'].save(commit=True)
+    #         ctx['save_success'] = 'Successfully Saved Changes!'
+    #     return render(request, self.template_name, ctx)
 
 
 class SectionDView(LoginRequiredMixin, TemplateView):
@@ -656,17 +667,17 @@ def get_qar5_for_team(team_id, qapp_id=None):
     if qapp_id:
         return Qapp.objects.filter(
             id__in=include_qapps).filter(id=qapp_id).first()
-    
+
     return Qapp.objects.filter(id__in=include_qapps)
 
 
 def get_qapp_info(user, qapp_id):
-    """Method to return all pieces of a qapp in a dictionary"""
+    """Method to return all pieces of a qapp in a dictionary."""
     ctx = {}
     ctx['qapp'] = get_qar5_for_user(user.id, qapp_id)
 
     # Only return this if the user has access to it via super, owner, or team:
-    #db_user = User.objects.get(id=user.id)
+    # db_user = User.objects.get(id=user.id)
 
     if ctx['qapp'] or user.is_superuser or ctx['qapp'].prepared_by == user:
         ctx['qapp_leads'] = QappLead.objects.filter(qapp_id=qapp_id)
@@ -677,7 +688,7 @@ def get_qapp_info(user, qapp_id):
                 qapp_approval_id=ctx['qapp_approval'].id)
         ctx['section_a'] = SectionA.objects.filter(qapp_id=qapp_id).first()
         ctx['section_b'] = SectionB.objects.filter(qapp_id=qapp_id).first()
-        ctx['section_c'] = SectionC.objects.filter(qapp_id=qapp_id).first()
+        ctx['section_c'] = SectionC()
         ctx['section_d'] = SectionD.objects.filter(qapp_id=qapp_id).first()
         ctx['references'] = References.objects.filter(qapp_id=qapp_id).first()
         ctx['revisions'] = Revision.objects.filter(qapp_id=qapp_id)

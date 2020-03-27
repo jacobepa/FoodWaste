@@ -63,7 +63,7 @@ class Qapp(models.Model):
     def save_model(self, request, obj, form, change):
         """
         Overwrite the default save_model method.
-        
+
         So we can automatically set the prepared_by field as current user.
         """
         # Only set prepared_by when it's the first save (create)
@@ -75,7 +75,6 @@ class Qapp(models.Model):
     def __str__(self):
         """Override str method to display name instead of stringified obj."""
         return self.title
-
 
     # def save(user):
     #    """
@@ -168,34 +167,58 @@ class SectionA(models.Model):
     a9_drive_path = models.CharField(blank=False, null=False, max_length=255)
     # Dropdown selection for the SectionB Classificiation
     sectionb_type = models.ForeignKey(SectionBType, blank=True, null=True,
-                                       related_name='sectionb_type',
+                                      related_name='sectionb_type',
                                       on_delete=models.CASCADE)
 
 
 class SectionB(models.Model):
-    """Class representing the entirety of SectionB for a given QAPP."""
+    """
+    Class representing the entirety of SectionB for a given QAPP.
+
+    Instead of creating a Section B class for each of the Section B Types,
+    there will instead be one class with extra nullable fields. There
+    will likely still be multiple forms for the different Section B Types.
+    """
 
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
-    # B1 Secondary Data will be a dropdown with options from the following: ?
-    # analytical methods, animal subjects, cell culture models, existing data,
-    # measurements, model application, model development, software development
-    # b1_secondary_data =
-    # b1_1 =
+    b1_1 = models.CharField(blank=True, null=True, max_length=2047)
+    b1_2 = models.CharField(blank=True, null=True, max_length=2047)
+    b1_3 = models.CharField(blank=True, null=True, max_length=2047)
+    b1_4 = models.CharField(blank=True, null=True, max_length=2047)
+    b1_5 = models.CharField(blank=True, null=True, max_length=2047)
 
-    b1_2 = models.CharField(blank=False, null=False, max_length=2047)
-    b1_3 = models.CharField(blank=False, null=False, max_length=2047)
-    b1_4 = models.CharField(blank=False, null=False, max_length=2047)
-    b1_5 = models.CharField(blank=False, null=False, max_length=2047)
+    b2_1 = models.CharField(blank=True, null=True, max_length=2047)
+    b2_2 = models.CharField(blank=True, null=True, max_length=2047)
+    b2_3 = models.CharField(blank=True, null=True, max_length=2047)
+    b2_4 = models.CharField(blank=True, null=True, max_length=2047)
+    b2_5 = models.CharField(blank=True, null=True, max_length=2047)
+    b2_6 = models.CharField(blank=True, null=True, max_length=2047)
+    b2_7 = models.CharField(blank=True, null=True, max_length=2047)
+    b2_8 = models.CharField(blank=True, null=True, max_length=2047)
 
-    b2_1 = models.CharField(blank=False, null=False, max_length=2047)
-    b2_2 = models.CharField(blank=False, null=False, max_length=2047)
-    b2_3 = models.CharField(blank=False, null=False, max_length=2047)
-    b2_4 = models.CharField(blank=False, null=False, max_length=2047)
-    b2_5 = models.CharField(blank=False, null=False, max_length=2047)
+    b3_1 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_2 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_3 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_4 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_5 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_6 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_7 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_8 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_9 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_10 = models.CharField(blank=True, null=True, max_length=2047)
 
-    b3 = models.CharField(blank=False, null=False, max_length=2047)
-    b4 = models.CharField(blank=False, null=False, max_length=2047)
+    b4_1 = models.CharField(blank=True, null=True, max_length=2047)
+    b4_2 = models.CharField(blank=True, null=True, max_length=2047)
+    b4_3 = models.CharField(blank=True, null=True, max_length=2047)
+    b4_4 = models.CharField(blank=True, null=True, max_length=2047)
+    b4_5 = models.CharField(blank=True, null=True, max_length=2047)
+
+    b5_1 = models.CharField(blank=True, null=True, max_length=2047)
+    b5_2 = models.CharField(blank=True, null=True, max_length=2047)
+
+    b6_1 = models.CharField(blank=True, null=True, max_length=2047)
+    b6_2 = models.CharField(blank=True, null=True, max_length=2047)
 
 
 class SectionC(models.Model):
@@ -205,9 +228,7 @@ class SectionC(models.Model):
         Qapp, on_delete=models.CASCADE, primary_key=True)
     c1 = SECTION_C_INFO[0]
     c2 = SECTION_C_INFO[1]
-    c3 = models.CharField(blank=False, null=False, max_length=2047)
-
-
+    # c3 = models.CharField(blank=False, null=False, max_length=2047)
 
 
 class SectionD(models.Model):

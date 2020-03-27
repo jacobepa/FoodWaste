@@ -22,8 +22,11 @@ from zipfile import ZipFile
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.templatetags.static import static
+from django.utils.text import slugify
+from constants.qar5_sectionb import SECTION_B_INFO
 from DataSearch.settings import DEBUG, STATIC_ROOT
 from qar5.views import get_qar5_for_user, get_qar5_for_team, get_qapp_info
+
 
 def export_doc(request, *args, **kwargs):
     """Function to export a multiple QAPP objects as Word Docx files."""
@@ -65,20 +68,20 @@ def export_doc(request, *args, **kwargs):
 
 
 def add_custom_heading(document, text, level):
-    """Helper method to easily add centered headers to a docx file"""
+    """Helper method to easily add centered headers to a docx file."""
     heading_style = 'custom_header_%d' % level
     paragraph = document.add_paragraph(text, heading_style)
     return paragraph
 
 
 def add_center_heading(document, text, level):
-    """Helper method to easily add centered headers to a docx file"""
+    """Helper method to easily add centered headers to a docx file."""
     paragraph = add_custom_heading(document, text, level)
     paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
 
 def set_table_row_height(table):
-    """Helper method to set minimum row height and alignment for a table"""
+    """Helper method to set minimum row height and alignment for a table."""
     for row in table.rows:
         row.height_rule = WD_ROW_HEIGHT_RULE.AT_LEAST
         row.height = Inches(0.35)
@@ -89,10 +92,10 @@ def set_table_row_height(table):
 def add_custom_headers(document):
     """
     Helper method to create and inject custom headers into a docx.
+
     This functionality is necessary so the cover page isn't added
     to the auto-generated Table of Contents.
     """
-    
     custom_header_1 = document.styles.add_style(
         'custom_header_1', WD_STYLE_TYPE.PARAGRAPH)
     custom_header_1.font.size = Pt(14)
@@ -113,8 +116,8 @@ def add_custom_headers(document):
 
 
 def create_toc(document):
-    """Helper method to set up the Table of Contents page"""
-    add_custom_heading(document, 'Table of Contents', level=2)
+    """Helper method to set up the Table of Contents page."""
+    add_custom_heading(document, 'A.2 Table of Contents', level=2)
     paragraph = document.add_paragraph()
     run = paragraph.add_run()
     # creates a new element
@@ -144,17 +147,16 @@ def create_toc(document):
     p_element = paragraph._p
 
 
-
 # py-lint: disable=no-member
 def export_doc_single(request, *args, **kwargs):
     """Function to export a single QAPP object as a Word Docx file."""
-    qapp_id = kwargs.get('pk', None) 
+    qapp_id = kwargs.get('pk', None)
     qapp_info = get_qapp_info(request.user, qapp_id)
 
     if not qapp_info:
         return HttpResponseRedirect(request)
 
-    filename = '%s.docx' % qapp_info['qapp'].title
+    filename = '%s.docx' % slugify(qapp_info['qapp'].title)
 
     document = Document()
     add_custom_headers(document)
@@ -164,19 +166,24 @@ def export_doc_single(request, *args, **kwargs):
     # BEGIN COVER PAGE
     # #################################################
     # Coversheet with signatures section:
-    if DEBUG:
-        logo = path.join(STATIC_ROOT, 'EPA_Files', 'logo.png')
-        qual_assur_proj_plan = path.join(
-            STATIC_ROOT, 'images', 'quality_assurance_project_plan.PNG')
-    else:
-        logo = static('logo.png')
-        qual_assur_proj_plan = static('quality_assurance_project_plan.PNG')
-
     # TODO: Add top row logo and blue background label
     run = document.add_paragraph().add_run()
-    run.add_picture(logo, width=Inches(1.5))
-    run.add_text('\t\t\t')
-    run.add_picture(qual_assur_proj_plan, width=Inches(3))
+
+    try:
+        if DEBUG:
+            logo = path.join(STATIC_ROOT, 'EPA_Files', 'loogo.png')
+            qual_assur_proj_plan = path.join(
+                STATIC_ROOT, 'images', 'quality_assurance_project_plan.PNG')
+        else:
+            logo = static('logo.png')
+            qual_assur_proj_plan = static('quality_assurance_project_plan.PNG')
+
+        run.add_picture(logo, width=Inches(1.5))
+        run.add_text('\t\t\t')
+        run.add_picture(qual_assur_proj_plan, width=Inches(3))
+
+    except FileNotFoundError:
+        print('couldn\'t find the static images!')
 
     # TODO Make blue_header text white, add blue background with shadow
     # document.add_picture('blue_background.png', width=Inches(4))
@@ -201,7 +208,7 @@ def export_doc_single(request, *args, **kwargs):
     add_center_heading(document, str(qapp_info['qapp'].date), level=3)
     # blank line
     add_center_heading(document, 'Prepared By', level=2)
-    add_center_heading(document, 
+    add_center_heading(document,
         '%s %s' % (qapp_info['qapp'].prepared_by.first_name,
                     qapp_info['qapp'].prepared_by.last_name,),
         level=3)
@@ -214,7 +221,7 @@ def export_doc_single(request, *args, **kwargs):
     # BEGIN APPROVAL PAGE
     # #################################################
 
-    add_custom_heading(document, 'Approval Page', level=2)
+    add_custom_heading(document, 'A.1 Approval Page', level=2)
     # Signature grid ...
     num_signatures = len(qapp_info['signatures'])
     table = document.add_table(rows=6+num_signatures, cols=12)
@@ -329,89 +336,48 @@ def export_doc_single(request, *args, **kwargs):
     # Section A
     document.add_heading('Section A - Executive Summary', level=1)
     if qapp_info['section_a']:
-        document.add_heading('A.1 Distribution List', level=2)
+        document.add_heading('A.3 Distribution List', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a3.replace('\r\n', ' '),
+            qapp_info['section_a'].a3,
             styles['No Spacing'])
-        document.add_heading('A.2 Project Task Organization', level=2)
+        document.add_heading('A.4 Project Task Organization', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a4.replace('\r\n', ' '),
+            qapp_info['section_a'].a4,
             styles['No Spacing'])
-        document.add_heading('A.3 Problem Definition Background', level=2)
+        document.add_heading('A.5 Problem Definition Background', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a5.replace('\r\n', ' '),
+            qapp_info['section_a'].a5,
             styles['No Spacing'])
-        document.add_heading('A.4 Project Description', level=2)
+        document.add_heading('A.6 Project Description', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a6.replace('\r\n', ' '),
+            qapp_info['section_a'].a6,
             styles['No Spacing'])
-        document.add_heading('A.5 Quality Objectives and Criteria', level=2)
+        document.add_heading('A.7 Quality Objectives and Criteria', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a7.replace('\r\n', ' '),
+            qapp_info['section_a'].a7,
             styles['No Spacing'])
-        document.add_heading('A.6 Special Training Certification', level=2)
+        document.add_heading('A.8 Special Training Certification', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a8.replace('\r\n', ' '),
+            qapp_info['section_a'].a8,
             styles['No Spacing'])
-        document.add_heading('A.7 Documents and Records', level=2)
+        document.add_heading('A.9 Documents and Records', level=2)
         document.add_paragraph(
-            qapp_info['section_a'].a9.replace('\r\n', ' '),
+            qapp_info['section_a'].a9,
             styles['No Spacing'])
     else:
         document.add_heading('SECTION A INCOMPLETE!', level=2)
 
     # Section B
-    document.add_heading('Section B - Experimental Design', level=1)
+    document.add_heading('Section B', level=1)
     if qapp_info['section_b']:
-        document.add_heading(
-            'B.1 Sample/Data Collection, Gathering, or Use', level=2)
-        document.add_heading('B.1.1 Use', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b1_2.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.1.2 Requirements', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b1_3.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.1.3 Databases, Maps, Literature', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b1_4.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.1.4 Non-Quality Constraints', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b1_5.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading(
-            'B.2 Data Analysis / Statistical Design / Data Management',
-            level=2)
-        document.add_heading('B.2.1 Sources', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_1.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.2.2 Acceptance/Rejection Process', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_2.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.2.3 Rationale for Selections', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_3.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.2.4 Procedures', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_4.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.2.5 Disclaimer', level=3)
-        document.add_paragraph(
-            qapp_info['section_b'].b2_5.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.3 Data Management and Documentation', level=2)
-        document.add_paragraph(
-            qapp_info['section_b'].b3.replace('\r\n', ' '),
-            styles['No Spacing'])
-        document.add_heading('B.4 Tracking', level=2)
-        document.add_paragraph(
-            qapp_info['section_b'].b4.replace('\r\n', ' '),
-            styles['No Spacing'])
+        sectionb_type = qapp_info['section_a'].sectionb_type.name
+        section_b_info = SECTION_B_INFO[sectionb_type]
+        for key in section_b_info:
+            val = getattr(qapp_info['section_b'], key, '')
+            if section_b_info[key].get('heading', False):
+                document.add_heading(section_b_info[key]['heading'], level=2)
+            document.add_heading(section_b_info[key]['label'], level=3)
+            document.add_paragraph(val, styles['No Spacing'])
     else:
         document.add_heading('SECTION B INCOMPLETE!', level=2)
 
@@ -421,16 +387,16 @@ def export_doc_single(request, *args, **kwargs):
         document.add_heading(
             'C.1 Assessments and Response Actions', level=2)
         document.add_paragraph(
-            qapp_info['section_c'].c1.replace('\r\n', ' '),
+            qapp_info['section_c'].c1,
             styles['No Spacing'])
         document.add_heading('C.2 Reports to Management', level=2)
         document.add_paragraph(
-            qapp_info['section_c'].c2.replace('\r\n', ' '),
+            qapp_info['section_c'].c2,
             styles['No Spacing'])
-        document.add_heading('C.3 Quality Metrics (QA/QC Checks)', level=2)
-        document.add_paragraph(
-            qapp_info['section_c'].c3.replace('\r\n', ' '),
-            styles['No Spacing'])
+        # document.add_heading('C.3 Quality Metrics (QA/QC Checks)', level=2)
+        # document.add_paragraph(
+        #     qapp_info['section_c'].c3,
+        #     styles['No Spacing'])
     else:
         document.add_heading(
             'C.1 Assessments and Response Actions', level=2)
@@ -442,17 +408,17 @@ def export_doc_single(request, *args, **kwargs):
         document.add_heading(
             'D.1 Data Review, Verification, and Validation', level=2)
         document.add_paragraph(
-            qapp_info['section_d'].d1.replace('\r\n', ' '),
+            qapp_info['section_d'].d1,
             styles['No Spacing'])
         document.add_heading(
             'D.2 Verification and Validation Methods', level=2)
         document.add_paragraph(
-            qapp_info['section_d'].d2.replace('\r\n', ' '),
+            qapp_info['section_d'].d2,
             styles['No Spacing'])
         document.add_heading(
             'D.3 Reconciliation with User Requirements', level=2)
         document.add_paragraph(
-            qapp_info['section_d'].d3.replace('\r\n', ' '),
+            qapp_info['section_d'].d3,
             styles['No Spacing'])
     else:
         document.add_heading('SECTION D INCOMPLETE!', level=2)
@@ -460,13 +426,15 @@ def export_doc_single(request, *args, **kwargs):
     # References
     document.add_heading('References', level=1)
     if qapp_info['references']:
-        document.add_paragraph(
-            qapp_info['references'].references.replace('\r\n\r\n', '\r\n'),
-            styles['No Spacing'])
+        run = document.add_paragraph().add_run()
+        run.add_text(qapp_info['references'].references)
+        # document.add_paragraph(
+        #     qapp_info['references'].references.replace('\r\n\r\n', '\r\n'),
+        #     styles['No Spacing'])
     else:
         document.add_heading('REFERENCES SECTION INCOMPLETE!', level=2)
 
-    content_type='application/vnd.openxmlformats-officedocument.' + \
+    content_type = 'application/vnd.openxmlformats-officedocument.' + \
             'wordprocessingml.document'
     response = HttpResponse(content_type)
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
