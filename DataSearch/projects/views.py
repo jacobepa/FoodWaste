@@ -719,7 +719,7 @@ def result_search_qapp_annual_review(request,**kwargs):
                     lead_criteria_list += "Project Lead Last Name starts with " + str(person_last)
 
                 if person_first:
-                    if lead_sql is not "":
+                    if lead_sql != "":
                         lead_sql += " and "
                         lead_criteria_list += " and "
                     lead_sql += "person_id in (select id from auth_user where upper(first_name) " \
@@ -735,7 +735,7 @@ def result_search_qapp_annual_review(request,**kwargs):
                     qam_criteria_list += "Project QA Manager Last Name starts with " + str(person_last)
 
                 if person_first:
-                    if qam_sql is not "":
+                    if qam_sql != "":
                         qam_sql += " and "
                         qam_criteria_list += " and "
                     qam_sql += "qa_manager_id in (select id from auth_user where upper(first_name) " \
@@ -752,7 +752,7 @@ def result_search_qapp_annual_review(request,**kwargs):
                                             + str(person_last)
 
                 if person_first:
-                    if reviewer_sql is not "":
+                    if reviewer_sql != "":
                         reviewer_sql += " and "
                         reviewer_criteria_list += " and "
 
@@ -768,7 +768,7 @@ def result_search_qapp_annual_review(request,**kwargs):
                 people_criteria += lead_criteria_list
 
             if qam_sql:
-                if people_sql is "(":
+                if people_sql == "(":
                     people_sql += qam_sql
                     people_criteria += qam_criteria_list
                 else:
@@ -776,7 +776,7 @@ def result_search_qapp_annual_review(request,**kwargs):
                     people_criteria = people_criteria + " or " + qam_criteria_list
 
             if reviewer_sql:
-                if people_sql is "(":
+                if people_sql == "(":
                     people_sql += reviewer_sql
                     people_criteria += reviewer_criteria_list
                 else:

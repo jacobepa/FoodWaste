@@ -36,6 +36,15 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('accounts', '0004_auto_20200327_1416'),
+        ('branches', '0001_initial'),
+        ('divisions', '0001_initial'),
+        ('immediate_offices', '0001_initial'),
+        ('labs', '0002_lab_designation_code'),
+        ('offices', '0001_initial'),
+        ('organization', '0009_auto_20190218_1816'),
+        ('persons', '0004_auto_20180406_1916'),
+        ('projects', '0051_remove_ordatwork'),
+        ('rms', '0011_auto_20180413_2312'),
     ]
 
     operations = [

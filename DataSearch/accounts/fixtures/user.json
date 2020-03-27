@@ -217,42 +217,6 @@
 },
 {
   "fields": {
-    "codename": "add_site",
-    "name": "Can add site",
-    "content_type": [
-      "sites",
-      "site"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 19
-},
-{
-  "fields": {
-    "codename": "change_site",
-    "name": "Can change site",
-    "content_type": [
-      "sites",
-      "site"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 20
-},
-{
-  "fields": {
-    "codename": "delete_site",
-    "name": "Can delete site",
-    "content_type": [
-      "sites",
-      "site"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 21
-},
-{
-  "fields": {
     "codename": "add_userprofile",
     "name": "Can add user profile",
     "content_type": [
@@ -610,6 +574,30 @@
   },
   "model": "auth.permission",
   "pk": 123
+},
+{
+  "fields": {
+    "codename": "add_personemergencycontact",
+    "name": "Can add person emergency contact",
+    "content_type": [
+      "persons",
+      "personemergencycontact"
+    ]
+  },
+  "model": "auth.permission",
+  "pk": 124
+},
+{
+  "fields": {
+    "codename": "change_personemergencycontact",
+    "name": "Can change person emergency contact",
+    "content_type": [
+      "persons",
+      "personemergencycontact"
+    ]
+  },
+  "model": "auth.permission",
+  "pk": 125
 },
 {
   "fields": {
@@ -1261,150 +1249,6 @@
 },
 {
   "fields": {
-    "codename": "add_soptype",
-    "name": "Can add sop type",
-    "content_type": [
-      "sops",
-      "soptype"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 214
-},
-{
-  "fields": {
-    "codename": "change_soptype",
-    "name": "Can change sop type",
-    "content_type": [
-      "sops",
-      "soptype"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 215
-},
-{
-  "fields": {
-    "codename": "delete_soptype",
-    "name": "Can delete sop type",
-    "content_type": [
-      "sops",
-      "soptype"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 216
-},
-{
-  "fields": {
-    "codename": "add_sop",
-    "name": "Can add sop",
-    "content_type": [
-      "sops",
-      "sop"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 217
-},
-{
-  "fields": {
-    "codename": "change_sop",
-    "name": "Can change sop",
-    "content_type": [
-      "sops",
-      "sop"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 218
-},
-{
-  "fields": {
-    "codename": "delete_sop",
-    "name": "Can delete sop",
-    "content_type": [
-      "sops",
-      "sop"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 219
-},
-{
-  "fields": {
-    "codename": "add_sopitem",
-    "name": "Can add sop item",
-    "content_type": [
-      "sops",
-      "sopitem"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 220
-},
-{
-  "fields": {
-    "codename": "change_sopitem",
-    "name": "Can change sop item",
-    "content_type": [
-      "sops",
-      "sopitem"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 221
-},
-{
-  "fields": {
-    "codename": "delete_sopitem",
-    "name": "Can delete sop item",
-    "content_type": [
-      "sops",
-      "sopitem"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 222
-},
-{
-  "fields": {
-    "codename": "add_sopinformation",
-    "name": "Can add sop information",
-    "content_type": [
-      "sops",
-      "sopinformation"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 223
-},
-{
-  "fields": {
-    "codename": "change_sopinformation",
-    "name": "Can change sop information",
-    "content_type": [
-      "sops",
-      "sopinformation"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 224
-},
-{
-  "fields": {
-    "codename": "delete_sopinformation",
-    "name": "Can delete sop information",
-    "content_type": [
-      "sops",
-      "sopinformation"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 225
-},
-{
-  "fields": {
     "codename": "add_supporttype",
     "name": "Can add support type",
     "content_type": [
@@ -1510,114 +1354,6 @@
   },
   "model": "auth.permission",
   "pk": 234
-},
-{
-  "fields": {
-    "codename": "add_version",
-    "name": "Can add version",
-    "content_type": [
-      "versions",
-      "version"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 235
-},
-{
-  "fields": {
-    "codename": "change_version",
-    "name": "Can change version",
-    "content_type": [
-      "versions",
-      "version"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 236
-},
-{
-  "fields": {
-    "codename": "delete_version",
-    "name": "Can delete version",
-    "content_type": [
-      "versions",
-      "version"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 237
-},
-{
-  "fields": {
-    "codename": "add_versionitem",
-    "name": "Can add version item",
-    "content_type": [
-      "versions",
-      "versionitem"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 238
-},
-{
-  "fields": {
-    "codename": "change_versionitem",
-    "name": "Can change version item",
-    "content_type": [
-      "versions",
-      "versionitem"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 239
-},
-{
-  "fields": {
-    "codename": "delete_versionitem",
-    "name": "Can delete version item",
-    "content_type": [
-      "versions",
-      "versionitem"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 240
-},
-{
-  "fields": {
-    "codename": "add_aboutqatrack",
-    "name": "Can add about qa track",
-    "content_type": [
-      "versions",
-      "aboutqatrack"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 241
-},
-{
-  "fields": {
-    "codename": "change_aboutqatrack",
-    "name": "Can change about qa track",
-    "content_type": [
-      "versions",
-      "aboutqatrack"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 242
-},
-{
-  "fields": {
-    "codename": "delete_aboutqatrack",
-    "name": "Can delete about qa track",
-    "content_type": [
-      "versions",
-      "aboutqatrack"
-    ]
-  },
-  "model": "auth.permission",
-  "pk": 243
 },
 {
   "fields": {
