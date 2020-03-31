@@ -117,7 +117,7 @@ class ExistingDataForm(ModelForm):
                 member=current_user).values_list('team', flat=True)
             self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
             self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
-        except:
+        except BaseException:
             super(ExistingDataForm, self).__init__(*args, **kwargs)
 
     class Meta:

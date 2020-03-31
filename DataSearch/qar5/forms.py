@@ -95,7 +95,7 @@ class QappForm(ModelForm):
                 Team.objects.filter(id__in=team_ids)
             self.fields['teams'].label_from_instance = \
                 lambda obj: "%s" % obj.name
-        except:
+        except BaseException:
             super(QappForm, self).__init__(*args, **kwargs)
 
     class Meta:
@@ -281,7 +281,7 @@ class SectionBForm(ModelForm):
                     max_length=2047, label=_(val['label']), required=False,
                     widget=Textarea({'class': 'form-control mb-2'}))
 
-    #def char_field(val):
+    # def char_field(val):
     #    return CharField(
     #        help_text=val['desc'],
     #        max_length=2047, label=_(val['label']), required=False,
