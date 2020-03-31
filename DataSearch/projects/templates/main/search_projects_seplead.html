@@ -2,24 +2,26 @@
 {% load humanize %}
 
 {% block project_content %}
-<h3>Search Projects with Separated Project Lead Only</h3>
-<div>
-    Use this search to find projects that may need the Project Lead field updated because the current Project Lead is no longer an EPA employee. This search is single purpose compared to "Search projects with database completeness issues" and does not take QAPP status into account.
-    <p><br>
-
-    To search for projects, select an organization, then click the "Search" button.
+<div class="row">
+    <h3>Search Projects with Separated Project Lead Only</h3>
+    <p>
+        Use this search to find projects that may need the Project Lead
+        field updated because the current Project Lead is no longer an
+        EPA employee. This search is single purpose compared to "Search
+        projects with database completeness issues" and does not take QAPP status into account.
+    </p>
+    <p>To search for projects, select an organization, then click the "Search" button.</p>
 </div>
-<div class="vmargin20">
-    <form class="form-horizontal" action="{% url 'result_search_project_seplead' %}" method="get">
 
+<div class="row">
+    <form class="form-horizontal col-sm-12" action="{% url 'result_search_project_seplead' %}" method="get">
         <div class="form-group">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-1">
+            <div class="col-sm-12">
                 <input type="submit" value="Search" name="start" class="btn btn-md btn-success">
             </div>
-            <label class="col-sm-2 control-label" title="To select multiple statuses, use Ctrl-click.">[?] Project Status</label>
-            <div class="col-sm-5">
-                <select class="form-control"  multiple="multiple" size=4 style="height: 100%;" name="project_status" value="{{project_status}}">
+            <label class="col-sm-4 control-label" title="To select multiple statuses, use Ctrl-click.">[?] Project Status</label>
+            <div class="col-sm-8">
+                <select class="form-control"  multiple="multiple" size=4 style="height: 100%;" name="project_status" {% if project_status %}value="{{project_status}}"{% endif %}>
                     {% for instance in project_statuses %}
                     <option {% if instance.id == selected_status.id %}selected{% endif%} value="{{instance.id}}">
                         {{instance.the_name}}
