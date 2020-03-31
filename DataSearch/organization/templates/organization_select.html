@@ -8,7 +8,7 @@ NOTE: lab/center was replaced with center/office with 2019 reorg of ORD.
         <label class="{{label_class}} control-label {% if office_required %}required{% endif %}"
                for="office">Office:</label>
         <div class="{{input_container_class}}">
-            <select id="id_office" name="office" class="form-control" {{org_disabled}}>
+            <select id="id_office" name="office" class="form-control" {% if org_disabled %}{{org_disabled}}{% endif %}>
                 <option value="">---</option>
             </select>
         </div>
@@ -18,7 +18,7 @@ NOTE: lab/center was replaced with center/office with 2019 reorg of ORD.
         <label title="By default, this dropdown will list the current centers for the selected office. Use the Show inactive organization units checkbox below to include old lab/centers in this dropdown." class="{{label_class}} control-label {% if lab_required %}required{% endif %}"
                for="lab">[?] Center/Office:</label>
         <div class="{{input_container_class}}">
-            <select id="id_lab" name="lab" class="form-control" {{org_disabled}}>
+            <select id="id_lab" name="lab" class="form-control" {% if org_disabled %}{{org_disabled}}{% endif %}>
                 <option value="">---</option>
             </select>
         </div>
@@ -31,7 +31,7 @@ NOTE: lab/center was replaced with center/office with 2019 reorg of ORD.
             [?] Division:
         </label>
         <div class="{{input_container_class}}">
-            <select id="id_division" name="division" class="form-control" {{org_disabled}}>
+            <select id="id_division" name="division" class="form-control" {% if org_disabled %}{{org_disabled}}{% endif %}>
                 <option value="">---</option>
             </select>
         </div>
@@ -44,7 +44,7 @@ NOTE: lab/center was replaced with center/office with 2019 reorg of ORD.
             [?] Branch:
         </label>
         <div class="{{input_container_class}}">
-            <select id="id_branch" name="branch" class="form-control" {{org_disabled}}>
+            <select id="id_branch" name="branch" class="form-control" {% if org_disabled %}{{org_disabled}}{% endif %}>
                 <option value="">---</option>
             </select>
         </div>
@@ -117,11 +117,17 @@ $(document).ready(function() {
 
     var dirty = document.getElementById('dirty');
     var formIsDirty = +dirty.value;
-
-    var passed_office_id = '{{selected_office.id}}';
-    var passed_lab_id = '{{selected_lab.id}}';
-    var passed_division_id = '{{selected_division.id}}';
-    var passed_branch_id = '{{selected_branch.id}}';
+    
+    var passed_office_id = '';
+    var passed_lab_id = '';
+    var passed_division_id = '';
+    var passed_branch_id = '';
+    {% if selected_office or selected_lab or selected_division or selected_branch %}
+    passed_office_id = '{{selected_office.id}}';
+    passed_lab_id = '{{selected_lab.id}}';
+    passed_division_id = '{{selected_division.id}}';
+    passed_branch_id = '{{selected_branch.id}}';
+    {% endif %}
 
     var selected_office_id = formIsDirty ? -1 : passed_office_id;
     var selected_lab_id = formIsDirty ? -1 : passed_lab_id;
@@ -184,15 +190,15 @@ $(document).ready(function() {
 
     // fill the office list to start
     fill_select('#id_office', office_list, selected_office_id, office_label);
-    if (selected_office_id != '') {
+    if (selected_office_id) {
         var office_labs = $.grep(lab_list, function(v) { return v.office_id == selected_office_id && (show_inactive || v.is_active); });
         fill_select('#id_lab', office_labs, selected_lab_id, lab_label);
 
-        if (selected_lab_id != '') {
+        if (selected_lab_id) {
             var lab_divisions = $.grep(division_list, function(v) { return v.lab_id == selected_lab_id && (show_inactive || v.is_active); });
             fill_select('#id_division', lab_divisions, selected_division_id, division_label);
 
-            if (selected_division_id != '') {
+            if (selected_division_id) {
                 var division_branches = $.grep(branch_list, function(v) { return v.division_id == selected_division_id && (show_inactive || v.is_active); });
                 fill_select('#id_branch', division_branches, selected_branch_id, branch_label);
             }
@@ -214,7 +220,7 @@ $(document).ready(function() {
         prev_division.value = -1;
         prev_branch.value = -1;
 
-        if (office_id != '') {
+        if (office_id) {
             var office_labs = $.grep(lab_list, function(v) { return v.office_id == office_id && (show_inactive || v.is_active); });
             fill_select('#id_lab', office_labs, '', lab_label);
         }
@@ -235,7 +241,7 @@ $(document).ready(function() {
         $("#id_division").find('option:not(:first)').remove();
         $("#id_branch").find('option:not(:first)').remove();
 
-        if (lab_id != '') {
+        if (lab_id) {
             var lab_divisions = $.grep(division_list, function(v) {
                 return v.lab_id == lab_id && (show_inactive || v.is_active);
             });
@@ -257,7 +263,7 @@ $(document).ready(function() {
 
         $("#id_branch").find('option:not(:first)').remove();
 
-        if (division_id != '') {
+        if (division_id) {
             var division_branches = $.grep(branch_list, function(v) {
                 return v.division_id == division_id && (show_inactive || v.is_active);
             });
@@ -299,15 +305,15 @@ $(document).ready(function() {
         $("#id_branch").find('option:not(:first)').remove();
 
         fill_select('#id_office', office_list, selected_office_id, office_label);
-        if (selected_office_id != '') {
+        if (selected_office_id) {
             var office_labs = $.grep(lab_list, function(v) { return v.office_id == selected_office_id && (v.is_active || show_inactive); });
             fill_select('#id_lab', office_labs, selected_lab_id, lab_label);
 
-            if (selected_lab_id != '') {
+            if (selected_lab_id) {
                 var lab_divisions = $.grep(division_list, function(v) { return v.lab_id == selected_lab_id && (v.is_active || show_inactive); });
                 fill_select('#id_division', lab_divisions, selected_division_id, division_label);
 
-                if (selected_division_id != '') {
+                if (selected_division_id) {
                     var division_branches = $.grep(branch_list, function(v) { return v.division_id == selected_division_id && (v.is_active || show_inactive); });
                     fill_select('#id_branch', division_branches, selected_branch_id, branch_label);
                 }

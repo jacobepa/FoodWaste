@@ -16,13 +16,15 @@ I will work on creating migrations to import these automatically...
 
 7) python manage.py loaddata organization/fixtures/organization.json
 
-python manage.py loaddata rms/fixtures/rms.json
+8) python manage.py loaddata rms/fixtures/rms.json
 
 
-) python manage.py loaddata projects/fixtures/projects.json
+9) python manage.py loaddata projects/fixtures/projects.json
 #  NOTE: I had to remove all projects.program from the fixture, that field doesn't exist in the model so fixture was breaking.
 #        Also removed all lines (in section fields) containing the text    "program":
+#        Also removed all sections for model "project_log"
+#        Also removed all collaborators: [] (set to empty list) and set all persons to id 1.
 
-python manage.py loaddata projects/fixtures/projects_support.json
+10) python manage.py loaddata projects/fixtures/projectnumber.json
 
-python manage.py loaddata projects/fixtures/projectnumber.json
+11) python manage.py loaddata projects/fixtures/projects_support.json
