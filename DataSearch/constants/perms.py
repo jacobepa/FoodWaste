@@ -218,7 +218,7 @@ parent_model_fields = {
 # Page to render if user is denyed their requested page.
 #
 def denyPage(request,**kwargs):
-    email = settings.SUPPORT_QATRACK_EMAIL
+    email = settings.SUPPORT_EMAIL
     return render(request, 'main/deny_view.html', locals())
 
 
