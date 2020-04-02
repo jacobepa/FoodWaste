@@ -1,151 +1,33 @@
-{% extends 'base/site_base_accounts_admin.html' %}
-{% load static %}
-{% block account_admin_content %}
-<h3>New User Registration</h3>
-<form class="form-horizontal" method="post" action="{% url 'register' %}" novalidate>
-    {% if form.errors %}
-    <div class="alert alert-danger">
-        <h5>Please correct the following errors</h5>
-        {% for field in form %}
-        {% if field.errors %}
-        <div>{{field.label_tag}} {{ field.errors|striptags }}</div>
-        {% endif %}
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% if success %}
-    <div class="alert alert-success">
-        The user has been created. <span class="glyphicon glyphicon-ok"></span>
-    </div>
-    {% endif %}
+{% extends "main/base.html" %}
 
-    {% csrf_token %}
+{% block content %}
+<div class="white-box">
+    <div>
+        <h3>New user registration</h3>
+        <div class="text-muted">
+            Enter your user information below.  Fields marked with a <span class="red">*</span>
+            are required.
+        </div>
+        <div class="vpadding20">
+            <form enctype="multipart/form-data" method="post" action="{% url 'register' %}">
 
-    <h5>Please verify the person is not an existing user before registering a new user.</h5>
+                {% csrf_token %}
 
-    <h5>NOTE: Usernames and passwords are case-sensitive.</h5>
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.label }}">
+                        {{ field.label_tag }}
+                        {% if field.field.required %}<span class="red">*</span>{% endif %}
+                        <span class="text-danger">{{ field.errors.as_text }}</span>
+                    </label>
+                    {{field}}
+                </div>
+                {% endfor %}
 
-    <h5 class="separator">Personal Information</h5>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">
-            <div>{{form.username.label_tag}}</div>
-        </label>
-        <div class="col-sm-9">
-            {{form.username}}
+                <input type="submit" name="submit" value="Submit" class="btn btn-info" role="button"/>
+            </form>
         </div>
     </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{form.first_name.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.first_name}}
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{form.last_name.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.last_name}}
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{form.email.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.email}}
-        </div>
-    </div>
-
-    {% include 'organization_select.html' %}
-
-    <h5 class="separator">Security Information</h5>
-
-    <div class="form-group">
-        <label title="An editor can create and edit records for any organization in their center/office. If a user needs to create or edit records for more than one lab/center, set them to ADMIN. Only admins can set another user to ADMIN." class="col-sm-3 control-label">[?] {{form.permissions.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.permissions}}
-        </div>
-    </div>
-
-    <!--
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{form.is_staff.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.is_staff}}
-        </div>
-    </div>
-    -->
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{form.is_active.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.is_active}}
-        </div>
-    </div>
-
-    <!--
-    <div class="form-group">
-        <label title="The user type limits which organizations the user can create records for. Only a super user can delete files attached by another user. However, any user can delete files they attached." class="col-sm-3 control-label">[?] {{form.user_type.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.user_type}}
-        </div>
-    </div>
-    -->
-
-    <!--<div class="form-group">
-        <label class="col-sm-3 control-label">{{form.is_reviewer.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.is_reviewer}}
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label title="Yes indicates user will have create and edit rights; No indicates user will have read-only rights." class="col-sm-3 control-label">[?] {{form.can_edit.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.can_edit}}
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{form.is_superuser.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.is_superuser}}
-        </div>
-    </div>-->
-
-    <!--
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{form.can_create_users.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.can_create_users}}
-        </div>
-    </div>
-    -->
-
-    <h5 class="separator">Password</h5>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{form.password1.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.password1}}
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{form.password2.label_tag}}</label>
-        <div class="col-sm-9">
-            {{form.password2}}
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-9"> </div>
-        <div class="col-sm-3">
-            <input class="btn btn-primary" type="submit" value="Save" />
-            <a class="btn btn-warning" href="{% url 'accounts_manage' %}">Cancel</a>
-        </div>
-    </div>
-
-</form>
+</div>
 {% endblock %}
+

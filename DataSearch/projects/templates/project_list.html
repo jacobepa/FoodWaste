@@ -1,0 +1,66 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h2 class="col-sm-9">Project Management</h2>
+    </div>
+
+    <div class="row mb-2">
+        <h4>{{user.username}}'s Projects</h4>
+        <div class="col-sm-12">
+        </div>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-secondary">
+            <tr>
+                <th scope="col">Project Name</th>
+                <th scope="col">Project Created By</th>
+                <th scope="col">Project Last Modified</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if projects %}
+            {% for project in projects %}
+            <tr id="{{project.id}}" onclick="rowClick('{{project.id}}')">
+                <td scope="row">{{project.name}}</td>
+                <td>{{project.created_by}}</td>
+                <td>{{project.last_modified_date}}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr><td colspan="4">You aren't a member of any Projects!</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <i class="btn btn-info btn-md" onclick="viewEditTeam(this, 'edit')" disabled>
+                Edit Project <span class="ml-2 glyphicon glyphicon-edit"></span>
+            </i>
+        </div>
+        <div class="col-sm-4">
+            <i class="btn btn-info btn-md" onclick="viewEditTeam(this, 'manage')" disabled>
+                Manage Members <span class="ml-2 glyphicon glyphicon-user"></span>
+            </i>
+        </div>
+        <div class="col-sm-4">
+            <button class="btn btn-md btn-info" onclick="window.location.href='/projects/project/'">
+                Create a new Project <span class="ml-2 glyphicon glyphicon-plus"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function viewEditTeam(btn, method) {
+            if ($(btn).attr('disabled')) return;
+            window.location.href = '/projects/project/' + $(btn).attr('id') + '/' + method;
+        }
+    </script>
+{% endblock %}
