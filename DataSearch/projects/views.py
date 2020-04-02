@@ -1,467 +1,236 @@
-# # views.py (accounts)
-# # !/usr/bin/env python3
-# # coding=utf-8
-# # young.daniel@epa.gov
-# # py-lint: disable=C0301,R0901,E1101,R0912
+# views.py (accounts)
+# !/usr/bin/env python3
+# coding=utf-8
+# young.daniel@epa.gov
+# py-lint: disable=C0301,R0901,E1101,R0912
 
-# """
-# Project management views.
+"""
+Project management views.
 
-# Available functions:
-# - Create the form view
-# - View to edit a project name
-# - Project Management Form
-# """
+Available functions:
+- Create the form view
+- View to edit a project's details
+- Project Management Form
+"""
 
-# from datetime import datetime
-# from io import BytesIO
-# from rest_framework.parsers import JSONParser
-# from rest_framework.response import Response
-# from rest_framework.views import APIView, status, Http404
-# from rest_framework import permissions
-# from django.http import HttpResponseRedirect
-# from django.urls import reverse
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.utils.decorators import method_decorator
-# from django.shortcuts import render
-# from django.views.generic import FormView, ListView
-# from django.test.client import RequestFactory
-# from accounts.models import User
-# from projects.forms import TeamManagementForm, Project
-# from projects.models import TeamMembership
+
+#from datetime import datetime
+#from io import BytesIO
+#from rest_framework.parsers import JSONParser
+#from rest_framework.response import Response
+#from rest_framework.views import APIView, status, Http404
+#from rest_framework import permissions
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.shortcuts import render
+from django.views.generic import FormView, ListView
+#from django.test.client import RequestFactory
+from accounts.models import User
+from projects.forms import BranchForm, CenterOfficeForm, DivisionForm, \
+    OfficeForm, ProjectManagementForm
+from projects.models import Project, ProjectSharingTeamMap
 # from projects.serializers import TeamSerializer, UserSerializer, \
 #     TeamMembershipSerializer, TeamMembershipModifySerializer
 
 
-# class TeamListView(LoginRequiredMixin, ListView):
-#     """
-#     New class to return a projects list view.
-
-#     This will serve as the management view where users can view their projects,
-#     edit their projects, and create new projects.
-#     """
-
-#     model = Project
-#     context_object_name = 'projects'
-#     template_name = 'team_list.html'
-
-#     def get_queryset(self):
-#         """Override default queryset with set of projects which requesting user is member."""
-#         user = self.request.user
-#         return Project.objects.filter(members=user).order_by(
-#             'name').select_related(
-#                 "created_by", "last_modified_by").prefetch_related(
-#                     "team_memberships", "team_memberships__member").all()
-
-
-# class TeamCreateView(FormView):
-#     """Class containing the view to create a new project."""
-
-#     form_class = TeamManagementForm
-#     template = 'team_create.html'
-
-#     @method_decorator(login_required)
-#     def get(self, request, *args, **kwargs):
-#         """Display the project create form."""
-#         form = TeamManagementForm()
-#         return render(request, self.template, {'form': form})
-
-#     @method_decorator(login_required)
-#     def post(self, request, *args, **kwargs):
-#         """Save the changes to the user form."""
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             team_instance = form.save(commit=False)
-#             # Project creator.
-#             team_instance.created_by = request.user
-#             # When and by whom the project was created.
-#             date_now = datetime.now()
-#             team_instance.created_date = date_now
-#             team_instance.created_by = request.user
-#             # When and by whom the project was last modified.
-#             team_instance.last_modified_date = date_now
-#             team_instance.last_modified_by = request.user
-#             # Save the project
-#             team_instance.save()
-
-#             # Add a membership for the requesting user.
-#             membership_instance = TeamMembership()
-#             membership_instance.added_date = date_now
-#             membership_instance.member = request.user
-#             membership_instance.project = team_instance
-#             membership_instance.is_owner = True
-#             membership_instance.can_edit = True
-#             membership_instance.save()
-
-#             return HttpResponseRedirect(
-#                 reverse('team_manage', kwargs={'team_id': team_instance.id}))
-
-#         return render(request, self.template, locals())
-
-
-# class TeamEditView(FormView):
-#     """View to edit a project name."""
-
-#     template = 'team_edit.html'
-#     form_class = TeamManagementForm
-
-#     @method_decorator(login_required)
-#     def get(self, request, *args, **kwargs):
-#         """Display the project create form."""
-#         ctx = {}
-#         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
-#         if ctx['team_id'] is not None:
-#             ctx['team_data'] = APITeamDetailView.as_view()(
-#                 request, team_id=ctx['team_id'], format='json').rendered_content
-#             ctx['project'] = JSONParser().parse(BytesIO(ctx['team_data']))
-#             return render(request, self.template, ctx)
-#         return HttpResponseRedirect(reverse('dashboard'))
-
-#     @method_decorator(login_required)
-#     def post(self, request, *args, **kwargs):
-#         """Save the changes to the user form."""
-#         ctx = {}
-#         ctx['params'] = request.POST
-#         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
-
-#         if ctx['team_id'] is not None:
-#             # Update the project name.
-#             ctx['team_obj'] = Project.objects.get(id=ctx['team_id'])
-#             if ctx['team_obj'] is not None:
-#                 ctx['name'] = ctx['params']['name'] if 'name' in ctx['params'] else None
-#                 ctx['name'] = ctx['name'].strip()
-#                 if ctx['name'] is not None and ctx['name']:
-#                     ctx['team_obj'].name = ctx['name']
-#                     ctx['team_obj'].save()
-#                 else:
-#                     ctx['error_msg'] = "Invalid project name."
-#             else:
-#                 ctx['error_msg'] = "Invalid project id specified."
-
-#             # Retrieve the updated data and render the view.
-#             get_request = RequestFactory().get('/')
-#             get_request.user = request.user
-#             ctx['team_data'] = APITeamDetailView.as_view()(
-#                 get_request, team_id=ctx['team_id'], format='json').rendered_content
-#             ctx['project'] = JSONParser().parse(BytesIO(ctx['team_data']))
-#             return render(request, self.template, ctx)
-
-#         # We should never get here, so just redirect to the dashboard.
-#         return HttpResponseRedirect(reverse('dashboard'))
-
-
-# class TeamManagementView(FormView):
-#     """Class containing methods to manage projects."""
-
-#     template = 'team_manage.html'
-#     form_class = TeamManagementForm
-
-#     @method_decorator(login_required)
-#     def get(self, request, *args, **kwargs):
-#         """Display the project create form."""
-#         ctx = {}
-#         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
-#         if ctx['team_id'] is not None:
-#             ctx['team_data'] = APITeamDetailView.as_view()(
-#                 request, team_id=ctx['team_id'], format='json').rendered_content
-#             ctx['project'] = JSONParser().parse(BytesIO(ctx['team_data']))
-#             ctx['nonmembers_data'] = APITeamMembershipListView.as_view()(
-#                 request, team_id=ctx['team_id'], nonmember=1, format='json').rendered_content
-#             ctx['nonmembers'] = JSONParser().parse(BytesIO(ctx['nonmembers_data']))
-#             return render(request, self.template, ctx)
-#         return HttpResponseRedirect(reverse('dashboard'))
-
-#     @method_decorator(login_required)
-#     def post(self, request, *args, **kwargs):
-#         """Save the changes to the user form."""
-#         ctx = {}
-#         ctx['params'] = request.POST
-#         ctx['command'] = ctx['params']["command"] if "command" in ctx['params'] else None
-#         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
-
-#         if ctx['team_id'] is not None and ctx['command'] is not None:
-#             if ctx['command'] == 'adduser':
-#                 # Add a user membership to the project.
-#                 ctx['user_id'] = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
-#                 if ctx['user_id'] is not None:
-#                     # Check if the user already has a membership, this can
-#                     # happen if the user reloads the page.
-#                     ctx['membership_list'] = TeamMembership.objects.filter(
-#                         team_id=ctx['team_id'], member_id=ctx['user_id']).all()
-#                     if ctx['membership_list'] is None or not ctx['membership_list']:
-#                         # Add a membership.
-#                         ctx['team_obj'] = Project.objects.get(id=ctx['team_id'])
-#                         ctx['member_obj'] = User.objects.get(id=ctx['user_id'])
-#                         ctx['membership'] = TeamMembership()
-#                         ctx['membership'].added_date = datetime.now()
-#                         ctx['membership'].project = ctx['team_obj']
-#                         ctx['membership'].member = ctx['member_obj']
-#                         ctx['membership'].can_edit = True
-#                         ctx['membership'].is_owner = False
-#                         ctx['membership'].save()
-#                 else:
-#                     ctx['error_msg'] = "Invalid user id specified."
-
-#             elif ctx['command'] == 'deleteuser':
-#                 # Remove a user membership.
-#                 ctx['user_id'] = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
-#                 if ctx['user_id'] is not None:
-#                     # Add a membership.
-#                     ctx['membership'] = TeamMembership.objects.get(team_id=ctx['team_id'], member_id=ctx['user_id'])
-#                     if ctx['membership'] is not None:
-#                         ctx['membership'].delete()
-#                 else:
-#                     ctx['error_msg'] = "Invalid user id specified."
-
-#             elif ctx['command'] == 'updatename':
-#                 # Update the project name.
-#                 ctx['team_obj'] = Project.objects.get(id=ctx['team_id'])
-#                 if ctx['team_obj'] is not None:
-#                     ctx['name'] = ctx['params']['name'] if 'name' in ctx['params'] else None
-#                     ctx['name'] = ctx['name'].strip()
-#                     if ctx['name'] is not None and ctx['name']:
-#                         ctx['team_obj'].name = ctx['name']
-#                         ctx['team_obj'].save()
-#                     else:
-#                         ctx['error_msg'] = "Invalid project name."
-#                 else:
-#                     ctx['error_msg'] = "Invalid project id specified."
-
-#             # Retrieve the updated data and render the view.
-#             get_request = RequestFactory().get('/')
-#             get_request.user = request.user
-
-#             ctx['team_data'] = APITeamDetailView.as_view()(
-#                 get_request, team_id=ctx['team_id'], format='json').rendered_content
-#             ctx['project'] = JSONParser().parse(BytesIO(ctx['team_data']))
-#             ctx['nonmembers_data'] = APITeamMembershipListView.as_view()(
-#                 get_request, team_id=ctx['team_id'], nonmember=1, format='json').rendered_content
-#             ctx['nonmembers'] = JSONParser().parse(BytesIO(ctx['nonmembers_data']))
-#             return render(request, self.template, ctx)
-
-#         # We should never get here, so just redirect to the dashboard.
-#         return HttpResponseRedirect(reverse('dashboard'))
-
-
-# #########################
-# # REST Api Project views
-# #########################
-
-# class APITeamListView(APIView):
-#     """Get a JSON list of all projects (GET) or create a new project (POST)."""
-
-#     permission_classes = (permissions.IsAuthenticated,)
-
-#     def get(self, request, *args, **kwargs):
-#         """Return all projects the current user is a member of."""
-#         user = self.request.user
-#         # Get the list of projects to exclude.
-#         exclude = kwargs.get('exclude', None)
-#         if exclude is None:
-#             exclude_json = self.request.query_params.get('exclude', None)
-#             if exclude_json is not None:
-#                 exclude = JSONParser().parse(BytesIO(exclude_json))
-
-#         if exclude is not None:
-#             projects = (
-#                 Project.objects.exclude(id__in=exclude).filter(members=user).order_by('name')
-#                 .select_related("created_by", "last_modified_by")
-#                 .prefetch_related("team_memberships", "team_memberships__member")
-#                 .all()
-#             )
-#         else:
-#             projects = (
-#                 Project.objects.filter(members=user).order_by('name')
-#                 .select_related("created_by", "last_modified_by")
-#                 .prefetch_related("team_memberships", "team_memberships__member")
-#                 .all()
-#             )
-
-#         serializer = TeamSerializer(projects, many=True)
-#         return Response(serializer.data)
-
-#     def post(self, request, *args, **kwargs):
-#         """Create a new project."""
-#         serializer = TeamSerializer(data=request.data, context={'request': request})
-#         if serializer.is_valid():
-#             project = serializer.save()
-#             # Add a membership for the requesting user.
-#             membership_instance = TeamMembership()
-#             membership_instance.added_date = datetime.now()
-#             membership_instance.member = request.user
-#             membership_instance.project = project
-#             membership_instance.is_owner = True
-#             membership_instance.can_edit = True
-#             membership_instance.save()
-
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class APITeamDetailView(APIView):
-#     """Read, Update, Delete for Project objects."""
-
-#     permission_classes = (permissions.IsAuthenticated,)
-
-#     @classmethod
-#     def get_object(cls, p_id, user):
-#         """Retrieve a project and its membership based on the provided user and p_id."""
-#         try:
-#             project = (
-#                 Project.objects
-#                 .select_related("created_by", "last_modified_by")
-#                 .prefetch_related("team_memberships", "team_memberships__member")
-#                 .get(id=p_id)
-#             )
-#             for membership in project.team_memberships.all():
-#                 if user == membership.member:
-#                     return project, membership
-#             raise Http404
-#         except Project.DoesNotExist:
-#             raise Http404
-
-#     def get(self, request, team_id, *args, **kwargs):
-#         """Get details for the specified project."""
-#         (project, _membership) = self.get_object(team_id, request.user)
-#         serializer = TeamSerializer(project)
-#         return Response(serializer.data)
-
-#     def put(self, request, team_id, *args, **kwargs):
-#         """Update an existing project. :param request: :param team_id: :param format: :return:."""
-#         (project, membership) = self.get_object(team_id, request.user)
-#         if not membership.can_edit:
-#             return Response({"detail": "current user cannot edit this project"}, status=status.HTTP_400_BAD_REQUEST)
-
-#         serializer = TeamSerializer(project, data=request.data, context={'request': request})
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     def delete(self, request, team_id, *args, **kwargs):
-#         """
-#         Delete a project.
-
-#         :param team_id:
-#         :param request:
-#         :param format:
-#         :return:
-#         """
-#         (project, membership) = self.get_object(team_id, request.user)
-#         if not membership.can_edit:
-#             return Response({"detail": "current user cannot delete this project"}, status=status.HTTP_400_BAD_REQUEST)
-
-#         project.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-# class APITeamMembershipListView(APIView):
-#     """Get a list of project members or users who are not project members."""
-
-#     permission_classes = (permissions.IsAuthenticated,)
-
-#     @classmethod
-#     def get_object(cls, p_id, user):
-#         """Get project memberships for the provided user and p_id."""
-#         try:
-#             project = (
-#                 Project.objects
-#                 .prefetch_related("team_memberships", "team_memberships__member")
-#                 .get(id=p_id)
-#             )
-#             team_memberships = project.team_memberships.all()
-#             for membership in team_memberships:
-#                 if user == membership.member:
-#                     return team_memberships
-#             raise Http404
-#         except Project.DoesNotExist:
-#             raise Http404
-
-#     def get(self, request, team_id, *args, **kwargs):
-#         """Get the membership information for the specified project."""
-#         # If query param "nonmember" is set, returns users not on this project.
-#         nonmember = kwargs.get('nonmember', None)
-#         nonmember = request.query_params.get('nonmember', None) if nonmember is None else nonmember
-#         if nonmember is not None:
-#             users = User.objects.exclude(member_memberships__team_id=team_id).order_by('last_name').all()
-#             serializer = UserSerializer(users, many=True)
-#             return Response(serializer.data)
-#         team_memberships = self.get_object(team_id, request.user)
-#         serializer = TeamMembershipSerializer(team_memberships, many=True)
-#         return Response(serializer.data)
-
-#     def post(self, request, team_id, *args, **kwargs):
-#         """Add a new membership for a user."""
-#         # Add the project info to the data.
-#         request.data["project"] = team_id
-#         serializer = TeamMembershipModifySerializer(data=request.data)
-#         if serializer.is_valid():
-#             # Make sure the membership doesn't already exist.
-#             existing_membership = TeamMembership.objects.filter(team__id=team_id,
-#                                                                 member__id=request.data["member"]).first()
-#             if existing_membership is not None:
-#                 return Response("user is already a member of this project", status=status.HTTP_400_BAD_REQUEST)
-#             membership = serializer.save()
-#             display_serializer = TeamMembershipSerializer(instance=membership)
-#             return Response(display_serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class APITeamMembershipDetailView(APIView):
-#     """Get a list of project members or users who are not project members."""
-
-#     permission_classes = (permissions.IsAuthenticated,)
-
-#     @classmethod
-#     def get_object(cls, membership_id, user):
-#         """Get current membership information for the provided user and membership_id."""
-#         try:
-#             current_membership = (
-#                 TeamMembership.objects
-#                 .select_related("member", "project")
-#                 .get(id=membership_id)
-#             )
-#             # Make sure this user can view this project information.
-#             for membership in current_membership.project.team_memberships.all():
-#                 if user == membership.member:
-#                     return current_membership, membership.can_edit
-#             raise Http404
-#         except Project.DoesNotExist:
-#             raise Http404
-
-#     def get(self, request, team_id, membership_id, *args, **kwargs):
-#         """Get details for the specified project."""
-#         (membership, _current_user_can_edit) = self.get_object(membership_id, request.user)
-#         serializer = TeamMembershipSerializer(instance=membership)
-#         return Response(serializer.data)
-
-#     def put(self, request, team_id, membership_id, *args, **kwargs):
-#         """
-#         Update an existing project.
-
-#         :param membership_id:
-#         :param request:
-#         :param team_id:
-#         :param format:
-#         :return:
-#         """
-#         (membership, current_user_can_edit) = self.get_object(membership_id, request.user)
-#         if not current_user_can_edit:
-#             return Response({"detail": "calling user cannot edit this project"}, status=status.HTTP_400_BAD_REQUEST)
-
-#         request.data["project"] = team_id
-#         request.data["member"] = membership.member.id
-#         serializer = TeamMembershipModifySerializer(membership, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     def delete(self, request, team_id, membership_id, *args, **kwargs):
-#         """Delete the specified project membership."""
-#         (membership, current_user_can_edit) = self.get_object(membership_id, request.user)
-#         if not current_user_can_edit:
-#             return Response({"detail": "calling user cannot edit this project"}, status=status.HTTP_400_BAD_REQUEST)
-#         membership.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
+def get_projects_for_user(user):
+    """
+    Method to get all Projects belonging to a user.
+
+    - of which the provided user is a member.
+    - logic filters for the user's non-member teams
+    - then excludes those teams from the data results.
+    - This is necessary because there is no direct connection between data
+    - model users and project instances. The relation here is through
+    - the teams model.
+    """
+    include_teams = TeamMembership.objects.filter(
+        member=user).values_list('team', flat=True)
+    exclude_teams = TeamMembership.objects.exclude(
+        team__in=include_teams).distinct().values_list('team', flat=True)
+    exclude_data = ProjectSharingTeamMap.objects.filter(
+        team__in=exclude_teams).values_list('project', flat=True)
+
+    return Project.objects.exclude(id__in=exclude_data)
+
+
+def check_can_edit(project, user):
+    """
+    Method used to check if the provided user can edit the provided project.
+
+    All of the user's member teams are checked as well as the user's
+    super user status or project ownership status.
+    """
+    # Check if any of the user's teams have edit privilege:
+    user_teams = TeamMembership.objects.filter(
+        member=user).values_list('team', flat=True)
+
+    for team in user_teams:
+        data_team_map = ProjectSharingTeamMap.objects.filter(
+            project=project, team=team).first()
+        if data_team_map and data_team_map.can_edit:
+            return True
+
+    # Check if the user is super or owns the project:
+    if user.is_superuser:
+        return True
+
+    # Since this is the last check, the project is either owned by
+    # the user, or the user does not have edit privilege at all:
+    return project.created_by == user
+
+
+class ProjectListView(LoginRequiredMixin, ListView):
+    """
+    New class to return a projects list view.
+
+    This will serve as the management view where users can view, edit,
+    and create new projects.
+    """
+
+    model = Project
+    context_object_name = 'projects'
+    template_name = 'project_list.html'
+
+    def get_queryset(self):
+        """Add method docstring."""  # TODO add docstring.
+        return get_projects_for_user(self.request.user)
+
+
+class ProjectEdit(LoginRequiredMixin, UpdateView):
+    """View for editing the details of an existing Project instance."""
+
+    model = Project
+    form_class = ProjectForm
+    template_name = 'project_edit.html'
+
+    def get(self, request, *args, **kwargs):
+        """
+        Override default get request.
+
+        So we can verify the user has edit privileges, either through super
+        status or team membership.
+        """
+        pk = kwargs.get('pk')
+        proj = Project.objects.filter(id=pk).first()
+        if check_can_edit(proj, request.user):
+            # TODO: Fix return form:
+            return render(request, self.template_name,
+                          {'object': proj, 'form': ProjectForm(instance=proj)})
+
+        reason = 'You don\'t have edit permissions for this Project!'
+        return HttpResponseRedirect('/project/detail/%s' % pk, 401, reason)
+
+    def form_valid(self, form):
+        """Project Edit Form validation and redirect."""
+        # Verify the current user has permissions to modify this Project:
+        self.object = form.save(commit=False)
+        self.object.save()
+        # Prepare and insert teams data.
+        if form.cleaned_data['teams']:
+            form_teams = form.cleaned_data['teams']
+
+            # Remove any team maps that have been deselected:
+            remove_teams = ProjectSharingTeamMap.objects.filter(
+                project=self.object).exclude(team__in=form_teams)
+
+            for team in remove_teams:
+                team.delete()
+
+            # Insert or update selected team maps:
+            for team in form_teams:
+                data_team_map = ProjectSharingTeamMap.objects.filter(
+                    project=self.object, team=team).first()
+                # Create new team map if not exists:
+                if not data_team_map:
+                    data_team_map = ProjectSharingTeamMap()
+                    data_team_map.team = team
+                    data_team_map.project = self.object
+                # Update (or set) the can_edit field:
+                data_team_map.can_edit = form.cleaned_data['can_edit']
+                data_team_map.save()
+        # Return back to the details page:
+        return HttpResponseRedirect('/project/detail/' + str(self.object.id))
+    
+
+class ProjectCreate(LoginRequiredMixin, CreateView):
+    """Class for creating new Projects."""
+
+    model = Project
+    template_name = 'project_create.html'
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        """Return a view with an empty form for creating a new Project."""
+        return render(
+            request, 'project_create.html',
+            {'form': ProjectForm(user=request.user)})
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a new Project form filled out."""
+        form = ProjectForm(request.POST, user=request.user)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            # Assign current user as the prepared_by
+            obj.prepared_by = request.user
+            obj.save()
+            # Prepare and insert teams data.
+            if form.cleaned_data['teams']:
+                for team in form.cleaned_data['teams']:
+                    data_team_map = ProjectSharingTeamMap()
+                    data_team_map.can_edit = form.cleaned_data['can_edit']
+                    data_team_map.team = team
+                    data_team_map.project = obj
+                    data_team_map.save()
+
+            return HttpResponseRedirect(
+                '/project/approval/create?project_id=%d' % obj.id)
+
+        return render(request, 'project_create.html', {'form': form})
+
+
+class ProjectDetail(LoginRequiredMixin, DetailView):
+    """Class for viewing an existing (newly created) Project."""
+
+    model = Project
+    template_name = 'project_detail.html'
+
+    def get_context_data(self, **kwargs):
+        """Add method docstring."""  # TODO add docstring.
+        context = super().get_context_data(**kwargs)
+        if not check_can_edit(context['object'], self.request.user):
+            context['edit_message'] = \
+                'You don\'t have edit permissions for this Project!'
+        return context
+
+
+# #########################################################################
+# Only let super or staff users create Offices, CenterOffices, Divisions,
+# and Branches. The rest of this file will be these staff/super only views.
+
+# Alternatively, rely on the Django Admin portal to create and manage these
+# objects.
+
+#class OfficeListView(LoginRequiredMixin, ListView):
+#class OfficeCreateView(LoginRequiredMixin, CreateView):
+#class OfficeEditView(LoginRequiredMixin, EditView):
+#class OfficeDeleteView(LoginRequiredMixin, DeleteView):
+
+#class CenterOfficeListView(LoginRequiredMixin, ListView):
+#class CenterOfficeCreateView(LoginRequiredMixin, CreateView):
+#class CenterOfficeEditView(LoginRequiredMixin, EditView):
+#class CenterOfficeDeleteView(LoginRequiredMixin, DeleteView):
+
+#class DivisionListView(LoginRequiredMixin, ListView):
+#class DivisionCreateView(LoginRequiredMixin, CreateView):
+#class DivisionEditView(LoginRequiredMixin, EditView):
+#class DivisionDeleteView(LoginRequiredMixin, DeleteView):
+
+#class BranchListView(LoginRequiredMixin, ListView):
+#class BranchCreateView(LoginRequiredMixin, CreateView):
+#class BranchEditView(LoginRequiredMixin, EditView):
+#class BranchDeleteView(LoginRequiredMixin, DeleteView):
