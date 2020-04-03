@@ -36,9 +36,10 @@ from teams.models import Team, TeamMembership
 @staff_member_required
 def web_dev_tools(request, *args, **kwargs):
     """
-    Method to redirect a user to a webpage with various custom admin
-    functionality. For example, there will be a button to remove extra
-    new line characters and spaces from QAPP data.
+    Method to redirect a user to a webpage.
+
+    - Includes various custom admin functionality.
+    - Includes button to remove extra new line characters/spaces from QAPP data.
     """
     return render(request, 'web_dev.html', {})
 
@@ -48,8 +49,9 @@ def web_dev_tools(request, *args, **kwargs):
 def clean_qapps(request, *args, **kwargs):
     """
     Method to remove extra new line characters and spaces from QAPP data.
-    This has been fixed in the constants, but any strings that have already
-    been inserted might need to be cleaned up.
+
+    - This has been fixed in the constants.
+    - Strings that have already been inserted might need to be cleaned up.
     """
     # TODO: Fix all default data of all sections of all qapps
     sections_a = SectionA.objects.all()
