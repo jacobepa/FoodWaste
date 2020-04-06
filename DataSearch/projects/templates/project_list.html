@@ -30,24 +30,19 @@
             </tr>
             {% endfor %}
             {% else %}
-            <tr><td colspan="4">You aren't a member of any Projects!</td></tr>
+            <tr><td colspan="4">You don't have access to any Projects!</td></tr>
             {% endif %}
         </tbody>
     </table>
 
     <div class="row">
         <div class="col-sm-4">
-            <i class="btn btn-info btn-md" onclick="viewEditTeam(this, 'edit')" disabled>
+            <i class="btn btn-info btn-md" onclick="viewEditProject(this, 'edit')" disabled>
                 Edit Project <span class="ml-2 glyphicon glyphicon-edit"></span>
             </i>
         </div>
         <div class="col-sm-4">
-            <i class="btn btn-info btn-md" onclick="viewEditTeam(this, 'manage')" disabled>
-                Manage Members <span class="ml-2 glyphicon glyphicon-user"></span>
-            </i>
-        </div>
-        <div class="col-sm-4">
-            <button class="btn btn-md btn-info" onclick="window.location.href='/projects/project/'">
+            <button class="btn btn-md btn-info" onclick="window.location.href='/projects/create/'">
                 Create a new Project <span class="ml-2 glyphicon glyphicon-plus"></span>
             </button>
         </div>
@@ -58,9 +53,9 @@
 
 {% block scripts %}
     <script>
-        function viewEditTeam(btn, method) {
+        function viewEditProject(btn, method) {
             if ($(btn).attr('disabled')) return;
-            window.location.href = '/projects/project/' + $(btn).attr('id') + '/' + method;
+            window.location.href = '/projects/detail/' + $(btn).attr('id') + '/' + method;
         }
     </script>
 {% endblock %}

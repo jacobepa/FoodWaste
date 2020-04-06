@@ -15,6 +15,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from projects.models import Branch, CenterOffice, Division, Office, \
     OrdRap, Project
+from teams.models import Team
 
 
 class OrdRapForm(forms.ModelForm):
@@ -32,7 +33,7 @@ class OrdRapForm(forms.ModelForm):
         fields = ("name",)
 
 
-class ProjectManagementForm(forms.ModelForm):
+class ProjectForm(forms.ModelForm):
     """Form For Creating or Updating a Project."""
 
     # Title/Name of the project
@@ -52,11 +53,29 @@ class ProjectManagementForm(forms.ModelForm):
     branch = forms.ModelChoiceField(
         label=_("Branch"), queryset=Branch.objects.none(),
         widget=forms.Select(attrs={'class': 'form-control'}), required=True)
-    title = models.CharField(blank=False, max_length=255, db_index=True)
     # Team Members (List of teams related to this project)
-    teams = models.ManyToManyField(Team, through='ProjectSharingTeamMap')
-    ord_rap = models.ForeignKey(
-        OrdRap, on_delete=models.CASCADE, null=True, blank=True)
+    teams = forms.ModelMultipleChoiceField(
+        widget=forms.SelectMultiple(
+            {'class': 'form-control mb-2', 'placeholder': 'Teams'}),
+        queryset=Team.objects.all(),
+        label=_("Share With Teams"), required=False)
+    ord_rap = forms.ModelChoiceField(
+        label=_("ORD RAP"), queryset=OrdRap.objects.none(),
+        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+
+    def __init__(self, *args, **kwargs):
+        """Override default init to add custom queryset for teams."""
+        try:
+            current_user = kwargs.pop('user')
+            super(ProjectForm, self).__init__(*args, **kwargs)
+            team_ids = TeamMembership.objects.filter(
+                member=current_user).values_list('team', flat=True)
+            self.fields['teams'].queryset = \
+                Team.objects.filter(id__in=team_ids)
+            self.fields['teams'].label_from_instance = \
+                lambda obj: "%s" % obj.name
+        except:
+            super(ProjectForm, self).__init__(*args, **kwargs)
 
     class Meta:
         """Meta data for the Project Management Form."""

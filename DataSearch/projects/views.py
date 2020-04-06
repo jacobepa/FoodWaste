@@ -13,27 +13,20 @@ Available functions:
 - Project Management Form
 """
 
-
-#from datetime import datetime
-#from io import BytesIO
-#from rest_framework.parsers import JSONParser
-#from rest_framework.response import Response
-#from rest_framework.views import APIView, status, Http404
-#from rest_framework import permissions
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.shortcuts import render
-from django.views.generic import FormView, ListView
-#from django.test.client import RequestFactory
+from django.views.generic import FormView, ListView, DetailView, \
+    UpdateView, CreateView
 from accounts.models import User
-from projects.forms import BranchForm, CenterOfficeForm, DivisionForm, \
-    OfficeForm, ProjectManagementForm
+from projects.forms import ProjectForm
 from projects.models import Project, ProjectSharingTeamMap
 # from projects.serializers import TeamSerializer, UserSerializer, \
 #     TeamMembershipSerializer, TeamMembershipModifySerializer
+from teams.models import TeamMembership
 
 
 def get_projects_for_user(user):
@@ -100,7 +93,7 @@ class ProjectListView(LoginRequiredMixin, ListView):
         return get_projects_for_user(self.request.user)
 
 
-class ProjectEdit(LoginRequiredMixin, UpdateView):
+class ProjectEditView(LoginRequiredMixin, UpdateView):
     """View for editing the details of an existing Project instance."""
 
     model = Project
@@ -156,7 +149,7 @@ class ProjectEdit(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect('/project/detail/' + str(self.object.id))
     
 
-class ProjectCreate(LoginRequiredMixin, CreateView):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     """Class for creating new Projects."""
 
     model = Project
@@ -193,7 +186,7 @@ class ProjectCreate(LoginRequiredMixin, CreateView):
         return render(request, 'project_create.html', {'form': form})
 
 
-class ProjectDetail(LoginRequiredMixin, DetailView):
+class ProjectDetailView(LoginRequiredMixin, DetailView):
     """Class for viewing an existing (newly created) Project."""
 
     model = Project

@@ -14,9 +14,16 @@ Available functions:
 """
 
 from django.conf.urls import url
-#from projects.views import ProjectCreateView, ProjectManagementView, \
-#    ProjectEditView, ProjectListView
+from projects.views import ProjectCreateView, ProjectDetailView, \
+    ProjectEditView, ProjectListView
 
 urlpatterns = [
-
+    url(r'^$', ProjectListView.as_view(), name='projects_list'),
+    url(r'^create/?$', ProjectCreateView.as_view(), name='project_create'),
+    url(r'^detail/(?P<pk>\d+)/?$',
+        ProjectDetailView.as_view(),
+        name='project_detail'),
+    url(r'^edit/(?P<pk>\d+)/?$',
+        ProjectEditView.as_view(),
+        name='project_edit'),
 ]

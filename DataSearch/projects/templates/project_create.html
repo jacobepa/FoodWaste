@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="white-box">
-    <form method="post" action="{% url 'team_create' %}">
+    <form method="post" action="{% url 'project_create' %}">
         {% if form.errors %}
         <div class="alert alert-danger">
             <h5>Please correct the following errors</h5>
@@ -21,23 +21,15 @@
         {% endif %}
 
         {% csrf_token %}
-        <h3 class="separator">Create a Project Project</h3>
-        <h4>
-            Select a name for your project.
-        </h4>
-        <div class="form-group">
-            <label for="name" class="control-label">{{form.name.label_tag}}</label>
-            <div>
-                {{form.name}}
-            </div>
-        </div>
+        <h3 class="separator">Create a Project</h3>
+        {{form}}
         
         <div class="row">
             <div class="col-sm-12">
                 <div class="float-right">
                     <button type="submit" class="btn btn-md btn-success">Save</button>
                     <button type="reset" class="btn btn-md btn-warning"
-                            onclick="window.location='{% url 'team_list' %}'">
+                            onclick="window.location='{% url 'project_list' %}'">
                         Cancel
                     </button>
                 </div>
