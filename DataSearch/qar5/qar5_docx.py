@@ -316,7 +316,7 @@ def export_doc_single(request, *args, **kwargs):
     document.add_heading('Table 1 QAPP Revision History', level=3)
     #  3) Table (revision history)
     num_revisions = len(qapp_info['revisions'])
-    table = document.add_table(rows=1+num_signatures, cols=3)
+    table = document.add_table(rows=1+num_revisions, cols=3)
     table.style = styles['Light List']
     row_cells = table.rows[0].cells
     row_cells[0].text = 'Revision Number'
