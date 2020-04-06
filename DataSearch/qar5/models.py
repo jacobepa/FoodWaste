@@ -18,7 +18,7 @@ from teams.models import Team, User
 class Division(models.Model):
     """Class representing EPA Divisions available to the QAPP."""
 
-    name = models.CharField(blank=False, null=False, max_length=255)
+    name = models.TextField(blank=False, null=False)
 
     def __str__(self):
         """Override str method to display name instead of stringified obj."""
@@ -28,7 +28,7 @@ class Division(models.Model):
 class SectionBType(models.Model):
     """Class representing Section B Types."""
 
-    name = models.CharField(blank=False, null=False, max_length=255)
+    name = models.TextField(blank=False, null=False)
 
     def __str__(self):
         """Override str method to display name instead of stringified obj."""
@@ -44,19 +44,18 @@ class Qapp(models.Model):
     division = models.ForeignKey(Division, blank=False, null=False,
                                  related_name='divisions',
                                  on_delete=models.CASCADE)
-    division_branch = models.CharField(
-        blank=False, null=False, max_length=255)
-    title = models.CharField(blank=False, null=False, max_length=255)
-    qa_category = models.CharField(blank=False, null=False, max_length=255)
-    intra_extra = models.CharField(blank=False, null=False, max_length=64)
-    revision_number = models.CharField(
-        blank=False, null=False, max_length=255)
-    date = models.DateTimeField(
-        blank=False, null=False, default=timezone.now)
+    division_branch = models.TextField(blank=False, null=False)
+    title = models.TextField(blank=False, null=False)
+    qa_category = models.TextField(blank=False, null=False)
+    intra_extra = models.CharField(blank=False, null=False,
+                                   max_length=64)
+    revision_number = models.TextField(blank=False, null=False)
+    date = models.DateTimeField(blank=False, null=False,
+                                default=timezone.now)
     prepared_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True)
-    strap = models.CharField(blank=False, null=False, max_length=255)
-    tracking_id = models.CharField(blank=False, null=False, max_length=255)
+    strap = models.TextField(blank=False, null=False)
+    tracking_id = models.TextField(blank=False, null=False)
     # List of teams with which the QAPP is shared.
     teams = models.ManyToManyField(Team, through='QappSharingTeamMap')
 
@@ -110,7 +109,7 @@ class QappLead(models.Model):
     Project has a one-to-many relationship with ProjectLead(s).
     """
 
-    name = models.CharField(blank=False, null=False, max_length=255)
+    name = models.TextField(blank=False, null=False)
     qapp = models.ForeignKey(Qapp, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -121,10 +120,8 @@ class QappLead(models.Model):
 class QappApproval(models.Model):
     """Class representing the approval page of a QAPP document."""
 
-    project_plan_title = models.CharField(blank=False, null=False,
-                                          max_length=255)
-    activity_number = models.CharField(blank=False, null=False,
-                                       max_length=255)
+    project_plan_title = models.TextField(blank=False, null=False)
+    activity_number = models.TextField(blank=False, null=False)
     qapp = models.OneToOneField(Qapp, blank=False,
                                 on_delete=models.CASCADE,
                                 primary_key=False)
@@ -137,9 +134,9 @@ class QappApprovalSignature(models.Model):
     qapp_approval = models.ForeignKey(QappApproval, blank=False,
                                       on_delete=models.CASCADE)
     contractor = models.BooleanField(blank=True, null=False, default=False)
-    name = models.CharField(blank=True, null=True, max_length=255)
-    signature = models.CharField(blank=True, null=True, max_length=255)
-    date = models.CharField(blank=True, null=True, max_length=255)
+    name = models.TextField(blank=True, null=True)
+    signature = models.TextField(blank=True, null=True)
+    date = models.TextField(blank=True, null=True)
 
 
 class SectionA(models.Model):
@@ -149,22 +146,22 @@ class SectionA(models.Model):
                                 primary_key=True)
 
     # A3 is readonly, defaults populated in form from constants module.
-    a3 = models.CharField(blank=False, null=False, max_length=2047)
+    a3 = models.TextField(blank=False, null=False)
     # A4 is user input with an optional chart (a4_chart)
-    a4 = models.CharField(blank=False, null=False, max_length=2047)
+    a4 = models.TextField(blank=False, null=False)
     a4_chart = models.FileField(null=True, blank=True,
                                 upload_to=get_attachment_storage_path)
     # A5 is user input
-    a5 = models.CharField(blank=False, null=False, max_length=2047)
+    a5 = models.TextField(blank=False, null=False)
     # A6 is user input
-    a6 = models.CharField(blank=False, null=False, max_length=2047)
+    a6 = models.TextField(blank=False, null=False)
     # A7 is user input
-    a7 = models.CharField(blank=False, null=False, max_length=2047)
+    a7 = models.TextField(blank=False, null=False)
     # A8 is user input
-    a8 = models.CharField(blank=False, null=False, max_length=2047)
+    a8 = models.TextField(blank=False, null=False)
     # A9 is mixed defaults and user input, thus we should break it up
-    a9 = models.CharField(blank=False, null=False, max_length=2047)
-    a9_drive_path = models.CharField(blank=False, null=False, max_length=255)
+    a9 = models.TextField(blank=False, null=False)
+    a9_drive_path = models.TextField(blank=False, null=False)
     # Dropdown selection for the SectionB Classificiation
     sectionb_type = models.ForeignKey(SectionBType, blank=True, null=True,
                                       related_name='sectionb_type',
@@ -182,43 +179,43 @@ class SectionB(models.Model):
 
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
-    b1_1 = models.CharField(blank=True, null=True, max_length=2047)
-    b1_2 = models.CharField(blank=True, null=True, max_length=2047)
-    b1_3 = models.CharField(blank=True, null=True, max_length=2047)
-    b1_4 = models.CharField(blank=True, null=True, max_length=2047)
-    b1_5 = models.CharField(blank=True, null=True, max_length=2047)
+    b1_1 = models.TextField(blank=True, null=True)
+    b1_2 = models.TextField(blank=True, null=True)
+    b1_3 = models.TextField(blank=True, null=True)
+    b1_4 = models.TextField(blank=True, null=True)
+    b1_5 = models.TextField(blank=True, null=True)
 
-    b2_1 = models.CharField(blank=True, null=True, max_length=2047)
-    b2_2 = models.CharField(blank=True, null=True, max_length=2047)
-    b2_3 = models.CharField(blank=True, null=True, max_length=2047)
-    b2_4 = models.CharField(blank=True, null=True, max_length=2047)
-    b2_5 = models.CharField(blank=True, null=True, max_length=2047)
-    b2_6 = models.CharField(blank=True, null=True, max_length=2047)
-    b2_7 = models.CharField(blank=True, null=True, max_length=2047)
-    b2_8 = models.CharField(blank=True, null=True, max_length=2047)
+    b2_1 = models.TextField(blank=True, null=True)
+    b2_2 = models.TextField(blank=True, null=True)
+    b2_3 = models.TextField(blank=True, null=True)
+    b2_4 = models.TextField(blank=True, null=True)
+    b2_5 = models.TextField(blank=True, null=True)
+    b2_6 = models.TextField(blank=True, null=True)
+    b2_7 = models.TextField(blank=True, null=True)
+    b2_8 = models.TextField(blank=True, null=True)
 
-    b3_1 = models.CharField(blank=True, null=True, max_length=2047)
-    b3_2 = models.CharField(blank=True, null=True, max_length=2047)
-    b3_3 = models.CharField(blank=True, null=True, max_length=2047)
-    b3_4 = models.CharField(blank=True, null=True, max_length=2047)
-    b3_5 = models.CharField(blank=True, null=True, max_length=2047)
-    b3_6 = models.CharField(blank=True, null=True, max_length=2047)
-    b3_7 = models.CharField(blank=True, null=True, max_length=2047)
-    b3_8 = models.CharField(blank=True, null=True, max_length=2047)
-    b3_9 = models.CharField(blank=True, null=True, max_length=2047)
-    b3_10 = models.CharField(blank=True, null=True, max_length=2047)
+    b3_1 = models.TextField(blank=True, null=True)
+    b3_2 = models.TextField(blank=True, null=True)
+    b3_3 = models.TextField(blank=True, null=True)
+    b3_4 = models.TextField(blank=True, null=True)
+    b3_5 = models.TextField(blank=True, null=True)
+    b3_6 = models.TextField(blank=True, null=True)
+    b3_7 = models.TextField(blank=True, null=True)
+    b3_8 = models.TextField(blank=True, null=True)
+    b3_9 = models.TextField(blank=True, null=True)
+    b3_10 = models.TextField(blank=True, null=True)
 
-    b4_1 = models.CharField(blank=True, null=True, max_length=2047)
-    b4_2 = models.CharField(blank=True, null=True, max_length=2047)
-    b4_3 = models.CharField(blank=True, null=True, max_length=2047)
-    b4_4 = models.CharField(blank=True, null=True, max_length=2047)
-    b4_5 = models.CharField(blank=True, null=True, max_length=2047)
+    b4_1 = models.TextField(blank=True, null=True)
+    b4_2 = models.TextField(blank=True, null=True)
+    b4_3 = models.TextField(blank=True, null=True)
+    b4_4 = models.TextField(blank=True, null=True)
+    b4_5 = models.TextField(blank=True, null=True)
 
-    b5_1 = models.CharField(blank=True, null=True, max_length=2047)
-    b5_2 = models.CharField(blank=True, null=True, max_length=2047)
+    b5_1 = models.TextField(blank=True, null=True)
+    b5_2 = models.TextField(blank=True, null=True)
 
-    b6_1 = models.CharField(blank=True, null=True, max_length=2047)
-    b6_2 = models.CharField(blank=True, null=True, max_length=2047)
+    b6_1 = models.TextField(blank=True, null=True)
+    b6_2 = models.TextField(blank=True, null=True)
 
 
 class SectionC(models.Model):
@@ -228,7 +225,7 @@ class SectionC(models.Model):
         Qapp, on_delete=models.CASCADE, primary_key=True)
     c1 = SECTION_C_INFO[0]
     c2 = SECTION_C_INFO[1]
-    # c3 = models.CharField(blank=False, null=False, max_length=2047)
+    # c3 = models.TextField(blank=False, null=False)
 
 
 class SectionD(models.Model):
@@ -236,9 +233,9 @@ class SectionD(models.Model):
 
     qapp = models.OneToOneField(
         Qapp, on_delete=models.CASCADE, primary_key=True)
-    d1 = models.CharField(blank=False, null=False, max_length=2047)
-    d2 = models.CharField(blank=False, null=False, max_length=2047)
-    d3 = models.CharField(blank=False, null=False, max_length=2047)
+    d1 = models.TextField(blank=False, null=False)
+    d2 = models.TextField(blank=False, null=False)
+    d3 = models.TextField(blank=False, null=False)
 
 
 # NOTE: All references are stored and retrievable from
@@ -261,9 +258,9 @@ class Revision(models.Model):
 
     qapp = models.ForeignKey(Qapp, blank=False,
                              on_delete=models.CASCADE)
-    revision = models.CharField(blank=False, null=False, max_length=255)
-    description = models.CharField(blank=False, null=False, max_length=255)
+    revision = models.TextField(blank=False, null=False)
+    description = models.TextField(blank=False, null=False)
     effective_date = models.DateTimeField(blank=False, null=False,
                                           default=timezone.now)
-    initial_version = models.CharField(
-        blank=False, null=False, max_length=255)
+    initial_version = models.TextField(
+        blank=False, null=False)

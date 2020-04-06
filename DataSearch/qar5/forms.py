@@ -30,12 +30,10 @@ class QappForm(ModelForm):
         widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
 
     division_branch = CharField(
-        max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("Division Branch:"), required=True)
 
     title = CharField(
-        max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("QAPP Title:"), required=True)
 
@@ -51,7 +49,7 @@ class QappForm(ModelForm):
         widget=Select(attrs={'class': 'form-control mb-2'}), required=True)
 
     revision_number = CharField(
-        max_length=255, label=_("Revision Number:"), required=True,
+        label=_("Revision Number:"), required=True,
         widget=TextInput({'class': 'form-control mb-2'}))
 
     date = DateTimeField(
@@ -59,17 +57,15 @@ class QappForm(ModelForm):
         widget=DateTimeInput(attrs={'class': 'form-control mb-2'}))
 
     # prepared_by = CharField(
-    #     max_length=255, label=_("Prepared By:"), required=True,
+    #     label=_("Prepared By:"), required=True,
     #     widget=TextInput({'class': 'form-control mb-2',
     #                      'readonly':'readonly'}))
 
     strap = CharField(
-        max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("StRAP:"), required=True)
 
     tracking_id = CharField(
-        max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("QA Tracking ID:"), required=True)
 
@@ -111,7 +107,6 @@ class QappLeadForm(ModelForm):
     """Form for creating project leads for a given qapp."""
 
     name = CharField(
-        max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("Lead Name:"), required=True)
 
@@ -132,12 +127,10 @@ class QappApprovalForm(ModelForm):
     """Form for creating the QAPP Approval page."""
 
     project_plan_title = CharField(
-        max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("Project Plan Title"), required=True)
 
     activity_number = CharField(
-        max_length=255,
         widget=TextInput({'class': 'form-control mb-2'}),
         label=_("Activity Number"), required=True)
 
@@ -169,17 +162,17 @@ class QappApprovalSignatureForm(ModelForm):
         widget=CheckboxInput(
             attrs={'class': 'form-control custom-control-input'}))
 
-    name = CharField(max_length=255,
-                     widget=TextInput({'class': 'form-control mb-2'}),
-                     label=_("Print Name:"), required=False)
+    name = CharField(
+        widget=TextInput({'class': 'form-control mb-2'}),
+        label=_("Print Name:"), required=False)
 
     signature = CharField(
-        max_length=255, label=_("Signature:"), required=False,
+        label=_("Signature:"), required=False,
         widget=TextInput({'class': 'form-control mb-2',
                           'readonly': 'readonly'}))
 
     date = CharField(
-        max_length=255, label=_("Date:"), required=False,
+        label=_("Date:"), required=False,
         widget=TextInput({'class': 'form-control mb-2',
                           'readonly': 'readonly'}))
 
@@ -199,13 +192,13 @@ class SectionAForm(ModelForm):
                                    attrs={'class': 'form-control mb-2',
                                           'readonly': 'readonly'}))
     a3 = CharField(
-        max_length=2047, label=_("A.3 Distribution List"),
+        label=_("A.3 Distribution List"),
         required=False, widget=Textarea(
             {'class': 'form-control mb-2', 'readonly': 'readonly'}),
         initial=SECTION_A_INFO['a3'])
 
     a4 = CharField(
-        max_length=2047, label=_("A.4 Project Task Organization"),
+        label=_("A.4 Project Task Organization"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
     a4_chart = FileField(
@@ -214,33 +207,33 @@ class SectionAForm(ModelForm):
             'multiple': False, 'class': 'custom-file-input'}))
 
     a5 = CharField(
-        max_length=2047, label=_("A.5 Problem Definition Background"),
+        label=_("A.5 Problem Definition Background"),
         required=True, widget=Textarea(
             {'class': 'form-control mb-2'}))
 
     a6 = CharField(
-        max_length=2047, label=_("A.6 Project Description"),
+        label=_("A.6 Project Description"),
         required=True, widget=Textarea(
             {'class': 'form-control mb-2'}))
 
     a7 = CharField(
-        max_length=2047, label=_("A.7 Quality Objectives and Criteria"),
+        label=_("A.7 Quality Objectives and Criteria"),
         required=True, widget=Textarea(
             {'class': 'form-control mb-2'}))
 
     a8 = CharField(
-        max_length=2047, label=_("A.8 Special Training Certification"),
+        label=_("A.8 Special Training Certification"),
         required=True, widget=Textarea(
             {'class': 'form-control mb-2'}))
 
     a9 = CharField(
-        max_length=2047, label=_("A.9 Documents and Records"),
+        label=_("A.9 Documents and Records"),
         required=False, widget=Textarea(
             {'class': 'form-control mb-2', 'readonly': 'readonly'}),
         initial=SECTION_A_INFO['a9'])
 
     a9_drive_path = CharField(
-        max_length=255, label=_("A.9 Drive Path:"), required=True,
+        label=_("A.9 Drive Path:"), required=True,
         widget=TextInput({'class': 'form-control mb-2'}))
 
     sectionb_type = ModelChoiceField(
@@ -278,13 +271,13 @@ class SectionBForm(ModelForm):
             for key, val in section_b_info.items():
                 self.fields[key] = CharField(
                     help_text=val['desc'],
-                    max_length=2047, label=_(val['label']), required=False,
+                    label=_(val['label']), required=False,
                     widget=Textarea({'class': 'form-control mb-2'}))
 
     # def char_field(val):
     #    return CharField(
     #        help_text=val['desc'],
-    #        max_length=2047, label=_(val['label']), required=False,
+    #        label=_(val['label']), required=False,
     #        widget=Textarea({'class': 'form-control mb-2'}))
 
     class Meta:
@@ -304,7 +297,6 @@ class SectionBForm(ModelForm):
 #                                        'readonly': 'readonly'}))
 
 #     c3 = CharField(
-#         max_length=2047,
 #         label=_("C.3 Quality Metrics (QA/QC Checks)"),
 #         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
@@ -325,16 +317,14 @@ class SectionDForm(ModelForm):
                                           'readonly': 'readonly'}))
 
     d1 = CharField(
-        max_length=2047,
         label=_("D.1 Data Review, Verification, and Validation"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
     d2 = CharField(
-        max_length=2047, label=_("D.2 Verification and Validation Methods"),
+        label=_("D.2 Verification and Validation Methods"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
     d3 = CharField(
-        max_length=2047,
         label=_("D.3 Reconciliation with User Requirements"),
         required=True, widget=Textarea({'class': 'form-control mb-2'}))
 
@@ -373,12 +363,10 @@ class RevisionForm(ModelForm):
                                    attrs={'class': 'form-control mb-2',
                                           'readonly': 'readonly'}))
     revision = CharField(
-        max_length=255,
         label=_("Revision Number"),
         required=True, widget=TextInput({'class': 'form-control mb-2'}))
 
     description = CharField(
-        max_length=255,
         label=_("Description"),
         required=True, widget=TextInput({'class': 'form-control mb-2'}))
 
@@ -388,7 +376,6 @@ class RevisionForm(ModelForm):
             attrs={'class': 'form-control mb-2'}))
 
     initial_version = CharField(
-        max_length=255,
         label=_("Initial Version"),
         required=True, widget=TextInput({'class': 'form-control mb-2'}))
 
