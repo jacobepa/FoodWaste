@@ -27,7 +27,7 @@ class TeamAdmin(admin.ModelAdmin):
         """Custom save method to attach created_by user."""
         try:
             temp_obj = obj.created_by
-        except:
+        except BaseException:
             obj.created_by = request.user
         obj.last_modified_by = request.user
         obj.save()

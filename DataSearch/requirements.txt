@@ -29,7 +29,7 @@ django-phonenumber-field==4.0.0 # An international phone number field for django
 djangorestframework==3.11.0     # Powerful and flexible toolkit for building Web APIs.
 django-wkhtmltopdf==3.3.0       # Allows a Django site to output dynamic PDFs.
 docutils==0.16                  # Modular system for processing documentation into formats such as HTML, XML, and LaTeX.
-duecredit==0.8.0                # Citation of scientific software and methods, and limited visibility of donation requests for open-source software.
+# duecredit==0.8.0                # Citation of scientific software and methods, and limited visibility of donation requests for open-source software.
 flake8==3.7.9                   # Flake8 is a wrapper around these tools: PyFlakes; pycodestyle; Ned Batchelder's McCabe script.
 mccabe==0.6.1                   # McCabe checker, plugin for flake8.
 numpy==1.18.2                   # NumPy: array processing for numbers, strings, records, and objects.

@@ -75,7 +75,6 @@ def export_pdf_single(request, *args, **kwargs):
     if not qapp_info:
         return HttpResponse(request)
 
-
     # Prepare a dictionary to replace the sectionb object
     sectionb_type = qapp_info['section_a'].sectionb_type.name
     section_b_info = SECTION_B_INFO[sectionb_type]
