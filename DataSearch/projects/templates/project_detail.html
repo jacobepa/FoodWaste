@@ -1,0 +1,58 @@
+{% extends "main/base.html" %}
+{% load humanize %}
+{% block content %}
+<div class="white-box">
+    <h3 class="row my-2">'{{project.title}}' Details</h3>
+    <div class="row my-2">
+        <!-- Created By -->
+        <label class="col-md-3 text-right">Created by:</label>
+        <span class="col-md-9">{{project.created_by}}</span>
+        <!-- Created -->
+        <label class="col-md-3 text-right">Creation date:</label>
+        <span class="col-md-9">{{project.created_date}}</span>
+        <!-- Last Updated At -->
+        <label class="col-md-3 text-right">Last update:</label>
+        <span class="col-md-9">{{project.last_modified_date}}</span>
+        <!-- ORD RAP Info -->
+        <label class="col-md-3 text-right">ORD RAP Info:</label>
+        <span class="col-md-9"></span>
+    </div>
+    <div class="row my-2">
+        <!-- Office Name -->
+        <label class="col-md-3 text-right">Office name:</label>
+        <span class="col-md-9">{{project.office.name}}</span>
+        <!-- Office Weblink -->
+        <label class="col-md-3 text-right">Office weblink:</label>
+        <span class="col-md-9">{{project.office.weblink}}</span>
+    </div>
+    <div class="row my-2">
+        <!-- Center/Office Name -->
+        <label class="col-md-3 text-right">Center/Office name:</label>
+        <span class="col-md-9">{{project.center_office.weblink}}</span>
+        <!-- Center/Office Weblink -->
+        <label class="col-md-3 text-right">Center/Office weblink:</label>
+        <span class="col-md-9">{{project.center_office.weblink}}</span>
+    </div>
+    <div class="row my-2">
+        <!-- Division Name -->
+        <label class="col-md-3 text-right">Division name:</label>
+        <span class="col-md-9">{{project.division.weblink}}</span>
+        <!-- Division Weblink -->
+        <label class="col-md-3 text-right">Division weblink:</label>
+        <span class="col-md-9">{{project.division.weblink}}</span>
+    </div>
+    <div class="row my-2">
+        <!-- Branch Name -->
+        <label class="col-md-3 text-right">Branch name:</label>
+        <span class="col-md-9">{{project.branch.weblink}}</span>
+        <!-- Branch Weblink -->
+        <label class="col-md-3 text-right">Branch weblink:</label>
+        <span class="col-md-9">{{project.branch.weblink}}</span>
+    </div>
+    <div class="row mt-3">
+        <button class="btn btn-md btn-info" onclick="window.location.href='/projects/'">
+            <span class="mr-2 glyphicon glyphicon-arrow-left"></span> Go back to Projects List
+        </button>
+    </div>
+</div>
+{% endblock %}

@@ -119,7 +119,7 @@ class ProjectEditView(LoginRequiredMixin, UpdateView):
                           {'object': proj, 'form': ProjectForm(instance=proj)})
 
         reason = 'You don\'t have edit permissions for this Project!'
-        return HttpResponseRedirect('/project/detail/%s' % pk, 401, reason)
+        return HttpResponseRedirect('/projects/detail/%s' % pk, 401, reason)
 
     def form_valid(self, form):
         """Project Edit Form validation and redirect."""
@@ -150,7 +150,7 @@ class ProjectEditView(LoginRequiredMixin, UpdateView):
                 data_team_map.can_edit = form.cleaned_data['can_edit']
                 data_team_map.save()
         # Return back to the details page:
-        return HttpResponseRedirect('/project/detail/' + str(self.object.id))
+        return HttpResponseRedirect('/projects/detail/' + str(self.object.id))
     
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
