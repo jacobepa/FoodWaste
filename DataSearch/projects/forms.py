@@ -42,16 +42,20 @@ class ProjectForm(forms.ModelForm):
             attrs={'class': 'form-control mb-2'}), required=True)
     office = forms.ModelChoiceField(
         label=_("Office"), queryset=Office.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        required=True)
     center_office = forms.ModelChoiceField(
-        label=_("Center/Office"), queryset=CenterOffice.objects.none(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
+        label=_("Center/Office"), queryset=CenterOffice.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        required=True)
     division = forms.ModelChoiceField(
-        label=_("Division"), queryset=Division.objects.none(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
+        label=_("Division"), queryset=Division.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        required=True)
     branch = forms.ModelChoiceField(
-        label=_("Branch"), queryset=Branch.objects.none(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
+        label=_("Branch"), queryset=Branch.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        required=True)
     # Team Members (List of teams related to this project)
     teams = forms.ModelMultipleChoiceField(
         widget=forms.SelectMultiple(
@@ -59,8 +63,9 @@ class ProjectForm(forms.ModelForm):
         queryset=Team.objects.all(),
         label=_("Share With Teams"), required=False)
     ord_rap = forms.ModelChoiceField(
-        label=_("ORD RAP"), queryset=OrdRap.objects.none(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
+        label=_("ORD RAP"), queryset=OrdRap.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        required=True)
 
     def __init__(self, *args, **kwargs):
         """Override default init to add custom queryset for teams."""

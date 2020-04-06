@@ -120,6 +120,10 @@ class Project(models.Model):
         OrdRap, on_delete=models.CASCADE, null=True, blank=True)
     created_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True, null=True,
+                                        blank=True, editable=False)
+    # When and by whom the team was last modified.
+    last_modified_date = models.DateTimeField(auto_now=True, blank=False)
 
     def save_model(self, request, obj, form, change):
         """

@@ -173,7 +173,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         if form.is_valid():
             obj = form.save(commit=False)
             # Assign current user as the prepared_by
-            obj.prepared_by = request.user
+            obj.created_by = request.user
             obj.save()
             # Prepare and insert teams data.
             if form.cleaned_data['teams']:
@@ -184,8 +184,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
                     data_team_map.project = obj
                     data_team_map.save()
 
-            return HttpResponseRedirect(
-                '/project/approval/create?project_id=%d' % obj.id)
+            return HttpResponseRedirect('/projects/detail/%d' % obj.id)
 
         return render(request, 'project_create.html', {'form': form})
 

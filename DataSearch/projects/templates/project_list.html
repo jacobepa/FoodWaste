@@ -24,7 +24,7 @@
             {% if projects %}
             {% for project in projects %}
             <tr id="{{project.id}}" onclick="rowClick('{{project.id}}')">
-                <td scope="row">{{project.name}}</td>
+                <td scope="row">{{project.title}}</td>
                 <td>{{project.created_by}}</td>
                 <td>{{project.last_modified_date}}</td>
             </tr>
