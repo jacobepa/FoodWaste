@@ -62,7 +62,6 @@ class Qapp(models.Model):
     def save_model(self, request, obj, form, change):
         """
         Overwrite the default save_model method.
-
         So we can automatically set the prepared_by field as current user.
         """
         # Only set prepared_by when it's the first save (create)
@@ -75,26 +74,15 @@ class Qapp(models.Model):
         """Override str method to display name instead of stringified obj."""
         return self.title
 
-    # def save(user):
-    #    """
-    #    Overwrite the default save_model method so we can automatically
-    #    set the prepared_by field as current user.
-    #    """
-    #    # Only set prepared_by when it's the first save (create)
-    #    if not obj.pk:
-    #        obj.prepared_by = request.user
-    #    return super().save(commit=True)
-
 
 class QappSharingTeamMap(models.Model):
     """Mapping between Existing Data and Teams they share."""
 
-    added_date = models.DateTimeField(auto_now_add=True,
-                                      blank=False,
-                                      editable=False)
-    qapp = models.ForeignKey(Qapp, blank=False,
-                             related_name='qapp_teams',
-                             on_delete=models.CASCADE)
+    added_date = models.DateTimeField(
+        auto_now_add=True, blank=False, editable=False)
+    qapp = models.ForeignKey(
+        Qapp, blank=False, related_name='qapp_teams',
+        on_delete=models.CASCADE)
     team = models.ForeignKey(Team, blank=False,
                              related_name='team_qapp',
                              on_delete=models.CASCADE)
@@ -144,20 +132,15 @@ class SectionA(models.Model):
 
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
-
     # A3 is readonly, defaults populated in form from constants module.
     a3 = models.TextField(blank=False, null=False)
     # A4 is user input with an optional chart (a4_chart)
     a4 = models.TextField(blank=False, null=False)
     a4_chart = models.FileField(null=True, blank=True,
                                 upload_to=get_attachment_storage_path)
-    # A5 is user input
     a5 = models.TextField(blank=False, null=False)
-    # A6 is user input
     a6 = models.TextField(blank=False, null=False)
-    # A7 is user input
     a7 = models.TextField(blank=False, null=False)
-    # A8 is user input
     a8 = models.TextField(blank=False, null=False)
     # A9 is mixed defaults and user input, thus we should break it up
     a9 = models.TextField(blank=False, null=False)
