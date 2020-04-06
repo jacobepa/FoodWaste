@@ -24,7 +24,7 @@ class OrdRapForm(forms.ModelForm):
     name = forms.CharField(
         label=_("Name"),
         widget=forms.TextInput(
-            attrs={'class': 'form-control'}), required=True)
+            attrs={'class': 'form-control mb-2'}), required=True)
 
     class Meta:
         """Meta data for the OrdRap Form."""
@@ -38,30 +38,29 @@ class ProjectForm(forms.ModelForm):
 
     # Title/Name of the project
     title = forms.CharField(
-        label=_("Title"), help_text="Project names must be unique",
-        widget=forms.TextInput(
-            attrs={'class': 'form-control'}), required=True)
+        label=_("Title"), widget=forms.TextInput(
+            attrs={'class': 'form-control mb-2'}), required=True)
     office = forms.ModelChoiceField(
         label=_("Office"), queryset=Office.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
     center_office = forms.ModelChoiceField(
         label=_("Center/Office"), queryset=CenterOffice.objects.none(),
-        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
     division = forms.ModelChoiceField(
         label=_("Division"), queryset=Division.objects.none(),
-        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
     branch = forms.ModelChoiceField(
         label=_("Branch"), queryset=Branch.objects.none(),
-        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
     # Team Members (List of teams related to this project)
     teams = forms.ModelMultipleChoiceField(
         widget=forms.SelectMultiple(
-            {'class': 'form-control mb-2', 'placeholder': 'Teams'}),
+            {'class': 'form-control mb-2 mb-2', 'placeholder': 'Teams'}),
         queryset=Team.objects.all(),
         label=_("Share With Teams"), required=False)
     ord_rap = forms.ModelChoiceField(
         label=_("ORD RAP"), queryset=OrdRap.objects.none(),
-        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
 
     def __init__(self, *args, **kwargs):
         """Override default init to add custom queryset for teams."""
@@ -91,13 +90,13 @@ class ProjectForm(forms.ModelForm):
 #    name = forms.CharField(
 #        label=_("Name"), help_text="Office names must be unique",
 #        widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=True)
+#            attrs={'class': 'form-control mb-2'}), required=True)
 #    weblink = forms.CharField(
 #        label=_("Name"), widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=False)
+#            attrs={'class': 'form-control mb-2'}), required=False)
 #    description = forms.CharField(
 #        label=_("Name"), widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=False)
+#            attrs={'class': 'form-control mb-2'}), required=False)
 
 
 #class CenterOfficeForm(forms.ModelForm):
@@ -106,16 +105,16 @@ class ProjectForm(forms.ModelForm):
 #    name = forms.CharField(
 #        label=_("Name"), help_text="Center/Office names must be unique",
 #        widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=True)
+#            attrs={'class': 'form-control mb-2'}), required=True)
 #    weblink = forms.CharField(
 #        label=_("Name"), widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=False)
+#            attrs={'class': 'form-control mb-2'}), required=False)
 #    description = forms.CharField(
 #        label=_("Name"), widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=False)
+#            attrs={'class': 'form-control mb-2'}), required=False)
 #    office = forms.ModelChoiceField(
 #        label=_("Office"), queryset=Office.objects.all(),
-#        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+#        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
 
 
 #class DivisionForm(forms.ModelForm):
@@ -124,19 +123,19 @@ class ProjectForm(forms.ModelForm):
 #    name = forms.CharField(
 #        label=_("Name"), help_text="Division names must be unique",
 #        widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=True)
+#            attrs={'class': 'form-control mb-2'}), required=True)
 #    weblink = forms.CharField(
 #        label=_("Name"), widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=False)
+#            attrs={'class': 'form-control mb-2'}), required=False)
 #    description = forms.CharField(
 #        label=_("Name"), widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=False)
+#            attrs={'class': 'form-control mb-2'}), required=False)
 #    office = forms.ModelChoiceField(
 #        label=_("Office"), queryset=Office.objects.all(),
-#        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+#        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
 #    center_office = forms.ModelChoiceField(
 #        label=_("Center/Office"), queryset=CenterOffice.objects.all(),
-#        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+#        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
 
 
 #class BranchForm(forms.ModelForm):
@@ -145,19 +144,19 @@ class ProjectForm(forms.ModelForm):
 #    name = forms.CharField(
 #        label=_("Name"), help_text="Branch names must be unique",
 #        widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=True)
+#            attrs={'class': 'form-control mb-2'}), required=True)
 #    weblink = forms.CharField(
 #        label=_("Name"), widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=False)
+#            attrs={'class': 'form-control mb-2'}), required=False)
 #    description = forms.CharField(
 #        label=_("Name"), widget=forms.TextInput(
-#            attrs={'class': 'form-control'}), required=False)
+#            attrs={'class': 'form-control mb-2'}), required=False)
 #    office = forms.ModelChoiceField(
 #        label=_("Office"), queryset=Office.objects.all(),
-#        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+#        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
 #    center_office = forms.ModelChoiceField(
 #        label=_("Center/Office"), queryset=CenterOffice.objects.all(),
-#        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+#        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)
 #    division = forms.ModelChoiceField(
 #        label=_("Division"), queryset=Division.objects.all(),
-#        widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+#        widget=forms.Select(attrs={'class': 'form-control mb-2'}), required=True)

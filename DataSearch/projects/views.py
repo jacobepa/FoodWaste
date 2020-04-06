@@ -1,4 +1,4 @@
-# views.py (accounts)
+# views.py (projects)
 # !/usr/bin/env python3
 # coding=utf-8
 # young.daniel@epa.gov
@@ -13,6 +13,9 @@ Available functions:
 - Project Management Form
 """
 
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -23,9 +26,10 @@ from django.views.generic import FormView, ListView, DetailView, \
     UpdateView, CreateView
 from accounts.models import User
 from projects.forms import ProjectForm
-from projects.models import Project, ProjectSharingTeamMap
-# from projects.serializers import TeamSerializer, UserSerializer, \
-#     TeamMembershipSerializer, TeamMembershipModifySerializer
+from projects.models import Project, ProjectSharingTeamMap, CenterOffice, \
+    Division, Branch
+from projects.serializers import CenterSerializer, DivisionSerializer, \
+    BranchSerializer
 from teams.models import TeamMembership
 
 
@@ -199,6 +203,42 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
             context['edit_message'] = \
                 'You don\'t have edit permissions for this Project!'
         return context
+
+
+class APICentersListView(LoginRequiredMixin, APIView):
+    """Get a JSON list of Centers/Offices (GET) for the given Office ID."""
+
+    def get(self, request, *args, **kwargs):
+        """Return all teams the current user is a member of."""
+        user = self.request.user
+        pk = kwargs.get('pk', None)
+        centers = CenterOffice.objects.filter(office_id=pk).all()
+        serializer = CenterSerializer(centers, many=True)
+        return Response(serializer.data)
+
+
+class APIDivisionsListView(LoginRequiredMixin, APIView):
+    """Get a JSON list of Centers/Offices (GET) for the given Office ID."""
+
+    def get(self, request, *args, **kwargs):
+        """Return all teams the current user is a member of."""
+        user = self.request.user
+        pk = kwargs.get('pk', None)
+        divisions = Division.objects.filter(center_office_id=pk).all()
+        serializer = DivisionSerializer(divisions, many=True)
+        return Response(serializer.data)
+
+
+class APIBranchesListView(LoginRequiredMixin, APIView):
+    """Get a JSON list of Centers/Offices (GET) for the given Office ID."""
+
+    def get(self, request, *args, **kwargs):
+        """Return all teams the current user is a member of."""
+        user = self.request.user
+        pk = kwargs.get('pk', None)
+        branches = Branch.objects.filter(division_id=pk).all()
+        serializer = BranchSerializer(branches, many=True)
+        return Response(serializer.data)
 
 
 # #########################################################################
