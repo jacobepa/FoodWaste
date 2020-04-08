@@ -10,11 +10,16 @@
             <div class="col-md-6">{{project_approval.activity_number}}</div>
         </div>
     </div>
-    <div class="col-md-6 mt-4">
-        <label class="col-sm-8 text-right">Manage Approval Signatures:</label>
-        <div class="col-sm-1 mr-2 float-right"><i onclick="addApprovalSignature({{object.id}})" class="fas fa-plus btn btn-sm btn-info"></i></div>
-        <div class="col-sm-1 mr-2 float-right"><i onclick="editApprovalSignature(this)" class="fas fa-edit btn btn-sm btn-warning" disabled></i></div>
-        <div class="col-sm-1 mr-2 float-right"><i onclick="removeApprovalSignature(this)" class="fas fa-minus btn btn-sm btn-danger" disabled></i></div>
+    <div class="col-md-6 mt-2">
+        <button class="col-md-8 offset-md-4 btn btn-sm btn-warning mb-2" onclick="editApprovalPage({{object.id}})">
+            Edit Plan Title and Activity Number
+        </button>
+        <div class="col-md-12 my-2">
+            <label class="col-sm-8 text-right">Manage Signatures:</label>
+            <div class="col-sm-1 mr-2 float-right"><i onclick="addApprovalSignature({{object.id}})" class="fas fa-plus btn btn-sm btn-info"></i></div>
+            <div class="col-sm-1 mr-2 float-right"><i onclick="editApprovalSignature(this)" class="fas fa-edit btn btn-sm btn-warning" disabled></i></div>
+            <div class="col-sm-1 mr-2 float-right"><i onclick="removeApprovalSignature(this)" class="fas fa-minus btn btn-sm btn-danger" disabled></i></div>
+        </div>
     </div>
 </div>
 <table class="table table-bordered table-hover">

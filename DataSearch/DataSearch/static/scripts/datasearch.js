@@ -37,6 +37,11 @@ function removeProjectLead(btn) {
 }
 
 //////////////////////////////////////////////////////////////////////
+// Project Approval Section
+function editApprovalPage(id) {
+    window.location.href = '/qar5/approval/edit/' + id;
+}
+//////////////////////////////////////////////////////////////////////
 // Project Approval Signature Section
 function addApprovalSignature(id) {
     window.location.href = '/qar5/approval_signature/create?qapp_id=' + id;

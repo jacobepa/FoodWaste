@@ -21,6 +21,7 @@ from django.http import FileResponse, HttpResponseRedirect, HttpRequest, \
 from django.shortcuts import render
 from django.template.loader import get_template, render_to_string
 from django.templatetags.static import static
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, ListView, \
     TemplateView, UpdateView
@@ -129,22 +130,23 @@ class QappEdit(LoginRequiredMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         """
-        Override default get request.
-
-        So we can verify the user has edit privileges, either through super
-        status or team membership.
+        Override default get request so we can verify the user has
+        edit privileges, either through super status or team membership.
         """
         pk = kwargs.get('pk')
         qapp = Qapp.objects.filter(id=pk).first()
         if check_can_edit(qapp, request.user):
-            # TODO: Fix return form:
+            # We need to make sure we return a QappApproval form for editing:
+            qapp_approval = QappApproval.objects.filter(qapp_id=pk).first()
+            approval_form = QappApprovalForm(instance=qapp_approval)
             return render(request, self.template_name,
-                          {'object': qapp, 'form': QappForm(instance=qapp)})
+                          {'object': qapp, 'form': QappForm(instance=qapp),
+                           'approval_form': approval_form})
 
         reason = 'You don\'t have edit permissions for this QAPP!'
         return HttpResponseRedirect('/qar5/detail/%s' % pk, 401, reason)
 
-    def form_valid(self, form):
+    def form_valid(self, form, *args, **kwargs):
         """Qapp Edit Form validation and redirect."""
         # Verify the current user has permissions to modify this QAPP:
         self.object = form.save(commit=False)
@@ -295,6 +297,35 @@ class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
 
         ctx = {'form': form, 'qapp_id': qapp_id}
         return render(request, self.template_name, ctx)
+
+
+class ProjectApprovalEdit(LoginRequiredMixin, UpdateView):
+    """View for editing the details of an existing Qapp Approval page."""
+
+    model = QappApproval
+    form_class = QappApprovalForm
+    template_name = 'SectionA/qapp_approval_create.html'
+
+    def get(self, request, *args, **kwargs):
+        """
+        Override default get request so we can verify the user has
+        edit privileges, either through super status or team membership.
+        """
+        pk = kwargs.get('pk')
+        qapp = Qapp.objects.filter(id=pk).first()
+        if check_can_edit(qapp, request.user):
+            # We need to make sure we return a QappApproval form for editing:
+            qapp_approval = QappApproval.objects.filter(qapp_id=pk).first()
+            return render(request, self.template_name,
+                          {'object': qapp_approval, 'qapp_id': pk,
+                           'form': QappApprovalForm(instance=qapp_approval)})
+
+        reason = 'You don\'t have edit permissions for this QAPP!'
+        return HttpResponseRedirect('/qar5/detail/%s' % pk, 401, reason)
+
+    def get_success_url(self):
+        pk = self.kwargs.get('pk')
+        return reverse('qapp_detail', kwargs=self.kwargs)
 
 
 class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
