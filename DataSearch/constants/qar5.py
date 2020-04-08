@@ -8,6 +8,9 @@
 
 #######################################################
 # Constants and Strings for the QAPP module Section A.
+A2_DEFINITIONS_ACRONYMS = 'Add definitions or ' + \
+    'acronyms here. If none enter (N/A).'
+
 A3_DISTRIBUTION_LIST = 'Quality Assurance Project Plans and Standard ' + \
     'Operating Procedures shall be controlled through documented ' + \
     'approvals as required by Section 5.3 of the Office of Research ' + \
@@ -91,6 +94,7 @@ A9_DOCUMENTS_RECORDS = 'Research activities must be documented according ' + \
 # """
 
 SECTION_A_INFO = {
+    'a2': A2_DEFINITIONS_ACRONYMS,
     'a3': A3_DISTRIBUTION_LIST,
     'a4': A4_PROJECT_TASK_ORGANIZATION,
     'a5': A5_PROBLEM_DEFINITION_BACKGROUND,

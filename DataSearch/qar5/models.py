@@ -132,6 +132,8 @@ class SectionA(models.Model):
 
     qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
                                 primary_key=True)
+    # A2 is new, see Jira DAT-32
+    a2 = models.TextField(blank=False, null=False)
     # A3 is readonly, defaults populated in form from constants module.
     a3 = models.TextField(blank=False, null=False)
     # A4 is user input with an optional chart (a4_chart)

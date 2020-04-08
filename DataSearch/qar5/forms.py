@@ -191,6 +191,12 @@ class SectionAForm(ModelForm):
                                widget=Textarea(
                                    attrs={'class': 'form-control mb-2',
                                           'readonly': 'readonly'}))
+
+    # A2 is new, see Jira DAT-32
+    a2 = CharField(
+        label=_("A.2 Definitions and Acronyms"),
+        required=True, widget=Textarea({'class': 'form-control mb-2'}))
+
     a3 = CharField(
         label=_("A.3 Distribution List"),
         required=False, widget=Textarea(
@@ -244,7 +250,7 @@ class SectionAForm(ModelForm):
         """Meta data for SectionAForm Form."""
 
         model = SectionA
-        fields = ('qapp', 'a3', 'a4', 'a4_chart', 'a5',
+        fields = ('qapp', 'a2', 'a3', 'a4', 'a4_chart', 'a5',
                   'a6', 'a7', 'a8', 'a9', 'a9_drive_path',
                   'sectionb_type')
 

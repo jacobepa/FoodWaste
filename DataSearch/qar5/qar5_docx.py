@@ -303,6 +303,11 @@ def export_doc_single(request, *args, **kwargs):
     # #################################################
 
     create_toc(document)
+    # TODO: DAT-32 Add 'Definitions and Acronyms' Below the ToC
+    document.add_heading('Definitions and Acronyms', level=2)
+    document.add_paragraph(
+        qapp_info['section_a'].a2,
+        styles['No Spacing'])
     document.add_page_break()
 
     # #################################################
