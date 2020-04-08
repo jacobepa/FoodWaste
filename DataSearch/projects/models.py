@@ -119,7 +119,11 @@ class Project(models.Model):
     ord_rap = models.ForeignKey(
         OrdRap, on_delete=models.CASCADE, null=True, blank=True)
     created_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True)
+        User, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='created_by_user')
+    project_lead = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='project_lead_user')
     created_date = models.DateTimeField(auto_now_add=True, null=True,
                                         blank=True, editable=False)
     # When and by whom the team was last modified.
@@ -133,7 +137,9 @@ class Project(models.Model):
         # Only set prepared_by when it's the first save (create)
         user = request.user
         if not obj.pk:
-            obj.prepared_by = request.user
+            obj.created_by = request.user
+            # Initial/default project lead is the creating user
+            obj.project_lead = request.user
         return super().save_model(request, obj, form, change)
 
     def __str__(self):

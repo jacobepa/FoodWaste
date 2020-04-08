@@ -34,6 +34,17 @@ from teams.serializers import TeamSerializer, UserSerializer, \
     TeamMembershipSerializer, TeamMembershipModifySerializer
 
 
+def is_user_member(user, team=None):
+    """
+    Utility method to check if a User is a member of the provided team,
+    or if the User is a member of any Team (when team=None)
+    """
+    if team:
+        return TeamMembership.objects.filter(
+            team_id=team.id, member_id=user.id).exists()
+    return TeamMembership.objects.filter(member_id=user.id).exists()
+
+
 class TeamListView(LoginRequiredMixin, ListView):
     """
     New class to return a teams list view.
@@ -255,7 +266,6 @@ class APITeamListView(APIView):
 
     def get(self, request, *args, **kwargs):
         """Return all teams the current user is a member of."""
-        user = self.request.user
         # Get the list of teams to exclude.
         exclude = kwargs.get('exclude', None)
         if exclude is None:

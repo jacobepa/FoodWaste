@@ -33,6 +33,17 @@ from projects.serializers import CenterSerializer, DivisionSerializer, \
 from teams.models import TeamMembership
 
 
+def is_user_project_lead(user, project=None):
+    """
+    Utility method to check if a User is the lead for the given project,
+    or if the User is project lead for any project (when project=None)
+    """
+    if project:
+        return Project.objects.filter(
+            id=project.id, project_lead_id=user.id).exists()
+    return Project.objects.filter(project_lead_id=user.id).exists()
+
+
 def get_projects_for_user(user):
     """
     Method to get all Projects belonging to a user.
@@ -77,7 +88,7 @@ def check_can_edit(project, user):
 
     # Since this is the last check, the project is either owned by
     # the user, or the user does not have edit privilege at all:
-    return project.created_by == user
+    return project.created_by == user or project.project_lead == user
 
 
 class ProjectListView(LoginRequiredMixin, ListView):
@@ -174,6 +185,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
             obj = form.save(commit=False)
             # Assign current user as the prepared_by
             obj.created_by = request.user
+            obj.project_lead = request.user
             obj.save()
             # Prepare and insert teams data.
             if form.cleaned_data['teams']:
