@@ -17,6 +17,7 @@
             <tr>
                 <th scope="col">Project Name</th>
                 <th scope="col">Project Created By</th>
+                <th scope="col">Project Lead</th>
                 <th scope="col">Project Last Modified</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@
             <tr id="{{project.id}}" onclick="rowClick('{{project.id}}')">
                 <td scope="row">{{project.title}}</td>
                 <td>{{project.created_by}}</td>
+                <td>{{project.project_lead}}</td>
                 <td>{{project.last_modified_date}}</td>
             </tr>
             {% endfor %}
