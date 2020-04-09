@@ -65,6 +65,11 @@ class ProjectForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control mb-2'}),
         required=True)
 
+    ord_rap = forms.ModelChoiceField(
+        label=_("ORD RAP"), queryset=OrdRap.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        required=True)
+
     # Team Members (List of teams related to this project)
     teams = forms.ModelMultipleChoiceField(
         widget=forms.SelectMultiple(
@@ -72,10 +77,10 @@ class ProjectForm(forms.ModelForm):
         queryset=Team.objects.all(),
         label=_("Share With Teams"), required=False)
 
-    ord_rap = forms.ModelChoiceField(
-        label=_("ORD RAP"), queryset=OrdRap.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
-        required=True)
+    can_edit = forms.BooleanField(
+        required=False, label=_("Teams can edit the QAPP"),
+        widget=forms.CheckboxInput(
+            attrs={'class': 'form-control col-sm-1 mb-2'}))
 
     def __init__(self, *args, **kwargs):
         """Override default init to add custom queryset for teams."""
@@ -96,7 +101,7 @@ class ProjectForm(forms.ModelForm):
 
         model = Project
         fields = ('title', 'project_lead', 'office', 'center_office',
-                  'division', 'branch', 'teams', 'ord_rap',)
+                  'division', 'branch', 'ord_rap', 'teams', 'can_edit')
 
 
 #class OfficeForm(forms.ModelForm):
