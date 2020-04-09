@@ -304,7 +304,7 @@ class ProjectApprovalEdit(LoginRequiredMixin, UpdateView):
 
     model = QappApproval
     form_class = QappApprovalForm
-    template_name = 'SectionA/qapp_approval_create.html'
+    template_name = 'SectionA/qapp_approval_edit.html'
 
     def get(self, request, *args, **kwargs):
         """
@@ -324,7 +324,6 @@ class ProjectApprovalEdit(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect('/qar5/detail/%s' % pk, 401, reason)
 
     def get_success_url(self):
-        pk = self.kwargs.get('pk')
         return reverse('qapp_detail', kwargs=self.kwargs)
 
 

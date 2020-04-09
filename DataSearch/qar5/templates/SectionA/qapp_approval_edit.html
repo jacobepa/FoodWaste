@@ -13,7 +13,7 @@
     
     <div class="row">
         <div class="col-md-12">
-            <form enctype="multipart/form-data" action="/qar5/approval/create/" method="post" role="form">
+            <form enctype="multipart/form-data" action="/qar5/approval/edit/{{qapp_id}}/" method="post" role="form">
                 {% csrf_token %}
                 <div class="form-group row">
                     <label for="" class="col-sm-2 control-label">{{form.qapp.label}}</label>
