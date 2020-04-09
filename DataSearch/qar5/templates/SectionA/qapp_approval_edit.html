@@ -13,6 +13,19 @@
     
     <div class="row">
         <div class="col-md-12">
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field in form %}
+                {% for error in field.errors %}
+                <h4>{{ error|escape }}</h4>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <h4>{{ error|escape }}</h4>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             <form enctype="multipart/form-data" action="/qar5/approval/edit/{{qapp_id}}/" method="post" role="form">
                 {% csrf_token %}
                 <div class="form-group row">

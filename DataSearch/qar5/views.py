@@ -323,8 +323,17 @@ class ProjectApprovalEdit(LoginRequiredMixin, UpdateView):
         reason = 'You don\'t have edit permissions for this QAPP!'
         return HttpResponseRedirect('/qar5/detail/%s' % pk, 401, reason)
 
-    def get_success_url(self):
-        return reverse('qapp_detail', kwargs=self.kwargs)
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Save the changes to the form."""
+        pk = kwargs.get('pk')
+        instance = QappApproval.objects.filter(qapp_id=pk).first()
+        form = QappApprovalForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/qar5/detail/%s' % pk)
+        return render(request, self.template_name,
+                      {'qapp_id': pk, 'form': form})
 
 
 class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
