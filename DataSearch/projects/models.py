@@ -138,8 +138,6 @@ class Project(models.Model):
         user = request.user
         if not obj.pk:
             obj.created_by = request.user
-            # Initial/default project lead is the creating user
-            obj.project_lead = request.user
         return super().save_model(request, obj, form, change)
 
     def __str__(self):

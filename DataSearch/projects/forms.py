@@ -15,7 +15,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from projects.models import Branch, CenterOffice, Division, Office, \
     OrdRap, Project
-from teams.models import Team
+from teams.models import Team, User
 
 
 class OrdRapForm(forms.ModelForm):
@@ -40,14 +40,22 @@ class ProjectForm(forms.ModelForm):
     title = forms.CharField(
         label=_("Title"), widget=forms.TextInput(
             attrs={'class': 'form-control mb-2'}), required=True)
+
+    project_lead = forms.ModelChoiceField(
+        label=_("Project Lead"), queryset=User.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        required=True)
+
     office = forms.ModelChoiceField(
         label=_("Office"), queryset=Office.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control mb-2'}),
         required=True)
+
     center_office = forms.ModelChoiceField(
         label=_("Center/Office"), queryset=CenterOffice.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control mb-2'}),
         required=True)
+
     division = forms.ModelChoiceField(
         label=_("Division"), queryset=Division.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control mb-2'}),
@@ -56,12 +64,14 @@ class ProjectForm(forms.ModelForm):
         label=_("Branch"), queryset=Branch.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control mb-2'}),
         required=True)
+
     # Team Members (List of teams related to this project)
     teams = forms.ModelMultipleChoiceField(
         widget=forms.SelectMultiple(
             {'class': 'form-control mb-2 mb-2', 'placeholder': 'Teams'}),
         queryset=Team.objects.all(),
         label=_("Share With Teams"), required=False)
+
     ord_rap = forms.ModelChoiceField(
         label=_("ORD RAP"), queryset=OrdRap.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control mb-2'}),
@@ -85,8 +95,8 @@ class ProjectForm(forms.ModelForm):
         """Meta data for the Project Management Form."""
 
         model = Project
-        fields = ('title', 'office', 'center_office', 'division',
-                  'branch', 'teams', 'ord_rap',)
+        fields = ('title', 'project_lead', 'office', 'center_office',
+                  'division', 'branch', 'teams', 'ord_rap',)
 
 
 #class OfficeForm(forms.ModelForm):

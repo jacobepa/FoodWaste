@@ -173,9 +173,10 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         """Return a view with an empty form for creating a new Project."""
-        return render(
-            request, 'project_create.html',
-            {'form': ProjectForm(user=request.user)})
+        # Set initial project_lead to current user
+        form = ProjectForm(initial={'project_lead': request.user},
+                           user=request.user)
+        return render(request, 'project_create.html', {'form': form})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -185,7 +186,6 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
             obj = form.save(commit=False)
             # Assign current user as the prepared_by
             obj.created_by = request.user
-            obj.project_lead = request.user
             obj.save()
             # Prepare and insert teams data.
             if form.cleaned_data['teams']:
