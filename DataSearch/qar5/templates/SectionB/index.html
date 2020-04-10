@@ -14,6 +14,7 @@
                     {% csrf_token %}
                     <div class="">
                         <div class="form-group row hidden">{{form.qapp}}</div>
+                        <div class="form-group row hidden">{{form.sectionb_type}}</div>
                         {% for field in form %}
                         {% if field.help_text %}
                         <div class="form-group row">

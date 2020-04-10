@@ -430,12 +430,13 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         qapp = Qapp.objects.get(id=qapp_id)
         sectiona = SectionA.objects.filter(qapp_id=qapp_id).first()
         selected_sectionb_types = sectiona.sectionb_type.all()
+
         if not sectiona or not selected_sectionb_types:
             form = SectionAForm({'qapp': qapp,
                                  'a3': SECTION_A_INFO['a3'],
                                  'a9': SECTION_A_INFO['a9']})
-            error_message = 'Please select a Section B Type from the ' + \
-                'dropdown before moving onto the next page, Section B.'
+            error_message = 'Please select one or more Section B Types ' + \
+                'from the list before moving onto the next page, Section B.'
             return render(request, 'SectionA/index.html',
                           {'title': 'QAPP Section A', 'qapp_id': qapp_id,
                            'SECTION_A_INFO': SECTION_A_INFO, 'form': form,
@@ -445,30 +446,16 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         if not sectionb_type_id:
             sectionb_type = selected_sectionb_types[0]
         else:
-            for type in selected_sectionb_types:
-                if type.id is int(sectionb_type_id):
-                    sectionb_type = type
-                    break
-                # If we get here, then the param passed in is bad, take 0
-                sectionb_type = selected_sectionb_types[0]
+            sectionb_type = selected_sectionb_types.filter(id=int(sectionb_type_id)).first()
 
-        existing_sections_b = SectionB.objects.filter(qapp=qapp)
+        existing_section_b = SectionB.objects.filter(
+            qapp=qapp, sectionb_type=sectionb_type).first()
 
-        # TODO: Figure out multiple Section B logic...
-        # selected_sectionb_types and existing_sections_b
-
-        # Single Section B page with a dropdown of selected_sectionb_types
-        # When you select one of the selected_sectionb_types from  this
-        # dropdown, reload the page with the relevant form. Don't allow
-        # next page until all selected_sectionb_types have been created and
-        # have corresponding existing_sections_b.
-
-        if existing_sections_b:
-            # Check if there are any selected_sectionb_types without existing
-            if any(selected_sectionb_types not in existing_sections_b):
-                form = SectionBForm(
-                    instance=existing_section_b,
-                    section_b_info=SECTION_B_INFO[sectionb_type.name])
+        if existing_section_b:
+            form = SectionBForm(
+                instance=existing_section_b,
+                section_b_info=SECTION_B_INFO[
+                    existing_section_b.sectionb_type.name])
 
         else:
             # Start with whatever the first sectionb_type is:
@@ -489,9 +476,16 @@ class SectionBView(LoginRequiredMixin, TemplateView):
                'SECTION_B_INFO': SECTION_B_INFO, 'title': 'QAPP Section B'}
 
         qapp = Qapp.objects.get(id=ctx['qapp_id'])
-        existing_section_b = SectionB.objects.filter(qapp=qapp).first()
-        if qapp.sectiona:
-            ctx['sectionb_type'] = qapp.sectiona.sectionb_type
+
+        sectionb_type_id = request.POST.get('sectionb_type')
+        ctx['sectionb_type'] = qapp.sectiona.sectionb_type.filter(
+            id=sectionb_type_id).first()
+
+        existing_section_b = SectionB.objects.filter(
+            qapp=qapp, sectionb_type=ctx['sectionb_type']).first()
+
+        ctx['selected_sectionb_types'] = qapp.sectiona.sectionb_type.all()
+
 
         # Update if existing, otherwise insert new:
         if existing_section_b:
