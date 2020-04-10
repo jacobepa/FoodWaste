@@ -242,9 +242,11 @@ class SectionAForm(ModelForm):
         label=_("A.9 Drive Path:"), required=True,
         widget=TextInput({'class': 'form-control mb-2'}))
 
-    sectionb_type = ModelChoiceField(
-        label=_("Section B Type:"), queryset=SectionBType.objects.all(),
-        widget=Select(attrs={'class': 'form-control mb-2'}), initial=0)
+    sectionb_type = ModelMultipleChoiceField(
+        widget=SelectMultiple(
+            {'class': 'form-control mb-2', 'placeholder': 'Section B Type'}),
+        queryset=SectionBType.objects.all(),
+        label=_("Section B Types"), required=True)
 
     class Meta:
         """Meta data for SectionAForm Form."""
@@ -258,11 +260,17 @@ class SectionAForm(ModelForm):
 class SectionBForm(ModelForm):
     """Class representing the entirety of SectionB for a given QAPP."""
 
-    qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
-                            required=True, label=_("Parent QAPP"),
-                            widget=Select(
+    qapp = ModelChoiceField(queryset=Qapp.objects.all(),
+                            initial=0, required=True,
+                            label=_("Parent QAPP"), widget=Select(
                                 attrs={'class': 'form-control mb-2',
                                         'readonly': 'readonly'}))
+
+    sectionb_type = ModelChoiceField(queryset=SectionBType.objects.all(),
+                                     initial=0, required=True,
+                                     label=_("Section B Type"), widget=Select(
+                                         attrs={'class': 'form-control mb-2',
+                                                'readonly': 'readonly'}))
 
     def __init__(self, *args, **kwargs):
         """
@@ -280,37 +288,11 @@ class SectionBForm(ModelForm):
                     label=_(val['label']), required=False,
                     widget=Textarea({'class': 'form-control mb-2'}))
 
-    # def char_field(val):
-    #    return CharField(
-    #        help_text=val['desc'],
-    #        label=_(val['label']), required=False,
-    #        widget=Textarea({'class': 'form-control mb-2'}))
-
     class Meta:
         """Meta data for SectionBForm Form."""
 
         model = SectionB
         fields = '__all__'
-
-
-# class SectionCForm(ModelForm):
-#     """Class representing the entirety of SectionC for a given QAPP."""
-
-#     qapp = ModelChoiceField(queryset=Qapp.objects.all(), initial=0,
-#                             required=True, label=_("Parent QAPP"),
-#                             widget=Textarea(
-#                                 attrs={'class': 'form-control mb-2',
-#                                        'readonly': 'readonly'}))
-
-#     c3 = CharField(
-#         label=_("C.3 Quality Metrics (QA/QC Checks)"),
-#         required=True, widget=Textarea({'class': 'form-control mb-2'}))
-
-    # class Meta:
-    #     """Meta data for SectionCForm Form."""
-
-    #     model = SectionC
-    #     fields = ('qapp', 'c3')
 
 
 class SectionDForm(ModelForm):

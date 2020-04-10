@@ -76,7 +76,7 @@ class Qapp(models.Model):
 
 
 class QappSharingTeamMap(models.Model):
-    """Mapping between Existing Data and Teams they share."""
+    """Mapping between QAPP and Teams they share."""
 
     added_date = models.DateTimeField(
         auto_now_add=True, blank=False, editable=False)
@@ -93,7 +93,6 @@ class QappSharingTeamMap(models.Model):
 class QappLead(models.Model):
     """
     Class representing a QAPP project lead.
-
     Project has a one-to-many relationship with ProjectLead(s).
     """
 
@@ -147,10 +146,20 @@ class SectionA(models.Model):
     # A9 is mixed defaults and user input, thus we should break it up
     a9 = models.TextField(blank=False, null=False)
     a9_drive_path = models.TextField(blank=False, null=False)
-    # Dropdown selection for the SectionB Classificiation
-    sectionb_type = models.ForeignKey(SectionBType, blank=True, null=True,
-                                      related_name='sectionb_type',
-                                      on_delete=models.CASCADE)
+    # Multi-select for the SectionB Classificiations
+    sectionb_type = models.ManyToManyField(
+        SectionBType, through='SectionBTypeMap')
+
+
+class SectionBTypeMap(models.Model):
+    """
+    Mapping for many-to-many relationship between
+    Section A and its Section B Types.
+    """
+    sectiona = models.ForeignKey(
+        SectionA, blank=False, on_delete=models.CASCADE)
+    sectionb_type = models.ForeignKey(
+        SectionBType, blank=False, on_delete=models.CASCADE)
 
 
 class SectionB(models.Model):
@@ -162,8 +171,10 @@ class SectionB(models.Model):
     will likely still be multiple forms for the different Section B Types.
     """
 
-    qapp = models.OneToOneField(Qapp, on_delete=models.CASCADE,
-                                primary_key=True)
+    qapp = models.ForeignKey(Qapp, on_delete=models.CASCADE)
+    sectionb_type = models.ForeignKey(
+        SectionBType, on_delete=models.CASCADE)
+
     b1_1 = models.TextField(blank=True, null=True)
     b1_2 = models.TextField(blank=True, null=True)
     b1_3 = models.TextField(blank=True, null=True)
@@ -201,6 +212,12 @@ class SectionB(models.Model):
 
     b6_1 = models.TextField(blank=True, null=True)
     b6_2 = models.TextField(blank=True, null=True)
+
+    class Meta:
+        """Meta data definitions for SectionB class"""
+        # Tell the model that these two fields are unique together.
+        # This is similar to declaring a composite primary key:
+        unique_together = ('qapp', 'sectionb_type')
 
 
 class SectionC(models.Model):

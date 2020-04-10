@@ -25,7 +25,7 @@ def load_fixture(_apps, _schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('qar5', '0003_auto_20200218_1317'),
+        ('qar5', '0002_division_fixture'),
     ]
 
     operations = [

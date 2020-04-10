@@ -429,12 +429,8 @@ class SectionBView(LoginRequiredMixin, TemplateView):
         qapp_id = request.GET.get('qapp_id', None)
         qapp = Qapp.objects.get(id=qapp_id)
         sectiona = SectionA.objects.filter(qapp_id=qapp_id).first()
-        sectionb_type = ''
-        if sectiona and sectiona.sectionb_type_id:
-            sectionb_type_id = sectiona.sectionb_type_id
-            sectionb_type = SectionBType.objects.get(id=sectionb_type_id)
-
-        else:
+        selected_sectionb_types = sectiona.sectionb_type.all()
+        if not sectiona or not selected_sectionb_types:
             form = SectionAForm({'qapp': qapp,
                                  'a3': SECTION_A_INFO['a3'],
                                  'a9': SECTION_A_INFO['a9']})
@@ -445,22 +441,46 @@ class SectionBView(LoginRequiredMixin, TemplateView):
                            'SECTION_A_INFO': SECTION_A_INFO, 'form': form,
                            'error_message': error_message})
 
-        existing_section_b = SectionB.objects.filter(qapp=qapp).first()
+        sectionb_type_id = request.GET.get('sectionb_type', None)
+        if not sectionb_type_id:
+            sectionb_type = selected_sectionb_types[0]
+        else:
+            for type in selected_sectionb_types:
+                if type.id is int(sectionb_type_id):
+                    sectionb_type = type
+                    break
+                # If we get here, then the param passed in is bad, take 0
+                sectionb_type = selected_sectionb_types[0]
 
-        if existing_section_b:
-            form = SectionBForm(
-                instance=existing_section_b,
-                section_b_info=SECTION_B_INFO[sectionb_type.name])
+        existing_sections_b = SectionB.objects.filter(qapp=qapp)
+
+        # TODO: Figure out multiple Section B logic...
+        # selected_sectionb_types and existing_sections_b
+
+        # Single Section B page with a dropdown of selected_sectionb_types
+        # When you select one of the selected_sectionb_types from  this
+        # dropdown, reload the page with the relevant form. Don't allow
+        # next page until all selected_sectionb_types have been created and
+        # have corresponding existing_sections_b.
+
+        if existing_sections_b:
+            # Check if there are any selected_sectionb_types without existing
+            if any(selected_sectionb_types not in existing_sections_b):
+                form = SectionBForm(
+                    instance=existing_section_b,
+                    section_b_info=SECTION_B_INFO[sectionb_type.name])
 
         else:
+            # Start with whatever the first sectionb_type is:
             form = SectionBForm(
-                {'qapp': qapp},
+                {'qapp': qapp, 'sectionb_type': sectionb_type},
                 section_b_info=SECTION_B_INFO[sectionb_type.name])
 
         return render(request, self.template_name,
                       {'title': 'QAPP Section B', 'qapp_id': qapp_id,
                        'SECTION_B_INFO': SECTION_B_INFO[sectionb_type.name],
-                       'form': form, 'sectionb_type': sectionb_type})
+                       'form': form, 'sectionb_type': sectionb_type,
+                       'selected_sectionb_types': selected_sectionb_types})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
