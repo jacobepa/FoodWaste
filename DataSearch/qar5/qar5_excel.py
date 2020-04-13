@@ -223,20 +223,22 @@ def export_excel_single(request, *args, **kwargs):
 
     # ###########################
     # Write Section B
-    sheet.cell(row=row, column=1).value = \
-        'Section B'
-    row += 1
     if qapp_info['section_b']:
-        sectionb_type = qapp_info['section_a'].sectionb_type.name
-        section_b_info = SECTION_B_INFO[sectionb_type]
-        for key in section_b_info:
-            val = getattr(qapp_info['section_b'], key, '')
-            if section_b_info[key].get('heading', False):
-                sheet.cell(row=row, column=1).value = \
-                    section_b_info[key]['heading']
+        for sectionb in qapp_info['section_b']:
+            sectionb_type = sectionb.sectionb_type.name
+            sheet.cell(row=row, column=1).value = \
+                'Section B - %s' % sectionb_type
+            row += 1
+            section_b_info = SECTION_B_INFO[sectionb_type]
+            for key in section_b_info:
+                val = getattr(sectionb, key, '')
+                if section_b_info[key].get('heading', False):
+                    sheet.cell(row=row, column=1).value = \
+                        section_b_info[key]['heading']
+                    row += 1
+                sheet.cell(row=row, column=1).value = section_b_info[key]['label']
+                sheet.cell(row=row, column=2).value = val
                 row += 1
-            sheet.cell(row=row, column=1).value = section_b_info[key]['label']
-            sheet.cell(row=row, column=2).value = val
             row += 1
     row += 2
 

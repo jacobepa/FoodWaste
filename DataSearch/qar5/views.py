@@ -740,7 +740,7 @@ def get_qapp_info(user, qapp_id):
             ctx['signatures'] = QappApprovalSignature.objects.filter(
                 qapp_approval_id=ctx['qapp_approval'].id)
         ctx['section_a'] = SectionA.objects.filter(qapp_id=qapp_id).first()
-        ctx['section_b'] = SectionB.objects.filter(qapp_id=qapp_id).first()
+        ctx['section_b'] = SectionB.objects.filter(qapp_id=qapp_id).all()
         ctx['section_c'] = SectionC()
         ctx['section_d'] = SectionD.objects.filter(qapp_id=qapp_id).first()
         ctx['references'] = References.objects.filter(qapp_id=qapp_id).first()

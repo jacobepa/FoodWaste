@@ -176,9 +176,10 @@
                 </div>
 
                 <!-- Section B -->
+                {% for sectionb in section_b %}
                 <div class="text-left">
-                    <h3 stle="color: midnightblue">Section B</h3>
-                    {% for key, val in section_b.items %}
+                    <h3 stle="color: midnightblue">Section B - {{sectionb.sectionb_type}}</h3>
+                    {% for key, val in sectionb.items %}
                     {% if val.heading %}
                     <h4 style="color: cornflowerblue">{{val.heading}}</h4>
                     {% endif %}
@@ -186,6 +187,7 @@
                     <p>{{val.value}}</p>
                     {% endfor %}
                 </div>
+                {% endfor %}
 
                 <!-- Section C -  -->
                 <div class="text-left">

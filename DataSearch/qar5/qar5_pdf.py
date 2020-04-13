@@ -75,19 +75,22 @@ def export_pdf_single(request, *args, **kwargs):
     if not qapp_info:
         return HttpResponse(request)
 
-    # Prepare a dictionary to replace the sectionb object
-    sectionb_type = qapp_info['section_a'].sectionb_type.name
-    section_b_info = SECTION_B_INFO[sectionb_type]
-    section_b = {}
-    for key in section_b_info:
-        section_b[key] = {}
-        val = getattr(qapp_info['section_b'], key, '')
-        if section_b_info[key].get('heading', False):
-            section_b[key]['heading'] = section_b_info[key]['heading']
-        section_b[key]['label'] = section_b_info[key]['label']
-        section_b[key]['value'] = val
+    # Prepare a list of dictionaries to replace the default sectionb objects
+    section_b_list = []
+    for sectionb in qapp_info['section_b']:
+        sectionb_type = sectionb.sectionb_type.name
+        section_b_info = SECTION_B_INFO[sectionb_type]
+        section_b = {'sectionb_type': sectionb_type}
+        for key in section_b_info:
+            section_b[key] = {}
+            val = getattr(sectionb, key, '')
+            if section_b_info[key].get('heading', False):
+                section_b[key]['heading'] = section_b_info[key]['heading']
+            section_b[key]['label'] = section_b_info[key]['label']
+            section_b[key]['value'] = val
+        section_b_list.append(section_b)
     # Replace the sectionb object with the prepared dictionary
-    qapp_info['section_b'] = section_b
+    qapp_info['section_b'] = section_b_list
 
     filename = '%s.pdf' % slugify(qapp_info['qapp'].title)
     resp = PDFTemplateResponse(

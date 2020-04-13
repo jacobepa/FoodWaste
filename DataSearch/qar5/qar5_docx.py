@@ -171,7 +171,7 @@ def export_doc_single(request, *args, **kwargs):
 
     try:
         if DEBUG:
-            logo = path.join(STATIC_ROOT, 'EPA_Files', 'loogo.png')
+            logo = path.join(STATIC_ROOT, 'EPA_Files', 'logo.png')
             qual_assur_proj_plan = path.join(
                 STATIC_ROOT, 'images', 'quality_assurance_project_plan.PNG')
         else:
@@ -188,6 +188,10 @@ def export_doc_single(request, *args, **kwargs):
     # TODO Make blue_header text white, add blue background with shadow
     # document.add_picture('blue_background.png', width=Inches(4))
     # background color: rgb(0, 176, 240)
+
+    section_incomplete_message = 'This section has errors or is ' + \
+        'incomplete. Please go back to the web tool and correct ' + \
+        'this section, then try exporting it again.'
 
     # The rest of the document will be WD_ALIGN_PARAGRAPH.CENTER
 
@@ -370,21 +374,27 @@ def export_doc_single(request, *args, **kwargs):
             qapp_info['section_a'].a9,
             styles['No Spacing'])
     else:
-        document.add_heading('SECTION A INCOMPLETE!', level=2)
+        document.add_paragraph(section_incomplete_message,
+                               styles['No Spacing'])
 
     # Section B
-    document.add_heading('Section B', level=1)
     if qapp_info['section_b']:
-        sectionb_type = qapp_info['section_a'].sectionb_type.name
-        section_b_info = SECTION_B_INFO[sectionb_type]
-        for key in section_b_info:
-            val = getattr(qapp_info['section_b'], key, '')
-            if section_b_info[key].get('heading', False):
-                document.add_heading(section_b_info[key]['heading'], level=2)
-            document.add_heading(section_b_info[key]['label'], level=3)
-            document.add_paragraph(val, styles['No Spacing'])
+        for sectionb in qapp_info['section_b']:
+            tempbreakhere = True
+            sectionb_type = sectionb.sectionb_type.name
+            document.add_heading('Section B - %s' % sectionb_type, level=1)
+            section_b_info = SECTION_B_INFO[sectionb_type]
+            for key in section_b_info:
+                val = getattr(sectionb, key, '')
+                if section_b_info[key].get('heading', False):
+                    document.add_heading(section_b_info[key]['heading'],
+                                         level=2)
+                document.add_heading(section_b_info[key]['label'], level=3)
+                document.add_paragraph(val, styles['No Spacing'])
     else:
-        document.add_heading('SECTION B INCOMPLETE!', level=2)
+        document.add_heading('Section B', level=1)
+        document.add_paragraph(section_incomplete_message,
+                               styles['No Spacing'])
 
     # Section C
     document.add_heading('Section C', level=1)
@@ -426,7 +436,8 @@ def export_doc_single(request, *args, **kwargs):
             qapp_info['section_d'].d3,
             styles['No Spacing'])
     else:
-        document.add_heading('SECTION D INCOMPLETE!', level=2)
+        document.add_paragraph(section_incomplete_message,
+                               styles['No Spacing'])
 
     # References
     document.add_heading('References', level=1)
@@ -437,7 +448,8 @@ def export_doc_single(request, *args, **kwargs):
         #     qapp_info['references'].references.replace('\r\n\r\n', '\r\n'),
         #     styles['No Spacing'])
     else:
-        document.add_heading('REFERENCES SECTION INCOMPLETE!', level=2)
+        document.add_paragraph(section_incomplete_message,
+                               styles['No Spacing'])
 
     content_type = 'application/vnd.openxmlformats-officedocument.' + \
             'wordprocessingml.document'
