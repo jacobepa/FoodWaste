@@ -348,7 +348,13 @@ def create_help_request(request):
             support.support_type = SupportType.objects.filter(the_name="Help").first()
 
             support.save()
-            # send_mail('GWSC Support Request', 'A GWSC Support Request Has Been Submitted. Here is the description of the issue: %s' % str(support.the_description), support.weblink , ['qatrack@epa.gov'], fail_silently=False)
+
+            send_mail('GWSC Support Request',
+                      'A DataSearch Support Request Has Been Submitted. ' + \
+                      'Here is the description of the issue: %s' % \
+                      str(support.the_description), support.weblink ,
+                      ['qatrack@epa.gov'], fail_silently=False)
+
             url = reverse('support:edit_support', kwargs={'obj_id': support.id})
             return HttpResponseRedirect(url)
     else:

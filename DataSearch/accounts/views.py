@@ -112,7 +112,7 @@ class UsernameReminderRequestView(FormView):
                             email_template_name, content)
                         if not settings.EMAIL_DISABLED:
                             send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                                      [user.email], fail_silently=True)
+                                      [user.email], fail_silently=False)
                     # Render the done page.
                     return render(request,
                                   'registration/username_reminder_done.html',
@@ -219,7 +219,7 @@ class PasswordResetRequestView(FormView):
 
                 if not settings.EMAIL_DISABLED:
                     send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                                [user.email], fail_silently=True)
+                                [user.email], fail_silently=False)
 
             # Render the done page.
             return render(request,
