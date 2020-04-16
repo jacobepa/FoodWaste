@@ -38,7 +38,7 @@ getcontext().prec = 9
 
 class UserManualView(TemplateView):
     """
-    View to present and process the "request more info" form.
+    View to present and process the 'request more info' form.
 
     :param request:
     :return:
@@ -64,7 +64,7 @@ class EventsView(TemplateView):
         :param kwargs:
         :return:
         """
-        return render(request, "main/events.html", {})
+        return render(request, 'main/events.html', {})
 
 
 @login_required
@@ -95,14 +95,14 @@ def download_file(request, name):
     # elif ext == 'docx':
     #    with open(file, 'rb') as doc:
     #        response = HttpResponse(doc)
-    #        con_disp = 'attachment; filename="' + name + '"'
+    #        con_disp = 'attachment; filename='' + name + """
     #        response['Content-Disposition'] = con_disp
     #        return response
 
     elif 'xls' in ext:
         with open(file, 'rb') as xls:
-            con_type = '''application/vnd.vnd.openxmlformats-officedocument.
-                          spreadsheetml.sheet'''
+            con_type = """application/vnd.vnd.openxmlformats-officedocument.
+                          spreadsheetml.sheet"""
             response = HttpResponse(xls, con_type)
             con_disp = 'attachment; filename="' + name + '"'
             response['Content-Disposition'] = con_disp
@@ -115,7 +115,7 @@ def download_file(request, name):
 def index(request):
     """User login support."""
     user = request.user
-    title = "Support Main Page"
+    title = 'Support Main Page'
 
     return render(request, 'main/support.html', locals())
 
@@ -132,14 +132,16 @@ class SuggestionCreateView(FormView):
     @method_decorator(login_required)
     def get(self, request, support_type_name):
         """Display the project create form."""
-        if "suggestion" == support_type_name.lower():
-            title = "Make a suggestion to improve GWSC"
-            instructions = "Describe your suggestion for GWSC below.  You will " \
-                           "have the option to add attachments after saving the suggestion."
+        if 'suggestion' == support_type_name.lower():
+            title = 'Make a suggestion to improve DataSearch'
+            instructions = 'Describe your suggestion for DataSearch below.  ' + \
+                'You will have the option to add attachments ' + \
+                'after saving the suggestion.'
         else:
-            title = "Request help with GWSC"
-            instructions = "Describe the problem you encountered with GWSC below.  You will " \
-                           "have the option to add attachments after saving the request."
+            title = 'request help with DataSearch'
+            instructions = 'Describe the problem you encountered with ' + \
+                'DataSearch below.  You will have the option to add ' + \
+                'attachments after saving the request.'
         form = self.form_class(initial={'weblink': request.user.email})
         return render(request, self.template, locals())
 
@@ -156,11 +158,13 @@ class SuggestionCreateView(FormView):
             support.created_by = user
             support.last_modified_by = user
             # lookup ticket type
-            support.support_type = SupportType.objects.filter(the_name__iexact=support_type_name).first()
+            support.support_type = SupportType.objects.filter(
+                the_name__iexact=support_type_name).first()
             support.save()
 
             url = reverse('support:edit_support',
-                          kwargs={'support_type_name': support_type_name, 'obj_id': support.id}) + "?new=1"
+                          kwargs={'support_type_name': support_type_name,
+                                  'obj_id': support.id}) + '?new=1'
             return HttpResponseRedirect(url)
         else:
             return render(request, self.template, locals())
@@ -182,11 +186,12 @@ class SuggestionEditView(FormView):
         support = get_object_or_404(Support, id=obj_id)
         support_attachments = SupportAttachment.objects.filter(support=support)
 
-        title = "Suggestion" if support_type_name == 'suggestion' else "Help"
-        instructions = "Edit your request or add attachments below."
-        if request.GET.get("new") is not None:
-            warn = "You're almost done. Update your suggestion as needed, add attachments, " \
-                   "and then click Submit to complete your request"
+        title = 'Suggestion' if support_type_name == 'suggestion' else 'Help'
+        instructions = 'Edit your request or add attachments below.'
+        if request.GET.get('new') is not None:
+            warn = 'You\'re almost done. Update your suggestion as ' + \
+                'needed, add attachments, and then click Submit ' + \
+                'to complete your request'
 
         # make sure the user has permission to edit this support object
         if not user.is_staff and support.user != user:
@@ -199,8 +204,8 @@ class SuggestionEditView(FormView):
     def post(self, request, support_type_name, obj_id, *args, **kwargs):
         """Save changes to user form."""
         user = request.user
-        title = "Suggestion" if support_type_name == 'suggestion' else "Help"
-        instructions = "Edit your request or add attachments below."
+        title = 'Suggestion' if support_type_name == 'suggestion' else 'Help'
+        instructions = 'Edit your request or add attachments below.'
         form_class = SupportForm if not user.is_staff else SupportAdminForm
         support = get_object_or_404(Support, id=obj_id)
         support_attachments = SupportAttachment.objects.filter(support=support)
@@ -213,19 +218,20 @@ class SuggestionEditView(FormView):
         if form.is_valid():
 
             support.modified = request.user
-            support.subject = form.cleaned_data["subject"]
-            support.the_description = form.cleaned_data["the_description"]
-            support.weblink = form.cleaned_data["weblink"]
+            support.subject = form.cleaned_data['subject']
+            support.the_description = form.cleaned_data['the_description']
+            support.weblink = form.cleaned_data['weblink']
             if user.is_staff:
-                support.date_resolved = form.cleaned_data["date_resolved"]
-                support.review_notes = form.cleaned_data["review_notes"]
+                support.date_resolved = form.cleaned_data['date_resolved']
+                support.review_notes = form.cleaned_data['review_notes']
 
             support.save()
 
             # reload the attachment list
-            support_attachments = SupportAttachment.objects.filter(support=support)
+            support_attachments = SupportAttachment.objects.filter(
+                support=support)
 
-            # email the GWSC admins and cc the user
+            # email the DataSearch admins and cc the user
             # get type of ticket
             if support.support_type is not None:
                 support_type_desc = support.support_type.the_name
@@ -235,28 +241,35 @@ class SuggestionEditView(FormView):
             support_email = settings.SUPPORT_EMAIL
             submitter_email = support.weblink
 
-            # Use this when testing so ordqatrack@epa.gov doesn't get test emails.
+            # Use this when testing so ordqatrack@epa.gov
+            # doesn't get test emails.
             # email_to = [submitter_email]
             email_to = [support_email, submitter_email]
 
             # detect if this is a new request versus editing
-            # if it's an update, we add language to the subject and body to indicate that to the recipient.
+            # if it's an update, we add language to the subject and
+            # body to indicate that to the recipient.
             referer_url = request.META['HTTP_REFERER']
-            if referer_url.endswith("?new=1"):
-                email_subject = 'GWSC ' + str(support_type_desc) + ' ' + str(obj_id) + ': ' + str(support.subject)
-                # email_body = support.the_description + '\n\nSubmitted by ' + support.weblink
+            if referer_url.endswith('?new=1'):
+                email_subject = 'DataSearch ' + str(support_type_desc) + ' ' + \
+                    str(obj_id) + ': ' + str(support.subject)
                 email_body = support.the_description
             else:
-                email_subject = 'UPDATED: GWSC ' + str(support_type_desc) + ' ' + str(obj_id) + ': ' + str(
-                    support.subject)
-                email_body = "This automated email is to notify you that your support request has been updated.\r\n\r\nDescription:\r\n" + str(
-                    support.the_description) + "\r\n\r\nDate Resolved: " + str(
-                    support.date_resolved) + "\r\n\r\nReview Notes:\r\n" + str(support.review_notes)
+                email_subject = 'UPDATED: DataSearch ' + str(support_type_desc) + \
+                    ' ' + str(obj_id) + ': ' + str(support.subject)
+                email_body = 'This automated email is to notify you ' + \
+                    'that your support request has been updated.\r\n\r\n' + \
+                    'Description:\r\n' + str(support.the_description) + \
+                    '\r\n\r\nDate Resolved: ' + str(support.date_resolved) + \
+                    '\r\n\r\nReview Notes:\r\n' + str(support.review_notes)
 
-            the_email = create_qt_email_message(email_subject, email_body, support_email, email_to)
+            # TODO: This isn't working!
+            the_email = create_qt_email_message(
+                email_subject, email_body, support_email, email_to)
 
             for att in support_attachments:
-                the_email.attach_file(settings.MEDIA_ROOT + "/" + str(att.attachment))
+                the_email.attach_file(
+                    settings.MEDIA_ROOT + '/' + str(att.attachment))
 
             if not settings.EMAIL_DISABLED:
                 the_email.send(fail_silently=False)
@@ -283,84 +296,63 @@ def show_support(request, support_type_name, obj_id):
 
     obj = get_object_or_404(Support, id=obj_id)
     support = Support.objects.get(id=obj_id)
-    title = "Show Support"
+    title = 'Show Support'
     support_attachments = SupportAttachment.objects.filter(support=obj)
 
-    # print("before render")
+    # print('before render')
 
     return render(request, 'show/show_support.html', locals())
 
 
 def search_support(request):
     """Search support tickets."""
-    title = "Search For Support - With Results Shown"
+    title = 'Search For Support - With Results Shown'
     return render(request, 'list/list_support_issues.html', locals())
 
 
 @login_required
 def file_upload_support(request, obj_id):
     """Ensure user logged into app."""
-    # return HttpResponse('<p>In file_upload_support for {0}</p>'.format('x'))
     user = request.user
     profile = user.userprofile
     support = Support.objects.get(id=obj_id)
 
-    if user.is_staff or profile.can_edit == "Y":
-        error_message = "You can add files"
+    if user.is_staff or profile.can_edit == 'Y':
+        error_message = 'You can add files'
     else:
-        error_message = "You are not authorized to add files."
-        back_link = "/support/show/"
+        error_message = 'You are not authorized to add files.'
+        back_link = '/support/show/'
         return render(request, 'error.html', locals())
 
     for new_file in request.FILES.getlist('upl'):
         # Create a new entry in our database
-        support_attachment, created = SupportAttachment.objects.get_or_create(support=support, attachment=new_file,
-                                                                              the_name=new_file.name, user=user,
-                                                                              the_size=new_file.size)
+        support_attachment, created = \
+            SupportAttachment.objects.get_or_create(
+                support=support, attachment=new_file, the_name=new_file.name,
+                user=user, the_size=new_file.size)
 
     url = reverse('support:edit_support', kwargs={'obj_id': support.id})
 
     return HttpResponseRedirect(url)
 
 
-@login_required
-def create_help_request(request):
-    """Create help in support tab."""
-    user = request.user
-    title = "Create a New Request"
-    supports = Support.objects.all()
-
-    if request.method == "POST":
-        form = SupportForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            # if 'files' in request.FILES:
-            #     files = request.FILES['files']
-            #     files.user = user
-
-            support = form.save(commit=False)
-
-            support.user = user
-            support.created_by = user
-            support.last_modified_by = user
-
-            # lookup ticket type
-            # support.support_type_id = 1;
-            support.support_type = SupportType.objects.filter(the_name="Help").first()
-
-            support.save()
-
-            send_mail('GWSC Support Request',
-                      'A DataSearch Support Request Has Been Submitted. ' + \
-                      'Here is the description of the issue: %s' % \
-                      str(support.the_description), support.weblink ,
-                      ['qatrack@epa.gov'], fail_silently=False)
-
-            url = reverse('support:edit_support', kwargs={'obj_id': support.id})
-            return HttpResponseRedirect(url)
-    else:
-        form = SupportForm(initial={'weblink': user.email})
-
-    return render(request, 'main/create_help_request.html', locals())
+# NOTE: This function isn't used, except inside the tests.py file...
+#def create_help_request(request):
+#    if request.method == 'POST':
+#        form = SupportForm(data=request.POST, files=request.FILES)
+#        if form.is_valid():
+#            if not settings.EMAIL_DISABLED:
+#                send_mail('DataSearch Support Request',
+#                          'A DataSearch Support Request Has Been Submitted. ' + \
+#                          'Here is the description of the issue: %s' % \
+#                          str(support.the_description), support.weblink ,
+#                          ['qatrack@epa.gov'], fail_silently=False)
+#            url = reverse('support:edit_support',
+#                          kwargs={'obj_id': support.id})
+#            return HttpResponseRedirect(url)
+#    else:
+#        form = SupportForm(initial={'weblink': user.email})
+#    return render(request, 'main/create_help_request.html', locals())
 
 
 @login_required
@@ -372,11 +364,12 @@ def edit_support_admin(request, obj_id):
     # if user.is_superuser:
     if user.is_staff:
 
-        print("edit as non-admin")
+        print('edit as non-admin')
         # user created this ticket
         # can edit as non-admin
-        if request.method == "POST":
-            form = SupportAdminForm(data=request.POST, files=request.FILES, instance=support)
+        if request.method == 'POST':
+            form = SupportAdminForm(data=request.POST, files=request.FILES,
+                                    instance=support)
             if form.is_valid():
                 support = form.save(commit=False)
 
@@ -384,13 +377,14 @@ def edit_support_admin(request, obj_id):
 
                 support.save()
 
-                url = reverse('support:show_support', kwargs={'obj_id': support.id})
+                url = reverse('support:show_support',
+                              kwargs={'obj_id': support.id})
                 return HttpResponseRedirect(url)
         else:
             form = SupportAdminForm(instance=support)
         return render(request, 'edit/admin/edit_support_admin.html', locals())
     else:
-        print("not allowed to edit")
+        print('not allowed to edit')
         # user unauthorized to edit this ticket
         return render(request, 'main/no_edit.html', locals())
 
@@ -398,7 +392,7 @@ def edit_support_admin(request, obj_id):
 @login_required
 def delete_support(request, support_type_name, obj_id):
     """Delete ticket."""
-    title = "Delete Support Issue"
+    title = 'Delete Support Issue'
     user = request.user
     support = get_object_or_404(Support, id=obj_id)
 
@@ -406,7 +400,8 @@ def delete_support(request, support_type_name, obj_id):
     if user.is_staff:
         support.delete()
 
-    url = reverse('support:list_supports', kwargs={'support_type_name': support_type_name})
+    url = reverse('support:list_supports',
+                  kwargs={'support_type_name': support_type_name})
     return HttpResponseRedirect(url)
 
 
@@ -414,16 +409,17 @@ def delete_support(request, support_type_name, obj_id):
 def list_supports(request, support_type_name):
     """List tickets."""
     user = request.user
-    title = "Support List"
+    title = 'Support List'
     # supports = Support.objects.all()
-    supports = Support.objects.filter(support_type__the_name__iexact=support_type_name)
+    supports = Support.objects.filter(
+        support_type__the_name__iexact=support_type_name)
     return render(request, 'list/list_support_issues.html', locals())
 
 
 @login_required
 def delete_support_attachment(request, obj_id):
     """Delete attachments for support tickets."""
-    title = "Delete Support Attachment"
+    title = 'Delete Support Attachment'
     user = request.user
     support_attachment = get_object_or_404(SupportAttachment, id=obj_id)
     support = support_attachment.support
@@ -431,17 +427,17 @@ def delete_support_attachment(request, obj_id):
 
     profile = user.userprofile
     obj = get_object_or_404(Support, id=support_id)
-    title = "Support"
+    title = 'Support'
 
     support_attachments = SupportAttachment.objects.filter(support=obj)
 
     try:
-        if support_attachment.user == user or profile.user_type == "SUPER":
+        if support_attachment.user == user or profile.user_type == 'SUPER':
             support_attachment.delete()
         else:
-            error = "You are not authorized to delete this attachment."
+            error = 'You are not authorized to delete this attachment.'
     except:
-        error = "Failed to delete attachment. Please try again."
+        error = 'Failed to delete attachment. Please try again.'
 
     return render(request, 'show/show_support.html', locals())
 
@@ -453,7 +449,7 @@ def result_search_support(request):
     query_show = ''
     x = int(0)
     y = int(0)
-    title = "Search Support - With Results Shown"
+    title = 'Search Support - With Results Shown'
 
     if request is None:
         return Support.objects.get(id=1)
@@ -462,19 +458,20 @@ def result_search_support(request):
         a = request.GET['a']
         if a:
             query = query & (Q(name__startswith=a))
-            query_show = query_show + "User Compound Library Name = " + str(a) + " "
+            query_show = query_show + 'User Compound Library Name = ' + \
+                str(a) + ' '
 
     if 'b' in request.GET:
         b = request.GET['b']
         if b:
             query = query & (Q(cas_number__startswith=b))
-            query_show = query_show + "CAS Number = " + str(b) + " "
+            query_show = query_show + 'CAS Number = ' + str(b) + ' '
 
     if 'c' in request.GET:
         c = request.GET['c']
         if c:
             query = query & (Q(formula__startswith=c))
-            query_show = query_show + "Molecular Formula = " + str(c) + " "
+            query_show = query_show + 'Molecular Formula = ' + str(c) + ' '
 
     count_per_page = 50
 
@@ -510,7 +507,7 @@ def result_search_support(request):
         y = count_per_page
         x = 0
 
-    query = query & (Q(make_public="Y"))
+    query = query & (Q(make_public='Y'))
 
     if query:
         the_count = Support.objects.filter(query).count()
@@ -525,7 +522,7 @@ def result_search_support(request):
 
         objs = Support.objects.filter(query)[x:y]
     else:
-        objs = ""
+        objs = ''
 
     return render(request, 'main/support.html', locals())
 
@@ -537,7 +534,7 @@ def search_support_for_last_30(request):
     query = Q()
     query_show = 'Support Requests Received For Last 30 Days'
 
-    title = "Support Requests Received Last 30 Days - With Results Shown"
+    title = 'Support Requests Received Last 30 Days - With Results Shown'
     d = datetime.today() - timedelta(days=30)
     if user.is_staff:
         query = Q(created__gte=d)
@@ -548,7 +545,7 @@ def search_support_for_last_30(request):
         the_count = Support.objects.filter(query).count()
         objs = Support.objects.filter(query)
     else:
-        objs = ""
+        objs = ''
 
     return render(request, 'list/list_support_issues.html', locals())
 
@@ -560,7 +557,7 @@ def search_support_for_last_60(request):
     query = Q()
     query_show = 'Support Requests Received For Last 60 Days'
 
-    title = "Support Requests Received Last 60 Days - With Results Shown"
+    title = 'Support Requests Received Last 60 Days - With Results Shown'
     d = datetime.today() - timedelta(days=60)
     if user.is_staff:
         query = Q(created__gte=d)
@@ -571,7 +568,7 @@ def search_support_for_last_60(request):
         the_count = Support.objects.filter(query).count()
         objs = Support.objects.filter(query)
     else:
-        objs = ""
+        objs = ''
 
     return render(request, 'list/list_support_issues.html', locals())
 
@@ -583,7 +580,7 @@ def search_support_for_last_90(request):
     query = Q()
     query_show = 'Support Requests Received For Last 90 Days'
 
-    title = "Support Requests Received Last 90 Days - With Results Shown"
+    title = 'Support Requests Received Last 90 Days - With Results Shown'
     d = datetime.today() - timedelta(days=90)
     if user.is_staff:
         query = Q(created__gte=d)
@@ -594,7 +591,7 @@ def search_support_for_last_90(request):
         the_count = Support.objects.filter(query).count()
         objs = Support.objects.filter(query)
     else:
-        objs = ""
+        objs = ''
 
     return render(request, 'list/list_support_issues.html', locals())
 
@@ -606,7 +603,7 @@ def search_support_for_last_180(request):
     query = Q()
     query_show = 'Support Requests Received For Last 180 Days'
 
-    title = "Support Requests Received Last 180 Days - With Results Shown"
+    title = 'Support Requests Received Last 180 Days - With Results Shown'
     d = datetime.today() - timedelta(days=180)
     if user.is_staff:
         query = Q(created__gte=d)
@@ -617,7 +614,7 @@ def search_support_for_last_180(request):
         the_count = Support.objects.filter(query).count()
         objs = Support.objects.filter(query)
     else:
-        objs = ""
+        objs = ''
 
     return render(request, 'list/list_support_issues.html', locals())
 
@@ -630,10 +627,10 @@ def search_support_for_last_180(request):
 def create_support_type(request):
     """Ticket support type."""
     user = request.user
-    title = "Create a New SupportType"
+    title = 'Create a New SupportType'
     support_types = SupportType.objects.all()
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = SupportTypeForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             if 'files' in request.FILES:
@@ -647,7 +644,8 @@ def create_support_type(request):
             support_type.last_modified_by = user.username
             support_type.save()
 
-            url = reverse('support:show_support_type', kwargs={'obj_id': support_type.id})
+            url = reverse('support:show_support_type',
+                          kwargs={'obj_id': support_type.id})
             return HttpResponseRedirect(url)
     else:
         form = SupportTypeForm()
@@ -659,7 +657,7 @@ def edit_support_type(request, obj_id):
     """Edit support type."""
     user = request.user
 
-    title = "Update SupportType"
+    title = 'Update SupportType'
 
     support_type = SupportType.objects.get(id=obj_id)
     support_types = SupportType.objects.all()
@@ -670,15 +668,17 @@ def edit_support_type(request, obj_id):
         return render(request, 'no_edit.html', locals())
 
     if support_type.user == user:
-        if request.method == "POST":
-            form = SupportTypeForm(data=request.POST, files=request.FILES, instance=support_type)
+        if request.method == 'POST':
+            form = SupportTypeForm(data=request.POST, files=request.FILES,
+                                   instance=support_type)
             if form.is_valid():
                 support_type = form.save(commit=False)
 
                 support_type.last_modified_by = user.username
                 support_type.save()
 
-                url = reverse('support:show_support_type', kwargs={'obj_id': support_type.id})
+                url = reverse('support:show_support_type',
+                              kwargs={'obj_id': support_type.id})
                 return HttpResponseRedirect(url)
         else:
             form = SupportTypeForm(instance=support_type)
@@ -691,7 +691,7 @@ def edit_support_type(request, obj_id):
 @login_required
 def delete_support_type(request, obj_id):
     """Add docstring."""  # TODO add docstring.
-    title = "Delete SupportType"
+    title = 'Delete SupportType'
     user = request.user
     support_type = get_object_or_404(SupportType, id=obj_id)
 
@@ -706,7 +706,7 @@ def delete_support_type(request, obj_id):
 def list_support_types(request):
     """Add docstring."""  # TODO add docstring.
     user = request.user
-    title = "SupportType List"
+    title = 'SupportType List'
     support_types = SupportType.objects.all().order_by('ordering')
     return render(request, 'list/list_support_types.html', locals())
 
@@ -718,7 +718,7 @@ def show_support_type(request, obj_id):
     user = request.user
 
     obj = get_object_or_404(SupportType, id=obj_id)
-    title = "Show SupportType"
+    title = 'Show SupportType'
 
     support_types = SupportType.objects.all().order_by('ordering')
     return render(request, 'show/show.html', locals())
@@ -726,7 +726,7 @@ def show_support_type(request, obj_id):
 
 def search_support_type(request):
     """Add docstring."""  # TODO add docstring.
-    title = "Search For SupportType - With Results Shown"
+    title = 'Search For SupportType - With Results Shown'
     return render(request, 'main/search_support_type.html', locals())
 
 
@@ -736,7 +736,7 @@ def result_search_support_type(request):
     query_show = ''
     x = int(0)
     y = int(0)
-    title = "Search SupportType - With Results Shown"
+    title = 'Search SupportType - With Results Shown'
 
     if request is None:
         return SupportType.objects.get(id=1)
@@ -745,19 +745,20 @@ def result_search_support_type(request):
         a = request.GET['a']
         if a:
             query = query & (Q(name__startswith=a))
-            query_show = query_show + "User Compound Library Name = " + str(a) + " "
+            query_show = query_show + 'User Compound Library Name = ' + \
+                str(a) + ' '
 
     if 'b' in request.GET:
         b = request.GET['b']
         if b:
             query = query & (Q(cas_number__startswith=b))
-            query_show = query_show + "CAS Number = " + str(b) + " "
+            query_show = query_show + 'CAS Number = ' + str(b) + ' '
 
     if 'c' in request.GET:
         c = request.GET['c']
         if c:
             query = query & (Q(formula__startswith=c))
-            query_show = query_show + "Molecular Formula = " + str(c) + " "
+            query_show = query_show + 'Molecular Formula = ' + str(c) + ' '
 
     count_per_page = 50
 
@@ -793,7 +794,7 @@ def result_search_support_type(request):
         y = count_per_page
         x = 0
 
-    query = query & (Q(make_public="Y"))
+    query = query & (Q(make_public='Y'))
 
     if query:
         the_count = SupportType.objects.filter(query).count()
@@ -808,7 +809,7 @@ def result_search_support_type(request):
 
         objs = SupportType.objects.filter(query)[x:y]
     else:
-        objs = ""
+        objs = ''
 
     return render(request, 'main/search_support_type.html', locals())
 
@@ -821,10 +822,10 @@ def result_search_support_type(request):
 def create_priority(request):
     """Add docstring."""  # TODO add docstring.
     user = request.user
-    title = "Create a New Priority"
+    title = 'Create a New Priority'
     priorities = Priority.objects.all()
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = PriorityForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             if 'files' in request.FILES:
@@ -838,7 +839,8 @@ def create_priority(request):
             priority.last_modified_by = user.username
             priority.save()
 
-            url = reverse('support:show_priority', kwargs={'obj_id': priority.id})
+            url = reverse('support:show_priority',
+                          kwargs={'obj_id': priority.id})
             return HttpResponseRedirect(url)
     else:
         form = PriorityForm()
@@ -850,7 +852,7 @@ def edit_priority(request, obj_id):
     """Add docstring."""  # TODO add docstring.
     user = request.user
 
-    title = "Update Priority"
+    title = 'Update Priority'
 
     priority = Priority.objects.get(id=obj_id)
     priorities = Priority.objects.all()
@@ -861,15 +863,17 @@ def edit_priority(request, obj_id):
         return render(request, 'no_edit.html', locals())
 
     if priority.user == user:
-        if request.method == "POST":
-            form = PriorityForm(data=request.POST, files=request.FILES, instance=priority)
+        if request.method == 'POST':
+            form = PriorityForm(data=request.POST, files=request.FILES,
+                                instance=priority)
             if form.is_valid():
                 priority = form.save(commit=False)
 
                 priority.last_modified_by = user.username
                 priority.save()
 
-                url = reverse('support:show_priority', kwargs={'obj_id': priority.id})
+                url = reverse('support:show_priority',
+                              kwargs={'obj_id': priority.id})
                 return HttpResponseRedirect(url)
         else:
             form = PriorityForm(instance=priority)
@@ -882,7 +886,7 @@ def edit_priority(request, obj_id):
 @login_required
 def delete_priority(request, obj_id):
     """Add docstring."""  # TODO add docstring.
-    title = "Delete Priority"
+    title = 'Delete Priority'
     user = request.user
     priority = get_object_or_404(Priority, id=obj_id)
 
@@ -897,7 +901,7 @@ def delete_priority(request, obj_id):
 def list_priorities(request):
     """Add docstring."""  # TODO add docstring.
     user = request.user
-    title = "Priority List"
+    title = 'Priority List'
     priorities = Priority.objects.all().order_by('ordering')
     return render(request, 'list/list_priorities.html', locals())
 
@@ -909,14 +913,14 @@ def show_priority(request, obj_id):
     user = request.user
 
     obj = get_object_or_404(Priority, id=obj_id)
-    title = "Show Priority"
+    title = 'Show Priority'
 
     return render(request, 'show/show.html', locals())
 
 
 def search_priority(request):
     """Add docstring."""  # TODO add docstring.
-    title = "Search For Priority - With Results Shown"
+    title = 'Search For Priority - With Results Shown'
     return render(request, 'main/search_priority.html', locals())
 
 
@@ -926,7 +930,7 @@ def result_search_priority(request):
     query_show = ''
     x = int(0)
     y = int(0)
-    title = "Search Priority - With Results Shown"
+    title = 'Search Priority - With Results Shown'
 
     if request is None:
         return Priority.objects.get(id=1)
@@ -935,19 +939,20 @@ def result_search_priority(request):
         a = request.GET['a']
         if a:
             query = query & (Q(name__startswith=a))
-            query_show = query_show + "User Compound Library Name = " + str(a) + " "
+            query_show = query_show + 'User Compound Library Name = ' + \
+                str(a) + ' '
 
     if 'b' in request.GET:
         b = request.GET['b']
         if b:
             query = query & (Q(cas_number__startswith=b))
-            query_show = query_show + "CAS Number = " + str(b) + " "
+            query_show = query_show + 'CAS Number = ' + str(b) + ' '
 
     if 'c' in request.GET:
         c = request.GET['c']
         if c:
             query = query & (Q(formula__startswith=c))
-            query_show = query_show + "Molecular Formula = " + str(c) + " "
+            query_show = query_show + 'Molecular Formula = ' + str(c) + ' '
 
     count_per_page = 50
 
@@ -983,7 +988,7 @@ def result_search_priority(request):
         y = count_per_page
         x = 0
 
-    query = query & (Q(make_public="Y"))
+    query = query & (Q(make_public='Y'))
 
     if query:
         the_count = Priority.objects.filter(query).count()
@@ -998,7 +1003,7 @@ def result_search_priority(request):
 
         objs = Priority.objects.filter(query)[x:y]
     else:
-        objs = ""
+        objs = ''
 
     return render(request, 'main/search_priority.html', locals())
 

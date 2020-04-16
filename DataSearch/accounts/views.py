@@ -370,48 +370,47 @@ class UserRegistrationView(FormView):
             country = Country.objects.get(id=user.userprofile.country_id)
 
             # NOTE: Disable this on dev machines to test account creation:
+            # Send an activation email.
+            request_email_context = {
+                'APP_NAME': settings.APP_NAME,
+                'email': settings.EMAIL_HOST_USER,
+                'domain': request.META['HTTP_HOST'],
+                'site_name': settings.SITE_NAME,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'user': user,
+                'sector': sector,
+                'role': role,
+                'state': state,
+                'country': country,
+                'protocol': 'http',
+            }
+            subject = loader.render_to_string(
+                self.admin_subject_template_name, request_email_context)
+            # Email subject *must not* contain newlines.
+            subject = ''.join(subject.splitlines())
+            email = loader.render_to_string(
+                self.admin_email_template_name, request_email_context)
+            # This is driven by local_settings.py.
             if not settings.EMAIL_DISABLED:
-                # Send an activation email.
-                request_email_context = {
-                    'APP_NAME': settings.APP_NAME,
-                    'email': settings.EMAIL_HOST_USER,
-                    'domain': request.META['HTTP_HOST'],
-                    'site_name': settings.SITE_NAME,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'user': user,
-                    'sector': sector,
-                    'role': role,
-                    'state': state,
-                    'country': country,
-                    'protocol': 'http',
-                }
-                subject = loader.render_to_string(
-                    self.admin_subject_template_name, request_email_context)
-                # Email subject *must not* contain newlines.
-                subject = ''.join(subject.splitlines())
-                email = loader.render_to_string(
-                    self.admin_email_template_name, request_email_context)
-                # This is driven by local_settings.py.
-                if not settings.EMAIL_DISABLED:
-                    send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                                settings.USER_APPROVAL_EMAIL, fail_silently=False)
+                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                            settings.USER_APPROVAL_EMAIL, fail_silently=False)
 
-                # Send an email to the user notifying them that
-                # the account request is under review.
-                user_email_context = {
-                    'APP_NAME': settings.APP_NAME,
-                    'email': user.email
-                }
-                subject = loader.render_to_string(
-                    self.user_subject_template_name, user_email_context)
-                # Email subject *must not* contain newlines
-                subject = ''.join(subject.splitlines())
-                email = loader.render_to_string(
-                    self.user_email_template_name, user_email_context)
+            # Send an email to the user notifying them that
+            # the account request is under review.
+            user_email_context = {
+                'APP_NAME': settings.APP_NAME,
+                'email': user.email
+            }
+            subject = loader.render_to_string(
+                self.user_subject_template_name, user_email_context)
+            # Email subject *must not* contain newlines
+            subject = ''.join(subject.splitlines())
+            email = loader.render_to_string(
+                self.user_email_template_name, user_email_context)
 
-                if not settings.EMAIL_DISABLED:
-                    send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
-                              [user.email], fail_silently=False)
+            if not settings.EMAIL_DISABLED:
+                send_mail(subject, email, settings.DEFAULT_FROM_EMAIL,
+                            [user.email], fail_silently=False)
 
             # Render the activation needed template.
             return render(request, self.template_register_inactive,
