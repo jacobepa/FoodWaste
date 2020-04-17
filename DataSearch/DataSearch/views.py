@@ -25,6 +25,7 @@ from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView, \
     DetailView, UpdateView
+from constants.utils import download_file, download_files
 from DataSearch.forms import ExistingDataForm
 from DataSearch.models import ExistingData, ExistingDataSharingTeamMap, \
     Attachment, DataAttachmentMap
@@ -62,9 +63,6 @@ def clean_qapps(request, *args, **kwargs):
         sect.a3 = a3_clean
         sect.a9 = a9_clean
         sect.save()
-        # Clean Section B
-        # Clean Section C
-        # Clean Section D
     return render(request, 'web_dev.html', {})
 
 
@@ -409,3 +407,29 @@ def export_excel(request, *args, **kwargs):
     sheet.title = filename.split('.')[0]
     workbook.save(response)
     return response
+
+
+def attachments_download(request, *args, **kwargs):
+    """
+    Method for downloading attachments for a provided existing data search.
+    - pk for existing data (required)
+    - id for attachment (optional)
+    """
+    existing_id = kwargs.get('pk', None)
+    attachment_id = kwargs.get('id', None)
+    existing = ExistingData.objects.filter(id=existing_id).first()
+
+    if existing:
+        if attachment_id is None:
+            # Export all uploads for this user:
+            file_list = existing.attachments.all()
+            zip_name = 'existingdata_%s_attachments' % existing_id
+            return download_files(file_list, zip_name)
+
+        else:
+            # Export the upload specified, if it belongs to the user:
+            file = existing.attachments.filter(id=attachment_id).first()
+            if file:
+                return download_file(file)
+
+    return HttpResponse(request)

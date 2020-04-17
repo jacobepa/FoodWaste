@@ -12,7 +12,8 @@ from django.contrib import admin
 from django.urls import include
 from DataSearch.views import home, contact, about, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
-    ExistingDataEdit, export_pdf, export_excel, web_dev_tools, clean_qapps
+    ExistingDataEdit, export_pdf, export_excel, web_dev_tools, \
+    clean_qapps, attachments_download
 from DataSearch.settings import MEDIA_ROOT, MEDIA_URL
 
 
@@ -38,6 +39,14 @@ urlpatterns = [
         export_pdf, name='existing_data_pdf'),
     url(r'^existingdata/exportexcel/?$',
         export_excel, name='existing_data_excel'),
+
+    # Download all attachments for the given datasearch pk
+    url(r'^existingdata/download_attachments/(?P<pk>\d+)/?$',
+        attachments_download, name='existing_data_pdf'),
+    # Download a single attachment for the given
+    # datasearch pk and attachment id
+    url(r'^existingdata/download_attachment/(?P<pk>\d+)/(?P<id>\d+)/?$',
+        attachments_download, name='existing_data_pdf'),
 
     url(r'^existingdata/create/?$',
         ExistingDataCreate.as_view(),

@@ -263,7 +263,6 @@ class SuggestionEditView(FormView):
                     '\r\n\r\nDate Resolved: ' + str(support.date_resolved) + \
                     '\r\n\r\nReview Notes:\r\n' + str(support.review_notes)
 
-            # TODO: This isn't working!
             the_email = create_qt_email_message(
                 email_subject, email_body, support_email, email_to)
 

@@ -13,6 +13,34 @@
             {% endif %}
         {% endfor %}
         </div>
+
+        <!-- 3. TABLE TO DISPLAY THE UPLOADED FILES -->
+        <table id="gallery" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        Attachments (<a href="/existingdata/download_attachments/{{object.id}}/">Download All</a>)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in object.attachments.all %}
+                <tr>
+                    <td>
+                        <a href="/existingdata/download_attachment/{{object.id}}/{{file.id}}">
+                            <span class="fa fa-download"></span> {{ file.name }}
+                        </a>
+                    </td>
+                    <!--{#<td>
+                        <a href="{{ file.id }}">
+                            Delete File
+                        </a>
+                    </td>#}-->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
         <div class="row mt-2">
             <a href="/existingdata/exportpdf/{{object.id}}" class="btn btn-info mx-2">Export to PDF</a>
             <a href="/existingdata/exportexcel/{{object.id}}" class="btn btn-info mx-2">Export to Excel</a>
