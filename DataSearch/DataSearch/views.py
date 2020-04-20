@@ -73,24 +73,10 @@ def get_existing_data_all():
 
 def get_existing_data_user(user_id):
     """
-    Method to get all data belonging to a team.
-
-    - of which the provided user is a member.
-    - logic filters for the user's non-member teams
-    - then excludes those teams from the data results.
-    - This is necessary because there is no direct connection between data
-    - model users and existing data instances. The relation here is through
-    - the teams model.
+    Method to get all Existing Data created by a User.
     """
     user = User.objects.get(id=user_id)
-    include_teams = TeamMembership.objects.filter(
-        member=user).values_list('team', flat=True)
-    exclude_teams = TeamMembership.objects.exclude(
-        team__in=include_teams).distinct().values_list('team', flat=True)
-    exclude_data = ExistingDataSharingTeamMap.objects.filter(
-        team__in=exclude_teams).values_list('data', flat=True)
-    queryset = ExistingData.objects.exclude(id__in=exclude_data)
-    return queryset
+    return ExistingData.objects.filter(created_by=user)
 
 
 def get_existing_data_team(team_id):

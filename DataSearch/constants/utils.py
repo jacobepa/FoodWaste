@@ -39,13 +39,13 @@ def get_attachment_storage_path(instance, filename):
 
 def get_flowsa_storage_path(instance, filename):
     """Build the FLOWSA upload storage path using username and filename."""
-    return '%s/flowsa/%s' % (
+    return 'uploads/%s/flowsa/%s' % (
         instance.uploaded_by.username, filename)
 
 
 def get_scifinder_storage_path(instance, filename):
     """Build the scifinder upload storage path using username and filename."""
-    return '%s/scifinder/%s' % (
+    return 'uploads/%s/scifinder/%s' % (
         instance.uploaded_by.username, filename)
 
 

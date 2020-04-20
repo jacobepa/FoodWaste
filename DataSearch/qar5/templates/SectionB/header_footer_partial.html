@@ -11,4 +11,7 @@
         </div>
     </div>
     <div class="col-md-3"><a href="/qar5/SectionC?qapp_id={{qapp_id}}">Next Page >></a></div>
+    {% if edit_message %}
+    <div class="col-sm-12 text-danger">{{edit_message}}</div>
+    {% endif %}
 </div>
