@@ -88,6 +88,33 @@ def get_existing_data_team(team_id):
     return queryset
 
 
+def check_can_edit(data, user):
+    """
+    Method used to check if the provided user can
+    edit the provided Data Search instance.
+
+    All of the user's member teams are checked as well as the user's
+    super user status or Data Search instance ownership status.
+    """
+    # Check if any of the user's teams have edit privilege:
+    user_teams = TeamMembership.objects.filter(
+        member=user).values_list('team', flat=True)
+
+    for team in user_teams:
+        data_team_map = ExistingDataSharingTeamMap.objects.filter(
+            data=data, team=team).first()
+        if data_team_map and data_team_map.can_edit:
+            return True
+
+    # Check if the user is super or owns the data:
+    if user.is_superuser:
+        return True
+
+    # Since this is the last check, the data is either owned by
+    # the user, or the user does not have edit privilege at all:
+    return data.created_by == user
+
+
 class ExistingDataIndex(LoginRequiredMixin, TemplateView):
     """Class to return the first page of the Existing Data flow."""
 
@@ -153,6 +180,11 @@ class ExistingDataDetail(LoginRequiredMixin, DetailView):
         - Specifically, want to send the user or team information for this list of data.
         """
         context = super().get_context_data(**kwargs)
+        context['edit_disabled'] = ''
+        if not check_can_edit(context['object'], self.request.user):
+            context['edit_message'] = 'You cannot edit this data.'
+            context['edit_disabled'] = 'disabled'
+
         referer = self.request.META['HTTP_REFERER'].split('/')
         p_id = referer[len(referer) - 1]
         p_type = referer[len(referer) - 2]
@@ -170,11 +202,31 @@ class ExistingDataEdit(LoginRequiredMixin, UpdateView):
     form_class = ExistingDataForm
     template_name = 'DataSearch/existing_data_edit.html'
 
+    def get(self, request, *args, **kwargs):
+        """
+        Override default get request so we can verify the user has
+        edit privileges, either through super status or team membership.
+        """
+        pk = kwargs.get('pk')
+        data = ExistingData.objects.filter(id=pk).first()
+        if check_can_edit(data, request.user):
+            # We need to make sure we return a QappApproval form for editing:
+            object = ExistingData.objects.filter(id=pk).first()
+            return render(request, self.template_name,
+                          {'object': object,
+                           'form': ExistingDataForm(instance=object)})
+
+        reason = 'You cannot edit this data.'
+        return HttpResponseRedirect('/existingdata/detail/%s' % pk, 401, reason)
+
     def form_valid(self, form):
         """Existing Data Edit Form validation and redirect."""
         self.object = form.save(commit=False)
+        if not check_can_edit(self.object, request.user):
+            reason = 'You cannot edit this data.'
+            return HttpResponseRedirect('/existingdata/detail/%s' % self.object.ID, 401, reason)
         self.object.save()
-        return HttpResponseRedirect('/existingdata/detail/' + str(self.object.id))
+        return HttpResponseRedirect('/existingdata/detail/%s' % str(self.object.id))
 
 
 class ExistingDataCreate(LoginRequiredMixin, CreateView):
