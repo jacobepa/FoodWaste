@@ -156,7 +156,8 @@ class TeamEditView(FormView):
             ctx['team_data'] = APITeamDetailView.as_view()(
                 get_request, team_id=ctx['team_id'], format='json').rendered_content
             ctx['team'] = JSONParser().parse(BytesIO(ctx['team_data']))
-            return render(request, self.template, ctx)
+            #return render(request, self.template, ctx)
+            return HttpResponseRedirect('/teams/list/')
 
         # We should never get here, so just redirect to the dashboard.
         return HttpResponseRedirect(reverse('dashboard'))
@@ -180,6 +181,11 @@ class TeamManagementView(FormView):
             ctx['nonmembers_data'] = APITeamMembershipListView.as_view()(
                 request, team_id=ctx['team_id'], nonmember=1, format='json').rendered_content
             ctx['nonmembers'] = JSONParser().parse(BytesIO(ctx['nonmembers_data']))
+            
+            membership = TeamMembership.objects.filter(
+                team_id=ctx['team_id'], member_id=request.user).first()
+            ctx['user_can_edit'] = membership.can_edit
+
             return render(request, self.template, ctx)
         return HttpResponseRedirect(reverse('dashboard'))
 
@@ -192,6 +198,13 @@ class TeamManagementView(FormView):
         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
 
         if ctx['team_id'] is not None and ctx['command'] is not None:
+
+            # If the request.user cannot edit the current team, do nothing.
+            membership = TeamMembership.objects.filter(
+                team_id=ctx['team_id'], member_id=request.user).first()
+            if not membership.can_edit:
+                return HttpResponseRedirect('/teams/team/%s/manage' % ctx['team_id'])
+
             if ctx['command'] == 'adduser':
                 # Add a user membership to the team.
                 ctx['user_id'] = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
@@ -202,13 +215,12 @@ class TeamManagementView(FormView):
                         team_id=ctx['team_id'], member_id=ctx['user_id']).all()
                     if ctx['membership_list'] is None or not ctx['membership_list']:
                         # Add a membership.
-                        ctx['team_obj'] = Team.objects.get(id=ctx['team_id'])
                         ctx['member_obj'] = User.objects.get(id=ctx['user_id'])
                         ctx['membership'] = TeamMembership()
                         ctx['membership'].added_date = datetime.now()
                         ctx['membership'].team = ctx['team_obj']
                         ctx['membership'].member = ctx['member_obj']
-                        ctx['membership'].can_edit = True
+                        ctx['membership'].can_edit = False
                         ctx['membership'].is_owner = False
                         ctx['membership'].save()
                 else:
@@ -227,7 +239,6 @@ class TeamManagementView(FormView):
 
             elif ctx['command'] == 'updatename':
                 # Update the team name.
-                ctx['team_obj'] = Team.objects.get(id=ctx['team_id'])
                 if ctx['team_obj'] is not None:
                     ctx['name'] = ctx['params']['name'] if 'name' in ctx['params'] else None
                     ctx['name'] = ctx['name'].strip()
@@ -238,6 +249,18 @@ class TeamManagementView(FormView):
                         ctx['error_msg'] = "Invalid team name."
                 else:
                     ctx['error_msg'] = "Invalid team id specified."
+
+            elif ctx['command'] == 'canedit':
+                # Change this user's can_edit status.
+                ctx['user_id'] = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
+                ctx['can_edit'] = ctx['params']['can_edit'] if 'can_edit' in ctx['params'] else None
+                if ctx['user_id'] is not None and ctx['can_edit'] is not None:
+                    # Get the membership object:
+                    ctx['membership'] = TeamMembership.objects.get(team_id=ctx['team_id'], member_id=ctx['user_id'])
+                    if ctx['membership'] is not None:
+                        ctx['membership'].can_edit = ctx['can_edit']
+                        ctx['membership'].save()
+
 
             # Retrieve the updated data and render the view.
             get_request = RequestFactory().get('/')
@@ -302,7 +325,7 @@ class APITeamListView(APIView):
             membership_instance.member = request.user
             membership_instance.team = team
             membership_instance.is_owner = True
-            membership_instance.can_edit = True
+            membership_instance.can_edit = False
             membership_instance.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)

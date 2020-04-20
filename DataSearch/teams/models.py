@@ -55,7 +55,7 @@ class TeamMembership(models.Model):
                              on_delete=models.CASCADE)
     # Indicates if the user is a group owner.
     is_owner = models.BooleanField(blank=False)
-    # Indicates if the user can edit projects in the group.
+    # Indicates if the user can edit the team's name and members.
     can_edit = models.BooleanField(blank=False)
 
     def __str__(self):
