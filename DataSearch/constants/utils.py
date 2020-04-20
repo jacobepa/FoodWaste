@@ -190,7 +190,7 @@ def download_file(file):
     name_split = file.file.name.split('.')
     ext = name_split[len(name_split) - 1]
 
-    with open(file.file.file.name) as f:
+    with open(file.file.file.name, 'rb') as f:
         if 'xls' in ext:
             con_type = 'application/vnd.vnd.openxmlformats-' + \
                 'officedocument.spreadsheetml.sheet'
