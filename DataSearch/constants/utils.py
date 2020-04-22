@@ -27,8 +27,8 @@ from django.http import HttpResponse
 from operator import itemgetter
 
 
-# upload_storage = FileSystemStorage(location=settings.UPLOAD_ROOT,
-#                                    base_url='/uploads')
+upload_storage = FileSystemStorage(location=settings.UPLOAD_ROOT,
+                                   base_url='/uploads')
 
 
 def get_attachment_storage_path(instance, filename):
