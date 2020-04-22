@@ -159,7 +159,7 @@ MEDIA_URL = "/media/"
 
 # We keep upload root separate from STATIC and MEDIA to keep it more secure.
 # UPLOAD_ROOT will not be accessible from URL, only by the server views.
-UPLOAD_ROOT = os.path.join(BASE_DIR, 'DataSearch', 'uploads')
+UPLOAD_ROOT = os.path.join(MEDIA_ROOT, 'uploads')
 
 ENABLE_RSS_FEEDS = False
 
