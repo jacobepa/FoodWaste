@@ -19,7 +19,7 @@ Available functions:
 
 from io import BytesIO
 from os import path
-from zipfile import ZipFile, ZIP_DEFLATED
+from zipfile import ZipFile
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMultiAlternatives
@@ -27,26 +27,26 @@ from django.http import HttpResponse
 from operator import itemgetter
 
 
-upload_storage = FileSystemStorage(location=settings.UPLOAD_ROOT,
-                                   base_url='/uploads')
+# upload_storage = FileSystemStorage(location=settings.UPLOAD_ROOT,
+#                                    base_url='/uploads')
 
 
 def get_attachment_storage_path(instance, filename):
     """Build the attachment storage path using username and filename."""
-    return 'uploads/%s/attachments/%s' % (
-        instance.uploaded_by.username, filename)
+    return '%s/%s/attachments/%s' % (
+        settings.UPLOAD_ROOT, instance.uploaded_by.username, filename)
 
 
 def get_flowsa_storage_path(instance, filename):
     """Build the FLOWSA upload storage path using username and filename."""
-    return 'uploads/%s/flowsa/%s' % (
-        instance.uploaded_by.username, filename)
+    return '%s/%s/flowsa/%s' % (
+        settings.UPLOAD_ROOT, instance.uploaded_by.username, filename)
 
 
 def get_scifinder_storage_path(instance, filename):
     """Build the scifinder upload storage path using username and filename."""
-    return 'uploads/%s/scifinder/%s' % (
-        instance.uploaded_by.username, filename)
+    return '%s/%s/scifinder/%s' % (
+        settings.UPLOAD_ROOT, instance.uploaded_by.username, filename)
 
 
 # Email Utility functions.
