@@ -196,26 +196,28 @@ class TeamManagementView(FormView):
         ctx['params'] = request.POST
         ctx['command'] = ctx['params']["command"] if "command" in ctx['params'] else None
         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
+        ctx['team_obj'] = Team.objects.filter(id=ctx['team_id']).first()
 
-        if ctx['team_id'] is not None and ctx['command'] is not None:
+        if ctx['team_obj'] is not None and ctx['command'] is not None:
 
             # If the request.user cannot edit the current team, do nothing.
             membership = TeamMembership.objects.filter(
                 team_id=ctx['team_id'], member_id=request.user).first()
+            ctx['user_can_edit'] = membership.can_edit
             if not membership.can_edit:
                 return HttpResponseRedirect('/teams/team/%s/manage' % ctx['team_id'])
 
             if ctx['command'] == 'adduser':
                 # Add a user membership to the team.
-                ctx['user_id'] = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
-                if ctx['user_id'] is not None:
+                user_id = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
+                if user_id is not None:
                     # Check if the user already has a membership, this can
                     # happen if the user reloads the page.
                     ctx['membership_list'] = TeamMembership.objects.filter(
-                        team_id=ctx['team_id'], member_id=ctx['user_id']).all()
+                        team_id=ctx['team_id'], member_id=user_id).all()
                     if ctx['membership_list'] is None or not ctx['membership_list']:
                         # Add a membership.
-                        ctx['member_obj'] = User.objects.get(id=ctx['user_id'])
+                        ctx['member_obj'] = User.objects.get(id=user_id)
                         ctx['membership'] = TeamMembership()
                         ctx['membership'].added_date = datetime.now()
                         ctx['membership'].team = ctx['team_obj']
@@ -228,10 +230,10 @@ class TeamManagementView(FormView):
 
             elif ctx['command'] == 'deleteuser':
                 # Remove a user membership.
-                ctx['user_id'] = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
-                if ctx['user_id'] is not None:
+                user_id = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
+                if user_id is not None:
                     # Add a membership.
-                    ctx['membership'] = TeamMembership.objects.get(team_id=ctx['team_id'], member_id=ctx['user_id'])
+                    ctx['membership'] = TeamMembership.objects.get(team_id=ctx['team_id'], member_id=user_id)
                     if ctx['membership'] is not None:
                         ctx['membership'].delete()
                 else:
@@ -252,11 +254,11 @@ class TeamManagementView(FormView):
 
             elif ctx['command'] == 'canedit':
                 # Change this user's can_edit status.
-                ctx['user_id'] = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
+                user_id = int(ctx['params']['user_id']) if 'user_id' in ctx['params'] else None
                 ctx['can_edit'] = ctx['params']['can_edit'] if 'can_edit' in ctx['params'] else None
-                if ctx['user_id'] is not None and ctx['can_edit'] is not None:
+                if user_id is not None and ctx['can_edit'] is not None:
                     # Get the membership object:
-                    ctx['membership'] = TeamMembership.objects.get(team_id=ctx['team_id'], member_id=ctx['user_id'])
+                    ctx['membership'] = TeamMembership.objects.get(team_id=ctx['team_id'], member_id=user_id)
                     if ctx['membership'] is not None:
                         ctx['membership'].can_edit = ctx['can_edit']
                         ctx['membership'].save()

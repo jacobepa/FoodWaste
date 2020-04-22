@@ -214,7 +214,8 @@ class ExistingDataEdit(LoginRequiredMixin, UpdateView):
             object = ExistingData.objects.filter(id=pk).first()
             return render(request, self.template_name,
                           {'object': object,
-                           'form': ExistingDataForm(instance=object)})
+                           'form': ExistingDataForm(instance=object,
+                                                     user=request.user)})
 
         reason = 'You cannot edit this data.'
         return HttpResponseRedirect('/existingdata/detail/%s' % pk, 401, reason)
