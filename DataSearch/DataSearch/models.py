@@ -9,7 +9,7 @@
 
 from django.db import models
 from django.utils import timezone
-from constants.utils import get_attachment_storage_path
+from constants.utils import get_attachment_storage_path, upload_storage
 from teams.models import Team, User
 
 
@@ -18,7 +18,8 @@ class Attachment(models.Model):
 
     name = models.CharField(blank=False, null=False, max_length=255)
     file = models.FileField(null=True, blank=True,
-                            upload_to=get_attachment_storage_path)
+                            upload_to=get_attachment_storage_path,
+                            storage=upload_storage)
     uploaded_by = models.ForeignKey(User, blank=False,
                                     on_delete=models.CASCADE)
 
