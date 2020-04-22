@@ -155,7 +155,7 @@ MANUAL_NAME = 'K-LRTD-0032360-QM-1-0.docx'
 # EXCEL_TOOL = ''
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "DataSearch/media")
-# MEDIA_URL = "/media/"
+MEDIA_URL = "/media/"
 
 # We keep upload root separate from STATIC and MEDIA to keep it more secure.
 # UPLOAD_ROOT will not be accessible from URL, only by the server views.
