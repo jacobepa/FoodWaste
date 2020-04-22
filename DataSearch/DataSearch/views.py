@@ -22,9 +22,10 @@ from django.http import HttpRequest, HttpResponseRedirect, HttpResponse, \
     JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView, \
-    DetailView, UpdateView
+    DetailView, UpdateView, DeleteView
 from constants.utils import download_file, download_files
 from DataSearch.forms import ExistingDataForm
 from DataSearch.models import ExistingData, ExistingDataSharingTeamMap, \
@@ -223,7 +224,7 @@ class ExistingDataEdit(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """Existing Data Edit Form validation and redirect."""
         self.object = form.save(commit=False)
-        if not check_can_edit(self.object, request.user):
+        if not check_can_edit(self.object, self.request.user):
             reason = 'You cannot edit this data.'
             return HttpResponseRedirect('/existingdata/detail/%s' % self.object.ID, 401, reason)
         self.object.save()
@@ -273,9 +274,17 @@ class ExistingDataCreate(LoginRequiredMixin, CreateView):
                     data_team_map.team = team
                     data_team_map.data = obj
                     data_team_map.save()
-            return HttpResponseRedirect('/existingdata/')
+            return HttpResponseRedirect('/existingdata/detail/%s' % obj.id)
         return render(request, 'DataSearch/existing_data_create.html',
                       {'form': form})
+
+
+class ExistingDataDelete(LoginRequiredMixin, DeleteView):
+    """Class for deleting previously uploaded files."""
+
+    model = ExistingData
+    template_name = 'DataSearch/existing_data_confirm_delete.html'
+    success_url = reverse_lazy('tracking_tool')
 
 
 def home(request):
@@ -470,5 +479,23 @@ def attachments_download(request, *args, **kwargs):
             file = existing.attachments.filter(id=attachment_id).first()
             if file:
                 return download_file(file)
+
+    return HttpResponse(request)
+
+
+def attachment_delete(request, *args, **kwargs):
+    """
+    Method for deleting an attachment for a provided existing data search.
+    - pk for existing data (required)
+    - id for attachment (required)
+    """
+    existing_id = kwargs.get('pk', None)
+    attachment_id = kwargs.get('id', None)
+    existing = ExistingData.objects.filter(id=existing_id).first()
+    if existing:
+        file = existing.attachments.filter(id=attachment_id).first()
+        if file:
+            file.delete()
+            existing.save()
 
     return HttpResponse(request)
