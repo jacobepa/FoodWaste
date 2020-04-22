@@ -159,7 +159,7 @@
     var DUCK_URL = 'https://duckduckgo.com/?q=';
     function searchFieldUpdate() {
         var searchTerm = $("#id_search").val();
-        if (searchTerm.length > 5) {
+        if (searchTerm.length > 2) {
             $("#searchLink").removeClass('disabled');
             $("#searchLink").addClass('btn-success');
             $("#searchLink").removeClass('btn-secondary');
@@ -176,7 +176,7 @@
 
     function goSearch() {
         var searchTerm = $("#id_search").val();
-        if (searchTerm.length > 5) {
+        if (searchTerm.length > 2) {
 
             var searchSelection = $("#searchMethodSelect").val();
             if (searchSelection === 'google')

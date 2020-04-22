@@ -108,12 +108,7 @@ def check_can_edit(data, user):
             return True
 
     # Check if the user is super or owns the data:
-    if user.is_superuser:
-        return True
-
-    # Since this is the last check, the data is either owned by
-    # the user, or the user does not have edit privilege at all:
-    return data.created_by == user
+    return user.is_superuser or data.created_by == user
 
 
 class ExistingDataIndex(LoginRequiredMixin, TemplateView):
@@ -285,6 +280,19 @@ class ExistingDataDelete(LoginRequiredMixin, DeleteView):
     model = ExistingData
     template_name = 'DataSearch/existing_data_confirm_delete.html'
     success_url = reverse_lazy('tracking_tool')
+    # TODO: Check user permissions
+
+    def get(self, request, *args, **kwargs):
+        """
+        Override the default get method so we can check if the user
+        has permission to edit (delete) this object.
+        """
+        pk = kwargs.get('pk', None)
+        if pk:
+            object = ExistingData.objects.filter(id=pk).first()
+            if object and check_can_edit(object, request.user):
+                return render(request, self.template_name, {'object': object})
+        return HttpResponseRedirect('/existingdata/detail/%s' % pk)
 
 
 def home(request):
@@ -492,10 +500,11 @@ def attachment_delete(request, *args, **kwargs):
     existing_id = kwargs.get('pk', None)
     attachment_id = kwargs.get('id', None)
     existing = ExistingData.objects.filter(id=existing_id).first()
-    if existing:
+
+    if existing and check_can_edit(existing, request.user):
         file = existing.attachments.filter(id=attachment_id).first()
         if file:
             file.delete()
             existing.save()
 
-    return HttpResponse(request)
+    return HttpResponseRedirect('/existingdata/detail/%s' % existing_id)

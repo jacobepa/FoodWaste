@@ -64,9 +64,12 @@
                     <button onclick="window.location.href='/existingdata'" class="btn btn-danger mx-2">Back</button>
                     {% endif %}
                 </div>
+                
+                {% if not edit_message %}
                 <div class="float-right">
                     <button onclick="window.location.href='/existingdata/delete/{{object.id}}'" class="btn btn-danger mx-2">Delete Data Entry</button>
                 </div>
+                {% endif %}
                 <div class="float-none"></div>
             </div>
         </div>
