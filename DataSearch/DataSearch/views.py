@@ -259,6 +259,7 @@ def existing_form_process_teams_attachments(request, form, instance=None):
 
     # Prepare and insert teams data.
     teams = form.cleaned_data['teams']
+    existing_teams = []
     # Get any existing teams mapped to this existing_data instance
     if instance:
         existing_teams = instance.teams.all()
@@ -293,7 +294,7 @@ class ExistingDataCreate(LoginRequiredMixin, CreateView):
         """Process the post request with a new Existing Data form filled out."""
         form = ExistingDataForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
-            obj = existing_form_process_teams_attachments(form)
+            obj = existing_form_process_teams_attachments(request, form, None)
             return HttpResponseRedirect('/existingdata/detail/%s' % obj.id)
         return render(request, 'DataSearch/existing_data_create.html',
                       {'form': form})
