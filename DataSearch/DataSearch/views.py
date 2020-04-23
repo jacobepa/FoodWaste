@@ -491,6 +491,21 @@ def export_excel(request, *args, **kwargs):
     return response
 
 
+def export_docx(request, *args, **kwargs):
+    """Function to export Existing Existing Data as a Word doc."""
+    data_id = kwargs.get('pk', None)
+    if data_id is None:
+        # Export ALL ExistingData available for this user.
+        data = get_existing_data_all()
+        filename = 'export_existingdata_%s.docx' % request.user.username
+
+    else:
+        data = [ExistingData.objects.get(id=data_id)]
+        filename = 'export_%s.docx' % data[0].source_title
+
+
+
+
 def attachments_download(request, *args, **kwargs):
     """
     Method for downloading attachments for a provided existing data search.
