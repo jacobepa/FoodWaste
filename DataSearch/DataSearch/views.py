@@ -210,21 +210,74 @@ class ExistingDataEdit(LoginRequiredMixin, UpdateView):
             object = ExistingData.objects.filter(id=pk).first()
             return render(request, self.template_name,
                           {'object': object,
-                           'form': ExistingDataForm(instance=object,
-                                                     user=request.user)})
+                           'form': ExistingDataForm(
+                               instance=object, user=request.user)})
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a modified Existing Data form."""
+        pk = kwargs.get('pk')
+        instance = ExistingData.objects.filter(id=pk).first()
+        if check_can_edit(instance, request.user):
+            form = ExistingDataForm(request.POST, request.FILES, 
+                                    instance=instance, user=request.user)
+            if form.is_valid():
+                obj = existing_form_process_teams_attachments(
+                    request, form, instance)
+                return HttpResponseRedirect('/existingdata/detail/%s' % obj.id)
+
+            return render(request, self.template_name, {'form': form})
 
         reason = 'You cannot edit this data.'
         return HttpResponseRedirect('/existingdata/detail/%s' % pk, 401, reason)
 
-    def form_valid(self, form):
-        """Existing Data Edit Form validation and redirect."""
-        self.object = form.save(commit=False)
-        if not check_can_edit(self.object, self.request.user):
-            reason = 'You cannot edit this data.'
-            return HttpResponseRedirect('/existingdata/detail/%s' % self.object.ID, 401, reason)
-        self.object.save()
-        return HttpResponseRedirect('/existingdata/detail/%s' % str(self.object.id))
 
+def existing_form_process_teams_attachments(request, form, instance=None):
+    """
+    Custom method with shared code when saving an Existing Data instance.
+    Assume form.is_valid() check passed outside this method.
+    """
+    obj = form.save(commit=False)
+    obj.created_by = request.user
+    obj.disclaimer_req = form.cleaned_data['disclaimer_req']
+    obj.save()
+    for field in request.FILES:
+        file = request.FILES[field]
+        # filename = fs.save(file.name, file).
+        # uploaded_file_url = fs.url(filename).
+        # Insert the attachment.
+        attch = Attachment()
+        attch.uploaded_by = request.user
+        attch.name = file.name
+        attch.file = file
+        attch.save()
+        # Insert DataAttachmentMap.
+        attch_map = DataAttachmentMap()
+        attch_map.data = obj
+        attch_map.attachment = attch
+        attch_map.save()
+
+    # Prepare and insert teams data.
+    teams = form.cleaned_data['teams']
+    # Get any existing teams mapped to this existing_data instance
+    if instance:
+        existing_teams = instance.teams.all()
+        for team in existing_teams:
+            if team not in teams:
+                data_team_map = ExistingDataSharingTeamMap.objects.filter(
+                    data=instance, team=team).first()
+                if data_team_map:
+                    data_team_map.delete()
+
+    for team in teams:
+        if not existing_teams or team not in existing_teams:
+            data_team_map = ExistingDataSharingTeamMap()
+            data_team_map.can_edit = True
+            data_team_map.team = team
+            data_team_map.data = obj
+            data_team_map.save()
+
+    return obj
 
 class ExistingDataCreate(LoginRequiredMixin, CreateView):
     """Class for creating new Existing Data."""
@@ -238,37 +291,9 @@ class ExistingDataCreate(LoginRequiredMixin, CreateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a new Existing Data form filled out."""
-        # request.POST = request.POST.copy()
-        # request.POST['phone'] = '+1' + strip_non_numerals(request.POST['phone'])
         form = ExistingDataForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.created_by = request.user
-            obj.disclaimer_req = form.cleaned_data['disclaimer_req']
-            obj.save()
-            for field in request.FILES:
-                file = request.FILES[field]
-                # filename = fs.save(file.name, file).
-                # uploaded_file_url = fs.url(filename).
-                # Insert the attachment.
-                attch = Attachment()
-                attch.uploaded_by = request.user
-                attch.name = file.name
-                attch.file = file
-                attch.save()
-                # Insert DataAttachmentMap.
-                attch_map = DataAttachmentMap()
-                attch_map.data = obj
-                attch_map.attachment = attch
-                attch_map.save()
-            # Prepare and insert teams data.
-            if form.cleaned_data['teams']:
-                for team in form.cleaned_data['teams']:
-                    data_team_map = ExistingDataSharingTeamMap()
-                    data_team_map.can_edit = True
-                    data_team_map.team = team
-                    data_team_map.data = obj
-                    data_team_map.save()
+            obj = existing_form_process_teams_attachments(form)
             return HttpResponseRedirect('/existingdata/detail/%s' % obj.id)
         return render(request, 'DataSearch/existing_data_create.html',
                       {'form': form})

@@ -94,7 +94,8 @@ class DataAttachmentMap(models.Model):
 class ExistingDataSharingTeamMap(models.Model):
     """Mapping between Existing Data and Teams they share."""
 
-    added_date = models.DateTimeField(auto_now_add=True, blank=False, editable=False)
+    added_date = models.DateTimeField(
+        auto_now_add=True, blank=False, editable=False)
     data = models.ForeignKey(ExistingData, blank=False,
                              related_name='existing_data_teams',
                              on_delete=models.CASCADE)
@@ -103,3 +104,6 @@ class ExistingDataSharingTeamMap(models.Model):
                              on_delete=models.CASCADE)
     # Indicates if the team can edit the project.
     can_edit = models.BooleanField(blank=False)
+
+    class Meta:
+        unique_together = ('data', 'team')

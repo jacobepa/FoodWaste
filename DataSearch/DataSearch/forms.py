@@ -117,6 +117,13 @@ class ExistingDataForm(ModelForm):
                 member=current_user).values_list('team', flat=True)
             self.fields['teams'].queryset = Team.objects.filter(id__in=team_ids)
             self.fields['teams'].label_from_instance = lambda obj: "%s" % obj.name
+            # If this is an edit form, i.e. instance is passed in, then
+            # we need to set the default selected teams, if any...
+            instance = kwargs.get('instance', None)
+            if instance:
+                sel_teams = instance.teams.all()
+                if sel_teams:
+                    self.fields['teams'].initial = sel_teams
         except BaseException:
             super(ExistingDataForm, self).__init__(*args, **kwargs)
 
