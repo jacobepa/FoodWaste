@@ -77,7 +77,8 @@ A9_DOCUMENTS_RECORDS = 'Research activities must be documented according ' + \
     'even if a researcher or an analyst participating in the project ' + \
     'leaves the project staff. Electronic project records can be ' + \
     'maintained by the project lead on using this ' + \
-    '<a href="/existingdata"> EXISTING DATA SEARCH TOOL</a> or can ' + \
+    '<a href="/existingdata"> EXISTING DATA AND INFORMATION SEARCH TOOL' + \
+    '</a> or can ' + \
     'be stored on the ORD network drive, List file path where files ' + \
     'are stored. Electronic Records shall be maintained in a manner that ' + \
     'maximizes the confidentiality, accessibility, and integrity of the ' + \
@@ -116,7 +117,8 @@ SECONDARY_DATA_OPTIONS = (
     ('Software Development', 'Software Development')
 )
 
-B1_SECONDARY_DATA = 'Identify the secondary data needed to meet the ' + \
+B1_SECONDARY_DATA = 'Identify the Existing Data and Information ' + \
+    'needed to meet the ' + \
     'research objectives. If covered in project QAPP cite. If N/A type N/A.'
 
 B1_EXISTING_DATA = 'Describe how the existing data information will be ' + \
@@ -139,7 +141,8 @@ B1_DATABASES_MAPS_LITERATURE = '(1) Information and data used to site ' + \
     'If covered in project QAPP cite. If N/A type N/A.'
 
 B1_NON_QUALITY_CONSTRAINTS = 'Identify any non-quality constraints on ' + \
-    'the secondary data information that affect its use in the research ' + \
+    'the Existing Data and Information information that affect its ' + \
+    'use in the research ' + \
     'effort e.g., legal, programmatic, privacy confidentiality i.e. is ' + \
     'it proprietary or CBI. If supporting an office, region or program ' + \
     'check on applicability of the project decision, examples may ' + \
@@ -147,24 +150,26 @@ B1_NON_QUALITY_CONSTRAINTS = 'Identify any non-quality constraints on ' + \
     'Federal Rule of Evidence 702. If covered in ' + \
     'project QAPP cite. If N/A type N/A.'
 
-B2_SECONDARY_DATA_SOURCES = 'Identify the sources for the secondary ' + \
-    'data. Describe the planning process for data gathering and how ' + \
+B2_SECONDARY_DATA_SOURCES = 'Identify the sources for the Existing Data ' + \
+    'and Information. Describe the planning process for data ' + \
+    'gathering and how ' + \
     'the project ensures that data or information collected are of ' + \
     'sufficient quality to satisfy the needs of the research effort. ' + \
     'If covered in project QAPP cite. If N/A type N/A.'
 
 B2_PROCESS = 'Describe the process for acceptance rejection and ' + \
-    'inclusion exclusion of secondary data to support research ' + \
-    'objectives e.g., to exclude potential bias. If covered in ' + \
+    'inclusion exclusion of Existing Data and Information to support ' + \
+    'research objectives e.g., to exclude potential bias. If covered in ' + \
     'project QAPP cite. If N/A type N/A.'
 
 B2_RATIONALE = 'Discuss the rationale for selecting the sources ' + \
     'identified. If a hierarchy of sources exists for the gathering of ' + \
-    'secondary data, specify that hierarchy. If covered in ' + \
+    'Existing Data and Information, specify that hierarchy. If covered in ' + \
     'project QAPP cite. If N/A type N/A.'
 
 B2_PROCEDURES = 'Describe the procedures for determining the quality of ' + \
-    'the secondary data. Identify criteria for evaluating data or ' + \
+    'the Existing Data and Information. Identify criteria for ' + \
+    'evaluating data or ' + \
     'information quality e.g., using EPAs five General Assessment ' + \
     'Factors or using measurement data criteria such as accuracy, ' + \
     'precision, representativeness, completeness, and comparability. ' + \
@@ -173,7 +178,8 @@ B2_PROCEDURES = 'Describe the procedures for determining the quality of ' + \
     'require additional evaluation for quality. If covered in project ' + \
     'QAPP cite. If N/A type N/A.'
 
-B2_DISCLAIMER = 'If the quality of the secondary data will not be ' + \
+B2_DISCLAIMER = 'If the quality of the Existing Data and ' + \
+    'Information will not be ' + \
     'evaluated by EPA, state this in the QAPP and require one of the ' + \
     'following disclaimer statements to be added to any research product ' + \
     'requiring clearance: EPA is distributing this information solely as ' + \
@@ -188,15 +194,16 @@ B2_DISCLAIMER = 'If the quality of the secondary data will not be ' + \
     'QAPP cite. If N/A type N/A.'
 
 B3_PROCESS = 'Describe the process for documenting and tracking sources ' + \
-    'used and the information that will be recorded for the secondary ' + \
-    'data collected e.g. data source, originating organization, report ' + \
+    'used and the information that will be recorded for the ' + \
+    'Existing Data and Information ' + \
+    'collected e.g. data source, originating organization, report ' + \
     'title, type of information, date. If covered in project ' + \
     'QAPP cite. If N/A type N/A'
 
 B4_EXISTING_DATA_TRACKING = 'Existing data sources are tracked and ' + \
-    'logged in CESER application Existing Data Search Tool ' + \
-    'https://134.67.216.106 under CESER QMP K-LRTD-0032360-QM-1-0 and ' + \
-    'QAPP K-LRTD-0032360-QP-1-0. If covered in project QAPP ' + \
+    'logged in CESER application Existing Data and Information Search ' + \
+    'Tool https://134.67.216.106 under CESER QMP K-LRTD-0032360-QM-1-0 ' + \
+    'and QAPP K-LRTD-0032360-QP-1-0. If covered in project QAPP ' + \
     'cite. If N/A type N/A.'
 
 SECTION_B_INFO = {

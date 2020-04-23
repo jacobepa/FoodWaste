@@ -21,7 +21,7 @@ EXISTING_DATA = {
     'b1_1': {
         'heading': 'B.1	DATA ACQUISITION AND COLLECTION',
         'label': 'B.1.1 Existing Data',
-        'desc': 'Identify the secondary data needed to ' + \
+        'desc': 'Identify the Existing Data and Information needed to ' + \
             'meet the research objective(s).'
     },
     'b1_2': {
@@ -49,8 +49,9 @@ EXISTING_DATA = {
     },
     'b1_5': {
         'label': 'B.1.5 Non-Quality Constraints',
-        'desc': 'Identify any non-quality constraints on the secondary ' + \
-            'data/ information that affect its use in the research ' + \
+        'desc': 'Identify any non-quality constraints on the ' + \
+            'Existing Data and Information that affect its use in ' + \
+            'the research ' + \
             'effort (e.g., legal, programmatic, privacy/ ' + \
             'confidentiality (i.e., is it proprietary or CBI)).\r\nIf ' + \
             'supporting an office, region or program check on ' + \
@@ -61,7 +62,8 @@ EXISTING_DATA = {
     'b2_1': {
         'heading': 'B.2	DATA COLLECTION AND EVALUATION',
         'label': 'B.2.1 Existing Data Sources',
-        'desc': 'Identify the source(s) for the secondary data.  ' + \
+        'desc': 'Identify the source(s) for the Existing Data and ' + \
+            'Information.  ' + \
             'Describe the planning process for data gathering and ' + \
             'how the project ensures that data or information collected ' + \
             'are of sufficient quality to satisfy the ' + \
@@ -70,19 +72,22 @@ EXISTING_DATA = {
     'b2_2': {
         'label': 'B.2.2 Criteria for Acceptance or Rejection',
         'desc': 'Describe the process for acceptance/ rejection and ' + \
-            'inclusion/ exclusion of secondary data to support research ' + \
+            'inclusion/ exclusion of Existing Data and Information' + \
+            'to support research ' + \
             'objectives (e.g., to exclude potential bias).'
     },
     'b2_3': {
         'label': 'B.2.3 Rational Selection of Existing Data',
         'desc': 'Discuss the rationale for selecting the source(s) ' + \
             'identified.  If a hierarchy of sources exists for the ' + \
-            'gathering of secondary data, specify that hierarchy.'
+            'gathering of Existing Data and Information, specify ' + \
+            'that hierarchy.'
     },
     'b2_4': {
         'label': 'B.2.4 SOPs Determine Quality of Data',
         'desc': 'Describe the procedures for determining the quality of ' + \
-            'the secondary data. Identify criteria for evaluating data ' + \
+            'the Existing Data and Information. Identify criteria for ' + \
+            'evaluating data ' + \
             'or information quality (e.g., using EPA’s five General ' + \
             'Assessment Factors or using measurement data criteria such ' + \
             'as accuracy, precision, representativeness, completeness, ' + \
@@ -93,28 +98,28 @@ EXISTING_DATA = {
     },
     'b2_5': {
         'label': 'B.2.5 Disclaimer Existing Data',
-        'desc': 'If the quality of the secondary data will not be ' + \
-            'evaluated by EPA, state this in the QAPP and require one ' + \
-            'of the following disclaimer statements to be added to any ' + \
-            'research product requiring clearance:\r\nEPA is distributing ' + \
-            'this information solely as a public service. [Insert name ' + \
-            'of information source] is responsible for the quality of ' + \
-            'this information. EPA’s distribution of this information ' + \
-            'does not represent or imply endorsement by EPA.\r\nor;\r\n' + \
-            'The research presented was not performed or funded by EPA ' + \
-            'and was not subject to EPA’s quality system requirements. ' + \
-            'The views expressed in this [article/presentation/poster] ' + \
-            'are those of the author(s) and do not necessarily represent ' + \
-            'the views or the policies of the U.S. ' + \
-            'Environmental Protection Agency.'
+        'desc': 'If the quality of the Existing Data and Information ' + \
+            'will not be evaluated by EPA, state this in the QAPP and ' + \
+            'require one of the following disclaimer statements to be ' + \
+            'added to any research product requiring clearance:\r\nEPA ' + \
+            'is distributing this information solely as a public ' + \
+            'service. [Insert name of information source] is ' + \
+            'responsible for the quality of this information. EPA\'s ' + \
+            'distribution of this information does not represent or ' + \
+            'imply endorsement by EPA.\r\nor;\r\nThe research presented ' + \
+            'was not performed or funded by EPA and was not subject to ' + \
+            'EPA\'s quality system requirements. The views expressed in ' + \
+            'this [article/presentation/poster] are those of the ' + \
+            'author(s) and do not necessarily represent the views or ' + \
+            'the policies of the U.S. Environmental Protection Agency.'
     },
     'b3_1': {
         'heading': 'B.3	DATA MANAGEMENT AND DOCUMENTATION',
         'label': 'B.3.1 Data Tracking and Storage',
         'desc': 'Describe the process for documenting and tracking ' + \
             'sources used and the information that will be recorded for ' + \
-            'the secondary data collected (e.g., data source, ' + \
-            'originating organization, report title, type of ' + \
+            'the Existing Data and Information collected (e.g., data ' + \
+            'source, originating organization, report title, type of ' + \
             'information, date).'
     }
 }
