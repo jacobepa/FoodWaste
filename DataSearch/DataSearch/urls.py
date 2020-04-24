@@ -12,8 +12,10 @@ from django.contrib import admin
 from django.urls import include
 from DataSearch.views import home, contact, about, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
-    ExistingDataEdit, ExistingDataDelete, export_pdf, export_excel, \
-    web_dev_tools, clean_qapps, attachments_download, attachment_delete, \
+    ExistingDataEdit, ExistingDataDelete, web_dev_tools, clean_qapps, \
+    attachments_download, attachment_delete
+    
+from DataSearch.views_exports import export_pdf, export_excel, \
     export_doc_single, export_docx
 from DataSearch.settings import MEDIA_ROOT, MEDIA_URL
 
