@@ -23,6 +23,7 @@ from django.utils.decorators import method_decorator
 from django.utils.text import slugify
 from DataSearch.models import ExistingData, Attachment, DataAttachmentMap
 from DataSearch.settings import APP_DISCLAIMER
+from DataSearch.views import get_existing_data_team, get_existing_data_user
 
 
 def export_pdf(request, *args, **kwargs):
@@ -33,7 +34,6 @@ def export_pdf(request, *args, **kwargs):
         data = get_existing_data_all()
         template = get_template('DataSearch/existing_data_pdf_multi.html')
         filename = 'export_existingdata_%s.pdf' % request.user.username
-        # TODO get all attachment_ids
         attachment_ids = DataAttachmentMap.objects.all().values_list(
             'attachment', flat=True)
     else:
@@ -96,7 +96,6 @@ def export_pdf(request, *args, **kwargs):
             file = attachment.file.file
             # Zip attachment:
             archive.write(file.name, path.basename(file.name))
-            temp_do_something = True
         except FileNotFoundError:
             print('Attachment File Not Found!')
 
@@ -199,6 +198,7 @@ def export_doc_single(request, *args, **kwargs):
     filename = '%s.docx' % slugify(data.source_title)
 
     document = Document()
+    styles = document.styles
     document.add_heading(
         'Existing Data Search: %s' % data.source_title, level=1)
     
@@ -227,21 +227,52 @@ def export_doc_single(request, *args, **kwargs):
     document.add_heading('Created by', level=3)
     document.add_paragraph(str(data.created_by))
 
-    document.add_heading('Teams Shared With', level=3)
-    for team in data.teams.all():
-        document.add_paragraph(team.name)
-        # List members?
+    teams = data.teams.all()
+    if teams:
+        document.add_heading('Shared With Teams', level=3)
+        table = document.add_table(rows=len(teams), cols=1)
+        row = 0
+        for team in teams:
+            table.rows[row].cells[0].text = team.name
+            # List members?
+            row += 1
 
-    document.add_heading('Attachments', level=2)
-    for attachment in data.attachments.all():
-        document.add_paragraph(attachment.name)
-        # List uploaded_by?
-        # Make hyperlink to open included file?
+    # Create a zip archive to return multiple files: Docx, n attachments.
+    zip_mem = BytesIO()
+    archive = ZipFile(zip_mem, 'w')
 
+    attachments = data.attachments.all()
+    if attachments:
+        document.add_heading('Attachments', level=2)
+        table = document.add_table(rows=len(attachments), cols=1)
+        row = 0
+        for attachment in attachments:
+            table.rows[row].cells[0].text = attachment.name
+            # List uploaded_by?
+            # Make hyperlink to open included file?
+            row += 1
+            try:
+                file = attachment.file.file
+                archive.write(file.name, path.basename(file.name))
+            except FileNotFoundError:
+                print('AttachmentFileNotFound')
+
+    # Write the finalized docx to zip file:
     content_type = 'application/vnd.openxmlformats-officedocument.' + \
             'wordprocessingml.document'
-    response = HttpResponse(content_type)
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    document.save(response)
-    response['filename'] = filename
+    fake_response = HttpResponse(content_type)
+    fake_response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    document.save(fake_response)
+    
+    with tempfile.SpooledTemporaryFile() as tmp:
+        archive.writestr(filename, fake_response.content)
+
+    archive.close()
+
+    response = HttpResponse(zip_mem.getvalue(),\
+        content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename="%s.zip"' % \
+        filename
+    response['Content-length'] = zip_mem.tell()
+    response['filename'] = '%s.zip' % filename
     return response
