@@ -202,8 +202,8 @@ B3_PROCESS = 'Describe the process for documenting and tracking sources ' + \
 
 B4_EXISTING_DATA_TRACKING = 'Existing data sources are tracked and ' + \
     'logged in CESER application Existing Data and Information Search ' + \
-    'Tool https://134.67.216.106 under CESER QMP K-LRTD-0032360-QM-1-0 ' + \
-    'and QAPP K-LRTD-0032360-QP-1-0. If covered in project QAPP ' + \
+    'Tool https://134.67.216.106 under CESER ' + \
+    'QAPP K-LRTD-0032360-QP-1-0. If covered in project QAPP ' + \
     'cite. If N/A type N/A.'
 
 SECTION_B_INFO = {

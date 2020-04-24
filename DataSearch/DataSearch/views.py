@@ -8,9 +8,11 @@
 """Definition of views."""
 
 from datetime import datetime
+from docx import Document
 from io import BytesIO
 from openpyxl import Workbook
 from os import path, remove
+import tempfile
 from wkhtmltopdf.views import PDFTemplateResponse
 from xhtml2pdf import pisa
 from zipfile import ZipFile
@@ -24,6 +26,7 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.text import slugify
 from django.views.generic import TemplateView, ListView, CreateView, \
     DetailView, UpdateView, DeleteView
 from constants.utils import download_file, download_files
@@ -82,11 +85,13 @@ def get_existing_data_user(user_id):
 
 def get_existing_data_team(team_id):
     """Method to get all data belonging to a team."""
-    team = Team.objects.get(id=team_id)
-    include_data = ExistingDataSharingTeamMap.objects.filter(
-        team=team).values_list('data', flat=True)
-    queryset = ExistingData.objects.filter(id__in=include_data)
-    return queryset
+    team = Team.objects.filter(id=team_id).first()
+    if team:
+        include_data = ExistingDataSharingTeamMap.objects.filter(
+            team=team).values_list('data', flat=True)
+        queryset = ExistingData.objects.filter(id__in=include_data)
+        return queryset
+    return []
 
 
 def check_can_edit(data, user):
@@ -371,7 +376,6 @@ def export_pdf(request, *args, **kwargs):
     data_id = kwargs.get('pk', None)
     if data_id is None:
         # Export ALL ExistingData available for this user to PDF.
-        # data = get_existing_data_user(request.user)
         data = get_existing_data_all()
         template = get_template('DataSearch/existing_data_pdf_multi.html')
         filename = 'export_existingdata_%s.pdf' % request.user.username
@@ -454,7 +458,6 @@ def export_excel(request, *args, **kwargs):
     data_id = kwargs.get('pk', None)
     if data_id is None:
         # Export ALL ExistingData available for this user to Excel.
-        # data = get_existing_data_user(request.user)
         data = get_existing_data_all()
         filename = 'export_existingdata_%s.xlsx' % request.user.username
 
@@ -493,17 +496,101 @@ def export_excel(request, *args, **kwargs):
 
 def export_docx(request, *args, **kwargs):
     """Function to export Existing Existing Data as a Word doc."""
-    data_id = kwargs.get('pk', None)
-    if data_id is None:
-        # Export ALL ExistingData available for this user.
-        data = get_existing_data_all()
-        filename = 'export_existingdata_%s.docx' % request.user.username
-
+    if 'user' in request.path:
+        user_id = kwargs.get('pk', None)
+        team_id = data_id = None
+    elif 'team' in request.path:
+        team_id = kwargs.get('pk', None)
+        user_id = data_id = None
     else:
-        data = [ExistingData.objects.get(id=data_id)]
-        filename = 'export_%s.docx' % data[0].source_title
+        data_id = kwargs.get('pk', None)
+        team_id = user_id = None
+
+    if data_id is None or user_id or team_id:
+        if user_id:
+            data_ids = get_existing_data_user(
+                user_id).values_list('id', flat=True)
+        else:
+            data_ids = get_existing_data_team(
+                team_id).values_list('id', flat=True)
+
+        zip_mem = BytesIO()
+        archive = ZipFile(zip_mem, 'w')
+        for id in data_ids:
+            resp = export_doc_single(request, pk=id)
+            filename = resp['filename']
+            if filename:
+                temp_file_name = '%d_%s' % (id, filename)
+                with tempfile.SpooledTemporaryFile() as tmp:
+                    archive.writestr(temp_file_name, resp.content)
+
+        archive.close()
+        response = HttpResponse(
+            zip_mem.getvalue(), content_type='application/force-download')
+        response['Content-Disposition'] = \
+            'attachment; filename="%s_datasearches.zip"' % request.user.username
+        response['Content-length'] = zip_mem.tell()
+        return response
 
 
+# py-lint: disable=no-member
+def export_doc_single(request, *args, **kwargs):
+    """Function to export a single DataSearch object as a Word Docx file."""
+    data_id = kwargs.get('pk', None)
+    data = ExistingData.objects.filter(id=data_id).first()
+
+    if not data:
+        return HttpResponseRedirect(request)
+
+    filename = '%s.docx' % slugify(data.source_title)
+
+    document = Document()
+    document.add_heading(
+        'Existing Data Search: %s' % data.source_title, level=1)
+    
+    document.add_heading('User Work Office/Lab', level=3)
+    document.add_paragraph(data.work)
+    document.add_heading('Email Address', level=3)
+    document.add_paragraph(data.email)
+    document.add_heading('Phone Number', level=3)
+    document.add_paragraph(data.phone)
+    document.add_heading('Search Phrase', level=3)
+    document.add_paragraph(data.search)
+    document.add_heading('Source', level=3)
+    document.add_paragraph(data.source.name)
+    document.add_heading('Source Title', level=3)
+    document.add_paragraph(data.source_title)
+    document.add_heading('Keywords', level=3)
+    document.add_paragraph(data.keywords)
+    document.add_heading('URL', level=3)
+    document.add_paragraph(data.url)
+    document.add_heading('Citation', level=3)
+    document.add_paragraph(data.citation)
+    document.add_heading('Date Accessed', level=3)
+    document.add_paragraph(str(data.date_accessed))
+    document.add_heading('Comments', level=3)
+    document.add_paragraph(data.comments)
+    document.add_heading('Created by', level=3)
+    document.add_paragraph(str(data.created_by))
+
+    document.add_heading('Teams Shared With', level=3)
+    for team in data.teams.all():
+        document.add_paragraph(team.name)
+        # List members?
+
+    document.add_heading('Attachments', level=2)
+    for attachment in data.attachments.all():
+        document.add_paragraph(attachment.name)
+        # List uploaded_by?
+        # Make hyperlink to open included file?
+
+    content_type = 'application/vnd.openxmlformats-officedocument.' + \
+            'wordprocessingml.document'
+    response = HttpResponse(content_type)
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    document.save(response)
+    response['filename'] = filename
+    return response
 
 
 def attachments_download(request, *args, **kwargs):

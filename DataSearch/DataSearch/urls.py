@@ -13,7 +13,8 @@ from django.urls import include
 from DataSearch.views import home, contact, about, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
     ExistingDataEdit, ExistingDataDelete, export_pdf, export_excel, \
-    web_dev_tools, clean_qapps, attachments_download, attachment_delete
+    web_dev_tools, clean_qapps, attachments_download, attachment_delete, \
+    export_doc_single, export_docx
 from DataSearch.settings import MEDIA_ROOT, MEDIA_URL
 
 
@@ -30,7 +31,6 @@ urlpatterns = [
 
     # Begin existingdata URLs.
     # URLs for PDF and Excel exports.
-    # downloadattachments
     url(r'^existingdata/exportpdf/(?P<pk>\d+)/?$',
         export_pdf, name='existing_data_pdf'),
     url(r'^existingdata/exportexcel/(?P<pk>\d+)/?$',
@@ -39,6 +39,16 @@ urlpatterns = [
         export_pdf, name='existing_data_pdf'),
     url(r'^existingdata/exportexcel/?$',
         export_excel, name='existing_data_excel'),
+    # URLs for Docx export:
+    url(r'^existingdata/exportdocx/(?P<pk>\d+)/?$',
+        export_doc_single, name='existing_data_docx'),
+    url(r'^existingdata/exportdocx/user/(?P<pk>\d+)/?$',
+        export_docx, name='existing_data_docx'),
+    url(r'^existingdata/exportdocx/team/(?P<pk>\d+)/?$',
+        export_docx, name='existing_data_docx'),
+    url(r'^existingdata/exportdocx/?$',
+        export_docx, name='existing_data_docx'),
+
 
     # Download all attachments for the given datasearch pk
     url(r'^existingdata/download_attachments/(?P<pk>\d+)/?$',

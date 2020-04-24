@@ -53,6 +53,7 @@
         <div class="row mt-2">
             <div class="col-md-12">
                 <div class="float-left">
+                    <button onclick="window.location.href='/existingdata/exportdocx/{{object.id}}'" class="btn btn-info mx-2">Export to Docx</button>
                     <button onclick="window.location.href='/existingdata/exportpdf/{{object.id}}'" class="btn btn-info mx-2">Export to PDF</button>
                     <button onclick="window.location.href='/existingdata/exportexcel/{{object.id}}'" class="btn btn-info mx-2">Export to Excel</button>
                     <button onclick="window.location.href='/existingdata/edit/{{object.id}}'" class="btn btn-warning mx-2" {{edit_disabled}}>Edit Data Entry</button>
