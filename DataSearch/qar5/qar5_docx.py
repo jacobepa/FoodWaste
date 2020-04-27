@@ -152,6 +152,7 @@ def export_doc_single(request, *args, **kwargs):
     """Function to export a single QAPP object as a Word Docx file."""
     qapp_id = kwargs.get('pk', None)
     qapp_info = get_qapp_info(request.user, qapp_id)
+    qapp_info['qapp'] = qapp_info['qapp'].first()
 
     if not qapp_info:
         return HttpResponseRedirect(request)
@@ -309,9 +310,12 @@ def export_doc_single(request, *args, **kwargs):
     create_toc(document)
     # TODO: DAT-32 Add 'Definitions and Acronyms' Below the ToC
     document.add_heading('Definitions and Acronyms', level=2)
-    document.add_paragraph(
-        qapp_info['section_a'].a2,
-        styles['No Spacing'])
+
+    if qapp_info['section_a'] and qapp_info['section_a'].a2:
+        document.add_paragraph(
+            qapp_info['section_a'].a2,
+            styles['No Spacing'])
+
     document.add_page_break()
 
     # #################################################
