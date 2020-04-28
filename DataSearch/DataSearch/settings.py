@@ -161,6 +161,8 @@ MEDIA_URL = "/media/"
 # UPLOAD_ROOT will not be accessible from URL, only by the server views.
 UPLOAD_ROOT = os.path.join(MEDIA_ROOT, 'uploads')
 
+FILE_UPLOAD_PERMISSIONS = 0o644
+
 ENABLE_RSS_FEEDS = False
 
 APP_NAME = 'ExistingData'
