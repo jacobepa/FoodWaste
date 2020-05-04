@@ -45,6 +45,12 @@ def is_user_member(user, team=None):
     return TeamMembership.objects.filter(member_id=user.id).exists()
 
 
+def can_user_edit_team(user, team_id):
+    membership = TeamMembership.objects.filter(
+        team_id=team_id, member_id=user.id).first()
+    return membership.can_edit or user.is_superuser
+
+
 class TeamListView(LoginRequiredMixin, ListView):
     """
     New class to return a teams list view.
@@ -123,11 +129,12 @@ class TeamEditView(FormView):
         ctx = {}
         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
         if ctx['team_id'] is not None:
+            if can_user_edit_team(request.user, ctx['team_id']):
+                return render(request, self.template, ctx)
             ctx['team_data'] = APITeamDetailView.as_view()(
                 request, team_id=ctx['team_id'], format='json').rendered_content
             ctx['team'] = JSONParser().parse(BytesIO(ctx['team_data']))
-            return render(request, self.template, ctx)
-        return HttpResponseRedirect(reverse('dashboard'))
+        return HttpResponseRedirect('/teams/list/')
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -137,6 +144,9 @@ class TeamEditView(FormView):
         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
 
         if ctx['team_id'] is not None:
+            if not can_user_edit_team(request.user, ctx['team_id']):
+                return HttpResponseRedirect('/teams/list/')
+
             # Update the team name.
             ctx['team_obj'] = Team.objects.get(id=ctx['team_id'])
             if ctx['team_obj'] is not None:
@@ -187,7 +197,7 @@ class TeamManagementView(FormView):
             ctx['user_can_edit'] = membership.can_edit
 
             return render(request, self.template, ctx)
-        return HttpResponseRedirect(reverse('dashboard'))
+        return HttpResponseRedirect('/teams/list/')
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -196,10 +206,11 @@ class TeamManagementView(FormView):
         ctx['params'] = request.POST
         ctx['command'] = ctx['params']["command"] if "command" in ctx['params'] else None
         ctx['team_id'] = kwargs["team_id"] if kwargs is not None and 'team_id' in kwargs else None
+        if not can_user_edit_team(request.user, ctx['team_id']):
+            return HttpResponseRedirect('/teams/list/')
+
         ctx['team_obj'] = Team.objects.filter(id=ctx['team_id']).first()
-
         if ctx['team_obj'] is not None and ctx['command'] is not None:
-
             # If the request.user cannot edit the current team, do nothing.
             membership = TeamMembership.objects.filter(
                 team_id=ctx['team_id'], member_id=request.user).first()

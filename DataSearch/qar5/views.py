@@ -113,12 +113,7 @@ def check_can_edit(qapp, user):
             return True
 
     # Check if the user is super or owns the qapp:
-    if user.is_superuser:
-        return True
-
-    # Since this is the last check, the qapp is either owned by
-    # the user, or the user does not have edit privilege at all:
-    return qapp.prepared_by == user
+    return user.is_superuser or qapp.prepared_by == user
 
 
 class QappEdit(LoginRequiredMixin, UpdateView):
@@ -150,7 +145,7 @@ class QappEdit(LoginRequiredMixin, UpdateView):
         """Qapp Edit Form validation and redirect."""
         # Verify the current user has permissions to modify this QAPP:
         self.object = form.save(commit=False)
-        if not check_can_edit(self.object, request.user):
+        if not check_can_edit(self.object, self.request.user):
             reason = 'You cannot edit this QAPP.'
             return HttpResponseRedirect('/qar5/detail/%s' % self.object.id, 401, reason)
 

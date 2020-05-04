@@ -10,6 +10,7 @@
             <div class="col-md-6">{{project_approval.activity_number}}</div>
         </div>
     </div>
+    {% if not edit_message %}
     <div class="col-md-6 mt-2">
         <button class="col-md-8 offset-md-4 btn btn-sm btn-warning mb-2" onclick="editApprovalPage({{object.id}})">
             Edit Plan Title and Activity Number
@@ -21,6 +22,7 @@
             <div class="col-sm-1 mr-2 float-right"><i onclick="removeApprovalSignature(this)" class="fas fa-minus btn btn-sm btn-danger" disabled></i></div>
         </div>
     </div>
+    {% endif %}
 </div>
 <table class="table table-bordered table-hover">
     <caption>List of QAPP Approval Signatures</caption>

@@ -12,7 +12,7 @@ from os import path
 from zipfile import ZipFile, ZIP_DEFLATED
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -69,6 +69,15 @@ class FlowsaDelete(LoginRequiredMixin, DeleteView):
     model = Upload
     template_name = 'flowsa_upload_confirm_delete.html'
     success_url = reverse_lazy('flowsa:flowsa_index')
+
+    def dispatch(self, *args, **kwargs):
+        pk = kwargs.get('pk')
+        instance = Upload.objects.filter(id=pk).first()
+        if instance:
+            user = self.request.user
+            if instance.uploaded_by == user or user.is_superuser:
+                return super().dispatch(*args, **kwargs)
+        return HttpResponseRedirect(self.success_url)
 
 
 def flowsa_download(request, *args, **kwargs):

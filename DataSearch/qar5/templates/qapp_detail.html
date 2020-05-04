@@ -14,16 +14,16 @@
                             class="my-2 col-md-12 btn btn-md btn-info">
                         Back to QAPP List
                     </button>
+                    {% if not edit_message %}
                     <button onclick="window.location.href='/qar5/edit/{{object.id}}'"
-                            class="my-2 col-md-12 btn btn-md btn-warning"
-                            {% if edit_message %} disabled title="{{edit_message}}" {% endif %}>
+                            class="my-2 col-md-12 btn btn-md btn-warning">
                         Edit QAPP
                     </button>
                     <button onclick="window.location.href='/qar5/delete/{{object.id}}'"
-                            class="my-2 col-md-12 btn btn-md btn-danger"
-                            {% if edit_message %} disabled title="{{edit_message}}" {% endif %}>
+                            class="my-2 col-md-12 btn btn-md btn-danger">
                         Delete QAPP
                     </button>
+                    {% endif %}
 
                     <button onclick="window.location.href='/qar5/exportdoc/{{object.id}}'"
                             class="my-2 col-md-12 btn btn-md btn-info">

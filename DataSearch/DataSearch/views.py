@@ -207,6 +207,9 @@ class ExistingDataEdit(LoginRequiredMixin, UpdateView):
                            'form': ExistingDataForm(
                                instance=object, user=request.user)})
 
+        reason = 'You cannot edit this data.'
+        return HttpResponseRedirect('/existingdata/detail/%s' % pk, 401, reason)
+
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a modified Existing Data form."""
@@ -300,7 +303,6 @@ class ExistingDataDelete(LoginRequiredMixin, DeleteView):
     model = ExistingData
     template_name = 'DataSearch/existing_data_confirm_delete.html'
     success_url = reverse_lazy('tracking_tool')
-    # TODO: Check user permissions
 
     def get(self, request, *args, **kwargs):
         """
