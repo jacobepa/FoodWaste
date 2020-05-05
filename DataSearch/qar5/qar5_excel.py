@@ -164,12 +164,22 @@ def export_excel_single(request, *args, **kwargs):
     # Write the Revision History
     sheet.cell(row=row, column=1).value = 'Definitions and Acronyms'
     row += 1
-    # TODO: DAT-32 Add 'Definitions and Acronyms' under A.2 Table of Contents.
-    if qapp_info['section_a'] and qapp_info['section_a'].a2:
-        definitions = str.splitlines(qapp_info['section_a'].a2)
-        for defin in definitions:
-            sheet.cell(row=row, column=1).value = defin
+
+    if qapp_info['section_a']:
+        if qapp_info['section_a'].a2:
+            definitions = str.splitlines(qapp_info['section_a'].a2)
+            for defin in definitions:
+                sheet.cell(row=row, column=1).value = defin
+                row += 1
+
+        if qapp_info['section_a'].a2_keywords:
+            sheet.cell(row=row, column=1).value = 'Keywords'
             row += 1
+            definitions = str.splitlines(qapp_info['section_a'].a2_keywords)
+            for defin in definitions:
+                sheet.cell(row=row, column=1).value = defin
+                row += 1
+
     row += 1
 
     # ###########################

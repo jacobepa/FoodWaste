@@ -311,10 +311,17 @@ def export_doc_single(request, *args, **kwargs):
     # TODO: DAT-32 Add 'Definitions and Acronyms' Below the ToC
     document.add_heading('Definitions and Acronyms', level=2)
 
-    if qapp_info['section_a'] and qapp_info['section_a'].a2:
-        document.add_paragraph(
-            qapp_info['section_a'].a2,
-            styles['No Spacing'])
+    if qapp_info['section_a']:
+        if qapp_info['section_a'].a2:
+            document.add_paragraph(
+                qapp_info['section_a'].a2,
+                styles['No Spacing'])
+
+        if qapp_info['section_a'].a2_keywords:
+            document.add_heading('Keywords', level=2)
+            document.add_paragraph(
+                qapp_info['section_a'].a2_keywords,
+                styles['No Spacing'])
 
     document.add_page_break()
 
