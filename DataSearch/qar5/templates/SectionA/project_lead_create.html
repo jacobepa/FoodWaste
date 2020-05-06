@@ -19,7 +19,7 @@
     <div class="row mt-4">
         <h3>Adding a new Project Lead for QAPP with ID {{qapp_id}}</h3>
         <div class="col-md-12">
-            <form enctype="multipart/form-data" action="/qar5/project_lead/create/" method="post" role="form">
+            <form enctype="multipart/form-data" method="post" role="form">
                 {% csrf_token %}
                 <div class="form-group row">
                     <label>{{form.name.label}}</label>

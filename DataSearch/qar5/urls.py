@@ -16,7 +16,9 @@ from django.conf.urls import url
 from qar5.views import QappCreate, QappDetail, ProjectApprovalCreate, \
     ProjectLeadCreate, ProjectApprovalSignatureCreate, SectionAView, \
     SectionBView, SectionCView, SectionDView, SectionEView, SectionFView, \
-    RevisionCreate, QappList, QappEdit, QappIndex, ProjectApprovalEdit
+    RevisionCreate, QappList, QappEdit, QappIndex, ProjectApprovalEdit, \
+    ProjectApprovalSignatureDelete, ProjectApprovalSignatureEdit,  \
+    ProjectLeadDelete, ProjectLeadEdit
 from qar5.qar5_docx import export_doc, export_doc_single
 from qar5.qar5_excel import export_excel, export_excel_single
 from qar5.qar5_pdf import export_pdf, export_pdf_single
@@ -87,17 +89,13 @@ urlpatterns = [
         ProjectApprovalSignatureCreate.as_view(),
         name='get_approval_signature_form'),
 
-    # url(r'^approval_signature/delete/(?P<pk>\d+)/?$',
-    #    get_approval_signature_form.as_view(),
-    #    name='get_approval_signature_form'),
+     url(r'^approval_signature/delete/(?P<pk>\d+)/?$',
+        ProjectApprovalSignatureDelete.as_view(),
+        name='delete_approval_signature'),
 
-    # url(r'^approval_signature/detail/(?P<pk>\d+)/?$',
-    #    get_approval_signature_form.as_view(),
-    #    name='get_approval_signature_form'),
-
-    # url(r'^approval_signature/edit/(?P<pk>\d+)/?$',
-    #    get_approval_signature_form.as_view(),
-    #    name='get_approval_signature_form'),
+     url(r'^approval_signature/edit/(?P<pk>\d+)/?$',
+        ProjectApprovalSignatureEdit.as_view(),
+        name='edit_approval_signature'),
 
     ############################################
     # Project Lead URLs
@@ -105,17 +103,13 @@ urlpatterns = [
         ProjectLeadCreate.as_view(),
         name='get_project_lead_form'),
 
-    # url(r'^project_lead/delete/(?P<pk>\d+)/?$',
-    #    ProjectLeadCreate.as_view(),
-    #    name='get_project_lead_form'),
+     url(r'^project_lead/delete/(?P<pk>\d+)/?$',
+        ProjectLeadDelete.as_view(),
+        name='delete_project_lead'),
 
-    # url(r'^project_lead/detail/(?P<pk>\d+)/?$',
-    #    ProjectLeadCreate.as_view(),
-    #    name='get_project_lead_form'),
-
-    # url(r'^project_lead/edit/(?P<pk>\d+)/?$',
-    #    ProjectLeadCreate.as_view(),
-    #    name='get_project_lead_form'),
+     url(r'^project_lead/edit/(?P<pk>\d+)/?$',
+        ProjectLeadEdit.as_view(),
+        name='edit_project_lead'),
 
     ############################################
     # SectionB URLs

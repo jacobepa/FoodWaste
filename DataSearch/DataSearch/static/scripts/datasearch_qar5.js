@@ -28,7 +28,7 @@ function getId(btn) {
 
 function editProjectLead(btn) {
     if ($(btn).attr('disabled')) return;
-    window.location.href = '/qar5/project_lead/detail/' + getId(btn);
+    window.location.href = '/qar5/project_lead/edit/' + getId(btn);
 }
 
 function removeProjectLead(btn) {
@@ -49,7 +49,7 @@ function addApprovalSignature(id) {
 
 function editApprovalSignature(btn) {
     if ($(btn).attr('disabled')) return;
-    window.location.href = '/qar5/approval_signature/detail/' + getId(btn);
+    window.location.href = '/qar5/approval_signature/edit/' + getId(btn);
 }
 
 function removeApprovalSignature(btn) {

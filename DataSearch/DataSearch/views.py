@@ -198,14 +198,12 @@ class ExistingDataEdit(LoginRequiredMixin, UpdateView):
         edit privileges, either through super status or team membership.
         """
         pk = kwargs.get('pk')
-        data = ExistingData.objects.filter(id=pk).first()
-        if check_can_edit(data, request.user):
-            # We need to make sure we return a QappApproval form for editing:
-            object = ExistingData.objects.filter(id=pk).first()
+        object = ExistingData.objects.filter(id=pk).first()
+        if check_can_edit(object, request.user):
             return render(request, self.template_name,
                           {'object': object,
-                           'form': ExistingDataForm(
-                               instance=object, user=request.user)})
+                           'form': self.form_class(instance=object,
+                                                   user=request.user)})
 
         reason = 'You cannot edit this data.'
         return HttpResponseRedirect('/existingdata/detail/%s' % pk, 401, reason)
@@ -304,17 +302,14 @@ class ExistingDataDelete(LoginRequiredMixin, DeleteView):
     template_name = 'DataSearch/existing_data_confirm_delete.html'
     success_url = reverse_lazy('tracking_tool')
 
-    def get(self, request, *args, **kwargs):
-        """
-        Override the default get method so we can check if the user
-        has permission to edit (delete) this object.
-        """
-        pk = kwargs.get('pk', None)
-        if pk:
-            object = ExistingData.objects.filter(id=pk).first()
-            if object and check_can_edit(object, request.user):
-                return render(request, self.template_name, {'object': object})
-        return HttpResponseRedirect('/existingdata/detail/%s' % pk)
+    def dispatch(self, *args, **kwargs):
+        pk = kwargs.get('pk')
+        instance = ExistingData.objects.filter(id=pk).first()
+        if instance:
+            user = self.request.user
+            if check_can_edit(instance, user) or user.is_superuser:
+                return super().dispatch(*args, **kwargs)
+        return HttpResponseRedirect(self.success_url)
 
 
 def home(request):

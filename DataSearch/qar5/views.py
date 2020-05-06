@@ -24,7 +24,7 @@ from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, ListView, \
-    TemplateView, UpdateView
+    TemplateView, UpdateView, DeleteView
 from constants.qar5 import SECTION_A_INFO, SECTION_C_DEFAULTS, \
     C3_QUALITY_METRICS, SECTION_D_INFO, SECTION_E_INFO, SECTION_F_INFO
 from constants.qar5_sectionb import SECTION_B_INFO
@@ -278,6 +278,66 @@ class ProjectLeadCreate(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect('/qar5/detail/%s' % qapp_id, 401, reason)
 
 
+class ProjectLeadDelete(LoginRequiredMixin, DeleteView):
+    """Class view for deleting approval signatures."""
+
+    model = QappLead
+    template_name = 'SectionA/confirm_delete.html'
+
+    def get_success_url(self):
+        return '/qar5/detail/%s' % self.object.qapp.id
+
+    def dispatch(self, *args, **kwargs):
+        pk = kwargs.get('pk')
+        instance = QappLead.objects.filter(id=pk).first()
+        if instance:
+            user = self.request.user
+            if check_can_edit(instance.qapp, user) or user.is_superuser:
+                return super().dispatch(*args, **kwargs)
+        return HttpResponseRedirect(self.get_success_url)
+
+
+class ProjectLeadEdit(LoginRequiredMixin, UpdateView):
+    """Class view for editing project leads."""
+
+    model = QappLead
+    form_class = QappLeadForm
+    template_name  = 'SectionA/project_lead_create.html'
+
+    def get(self, request, *args, **kwargs):
+        """
+        Override default get request so we can verify the user has
+        edit privileges, either through super status or team membership.
+        """
+        pk = kwargs.get('pk')
+        object = self.model.objects.filter(id=pk).first()
+        if check_can_edit(object.qapp, request.user):
+            return render(request, self.template_name,
+                          {'object': object,
+                           'form': self.form_class(instance=object),
+                           'qapp_id': object.qapp.id})
+
+        reason = 'You cannot edit this data.'
+        return HttpResponseRedirect(
+            '/qar5/detail/%s' % object.qapp.id, 401, reason)
+
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a modified Existing Data form."""
+        pk = kwargs.get('pk')
+        instance = self.model.objects.filter(id=pk).first()
+        qapp = instance.qapp
+        if check_can_edit(qapp, request.user):
+            form = self.form_class(request.POST, instance=instance)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/qar5/detail/%s' % qapp.id)
+
+            return render(request, self.template_name, {'form': form})
+
+        reason = 'You cannot edit this data.'
+        return HttpResponseRedirect('/qar5/detail/%s' % qapp.id, 401, reason)
+
+
 class ProjectApprovalCreate(LoginRequiredMixin, CreateView):
     """
     Create the base approval page with no signatures.
@@ -400,6 +460,68 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
 
         reason = 'You cannot edit this QAPP.'
         return HttpResponseRedirect('/qar5/detail/%s' % qapp_id, 401, reason)
+
+
+class ProjectApprovalSignatureDelete(LoginRequiredMixin, DeleteView):
+    """Class view for deleting approval signatures."""
+
+    model = QappApprovalSignature
+    template_name = 'SectionA/confirm_delete.html'
+
+    def get_success_url(self):
+        return '/qar5/detail/%s' % self.object.qapp_approval.qapp.id
+
+    def dispatch(self, *args, **kwargs):
+        pk = kwargs.get('pk')
+        instance = QappApprovalSignature.objects.filter(id=pk).first()
+        if instance:
+            qapp = instance.qapp_approval.qapp
+            user = self.request.user
+            if check_can_edit(qapp, user) or user.is_superuser:
+                return super().dispatch(*args, **kwargs)
+        return HttpResponseRedirect(self.get_success_url)
+
+
+class ProjectApprovalSignatureEdit(LoginRequiredMixin, UpdateView):
+    """Class view for editing approval signatures."""
+
+    model = QappApprovalSignature
+    form_class  = QappApprovalSignatureForm
+    template_name  = 'SectionA/project_approval_signature_create.html'
+
+    def get(self, request, *args, **kwargs):
+        """
+        Override default get request so we can verify the user has
+        edit privileges, either through super status or team membership.
+        """
+        pk = kwargs.get('pk')
+        object = self.model.objects.filter(id=pk).first()
+        if check_can_edit(object.qapp_approval.qapp, request.user):
+            return render(request, self.template_name,
+                          {'object': object,
+                           'form': self.form_class(instance=object),
+                           'qapp_id': object.qapp_approval.qapp.id})
+
+        reason = 'You cannot edit this data.'
+        return HttpResponseRedirect(
+            '/qar5/detail/%s' % object.qapp_approval.qapp.id, 401, reason)
+
+    def post(self, request, *args, **kwargs):
+        """Process the post request with a modified Existing Data form."""
+        pk = kwargs.get('pk')
+        instance = self.model.objects.filter(id=pk).first()
+        qapp = instance.qapp_approval.qapp
+        if check_can_edit(qapp, request.user):
+            form = self.form_class(request.POST, instance=instance)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/qar5/detail/%s' % qapp.id)
+
+            return render(request, self.template_name, {'form': form})
+
+        reason = 'You cannot edit this data.'
+        return HttpResponseRedirect('/qar5/detail/%s' % qapp.id, 401, reason)
+
 
 
 class SectionAView(LoginRequiredMixin, TemplateView):
