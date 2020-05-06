@@ -16,6 +16,14 @@ function fromEditToDetail() {
 function rowClick(id) {
     $("tr").removeClass('table-active');
     $("#" + id).addClass('table-active');
-    $("i").removeAttr('disabled');
+    if (id.includes('project_approval')) {
+        $("i.lead").attr('disabled', true);
+        $("i.approval").removeAttr('disabled');
+    } else if (id.includes('project_lead')) {
+        $("i.approval").attr('disabled', true);
+        $("i.lead").removeAttr('disabled');
+    } else {
+        $("i").removeAttr('disabled');
+    }
     $("i").attr('id', id);
 }

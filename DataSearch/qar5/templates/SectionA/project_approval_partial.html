@@ -18,8 +18,8 @@
         <div class="col-md-12 my-2">
             <label class="col-sm-8 text-right">Manage Signatures:</label>
             <div class="col-sm-1 mr-2 float-right"><i onclick="addApprovalSignature({{object.id}})" class="fas fa-plus btn btn-sm btn-info"></i></div>
-            <div class="col-sm-1 mr-2 float-right"><i onclick="editApprovalSignature(this)" class="fas fa-edit btn btn-sm btn-warning" disabled></i></div>
-            <div class="col-sm-1 mr-2 float-right"><i onclick="removeApprovalSignature(this)" class="fas fa-minus btn btn-sm btn-danger" disabled></i></div>
+            <div class="col-sm-1 mr-2 float-right"><i onclick="editApprovalSignature(this)" class="fas fa-edit btn btn-sm btn-warning approval" disabled></i></div>
+            <div class="col-sm-1 mr-2 float-right"><i onclick="removeApprovalSignature(this)" class="fas fa-minus btn btn-sm btn-danger approval" disabled></i></div>
         </div>
     </div>
     {% endif %}
@@ -37,7 +37,7 @@
     {% if project_approval_signatures %}
     <tbody>
         {% for signature in project_approval_signatures %}
-        <tr id="{{signature.id}}" onclick="rowClick('{{signature.id}}')">
+        <tr id="project_approval-{{signature.id}}" onclick="rowClick('project_approval-{{signature.id}}')">
             <td scope="row">{{signature.name}}</td>
             {% if signature.contractor %}
             <td>Contractor</td>

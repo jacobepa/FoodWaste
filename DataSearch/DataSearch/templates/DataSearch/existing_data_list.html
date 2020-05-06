@@ -73,12 +73,6 @@
 
 {% block scripts %}
     <script>
-        //function rowClick(rowId) {
-        //    $("tr").removeClass('table-active');
-        //    $("#" + rowId).addClass('table-active');
-        //    $("i").removeAttr('disabled');
-        //    $("i").attr('id', rowId);
-        //}
         function viewEditExistingData(btn) {
             if ($(btn).attr('disabled')) return;
             window.location.href = '/existingdata/detail/' + $(btn).attr('id');
