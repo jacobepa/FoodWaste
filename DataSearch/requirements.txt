@@ -32,7 +32,7 @@ docutils==0.16                  # Modular system for processing documentation in
 # duecredit==0.8.0                # Citation of scientific software and methods, and limited visibility of donation requests for open-source software.
 flake8==3.7.9                   # Flake8 is a wrapper around these tools: PyFlakes; pycodestyle; Ned Batchelder's McCabe script.
 mccabe==0.6.1                   # McCabe checker, plugin for flake8.
-mod_wsgi==4.7.1
+# mod_wsgi==4.7.1
 numpy==1.18.2                   # NumPy: array processing for numbers, strings, records, and objects.
 openpyxl==3.0.3                 # Python library to read/write Excel 2010 xlsx/xlsm/xltx/xltm files.
 pep8==1.7.1                     # Tool to check your Python code against some of the style conventions in PEP 8.
