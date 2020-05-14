@@ -71,17 +71,7 @@ def export_pdf_single(request, *args, **kwargs):
         archive = ZipFile(zip_mem, 'w')
 
         # Always add the generated PDF from above first:
-        # Having trouble writing the PDF to archive due to bad encoding.
-        # Possible solution is to manually write byte string to a temporary
-        # file location, write that file to archive, then delete temp file.
-        temp_file_name = "/tmp/temp_%s.pdf" % filename
-        with open(temp_file_name, 'wb') as temp_file:
-            temp_file.write(result.getvalue())
-
-        archive.write(temp_file_name)
-
-        # Delete the tempfile after creating/writing/zipping it.
-        remove(temp_file_name)
+        archive.writestr(filename, result.getvalue())
 
         # Then add all attachments
         archive = add_attachments_to_zip(archive, attachment_ids)
@@ -136,7 +126,7 @@ def export_excel_single(request, *args, **kwargs):
         content_type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         response = HttpResponse(content_type=content_type)
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-        sheet.title = filename.split('.')[0]
+        sheet.title = slugify(filename.split('.')[0])
         workbook.save(response)
         response['filename'] = '%s.xlsx' % filename
 
@@ -150,8 +140,8 @@ def export_excel_single(request, *args, **kwargs):
             archive = add_attachments_to_zip(archive, attachment_ids)
 
             # Add excel to the zip
-            with tempfile.SpooledTemporaryFile() as tmp:
-                archive.writestr(filename, response.content)
+            #with tempfile.SpooledTemporaryFile() as tmp:
+            archive.writestr(filename, response.content)
 
             archive.close()
             response = HttpResponse(zip_mem.getvalue(), content_type='application/force-download')
