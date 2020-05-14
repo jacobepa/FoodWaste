@@ -78,17 +78,19 @@
             window.location.href = '/existingdata/detail/' + $(btn).attr('id');
         }
         function exportAllData(exportType) {
+            urlType = 'exportexcel'
             if (exportType === 'pdf')
-                window.location.href = '/existingdata/exportpdf/';
-            else if (exportType === 'docx') {
-                {% if team %}
-                window.location.href = '/existingdata/exportdocx/team/{{team.id}}';
-                {% elif p_user %}
-                window.location.href = '/existingdata/exportdocx/user/{{p_user.id}}';
-                {% endif %}
-            }
+                urlType = 'exportpdf'
+            else if (exportType === 'docx')
+                urlType = 'exportdocx'
             else
-                window.location.href = '/existingdata/exportexcel/';
+                urlType = 'exportexcel'
+            
+            {% if team %}
+            window.location.href = '/existingdata/' + urlType + '/team/{{team.id}}';
+            {% elif p_user %}
+            window.location.href = '/existingdata/' + urlType + '/user/{{p_user.id}}';
+            {% endif %}
         }
     </script>
 {% endblock %}
