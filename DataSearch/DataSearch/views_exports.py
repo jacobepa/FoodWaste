@@ -54,10 +54,6 @@ def export_pdf_single(request, *args, **kwargs):
             cmd_options={},
         )
 
-        #resp['filename'] = '%s.zip' % filename
-        #if not attachment_ids or len(attachment_ids) == 0:
-        #    return resp
-
         # Else we need to create a PDF from template without sending response
         html = template.render(context_dict)
         result = BytesIO()
@@ -284,11 +280,13 @@ def export(request, *args, **kwargs):
                 with tempfile.SpooledTemporaryFile() as tmp:
                     archive.writestr(temp_file_name, resp.content)
 
+        username = User.objects.filter(id=user_id).values('username').first()['username']
+
         archive.close()
         response = HttpResponse(
             zip_mem.getvalue(), content_type='application/force-download')
         response['Content-Disposition'] = \
-            'attachment; filename="%s_datasearches.zip"' % request.user.username
+            'attachment; filename="%s_datasearches.zip"' % username
         response['Content-length'] = zip_mem.tell()
         return response
     
