@@ -15,7 +15,7 @@ Available functions:
 
 from django.contrib import admin
 from qar5.forms import QappForm
-from qar5.models import Qapp
+from qar5.models import Qapp, SectionA, SectionB, SectionD, References, Revision
 
 
 class QappAdmin(admin.ModelAdmin):
@@ -42,6 +42,16 @@ class QappAdmin(admin.ModelAdmin):
         if not obj.pk:
             obj.prepared_by = request.user
         return super().save_model(request, obj, form, change)
-
+    
 
 admin.site.register(Qapp, QappAdmin)
+
+admin.site.register(SectionA)
+
+admin.site.register(SectionB)
+
+admin.site.register(SectionD)
+
+admin.site.register(References)
+
+admin.site.register(Revision)
