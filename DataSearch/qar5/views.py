@@ -450,7 +450,7 @@ class ProjectApprovalSignatureCreate(LoginRequiredMixin, CreateView):
         approval = QappApproval.objects.get(id=approval_id)
         qapp_id = approval.qapp.id
 
-        if check_can_edit(qapp, request.user):
+        if check_can_edit(approval.qapp, request.user):
             if form.is_valid():
                 obj = form.save(commit=True)
                 return HttpResponseRedirect(

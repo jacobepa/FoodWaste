@@ -26,68 +26,61 @@ from DataSearch.settings import APP_DISCLAIMER
 from DataSearch.views import get_existing_data_team, get_existing_data_user
 
 
-def export_pdf(request, *args, **kwargs):
+def export_pdf_single(request, *args, **kwargs):
     """Function to export Existing  Data as a PDF document."""
     data_id = kwargs.get('pk', None)
-    if data_id is None:
-        # Export ALL ExistingData available for this user to PDF.
-        data = get_existing_data_all()
-        template = get_template('DataSearch/existing_data_pdf_multi.html')
-        filename = 'export_existingdata_%s.pdf' % request.user.username
-        attachment_ids = DataAttachmentMap.objects.all().values_list(
-            'attachment', flat=True)
-    else:
+    if data_id:
         data = ExistingData.objects.get(id=data_id)
         template = get_template('DataSearch/existing_data_pdf.html')
+
         filename = 'export_%s.pdf' % data.source_title
         # get attachment_ids related to just this data id
         attachment_ids = DataAttachmentMap.objects.filter(
             data_id=data_id).values_list('attachment', flat=True)
 
-    context_dict = {'object': data}
+        context_dict = {'object': data}
 
-    # NOTE: If returning attachments alongside the PDF, we will need to
-    # redesign the PDF downloader. As it stands, the PDF is downloaded with
-    # each response. We need a way to create the PDF before sending the
-    # response, then we can combine all files (PDF and attachments), then
-    # return them all at once.
-    resp = PDFTemplateResponse(
-        request=request,
-        template=template,
-        filename=filename,
-        context=context_dict,
-        show_content_in_browser=False,
-        cmd_options={},
-    )
-    if not attachment_ids or len(attachment_ids) == 0:
-        return resp
+        # NOTE: If returning attachments alongside the PDF, we will need to
+        # redesign the PDF downloader. As it stands, the PDF is downloaded with
+        # each response. We need a way to create the PDF before sending the
+        # response, then we can combine all files (PDF and attachments), then
+        # return them all at once.
+        resp = PDFTemplateResponse(
+            request=request,
+            template=template,
+            filename=filename,
+            context=context_dict,
+            show_content_in_browser=False,
+            cmd_options={},
+        )
 
-    # Else we need to create a PDF from template without sending response
-    html = template.render(context_dict)
-    result = BytesIO()
-    content = BytesIO(html.encode('utf-8'))
-    pdf = pisa.pisaDocument(content, result)
-    if pdf.err:
-        return resp
+        # Else we need to create a PDF from template without sending response
+        html = template.render(context_dict)
+        result = BytesIO()
+        content = BytesIO(html.encode('utf-8'))
+        pdf = pisa.pisaDocument(content, result)
+        if pdf.err:
+            return resp
 
-    # Create a zip archive to return multiple files: PDF, n attachments.
-    zip_mem = BytesIO()
-    archive = ZipFile(zip_mem, 'w')
+        # Create a zip archive to return multiple files: PDF, n attachments.
+        zip_mem = BytesIO()
+        archive = ZipFile(zip_mem, 'w')
 
-    # Always add the generated PDF from above first:
-    # Having trouble writing the PDF to archive due to bad encoding.
-    # Possible solution is to manually write byte string to a temporary
-    # file location, write that file to archive, then delete temp file.
-    temp_file_name = "/tmp/temp_%s.pdf" % filename
-    with open(temp_file_name, 'wb') as temp_file:
-        temp_file.write(result.getvalue())
+        # Always add the generated PDF from above first:
+        archive.writestr(filename, result.getvalue())
 
-    archive.write(temp_file_name)
+        # Then add all attachments
+        archive = add_attachments_to_zip(archive, attachment_ids)
 
-    # Delete the tempfile after creating/writing/zipping it.
-    remove(temp_file_name)
+        archive.close()
+        response = HttpResponse(zip_mem.getvalue(), content_type='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename="%s.zip"' % filename
+        response['Content-length'] = zip_mem.tell()
+        response['filename'] = '%s.zip' % filename
+        return response
 
-    # Then add all attachments
+
+def add_attachments_to_zip(archive, attachment_ids):
     for a_id in attachment_ids:
         # Get the actual file from server file system
         attachment = Attachment.objects.get(id=a_id)
@@ -98,91 +91,61 @@ def export_pdf(request, *args, **kwargs):
             archive.write(file.name, path.basename(file.name))
         except FileNotFoundError:
             print('Attachment File Not Found!')
-
-    archive.close()
-    response = HttpResponse(zip_mem.getvalue(), content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="%s.zip"' % filename
-    response['Content-length'] = zip_mem.tell()
-    return response
+    return archive
 
 
-def export_excel(request, *args, **kwargs):
+def export_excel_single(request, *args, **kwargs):
     """Function to export Existing Existing Data as an Excel sheet."""
     data_id = kwargs.get('pk', None)
-    if data_id is None:
-        # Export ALL ExistingData available for this user to Excel.
-        data = get_existing_data_all()
-        filename = 'export_existingdata_%s.xlsx' % request.user.username
+    if data_id:
+        data = ExistingData.objects.get(id=data_id)
+        filename = 'export_%s.xlsx' % data.source_title
+        workbook = Workbook()
+        sheet = workbook.active
+        row = 1
 
-    else:
-        data = [ExistingData.objects.get(id=data_id)]
-        filename = 'export_%s.xlsx' % data[0].source_title
-
-    workbook = Workbook()
-    sheet = workbook.active
-    row = 1
-
-    for datum in data:
         # Optionally add colors formatting before writing to cells.
         # Programmatically write results to the PDF.
-        for name, value in datum.get_fields():
+        for name, value in data.get_fields():
             sheet.cell(row=row, column=1).value = name
             sheet.cell(row=row, column=2).value = value
             row += 1
 
-        if datum.disclaimer_req:
+        if data.disclaimer_req:
             sheet.cell(row=row, column=1).value = 'Disclaimer'
             repl_str = '\n                    '
             # Replace '\n                    ' with ' ' in the disclaimer
             sheet.cell(row=row, column=2).value = APP_DISCLAIMER.replace(repl_str, ' ')
 
-        row += 1  # Add a blank space between each individual Data set
 
-    # Now return the generated excel sheet to be downloaded.
-    content_type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    response = HttpResponse(content_type=content_type)
-    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-    sheet.title = filename.split('.')[0]
-    workbook.save(response)
-    return response
+        # If no attachments, return the generated excel sheet.
+        content_type = 'application/vnd.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        response = HttpResponse(content_type=content_type)
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        sheet.title = slugify(filename.split('.')[0])
+        workbook.save(response)
+        response['filename'] = '%s.xlsx' % filename
 
+        # get attachment_ids related to just this data id
+        attachment_ids = DataAttachmentMap.objects.filter(
+            data_id=data_id).values_list('attachment', flat=True)
+        if attachment_ids:
+            # Create a zip archive to return multiple files: PDF, n attachments.
+            zip_mem = BytesIO()
+            archive = ZipFile(zip_mem, 'w')
+            archive = add_attachments_to_zip(archive, attachment_ids)
 
-def export_docx(request, *args, **kwargs):
-    """Function to export Existing Existing Data as a Word doc."""
-    if 'user' in request.path:
-        user_id = kwargs.get('pk', None)
-        team_id = data_id = None
-    elif 'team' in request.path:
-        team_id = kwargs.get('pk', None)
-        user_id = data_id = None
-    else:
-        data_id = kwargs.get('pk', None)
-        team_id = user_id = None
+            # Add excel to the zip
+            #with tempfile.SpooledTemporaryFile() as tmp:
+            archive.writestr(filename, response.content)
 
-    if data_id is None or user_id or team_id:
-        if user_id:
-            data_ids = get_existing_data_user(
-                user_id).values_list('id', flat=True)
-        else:
-            data_ids = get_existing_data_team(
-                team_id).values_list('id', flat=True)
+            archive.close()
+            response = HttpResponse(zip_mem.getvalue(), content_type='application/force-download')
+            response['Content-Disposition'] = 'attachment; filename="%s.zip"' % filename
+            response['Content-length'] = zip_mem.tell()
+            response['filename'] = '%s.zip' % filename
+            return response
 
-        zip_mem = BytesIO()
-        archive = ZipFile(zip_mem, 'w')
-        for id in data_ids:
-            resp = export_doc_single(request, pk=id)
-            filename = resp['filename']
-            if filename:
-                temp_file_name = '%d_%s' % (id, filename)
-                with tempfile.SpooledTemporaryFile() as tmp:
-                    archive.writestr(temp_file_name, resp.content)
-
-        archive.close()
-        response = HttpResponse(
-            zip_mem.getvalue(), content_type='application/force-download')
-        response['Content-Disposition'] = \
-            'attachment; filename="%s_datasearches.zip"' % request.user.username
-        response['Content-length'] = zip_mem.tell()
         return response
 
 
@@ -276,3 +239,55 @@ def export_doc_single(request, *args, **kwargs):
     response['Content-length'] = zip_mem.tell()
     response['filename'] = '%s.zip' % filename
     return response
+
+
+
+def export(request, *args, **kwargs):
+    """Function to export multiple Existing Data as a zip file of the provided formats."""
+    if 'user' in request.path:
+        user_id = kwargs.get('pk', None)
+        team_id = data_id = None
+    elif 'team' in request.path:
+        team_id = kwargs.get('pk', None)
+        user_id = data_id = None
+    else:
+        data_id = kwargs.get('pk', None)
+        team_id = user_id = None
+
+    if data_id is None or user_id or team_id:
+        if user_id:
+            data_ids = get_existing_data_user(
+                user_id).values_list('id', flat=True)
+        else:
+            data_ids = get_existing_data_team(
+                team_id).values_list('id', flat=True)
+
+        # TODO: Determine file type to set the method type
+        if 'docx' in request.path:
+            export_funct = export_doc_single
+        elif 'pdf' in request.path:
+            export_funct = export_pdf_single
+        else:
+            export_funct = export_excel_single
+
+        zip_mem = BytesIO()
+        archive = ZipFile(zip_mem, 'w')
+        for id in data_ids:
+            resp = export_funct(request, pk=id)
+            filename = resp['filename']
+            if filename:
+                temp_file_name = '%d_%s' % (id, filename)
+                with tempfile.SpooledTemporaryFile() as tmp:
+                    archive.writestr(temp_file_name, resp.content)
+
+        username = User.objects.filter(id=user_id).values('username').first()['username']
+
+        archive.close()
+        response = HttpResponse(
+            zip_mem.getvalue(), content_type='application/force-download')
+        response['Content-Disposition'] = \
+            'attachment; filename="%s_datasearches.zip"' % username
+        response['Content-length'] = zip_mem.tell()
+        return response
+    
+    return HttpResponseRedirect(request)
