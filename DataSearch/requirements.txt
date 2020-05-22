@@ -1,4 +1,4 @@
-# Check Python versions = "version Python 3.7.4 (64-bit)."
+# Check Python versions = "version Python 3.8.2 (64-bit)."
 # This requirements document was generated in the following way:
 # 1. Create a new python virtual environment.
 # 2. Install packages in this environment from the previous requirements file in Github
