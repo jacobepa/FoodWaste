@@ -3,7 +3,6 @@
 # coding=utf-8
 # young.daniel@epa.gov
 # py-lint: disable=W0511,R0904
-
 """
 This file demonstrates writing tests using the unittest module.
 
@@ -44,34 +43,48 @@ class TestViewAuthenticated(TestCase):
         self.client = Client()
         # User 1 created the team, User 2 created ExistingData,
         # User 3 has no privileges
-        self.user1 = User.objects.create_user(
-            username='testuser1', password='12345')
-        self.user2 = User.objects.create_user(
-            username='testuser2', password='12345')
-        self.user3 = User.objects.create_user(
-            username='testuser3', password='12345')
-        self.client.login(username='dyoung11', password='***REMOVED***')
+        self.user1 = User.objects.create_user(username='testuser1',
+                                              password='12345')
+        self.user2 = User.objects.create_user(username='testuser2',
+                                              password='12345')
+        self.user3 = User.objects.create_user(username='testuser3',
+                                              password='12345')
+        self.client.login(username='testuser1', password='12345')
         self.user = User.objects.get(id=1)
         self.team = Team.objects.create(created_by=self.user1, name='testteam')
-        TeamMembership.objects.create(
-            member=self.user1, team=self.team, is_owner=True, can_edit=True)
+        TeamMembership.objects.create(member=self.user1,
+                                      team=self.team,
+                                      is_owner=True,
+                                      can_edit=True)
         # Build some models to be used in this test class:
         self.source = ExistingDataSource.objects.get(id=1)
         self.data_dict = {
-            'work': self.test_str, 'email': self.test_str,
+            'work': self.test_str,
+            'email': self.test_str,
             'phone': self.test_str,
-            'search': self.test_str, 'source': self.source,
-            'source_title': self.test_str, 'keywords': self.test_str,
-            'url': self.test_str, 'disclaimer_req': True,
+            'search': self.test_str,
+            'source': self.source,
+            'source_title': self.test_str,
+            'keywords': self.test_str,
+            'url': self.test_str,
+            'disclaimer_req': True,
             'citation': self.test_str,
-            'comments': self.test_str, 'created_by': self.user2, 'teams': []}
-        self.dat = ExistingData.objects.create(
-            work=self.test_str, email=self.test_str, phone=self.test_str,
-            search=self.test_str, source=self.source,
-            source_title=self.test_str,
-            keywords=self.test_str, url=self.test_str, disclaimer_req=False,
-            citation=self.test_str, comments=self.test_str,
-            created_by=self.user2)
+            'comments': self.test_str,
+            'created_by': self.user2,
+            'teams': []
+        }
+        self.dat = ExistingData.objects.create(work=self.test_str,
+                                               email=self.test_str,
+                                               phone=self.test_str,
+                                               search=self.test_str,
+                                               source=self.source,
+                                               source_title=self.test_str,
+                                               keywords=self.test_str,
+                                               url=self.test_str,
+                                               disclaimer_req=False,
+                                               citation=self.test_str,
+                                               comments=self.test_str,
+                                               created_by=self.user2)
         self.dat_team_map = ExistingDataSharingTeamMap.objects.create(
             data=self.dat, team=self.team, can_edit=True)
         self.dat.teams.add(self.dat_team_map.team)
@@ -82,10 +95,11 @@ class TestViewAuthenticated(TestCase):
     def test_home(self):
         """Tests loading the home page."""
         response = self.client.get('/')
-        self.assertContains(
-            response, 'Existing Data and Information Search Tool', 2, 200)
-        self.assertContains(
-            response, 'CESER QAPP Builder for Category A or B', 1, 200)
+        self.assertContains(response,
+                            'Existing Data and Information Search Tool', 2,
+                            200)
+        self.assertContains(response, 'CESER QAPP Builder for Category A or B',
+                            1, 200)
 
     def test_contact(self):
         """Tests loading the contact page."""
@@ -93,22 +107,22 @@ class TestViewAuthenticated(TestCase):
         self.assertContains(response,
                             'Environmental Decision Analytics Branch (EDAB)',
                             1, 200)
-        self.assertContains(
-            response, 'Plastics Projects Research (EDAB)', 1, 200)
+        self.assertContains(response, 'Plastics Projects Research (EDAB)', 1,
+                            200)
 
     def test_web_dev_tools_get(self):
         """Tests loading the dev tools page."""
         response = self.client.get('/dev')
         self.assertContains(response, 'QAPP Module Management', 1, 200)
-        self.assertContains(
-            response, 'Clean Extra Spaces from QAPP Data', 1, 200)
+        self.assertContains(response, 'Clean Extra Spaces from QAPP Data', 1,
+                            200)
 
     def test_clean_qapps(self):
         """Test the clean qapps function."""
         response = self.client.get('/dev/clean_qapps')
         self.assertContains(response, 'QAPP Module Management', 1, 200)
-        self.assertContains(
-            response, 'Clean Extra Spaces from QAPP Data', 1, 200)
+        self.assertContains(response, 'Clean Extra Spaces from QAPP Data', 1,
+                            200)
 
     def test_get_existing_data_all(self):
         """Test the function to return all existing data objects."""
@@ -172,17 +186,17 @@ class TestViewAuthenticated(TestCase):
         """Test loading the Existing Data index page."""
         response = self.client.get('/existingdata')
         self.assertContains(response, 'Existing Data Tracking Tool', 1, 200)
-        self.assertContains(
-            response, 'Existing Data and Information Research Projects',
-            1, 200)
+        self.assertContains(response,
+                            'Existing Data and Information Research Projects',
+                            1, 200)
         self.assertContains(response, 'View existing entries for...', 1, 200)
         self.assertContains(response, 'New Team', 1, 200)
         self.assertContains(response, 'New Data Entry', 1, 200)
 
     def test_existingdata_list_user(self):
         """Test loading the list of Existing Data for a specified user."""
-        response = self.client.get(
-            '/existingdata/list/user/' + str(self.user.id))
+        response = self.client.get('/existingdata/list/user/' +
+                                   str(self.user.id))
         self.assertContains(response, 'Existing Data Tracking Tool', 1, 200)
         self.assertContains(response, 'View or Edit Existing Data', 1, 200)
         self.assertContains(response, 'Export All Data to Docx', 1, 200)
@@ -191,8 +205,8 @@ class TestViewAuthenticated(TestCase):
 
     def test_existingdata_list_team(self):
         """Test loading the list of Existing Data for a specified team."""
-        response = self.client.get(
-            '/existingdata/list/team/' + str(self.team.id))
+        response = self.client.get('/existingdata/list/team/' +
+                                   str(self.team.id))
         self.assertContains(response, 'Existing Data Tracking Tool', 1, 200)
         self.assertContains(response, 'View or Edit Existing Data', 1, 200)
         self.assertContains(response, 'Export All Data to Docx', 1, 200)
@@ -213,10 +227,11 @@ class TestViewAuthenticated(TestCase):
         Test loading details page for a specified existing data object,
         called from the team list page.
         """
-        header = {'HTTP_REFERER': '/existingdata/list/team/' +
-                  str(self.team.id)}
-        response = self.client.get('/existingdata/detail/' +
-                                   str(self.dat.id), **header)
+        header = {
+            'HTTP_REFERER': '/existingdata/list/team/' + str(self.team.id)
+        }
+        response = self.client.get('/existingdata/detail/' + str(self.dat.id),
+                                   **header)
         self.assertContains(response, 'Details for Existing Data', 1, 200)
         self.assertContains(response, 'Export to Docx', 1, 200)
         self.assertContains(response, 'Export to PDF', 1, 200)
@@ -230,10 +245,11 @@ class TestViewAuthenticated(TestCase):
         Test loading details page for a specified existing data object,
         called from the user list page.
         """
-        header = {'HTTP_REFERER': '/existingdata/list/user/' +
-                  str(self.user.id)}
-        response = self.client.get('/existingdata/detail/' +
-                                   str(self.dat.id), **header)
+        header = {
+            'HTTP_REFERER': '/existingdata/list/user/' + str(self.user.id)
+        }
+        response = self.client.get('/existingdata/detail/' + str(self.dat.id),
+                                   **header)
         self.assertContains(response, 'Details for Existing Data', 1, 200)
         self.assertContains(response, 'Export to Docx', 1, 200)
         self.assertContains(response, 'Export to PDF', 1, 200)
@@ -247,13 +263,14 @@ class TestViewAuthenticated(TestCase):
         Test loading details page for a specified existing data object
         where the requesting user doesn't have edit permissions.
         """
-        header = {'HTTP_REFERER': '/existingdata/list/user/' +
-                  str(self.user.id)}
+        header = {
+            'HTTP_REFERER': '/existingdata/list/user/' + str(self.user.id)
+        }
         path = '/existingdata/detail/' + str(self.dat.id)
         request = self.request_factory.get(path, **header)
         request.user = self.user3
-        response = ExistingDataDetail.as_view()(
-            pk=str(self.dat.id), request=request)
+        response = ExistingDataDetail.as_view()(pk=str(self.dat.id),
+                                                request=request)
         self.assertContains(response, 'Details for Existing Data', 1, 200)
         self.assertContains(response, 'Export to Docx', 1, 200)
         self.assertContains(response, 'Export to PDF', 1, 200)
@@ -278,8 +295,8 @@ class TestViewAuthenticated(TestCase):
         request = self.request_factory.get('/existingdata/edit/' +
                                            str(self.dat.id))
         request.user = self.user3
-        response = ExistingDataEdit.as_view()(
-            pk=str(self.dat.id), request=request)
+        response = ExistingDataEdit.as_view()(pk=str(self.dat.id),
+                                              request=request)
         self.assertEqual(response.status_code, 302)
 
     def test_existingdata_edit_post(self):
@@ -296,8 +313,8 @@ class TestViewAuthenticated(TestCase):
         path = '/existingdata/edit/' + str(self.dat.id)
         request = self.request_factory.post(path, data=self.data_dict)
         request.user = self.user3
-        response = ExistingDataEdit.as_view()(
-            pk=str(self.dat.id), request=request)
+        response = ExistingDataEdit.as_view()(pk=str(self.dat.id),
+                                              request=request)
         self.assertEqual(response.status_code, 302)
 
     def test_existing_form_process_teams_attachments(self):
@@ -308,11 +325,14 @@ class TestViewAuthenticated(TestCase):
         data_dict = self.data_dict
         # Set a new team
         team = Team.objects.create(created_by=self.user1, name='testteam2')
-        TeamMembership.objects.create(member=self.user1, team=team,
-                                      is_owner=True, can_edit=True)
+        TeamMembership.objects.create(member=self.user1,
+                                      team=team,
+                                      is_owner=True,
+                                      can_edit=True)
         data_dict['teams'].append(team.id)
-        form = ExistingDataForm(
-            self.data_dict, user=self.user1, instance=self.dat)
+        form = ExistingDataForm(self.data_dict,
+                                user=self.user1,
+                                instance=self.dat)
         clean = form.is_valid()
         self.assertTrue(clean)
 
@@ -322,7 +342,8 @@ class TestViewAuthenticated(TestCase):
         # Set up some attachments
         request.FILES['file'] = self.file
 
-        response = existing_form_process_teams_attachments(request, form,
+        response = existing_form_process_teams_attachments(request,
+                                                           form,
                                                            instance=self.dat)
         self.assertTrue(isinstance(response, ExistingData))
 
@@ -355,13 +376,18 @@ class TestViewAuthenticated(TestCase):
 
     def test_existing_data_delete(self):
         """Test Delete ExistingData with a valid PK"""
-        obj = ExistingData.objects.create(
-            work=self.test_str, email=self.test_str, phone=self.test_str,
-            search=self.test_str, source=self.source,
-            source_title=self.test_str,
-            keywords=self.test_str, url=self.test_str, disclaimer_req=False,
-            citation=self.test_str, comments=self.test_str,
-            created_by=self.user2)
+        obj = ExistingData.objects.create(work=self.test_str,
+                                          email=self.test_str,
+                                          phone=self.test_str,
+                                          search=self.test_str,
+                                          source=self.source,
+                                          source_title=self.test_str,
+                                          keywords=self.test_str,
+                                          url=self.test_str,
+                                          disclaimer_req=False,
+                                          citation=self.test_str,
+                                          comments=self.test_str,
+                                          created_by=self.user2)
         response = self.client.post(f'/existingdata/delete/{obj.id}')
         self.assertEqual(response.status_code, 302)
 
@@ -372,9 +398,11 @@ class TestViewAuthenticated(TestCase):
 
     def test_attachments_download_1(self):
         """Test attachments download function, download all attachments."""
-        att1 = Attachment.objects.create(name='Test1', file=self.file,
+        att1 = Attachment.objects.create(name='Test1',
+                                         file=self.file,
                                          uploaded_by=self.user1)
-        att2 = Attachment.objects.create(name='Test2', file=self.file,
+        att2 = Attachment.objects.create(name='Test2',
+                                         file=self.file,
                                          uploaded_by=self.user1)
         self.dat.attachments.add(att1)
         self.dat.attachments.add(att2)
@@ -385,7 +413,8 @@ class TestViewAuthenticated(TestCase):
 
     def test_attachments_download_2(self):
         """Test attachments download function, download one attachment."""
-        att = Attachment.objects.create(name='Test3', file=self.file,
+        att = Attachment.objects.create(name='Test3',
+                                        file=self.file,
                                         uploaded_by=self.user1)
         self.dat.attachments.add(att)
         path = f'/existingdata/download_attachment/{self.dat.id}/{att.id}/'
@@ -398,7 +427,8 @@ class TestViewAuthenticated(TestCase):
         Test attachment delete function.
         Function redirects to Details page.
         """
-        att = Attachment.objects.create(name='Test', file=self.file,
+        att = Attachment.objects.create(name='Test',
+                                        file=self.file,
                                         uploaded_by=self.user1)
         self.dat.attachments.add(att)
         path = f'/existingdata/delete_attachment/{self.dat.id}/{att.id}/'

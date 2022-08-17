@@ -3,7 +3,6 @@
 # coding=utf-8
 # young.daniel@epa.gov
 # py-lint: disable=C0301
-
 """
 This file houses test cases for the FLOWSA module.
 
@@ -35,15 +34,21 @@ class TestFlowsa(TestCase):
         """Prepare various objects for this class of tests."""
         self.request_factory = RequestFactory()
         self.test_str = 'Test'
-        self.client.login(username='dyoung11', password='***REMOVED***')
-        self.user = User.objects.get(id=1)
+        self.user = User.objects.create_user(username='testuser',
+                                             password='12345')
+        self.client.login(username='testuser', password='12345')
         self.file = SimpleUploadedFile('test.txt', b'This is a test file.')
-        self.upload_1 = Upload.objects.create(
-            name=self.test_str, file=self.file, uploaded_by=self.user)
-        self.upload_2 = Upload.objects.create(
-            name=self.test_str, file=self.file, uploaded_by=self.user)
-        self.upload_dict = {'name': self.test_str, 'file': self.file,
-                            'uploaded_by': self.user}
+        self.upload_1 = Upload.objects.create(name=self.test_str,
+                                              file=self.file,
+                                              uploaded_by=self.user)
+        self.upload_2 = Upload.objects.create(name=self.test_str,
+                                              file=self.file,
+                                              uploaded_by=self.user)
+        self.upload_dict = {
+            'name': self.test_str,
+            'file': self.file,
+            'uploaded_by': self.user
+        }
 
     ############################
     # START test models section
@@ -90,8 +95,9 @@ class TestFlowsa(TestCase):
 
     def test_flowsa_delete(self):
         """Test the delete method for flowsa uploads."""
-        upload = Upload.objects.create(
-            name=self.test_str, file=self.file, uploaded_by=self.user)
+        upload = Upload.objects.create(name=self.test_str,
+                                       file=self.file,
+                                       uploaded_by=self.user)
         pk = upload.id
         # Delete the file and check the return code is good.
         response = self.client.get(f'/flowsa/delete_file/{pk}/')
