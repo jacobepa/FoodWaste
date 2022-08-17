@@ -1,109 +1,103 @@
-﻿{% extends "main/base.html" %}
-
-{% block content %}
+﻿{% extends "main/base.html" %} {% block content %}
 
 <div class="container">
-    {% if edit_message %}
-    <div class="row text-danger">
-        {{edit_message}}
-    </div>
-    {% endif %}
-    <div class="row">
-        <div class="col-md-12">
-            <form enctype="multipart/form-data" action="/existingdata/edit/{{object.id}}" method="post" role="form">
-                {% csrf_token %}
-                <div class="form-group">
-                    <div class="col-sm-3">
-                        <label for="" class="col-sm-12 control-label">{{form.teams.label}}</label>
-                        <a href="{% url 'team_create' %}" class="col-sm-8 btn btn-sm btn-success">
-                            <span class="glyphicon glyphicon-plus"></span>
-                            Create Team
-                        </a>
-                    </div>
-                    <div class="col-sm-9">{{form.teams}}</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="" class="col-sm-3 control-label">{{form.work.label}}</label>
-                    <div class="col-sm-9">{{form.work}}</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="" class="col-sm-3 control-label">{{form.email.label}}</label>
-                    <div class="col-sm-9">{{form.email}}</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="" class="col-sm-3 control-label">{{form.phone.label}}</label>
-                    <div class="col-sm-9">{{form.phone}}</div>
-                </div>
-
-                <div class="form-group col-sm-12 mt-2">
-                    <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
-                    <div class="col-sm-9">
-                        <div class="col-sm-11">{{form.search}}</div>
-                    </div>
-                </div>
-
-                <div class="form-group col-sm-12 hidden-div">
-                    <label for="" class="col-sm-3 control-label">{{form.source.label}}</label>
-                    <div class="col-sm-9">{{form.source}}</div>
-                </div>
-
-                <div class="form-group col-sm-12 hidden-div">
-                    <label for="" class="col-sm-3 control-label">{{form.source_title.label}}</label>
-                    <div class="col-sm-9">{{form.source_title}}</div>
-                </div>
-
-                <div class="form-group col-sm-12 hidden-div">
-                    <label for="" class="col-sm-3 control-label">{{form.keywords.label}}</label>
-                    <div class="col-sm-9">{{form.keywords}}</div>
-                </div>
-
-                <div class="form-group col-sm-12 hidden-div">
-                    <label for="" class="col-sm-3 control-label">{{form.url.label}}</label>
-                    <div class="col-sm-9">{{form.url}}</div>
-                </div>
-
-                <div class="form-group col-sm-12 hidden-div">
-                    <label for="" class="col-sm-3 control-label">{{form.disclaimer_req.label}}</label>
-                    <div class="col-sm-9">{{form.disclaimer_req}}</div>
-                </div>
-
-                <div class="form-group col-sm-12 hidden-div">
-                    <label for="" class="col-sm-3 control-label">{{form.citation.label}}</label>
-                    <div class="col-sm-9">{{form.citation}}</div>
-                </div>
-
-                <div class="form-group col-sm-12 hidden-div">
-                    <label for="" class="col-sm-3 control-label">{{form.comments.label}}</label>
-                    <div class="col-sm-9">{{form.comments}}</div>
-                </div>
-
-                <div class="form-group col-sm-12">
-                    <label class="col-sm-3" for="id_attachments">{{form.attachments.label}}</label>
-                    <div class="col-sm-9">
-                        {{form.attachments}}
-                        <label class="custom-file-label" for="id_attachments">Select a file...</label>
-                    </div>
-                </div>
-
-                {% include 'edit_buttons_partial.html' %}
-            </form>
+  {% if edit_message %}
+  <div class="row text-danger">{{edit_message}}</div>
+  {% endif %}
+  <div class="row">
+    <div class="col-md-12">
+      <form enctype="multipart/form-data" action="/existingdata/edit/{{object.id}}" method="post" role="form">
+        {% csrf_token %}
+        <div class="form-group">
+          <div class="col-sm-3">
+            <label for="" class="col-sm-12 control-label">{{form.teams.label}}</label>
+            <a href="{% url 'team_create' %}" class="col-sm-8 btn btn-sm btn-success">
+              <span class="glyphicon glyphicon-plus"></span>
+              Create Team
+            </a>
+          </div>
+          <div class="col-sm-9">{{form.teams}}</div>
         </div>
+
+        <div class="form-group">
+          <label for="" class="col-sm-3 control-label">{{form.work.label}}</label>
+          <div class="col-sm-9">{{form.work}}</div>
+        </div>
+
+        <div class="form-group">
+          <label for="" class="col-sm-3 control-label">{{form.email.label}}</label>
+          <div class="col-sm-9">{{form.email}}</div>
+        </div>
+
+        <div class="form-group">
+          <label for="" class="col-sm-3 control-label">{{form.phone.label}}</label>
+          <div class="col-sm-9">{{form.phone}}</div>
+        </div>
+
+        <div class="form-group col-sm-12 mt-2">
+          <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
+          <div class="col-sm-9">
+            <div class="col-sm-11">{{form.search}}</div>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-12 hidden-div">
+          <label for="" class="col-sm-3 control-label">{{form.source.label}}</label>
+          <div class="col-sm-9">{{form.source}}</div>
+        </div>
+
+        <div class="form-group col-sm-12 hidden-div">
+          <label for="" class="col-sm-3 control-label">{{form.source_title.label}}</label>
+          <div class="col-sm-9">{{form.source_title}}</div>
+        </div>
+
+        <div class="form-group col-sm-12 hidden-div">
+          <label for="" class="col-sm-3 control-label">{{form.keywords.label}}</label>
+          <div class="col-sm-9">{{form.keywords}}</div>
+        </div>
+
+        <div class="form-group col-sm-12 hidden-div">
+          <label for="" class="col-sm-3 control-label">{{form.url.label}}</label>
+          <div class="col-sm-9">{{form.url}}</div>
+        </div>
+
+        <div class="form-group col-sm-12 hidden-div">
+          <label for="" class="col-sm-3 control-label">{{form.disclaimer_req.label}}</label>
+          <div class="col-sm-9">{{form.disclaimer_req}}</div>
+        </div>
+
+        <div class="form-group col-sm-12 hidden-div">
+          <label for="" class="col-sm-3 control-label">{{form.citation.label}}</label>
+          <div class="col-sm-9">{{form.citation}}</div>
+        </div>
+
+        <div class="form-group col-sm-12 hidden-div">
+          <label for="" class="col-sm-3 control-label">{{form.comments.label}}</label>
+          <div class="col-sm-9">{{form.comments}}</div>
+        </div>
+
+        <div class="form-group col-sm-12">
+          <label class="col-sm-3" for="id_attachments">{{form.attachments.label}}</label>
+          <div class="col-sm-9">
+            {{form.attachments}}
+            <label class="custom-file-label" for="id_attachments">Select a file...</label>
+          </div>
+        </div>
+
+        {% include 'edit_buttons_partial.html' %}
+      </form>
     </div>
+  </div>
 </div>
 
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-$('.custom-file-input').on('change', function () {
+  $('.custom-file-input').on('change', function () {
     var fileName = $(this).val().split('\\').pop();
     // Single upload implementation:
-    if (fileName) $(this).next('.custom-file-label').addClass("selected").html(fileName);
-    else $(this).next('.custom-file-label').addClass("selected").html('Select a file...');
+    if (fileName) $(this).next('.custom-file-label').addClass('selected').html(fileName);
+    else $(this).next('.custom-file-label').addClass('selected').html('Select a file...');
     // Multiple upload implementation, broken...
-});
+  });
 </script>
 {% endblock %}

@@ -41,7 +41,7 @@ class TestViewExportsAuthenticated(TestCase):
         self.request_factory = RequestFactory()
         self.test_str = 'Test'
         self.client = Client()
-        self.client.login(username='dyoung11', password='***REMOVED***')
+        self.client.login(username='dyoung11', password='Evelynj1!')
         # User 1 created the team, User 2 created ExistingData,
         # User 3 has no privileges
         self.user = User.objects.get(id=1)

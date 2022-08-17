@@ -35,7 +35,7 @@ class TestFlowsa(TestCase):
         """Prepare various objects for this class of tests."""
         self.request_factory = RequestFactory()
         self.test_str = 'Test'
-        self.client.login(username='dyoung11', password='***REMOVED***')
+        self.client.login(username='dyoung11', password='Evelynj1!')
         self.user = User.objects.get(id=1)
         self.file = SimpleUploadedFile('test.txt', b'This is a test file.')
         self.upload_1 = Upload.objects.create(

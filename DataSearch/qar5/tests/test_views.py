@@ -46,7 +46,7 @@ class TestViewAuthenticated(TestCase):
                                               password='12345')
         self.user2 = User.objects.create_user(username='testuser2',
                                               password='12345')
-        self.client.login(username='dyoung11', password='***REMOVED***')
+        self.client.login(username='dyoung11', password='Evelynj1!')
         self.user = User.objects.get(id=1)
         self.team = Team.objects.create(created_by=self.user1, name='testteam')
         self.team2 = Team.objects.create(created_by=self.user,

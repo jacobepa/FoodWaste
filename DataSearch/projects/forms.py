@@ -3,7 +3,6 @@
 # coding=utf-8
 # young.daniel@epa.gov
 # py-lint: disable=R0903
-
 """
 Forms for managing projects.
 
@@ -23,14 +22,14 @@ class OrdRapForm(forms.ModelForm):
 
     name = forms.CharField(
         label=_("Name"),
-        widget=forms.TextInput(
-            attrs={'class': 'form-control mb-2'}), required=True)
+        widget=forms.TextInput(attrs={'class': 'usa-input'}),
+        required=True)
 
     class Meta:
         """Meta data for the OrdRap Form."""
 
         model = OrdRap
-        fields = ("name",)
+        fields = ("name", )
 
 
 class ProjectForm(forms.ModelForm):
@@ -38,47 +37,59 @@ class ProjectForm(forms.ModelForm):
 
     # Title/Name of the project
     title = forms.CharField(
-        label=_("Title"), widget=forms.TextInput(
-            attrs={'class': 'form-control mb-2'}), required=True)
+        label=_("Title"),
+        widget=forms.TextInput(attrs={'class': 'usa-input'}),
+        required=True)
 
     project_lead = forms.ModelChoiceField(
-        label=_("Project Lead"), queryset=User.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        label=_("Project Lead"),
+        queryset=User.objects.all(),
+        widget=forms.Select(attrs={'class': 'usa-input'}),
         required=True)
 
     office = forms.ModelChoiceField(
-        label=_("Office"), queryset=Office.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        label=_("Office"),
+        queryset=Office.objects.all(),
+        widget=forms.Select(attrs={'class': 'usa-input'}),
         required=True)
 
     center_office = forms.ModelChoiceField(
-        label=_("Center/Office"), queryset=CenterOffice.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        label=_("Center/Office"),
+        queryset=CenterOffice.objects.all(),
+        widget=forms.Select(attrs={'class': 'usa-input'}),
         required=True)
 
     division = forms.ModelChoiceField(
-        label=_("Division"), queryset=Division.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        label=_("Division"),
+        queryset=Division.objects.all(),
+        widget=forms.Select(attrs={'class': 'usa-input'}),
         required=True)
     branch = forms.ModelChoiceField(
-        label=_("Branch"), queryset=Branch.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        label=_("Branch"),
+        queryset=Branch.objects.all(),
+        widget=forms.Select(attrs={'class': 'usa-input'}),
         required=True)
 
     ord_rap = forms.ModelChoiceField(
-        label=_("ORD RAP"), queryset=OrdRap.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control mb-2'}),
+        label=_("ORD RAP"),
+        queryset=OrdRap.objects.all(),
+        widget=forms.Select(attrs={'class': 'usa-input'}),
         required=True)
 
     # Team Members (List of teams related to this project)
-    teams = forms.ModelMultipleChoiceField(
-        widget=forms.SelectMultiple(
-            {'class': 'form-control mb-2 mb-2', 'placeholder': 'Teams'}),
-        queryset=Team.objects.all(),
-        label=_("Share With Teams"), required=False)
+    teams = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple({
+        'class':
+        'usa-input mb-2',
+        'placeholder':
+        'Teams'
+    }),
+                                           queryset=Team.objects.all(),
+                                           label=_("Share With Teams"),
+                                           required=False)
 
     can_edit = forms.BooleanField(
-        required=False, label=_("Teams can edit the QAPP"),
+        required=False,
+        label=_("Teams can edit the QAPP"),
         widget=forms.CheckboxInput(
             attrs={'class': 'form-control col-sm-1 mb-2'}))
 

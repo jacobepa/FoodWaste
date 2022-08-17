@@ -10,7 +10,7 @@
             <h3>A.1 Approval Page</h3>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-12">
             {% if form.errors %}
@@ -28,16 +28,16 @@
 
             <form enctype="multipart/form-data" action="/qar5/approval/edit/{{qapp_id}}/" method="post" role="form">
                 {% csrf_token %}
-                <div class="form-group row">
-                    <label for="" class="col-sm-2 control-label">{{form.qapp.label}}</label>
+                <div class="usa-form-group">
+                    <label for="" class="usa-label">{{form.qapp.label}}</label>
                     <div class="col-sm-8">{{form.qapp}}</div>
                 </div>
-                <div class="form-group row">
-                    <label for="" class="col-sm-2 control-label">{{form.project_plan_title.label}}</label>
+                <div class="usa-form-group">
+                    <label for="" class="usa-label">{{form.project_plan_title.label}}</label>
                     <div class="col-sm-8">{{form.project_plan_title}}</div>
                 </div>
-                <div class="form-group row">
-                    <label for="" class="col-sm-2 control-label">{{form.activity_number.label}}</label>
+                <div class="usa-form-group">
+                    <label for="" class="usa-label">{{form.activity_number.label}}</label>
                     <div class="col-sm-8">{{form.activity_number}}</div>
                 </div>
                 <div class="text-center">

@@ -9,7 +9,7 @@
         {% endif %}
         <div class="border rounded p-3 row">
             {% include 'EPA_QAPP_Header_Partial.html' %}
-            
+
             <div class="col-md-12">
                 <form enctype="multipart/form-data" action="/qar5/SectionD?qapp_id={{qapp_id}}" method="post" role="form" id="sectiond_form">
                     {% csrf_token %}
@@ -17,7 +17,7 @@
                         <div class="form-group row hidden">{{form.qapp}}</div>
 
                         <!------- Section D1 ------->
-                        <div class="form-group row">
+                        <div class="usa-form-group">
                             <label class="col-sm-3 control-label">
                                 {{form.d1.label}}
                                 <a tabindex="0" data-trigger="focus" data-container="body" class="text-info fa fa-info-circle"
@@ -28,7 +28,7 @@
                         </div>
 
                         <!------- Section D2 ------->
-                        <div class="form-group row">
+                        <div class="usa-form-group">
                             <label class="col-sm-3 control-label">
                                 {{form.d2.label}}
                                 <a tabindex="0" data-trigger="focus" data-container="body" class="text-info fa fa-info-circle"
@@ -39,7 +39,7 @@
                         </div>
 
                         <!------- Section D3 ------->
-                        <div class="form-group row">
+                        <div class="usa-form-group">
                             <label class="col-sm-3 control-label">
                                 {{form.d3.label}}
                                 <a tabindex="0" data-trigger="focus" data-container="body" class="text-info fa fa-info-circle"

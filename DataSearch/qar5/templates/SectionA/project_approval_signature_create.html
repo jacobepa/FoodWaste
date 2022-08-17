@@ -15,32 +15,32 @@
             <h3>Center for Environmental Solutions & Emergency Response</h3>
         </div>
     </div>
-    
+
     <div class="row mt-4">
         <h3>Adding a new Project Approval Signature for QAPP with ID {{qapp_id}}</h3>
         <div class="col-md-12">
             <form enctype="multipart/form-data" method="post" role="form">
                 {% csrf_token %}
-                <div class="form-group row">
+                <div class="usa-form-group">
                     <label>{{form.qapp_approval.label}}</label>
                     {{form.qapp_approval}}
                 </div>
-                <div class="form-group row">
+                <div class="usa-form-group">
                     <div class="custom-control custom-checkbox">
                         {{form.contractor}}
                         <span class="custom-control-indicator"></span>
                         <label for="id_contractor" class="custom-control-label mx-2">{{form.contractor.label}}</label>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="usa-form-group">
                     <label>{{form.name.label}}</label>
                     {{form.name}}
                 </div>
-                <div class="form-group row">
+                <div class="usa-form-group">
                     <label>{{form.signature.label}}</label>
                     {{form.signature}}
                 </div>
-                <div class="form-group row">
+                <div class="usa-form-group">
                     <label>{{form.date.label}}</label>
                     {{form.date}}
                 </div>

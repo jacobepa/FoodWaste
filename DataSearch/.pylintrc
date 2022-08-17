@@ -12,7 +12,6 @@ ignore=migrations,CVS,conf.py
 # Add files or directories matching the regex patterns to the blacklist. The
 # regex matches against base names, not paths.
 ignore-patterns=
-# TODO: Exclude all migration files, figure out the pattern to match [####]_[anychars].py
 
 # Python code to execute, usually for sys.path manipulation such as
 # pygtk.require().
@@ -24,7 +23,7 @@ jobs=1
 # List of plugins (as comma separated values of python modules names) to load,
 # usually to register additional checkers.
 load-plugins=pylint_django
-django-settings-module=DataSearch.settings
+django-settings-module=scfw.settings
 
 # Pickle collected data for later comparisons.
 persistent=yes
