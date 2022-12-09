@@ -12,14 +12,14 @@
 #---------------------------------------------------------------------------------------#
 
 # Required for site to run:
-Django>=4.0.4                     # Python Modules.
-djangorestframework>=3.13.1       # Powerful and flexible toolkit for building Web APIs.
-django-phonenumber-field>=6.1.0   # An international phone number field for django models.
+Django>=4.1.4                     # Python Modules.
+djangorestframework>=3.14.0       # Powerful and flexible toolkit for building Web APIs.
+django-phonenumber-field>=7.0.1   # An international phone number field for django models.
 django-wkhtmltopdf>=3.4.0         # Allows a Django site to output dynamic PDFs.
-openpyxl>=3.0.9                   # Python library to read/write Excel 2010 xlsx/xlsm/xltx/xltm files.
-psycopg2>=2.9.3                   # Python-PostgreSQL Database Adapter.
+openpyxl>=3.0.10                  # Python library to read/write Excel 2010 xlsx/xlsm/xltx/xltm files.
+psycopg2>=2.9.5                   # Python-PostgreSQL Database Adapter.
 python-docx>=0.8.11               # Python library for creating and updating Microsoft Word (.docx) files.
-xhtml2pdf>=0.2.7                  # Package for saving html templates as PDF files. Used to return multiple files instead of a
+xhtml2pdf>=0.2.8                  # Package for saving html templates as PDF files. Used to return multiple files instead of a
                                   # single PDF Template Response (as in wkhtmltopdf).
 
 # django-grappelli>=2.14.3          # A jazzy skin for the Django Admin-Interface.
