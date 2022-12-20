@@ -1,32 +1,42 @@
-{% extends "main/base.html" %}
+{% extends 'main/base.html' %}
 
 {% block content %}
 <div class="white-box">
     <div>
         <h3>New user registration</h3>
-        <div class="text-muted">
+        <p>
             Enter your user information below.  Fields marked with a <span class="red">*</span>
             are required.
-        </div>
-        <div class="vpadding20">
-            <form enctype="multipart/form-data" method="post" action="{% url 'register' %}">
-
-                {% csrf_token %}
-
-                {% for field in form %}
-                <div class="form-group">
-                    <label for="{{ field.label }}">
-                        {{ field.label_tag }}
-                        {% if field.field.required %}<span class="red">*</span>{% endif %}
-                        <span class="text-danger">{{ field.errors.as_text }}</span>
-                    </label>
-                    {{field}}
+        </p>
+        <form enctype="multipart/form-data" method="post" action="{% url 'register' %}">
+            {% if form.errors %}
+            <div class="usa-alert usa-alert--error" role="alert">
+                <div class="usa-alert__body">
+                    <h5 class="usa-alert__heading">Please correct the following errors</h5>
+                    {% for field in form %}
+                        {% if field.errors %}
+                        <p class="usa-alert__text">{{field.label_tag}} {{ field.errors|striptags }}</p>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-                {% endfor %}
+            </div>
+            {% endif %}
 
-                <input type="submit" name="submit" value="Submit" class="btn btn-info" role="button"/>
-            </form>
-        </div>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="usa-form-group">
+                <label for="{{ field.label }}">
+                    {{ field.label_tag }}
+                    {% if field.field.required %}*{% endif %}
+                </label>
+                {{field}}
+            </div>
+            {% endfor %}
+
+            <div class="usa-form-group">
+                <input type="submit" name="submit" value="Submit" class="usa-button" role="button"/>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

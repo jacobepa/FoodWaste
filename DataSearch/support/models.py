@@ -10,30 +10,18 @@ Models related to app support.
 Available functions:
 """
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from DataSearch import settings
 
 
 def get_support_storage_path(instance, filename):
-    """
-    Return the physical path to where support files will be stored.
-
-    :param instance: an object that contains the user information
-    :param filename: a string representing the filename
-    :return: a string representing a file path
-    """
+    """Return the physical path to where support files will be stored."""
     return '%s/support/%s' % (instance.user.username, filename)
 
 
 def get_instruction_storage_path(instance, filename):
-    """
-    Return the physical path to where instruction files will be stored.
-
-    :param instance: an object that contains the user information
-    :param filename: a string representing the filename
-    :return: a string representing a file path
-    """
+    """Return the physical path to where instruction files will be stored."""
     return '%s/instructions/%s' % (instance.user.username, filename)
 
 
@@ -174,9 +162,9 @@ class SupportAttachment(models.Model):
 
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
-    support = models.ForeignKey(
-        Support, on_delete=models.CASCADE, null=True, blank=True,
-        related_name="support_attachments")
+    support = models.ForeignKey(Support, on_delete=models.CASCADE,
+                                null=True, blank=True,
+                                related_name="support_attachments")
 
     the_name = models.CharField(blank=True, null=True, max_length=255)
     the_size = models.CharField(blank=True, null=True, max_length=255)

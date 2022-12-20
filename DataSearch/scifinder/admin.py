@@ -8,5 +8,3 @@ Define classes used to generate Django Admin portion of the website.
 
 Available functions:
 """
-
-# from django.contrib import admin

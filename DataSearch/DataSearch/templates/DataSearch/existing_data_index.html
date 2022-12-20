@@ -36,11 +36,28 @@
   </p>
 
   <div class="grid-row">
+
+    <div class="grid-col-sm-6">
+      <label class="grid-col-sm-12">View existing entries for...</label>
+      <li class="menu__item has-subnav">
+        <button class="menu__link has-subnav usa-nav__link" aria-expanded="false">Users</button>
+        <ul class="menu menu__subnav is-wide">
+          {% for user in users %}
+          <li class="menu__item">
+            <a href="/existingdata/list/user/{{user.id}}" class="menu__link">
+            {{user.username}} ({{user.first_name}} {{user.last_name}})
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+    </div>
+
     <div class="grid-col-sm-6">
       <label class="grid-col-sm-12">View existing entries for...</label>
       <div class="grid-col-sm-5">
         <button
-          class=""
+          class="usa-button"
           type="button"
           id="dropdownUserButton"
           data-toggle="dropdown"
@@ -76,6 +93,7 @@
         </div>
       </div>
     </div>
+
     <div class="grid-col-sm-6">
       <label class="grid-col-sm-12">or create...</label>
       <button onclick="window.location='{% url 'team_create' %}'" class="grid-col-sm-5 btn btn-success">

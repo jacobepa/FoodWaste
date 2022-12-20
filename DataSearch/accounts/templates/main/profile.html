@@ -1,168 +1,134 @@
-{% extends "main/base.html" %}
+{% extends 'main/base.html' %}
 
 {% block content %}
 
 <div class="white-box">
     <form class="form-horizontal" method="post" action="{% url 'profile' %}">
+
         {% if form.errors %}
-        <div class="alert alert-danger">
-            <h5>Please correct the following errors</h5>
-            {% for error in form.non_field_errors %}
-            <div>{{ error|escape }}</div>
-            {% endfor %}
-            {% for field in form %}
-                {% if field.errors %}
-                <div>{{field.label_tag}} {{ field.errors|striptags }}</div>
-                {% endif %}
-            {% endfor %}
+        <div class="usa-alert usa-alert--error" role="alert">
+            <div class="usa-alert__body">
+                <h5 class="usa-alert__heading">Please correct the following errors</h5>
+                {% for error in form.non_field_errors %}
+                <p class="usa-alert__text">{{ error|escape }}</p>
+                {% endfor %}
+                {% for field in form %}
+                    {% if field.errors %}
+                    <p class="usa-alert__text">{{field.label_tag}} {{ field.errors|striptags }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
         {% endif %}
+
         {% if success %}
-        <div class="alert alert-success">
-            Your profile has been updated. <span class="glyphicon glyphicon-ok"></span>
+        <div class="usa-alert usa-alert--success">
+            <div class="usa-alert__body">
+                <p class="usa-alert__text">Your profile has been updated.</p>
+            </div>
         </div>
         {% endif %}
 
         {% csrf_token %}
-        <h5 class="separator">Personal Information</h5>
+        <h3>Personal Information</h3>
 
-        <div class="form-group">
-            <label for="username" class="col-sm-3 control-label">{{form.username.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.username}}
-            </div>
+        <div class="usa-form-group">
+            <label for="username" class="usa-label">{{form.username.label_tag}}</label>
+            {{form.username}}
         </div>
 
-        <div class="form-group">
-            <label for="last_login" class="col-sm-3 control-label">{{form.last_login.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.last_login}}
-            </div>
+        <div class="usa-form-group">
+            <label for="last_login" class="usa-label">{{form.last_login.label_tag}}</label>
+            {{form.last_login}}
         </div>
 
-        <div class="form-group">
-            <label for="first_name" class="col-sm-3 control-label">{{form.first_name.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.first_name}}
-            </div>
+        <div class="usa-form-group">
+            <label for="first_name" class="usa-label">{{form.first_name.label_tag}}</label>
+            {{form.first_name}}
         </div>
 
-        <div class="form-group">
-            <label for="last_name" class="col-sm-3 control-label">{{form.last_name.label_tag}}</label>
-            <div class="col-sm-9">
+        <div class="usa-form-group">
+            <label for="last_name" class="usa-label">{{form.last_name.label_tag}}</label>
                 {{form.last_name}}
-            </div>
         </div>
 
-        <div class="form-group">
-            <label for="email" class="col-sm-3 control-label">{{form.email.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.email}}
-            </div>
+        <div class="usa-form-group">
+            <label for="email" class="usa-label">{{form.email.label_tag}}</label>
+            {{form.email}}
         </div>
 
-        <div class="form-group">
-            <label for="affiliation" class="col-sm-3 control-label">{{form.affiliation.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.affiliation}}
-            </div>
+        <div class="usa-form-group">
+            <label for="affiliation" class="usa-label">{{form.affiliation.label_tag}}</label>
+            {{form.affiliation}}
         </div>
 
-        <div class="form-group">
-            <label for="sector" class="col-sm-3 control-label">{{form.sector.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.sector}}
-            </div>
+        <div class="usa-form-group">
+            <label for="sector" class="usa-label">{{form.sector.label_tag}}</label>
+            {{form.sector}}
         </div>
 
-        <div class="form-group">
-            <label for="job_title" class="col-sm-3 control-label">{{form.job_title.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.job_title}}
-            </div>
+        <div class="usa-form-group">
+            <label for="job_title" class="usa-label">{{form.job_title.label_tag}}</label>
+            {{form.job_title}}
         </div>
 
-        <div class="form-group">
-            <label for="role" class="col-sm-3 control-label">{{form.role.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.role}}
-            </div>
+        <div class="usa-form-group">
+            <label for="role" class="usa-label">{{form.role.label_tag}}</label>
+            {{form.role}}
         </div>
 
-        <div class="form-group">
-            <label for="address_line1" class="col-sm-3 control-label">{{form.address_line1.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.address_line1}}
-            </div>
+        <div class="usa-form-group">
+            <label for="address_line1" class="usa-label">{{form.address_line1.label_tag}}</label>
+            {{form.address_line1}}
         </div>
 
-        <div class="form-group">
-            <label for="address_line2" class="col-sm-3 control-label">{{form.address_line2.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.address_line2}}
-            </div>
+        <div class="usa-form-group">
+            <label for="address_line2" class="usa-label">{{form.address_line2.label_tag}}</label>
+            {{form.address_line2}}
         </div>
 
-        <div class="form-group">
-            <label for="city" class="col-sm-3 control-label">{{form.city.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.city}}
-            </div>
+        <div class="usa-form-group">
+            <label for="city" class="usa-label">{{form.city.label_tag}}</label>
+            {{form.city}}
         </div>
 
-        <div class="form-group">
-            <label for="state" class="col-sm-3 control-label">{{form.state.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.state}}
-            </div>
+        <div class="usa-form-group">
+            <label for="state" class="usa-label">{{form.state.label_tag}}</label>
+            {{form.state}}
         </div>
 
-        <div class="form-group">
-            <label for="zipcode" class="col-sm-3 control-label">{{form.zipcode.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.zipcode}}
-            </div>
+        <div class="usa-form-group">
+            <label for="zipcode" class="usa-label">{{form.zipcode.label_tag}}</label>
+            {{form.zipcode}}
         </div>
 
-
-        <div class="form-group">
-            <label for="country" class="col-sm-3 control-label">{{form.country.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.country}}
-            </div>
+        <div class="usa-form-group">
+            <label for="country" class="usa-label">{{form.country.label_tag}}</label>
+            {{form.country}}
         </div>
 
-        <h5 class="separator">Change Password</h5>
+        <hr/>
+        <h3>Change Password</h3>
 
-        <div class="form-group">
-            <label for="current_password" class="col-sm-3 control-label">{{form.current_password.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.current_password}}
-            </div>
+        <div class="usa-form-group">
+            <label for="current_password" class="usa-label">{{form.current_password.label_tag}}</label>
+            {{form.current_password}}
         </div>
 
-        <div class="form-group">
-            <label for="password1" class="col-sm-3 control-label">{{form.password1.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.password1}}
-            </div>
+        <div class="usa-form-group">
+            <label for="password1" class="usa-label">{{form.password1.label_tag}}</label>
+            {{form.password1}}
         </div>
 
-        <div class="form-group">
-            <label for="password2" class="col-sm-3 control-label">{{form.password2.label_tag}}</label>
-            <div class="col-sm-9">
-                {{form.password2}}
-            </div>
+        <div class="usa-form-group">
+            <label for="password2" class="usa-label">{{form.password2.label_tag}}</label>
+            {{form.password2}}
         </div>
 
-        <div class="row">
-            <div class="col-sm-9"> </div>
-            <div class="col-sm-3">
-                <input class="btn btn-primary" type="submit" value="Save" />
-                <a class="btn btn-warning" href="{% url 'profile' %}">Undo changes</a>
-            </div>
+        <div class="usa-form-group">
+            <input class="usa-button" type="submit" value="Save" />
+            <a class="usa-button" href="{% url 'profile' %}">Undo changes</a>
         </div>
-
     </form>
 </div>
 
