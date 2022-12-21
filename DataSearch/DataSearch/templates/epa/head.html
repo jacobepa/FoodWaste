@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>{% if PAGE_NAME %}{{PAGE_NAME|safe}}{% else %}{{APP_NAME|safe}}{% endif %} | US EPA</title>
-  
+
     <link rel="canonical" href="https://archive.epa.gov/" />
     <link rel="shortlink" href="https://archive.epa.gov/" />
     <meta
@@ -162,14 +162,14 @@
     />
     <link rel="stylesheet" media="all" href="https://www.epa.gov/themes/epa_theme/css/styles.css" />
     <link rel="stylesheet" media="all" href="https://www.epa.gov/themes/epa_theme/css-lib/colorbox.min.css" />
-  
+
     {% load static %}
-  
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}" />
-  
+
     <!-- Custom app Addition: Include any extra CSS files: -->
     {% block extend_css %} {% endblock %}
-  
+
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
@@ -184,9 +184,8 @@
       })(window, document, 'script', 'dataLayer', 'GTM-L8ZB');
     </script>
     <!-- End Google Tag Manager -->
-  
+
     <!-- Begin Pattern Lab (Required for Pattern Lab to run properly) -->
-  
+
     <!-- End Pattern Lab -->
   </head>
-  
