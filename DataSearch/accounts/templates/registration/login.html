@@ -12,7 +12,7 @@
     <div>
         <form id="login_form" enctype="multipart/form-data" method="post" action="."
               role="form" class="well login">
-            <h4>Welcome to {{APP_NAME}}</h4>
+            <h4>Welcome to {{APP_NAME|safe}}</h4>
 
             {% if error %}
             <div class="usa-alert usa-alert--error" role="alert">
