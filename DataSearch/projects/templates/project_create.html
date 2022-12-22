@@ -51,9 +51,9 @@
 
   <div class="usa-form-group">
     <label for="" class="usa-label">{{form.teams.label}}</label>
-    <a href="{% url 'team_create' %}" class="col-sm-12 btn btn-sm btn-success">
+    <a href="{% url 'team_create' %}" class="usa-button">
       <span class="glyphicon glyphicon-plus"></span>
-      Create Team
+      Create a New Team
     </a>
     {{form.teams}}
   </div>
@@ -63,7 +63,7 @@
     {{form.can_edit}}
   </div>
 
-  <div class="button-group">
+  <div class="usa-button-group">
     <button type="submit" class="usa-button">Save</button>
     <button type="reset" class="usa-button" onclick="window.location='{% url 'project_list' %}'">Cancel</button>
   </div>

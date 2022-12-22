@@ -4,7 +4,7 @@
   <li class="menu__item">
     <a href="{% url 'contact' %}" class="menu__link">Contact</a>
   </li>
-  
+
   {% if user.is_authenticated %}
   <li class="menu__item has-subnav">
     <button class="menu__link has-subnav usa-nav__link" aria-expanded="false">Project</button>
@@ -13,7 +13,7 @@
       <li class="menu__item"><a href="/projects/create/" class="menu__link">Create a project</a></li>
     </ul>
   </li>
-  
+
   <li class="menu__item has-subnav">
     <button class="menu__link has-subnav usa-nav__link" aria-expanded="false">Project Activity</button>
     <ul class="menu menu__subnav is-wide">
@@ -23,7 +23,7 @@
       <li class="menu__item"><a href="/flowsa/" class="menu__link">FLOWSA data file tool</a></li>
     </ul>
   </li>
-  
+
   <li class="menu__item has-subnav">
     <button class="menu__link has-subnav usa-nav__link" aria-expanded="false">Teams</button>
     <ul class="menu menu__subnav is-wide">
@@ -31,7 +31,7 @@
       <li class="menu__item"><a href="/teams/team/" class="menu__link">Create a new team</a></li>
     </ul>
   </li>
-  
+
   <li class="menu__item has-subnav">
     <button class="menu__link has-subnav usa-nav__link" aria-expanded="false">Help/Suggestions</button>
     <ul class="menu menu__subnav is-wide">
@@ -39,7 +39,7 @@
       <li class="menu__item"><a href="{% url 'support:events' %}" class="menu__link">Upcoming Events</a></li>
     </ul>
   </li>
-  
+
   <li class="menu__item has-subnav">
     <button class="menu__link has-subnav usa-nav__link" aria-expanded="false">
       Welcome {% if user.first_name %} {{user.first_name|safe}} {% else %} {{user.username|safe}} {% endif %}
@@ -52,7 +52,7 @@
       <li class="menu__item"><a href="{% url 'logout' %}" class="menu__link">Logout</a></li>
     </ul>
   </li>
-  
+
   {% else %}
   <li class="menu__item">
     <a href="{% url 'register' %}" class="menu__link">Register</a>
@@ -61,4 +61,3 @@
     <a href="{% url 'login' %}" class="menu__link">Log-in</a>
   </li>
   {% endif %}
-  

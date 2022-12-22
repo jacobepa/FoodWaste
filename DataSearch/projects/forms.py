@@ -44,48 +44,50 @@ class ProjectForm(forms.ModelForm):
     project_lead = forms.ModelChoiceField(
         label=_("Project Lead"),
         queryset=User.objects.all(),
-        widget=forms.Select(attrs={'class': 'usa-input'}),
+        widget=forms.Select(attrs={'class': 'usa-input usa-select'}),
         required=True)
 
     office = forms.ModelChoiceField(
         label=_("Office"),
         queryset=Office.objects.all(),
-        widget=forms.Select(attrs={'class': 'usa-input'}),
+        widget=forms.Select(attrs={'class': 'usa-input usa-select'}),
         required=True)
 
     center_office = forms.ModelChoiceField(
         label=_("Center/Office"),
         queryset=CenterOffice.objects.all(),
-        widget=forms.Select(attrs={'class': 'usa-input'}),
+        widget=forms.Select(attrs={'class': 'usa-input usa-select'}),
         required=True)
 
     division = forms.ModelChoiceField(
         label=_("Division"),
         queryset=Division.objects.all(),
-        widget=forms.Select(attrs={'class': 'usa-input'}),
+        widget=forms.Select(attrs={'class': 'usa-input usa-select'}),
         required=True)
+
     branch = forms.ModelChoiceField(
         label=_("Branch"),
         queryset=Branch.objects.all(),
-        widget=forms.Select(attrs={'class': 'usa-input'}),
+        widget=forms.Select(attrs={'class': 'usa-input usa-select'}),
         required=True)
 
     ord_rap = forms.ModelChoiceField(
         label=_("ORD RAP"),
         queryset=OrdRap.objects.all(),
-        widget=forms.Select(attrs={'class': 'usa-input'}),
+        widget=forms.Select(attrs={'class': 'usa-input usa-select'}),
         required=True)
 
     # Team Members (List of teams related to this project)
-    teams = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple({
-        'class':
-        'usa-input mb-2',
-        'placeholder':
-        'Teams'
-    }),
-                                           queryset=Team.objects.all(),
-                                           label=_("Share With Teams"),
-                                           required=False)
+    teams = forms.ModelMultipleChoiceField(
+        widget=forms.SelectMultiple({
+            'class':
+            'usa-input mb-2',
+            'placeholder':
+            'Teams'
+        }),
+        queryset=Team.objects.all(),
+        label=_("Share With Teams"),
+        required=False)
 
     can_edit = forms.BooleanField(
         required=False,

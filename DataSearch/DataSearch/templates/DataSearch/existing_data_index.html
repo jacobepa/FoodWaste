@@ -11,7 +11,7 @@
       class="usa-button"
       onclick="window.location='https://www.epa.gov/sites/production/files/2015-07/documents/cklist-secondary.pdf'"
     >
-      Checklist for use of Existing Data&raquo;
+      Checklist for use of Existing Data &raquo;
     </button>
     <button
       class="usa-button"
@@ -35,8 +35,64 @@
     track data either as a team or individual user.
   </p>
 
-  <div class="grid-row">
 
+  <!-- <label class="usa-label" for="user-select">View existing entries for...</label>
+  <div class="usa-combo-box">
+    <select class="usa-select" name="user-select" id="user-select">
+      <option value>Select a User</option>
+      <option value="starfruit">Starfruit</option>
+      <option value="strawberry">Strawberry</option>
+      <option value="tamarind">Tamarind</option>
+      <option value="tangelo">Tangelo</option>
+      <option value="tangerine">Tangerine</option>
+      <option value="ugli fruit">Ugli fruit</option>
+    </select>
+  </div> -->
+
+  <div class="grid-container">
+    <div class="grid-row">
+
+      <!-- Existing Entries: -->
+      <div class="grid-col-6">
+        <div class="grid-row">
+          <label class="usa-label grid-col-12" for="user-select">View existing entries by User</label>
+          <div class="usa-combo-box">
+            <select class="usa-select" name="user-select" id="user-select">
+              <option value>Select a User</option>
+            </select>
+          </div>
+          <!-- <div class="usa-combo-box">
+            <select class="usa-select" name="teams" id="team-select">
+              <option value>Select a Team</option>
+            </select>
+          </div> -->
+        </div>
+      </div>
+
+      <!-- Create new: -->
+      <div class="grid-col-6">
+        <div class="grid-row">
+          <label class="usa-label grid-col-12" for="">or create...</label>
+          <div>
+            <button class="usa-button usa-button--outline">New Team</button>
+          </div>
+          <div>
+            <button class="usa-button usa-button--outline">New Data Entry</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <br /><br /><br /><br /><br />
+  <br /><br /><br /><br /><br />
+
+
+
+  <div class="grid-row">
     <div class="grid-col-sm-6">
       <label class="grid-col-sm-12">View existing entries for...</label>
       <li class="menu__item has-subnav">
