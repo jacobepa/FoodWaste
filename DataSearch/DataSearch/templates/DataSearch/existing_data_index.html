@@ -1,166 +1,97 @@
 ﻿{% extends "main/base.html" %} {% block content %}
-  <h2>Existing Data Tracking Tool</h2>
-  <p>
+<h2>Existing Data Tracking Tool</h2>
+<p>
     This tool has been developed to track existing data for 'Plastics Projects' under the new StRAP's assigned to the
     EDAB branch. Guidance for using data from other sources is available from your Division Quality Assurance Manager
     (QAM) or from your Center Director of Quality Assurance (DQA). Guidance for Quality Assurance Project Plans (G-5)
     identifies elements to consider when planning projects that use existing data.
-  </p>
-  <div class="button-group">
+</p>
+<div class="button-group">
     <button
-      class="usa-button"
-      onclick="window.location='https://www.epa.gov/sites/production/files/2015-07/documents/cklist-secondary.pdf'"
+        class="usa-button"
+        onclick="window.location='https://www.epa.gov/sites/production/files/2015-07/documents/cklist-secondary.pdf'"
     >
-      Checklist for use of Existing Data &raquo;
+        Checklist for use of Existing Data &raquo;
     </button>
     <button
-      class="usa-button"
-      onclick="window.location='https://www.epa.gov/sites/production/files/2015-06/documents/g5-final.pdf'"
+        class="usa-button"
+        onclick="window.location='https://www.epa.gov/sites/production/files/2015-06/documents/g5-final.pdf'"
     >
-      See Chapter 3 (G-5) &raquo;
+        See Chapter 3 (G-5) &raquo;
     </button>
-  </div>
+</div>
 
-  <h4>Existing Data and Information Research Projects</h4>
-  <p>
+<h4>Existing Data and Information Research Projects</h4>
+<p>
     An Existing Data and Information research project involves the gathering and/or use of existing environmental
     data for purposes other than those for which they were originally collected. These Existing Data and Information
     may be obtained from many sources, including literature, industry surveys, compilations from computerized
     databases and information systems, and computerized or mathematical models of environmental processes. If
     primary data will be generated as part of the project, then the information collected can be incorporated into
     the associated QAPP to address the Existing Data and Information.
-  </p>
-  <p>
+</p>
+<p>
     Please click one of the buttons below to begin searching for Existing Data and Information. You can create and
     track data either as a team or individual user.
-  </p>
+</p>
 
-
-  <!-- <label class="usa-label" for="user-select">View existing entries for...</label>
-  <div class="usa-combo-box">
-    <select class="usa-select" name="user-select" id="user-select">
-      <option value>Select a User</option>
-      <option value="starfruit">Starfruit</option>
-      <option value="strawberry">Strawberry</option>
-      <option value="tamarind">Tamarind</option>
-      <option value="tangelo">Tangelo</option>
-      <option value="tangerine">Tangerine</option>
-      <option value="ugli fruit">Ugli fruit</option>
-    </select>
-  </div> -->
-
-  <div class="grid-container">
+<div class="grid-container">
     <div class="grid-row">
-
-      <!-- Existing Entries: -->
-      <div class="grid-col-6">
-        <div class="grid-row">
-          <label class="usa-label grid-col-12" for="user-select">View existing entries by User</label>
-          <div class="usa-combo-box">
-            <select class="usa-select" name="user-select" id="user-select">
-              <option value>Select a User</option>
-            </select>
-          </div>
-          <!-- <div class="usa-combo-box">
-            <select class="usa-select" name="teams" id="team-select">
-              <option value>Select a Team</option>
-            </select>
-          </div> -->
+        <!-- Existing Entries: -->
+        <!-- By user: -->
+        <div class="grid-col-6">
+            <div class="grid-row">
+                <label class="usa-label grid-col-12" for="user-select">View existing entries by User</label>
+                <div class="usa-combo-box">
+                    <select class="usa-select" name="user-select" id="user-select"
+                                    onchange="entryByUser(this)">
+                        <option value>Select a User</option>
+                        {% for user in users %}
+                        <option value="{{user.id}}">{{user}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <!-- Create new: -->
-      <div class="grid-col-6">
-        <div class="grid-row">
-          <label class="usa-label grid-col-12" for="">or create...</label>
-          <div>
-            <button class="usa-button usa-button--outline">New Team</button>
-          </div>
-          <div>
-            <button class="usa-button usa-button--outline">New Data Entry</button>
-          </div>
+        <!-- By team: -->
+        <div class="grid-col-6">
+            <div class="grid-row">
+                <label class="usa-label grid-col-12" for="user-select">View existing entries by Team</label>
+                <div class="usa-combo-box">
+                    <select class="usa-select" name="user-select" id="user-select"
+                                    onchange="entryByTeam(this)">
+                        <option value>Select a Team</option>
+                        {% for team in teams %}
+                        <option value="{{team.id}}">{{team}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
-      </div>
-
     </div>
-  </div>
-
-
-
-  <br /><br /><br /><br /><br />
-  <br /><br /><br /><br /><br />
-
-
-
-  <div class="grid-row">
-    <div class="grid-col-sm-6">
-      <label class="grid-col-sm-12">View existing entries for...</label>
-      <li class="menu__item has-subnav">
-        <button class="menu__link has-subnav usa-nav__link" aria-expanded="false">Users</button>
-        <ul class="menu menu__subnav is-wide">
-          {% for user in users %}
-          <li class="menu__item">
-            <a href="/existingdata/list/user/{{user.id}}" class="menu__link">
-            {{user.username}} ({{user.first_name}} {{user.last_name}})
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-      </li>
-    </div>
-
-    <div class="grid-col-sm-6">
-      <label class="grid-col-sm-12">View existing entries for...</label>
-      <div class="grid-col-sm-5">
-        <button
-          class="usa-button"
-          type="button"
-          id="dropdownUserButton"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          Users
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownUserButton">
-          {% for user in users %}
-          <a class="dropdown-item" href="/existingdata/list/user/{{user.id}}">
-            {{user.username}} ({{user.first_name}} {{user.last_name}})
-          </a>
-          {% endfor %}
+    <!-- Create new: -->
+    <div class="grid-row">
+        <label class="usa-label grid-col-12" for="">or create...</label>
+        <div class="grid-col-12 usa-button-group">
+            <div>
+                <button class="usa-button usa-button--outline">New Team</button>
+            </div>
+            <div>
+                <button class="usa-button usa-button--outline">New Data Entry</button>
+            </div>
         </div>
-      </div>
-
-      <div class="grid-col-sm-5 offset-sm-1">
-        <button
-          class="btn btn-info dropdown-toggle grid-col-sm-12"
-          type="button"
-          id="dropdownTeamButton"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          Teams
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownTeamButton">
-          {% for team in teams %}
-          <a class="dropdown-item" href="/existingdata/list/team/{{team.id}}"> {{team.name}} </a>
-          {% endfor %}
-        </div>
-      </div>
     </div>
-
-    <div class="grid-col-sm-6">
-      <label class="grid-col-sm-12">or create...</label>
-      <button onclick="window.location='{% url 'team_create' %}'" class="grid-col-sm-5 btn btn-success">
-        <span class="glyphicon glyphicon-plus"></span>
-        New Team
-      </button>
-      <button onclick="window.location='/existingdata/create/'" class="grid-col-sm-5 offset-sm-1 btn btn-success">
-        <span class="glyphicon glyphicon-plus"></span>
-        New Data Entry
-      </button>
-    </div>
-  </div>
 </div>
+{% endblock %}{% block scripts %}
+<script>
+    function entryByUser(selObj) {
+        let val = selObj.value;
+        window.location.href=`/existingdata/list/user/${val}`;
+    }
+    function entryByTeam(selObj) {
+        let val = selObj.value;
+        window.location.href=`/existingdata/list/team/${val}`;
+    }
+</script>
 {% endblock %}

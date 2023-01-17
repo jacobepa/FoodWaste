@@ -1,87 +1,101 @@
 ﻿{% extends "main/base.html" %} {% block content %}
-<div class="container">
-  <h3>Details for Existing Data {{object.id}}</h3>
-  <div class="row">
-    {% for name, value in object.get_fields %} {% if value %}
-    <div class="col-sm-12">
-      <label class="col-sm-3">{{name}}</label>
-      <div class="col-sm-9">{{value}}</div>
-    </div>
-    {% endif %} {% endfor %}
-  </div>
 
-  <!-- 3. TABLE TO DISPLAY THE UPLOADED FILES -->
-  {% if object.attachments.all %}
-  <table id="gallery" class="table table-bordered">
-    <thead>
-      <tr>
-        <th colspan="2">Attachments (<a href="/existingdata/download_attachments/{{object.id}}/">Download All</a>)</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for file in object.attachments.all %}
-      <tr>
-        <td>
-          <a href="/existingdata/download_attachment/{{object.id}}/{{file.id}}">
-            <span class="fa fa-download"></span> {{ file.name }}
-          </a>
-        </td>
-        <td>
-          <a href="/existingdata/delete_attachment/{{object.id}}/{{ file.id }}"> Delete File </a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-  <p>No attachments have been uploaded for this Existing Data and Information Search.</p>
-  {% endif %} {% if edit_message %}
-  <div class="row text-danger">{{edit_message}}</div>
-  {% endif %}
-  <div class="row mt-2">
-    <div class="col-md-12">
-      <div class="float-left">
-        <button onclick="window.location.href='/existingdata/exportdocx/{{object.id}}'" class="btn btn-info mx-2">
-          Export to Docx
-        </button>
-        <button onclick="window.location.href='/existingdata/exportpdf/{{object.id}}'" class="btn btn-info mx-2">
-          Export to PDF
-        </button>
-        <button onclick="window.location.href='/existingdata/exportexcel/{{object.id}}'" class="btn btn-info mx-2">
-          Export to Excel
-        </button>
-        {% if not edit_message %}
-        <button
-          onclick="window.location.href='/existingdata/edit/{{object.id}}'"
-          class="btn btn-warning mx-2"
-          {{edit_disabled}}
-        >
-          Edit Data Entry
-        </button>
-        {% endif %} {% if team %}
-        <button onclick="window.location.href='/existingdata/list/team/{{team.id}}'" class="btn btn-danger mx-2">
-          Back
-        </button>
-        {% elif p_user %}
-        <button onclick="window.location.href='/existingdata/list/user/{{p_user.id}}'" class="btn btn-danger mx-2">
-          Back
-        </button>
-        {% else %}
-        <button onclick="window.location.href='/existingdata'" class="btn btn-danger mx-2">Back</button>
-        {% endif %}
-      </div>
+<h3>Details for Existing Data {{object.id}}</h3>
 
-      {% if not edit_message %}
-      <div class="float-right">
-        <button onclick="window.location.href='/existingdata/delete/{{object.id}}'" class="btn btn-danger mx-2">
-          Delete Data Entry
-        </button>
-      </div>
-      {% endif %}
-      <div class="float-none"></div>
-    </div>
+<table class="usa-table usa-table--borderless usa-table--compact">
+  <tbody>
+    {% for name, value in object.get_fields %}
+    {% if value %}
+      <tr>
+        <td style="border: none;">{{name}}</td>
+        <td style="border: none;">{{value}}</td>
+      </tr>
+    {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+
+  <!-- TABLE TO DISPLAY THE UPLOADED FILE(S) -->
+{% if object.attachments.all %}
+<table class="usa-table">
+  <thead>
+    <tr>
+      <th colspan="2">Attachments (<a href="/existingdata/download_attachments/{{object.id}}/">Download All</a>)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for file in object.attachments.all %}
+    <tr>
+      <td>
+        <a href="/existingdata/download_attachment/{{object.id}}/{{file.id}}">
+          <span class="fa fa-download"></span> {{ file.name }}
+        </a>
+      </td>
+      <td>
+        <a href="/existingdata/delete_attachment/{{object.id}}/{{ file.id }}"> Delete File </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+
+<p>No attachments have been uploaded for this Existing Data and Information Search.</p>
+
+{% endif %}
+
+{% if edit_message %}
+<div class="usa-alert usa-alert--error" role="alert">
+  <div class="usa-alert__body">
+    <p class="usa-alert__text">
+      {{edit_message}}
+    </p>
   </div>
 </div>
-{% endblock %} {% block scripts %}
-<script></script>
+{% endif %}
+
+<div class="usa-button-group">
+  <button onclick="window.location.href='/existingdata/exportdocx/{{object.id}}'" class="usa-button">
+    Export to Docx
+  </button>
+  <button onclick="window.location.href='/existingdata/exportpdf/{{object.id}}'" class="usa-button">
+    Export to PDF
+  </button>
+  <button onclick="window.location.href='/existingdata/exportexcel/{{object.id}}'" class="usa-button">
+    Export to Excel
+  </button>
+
+  {% if not edit_message %}
+  <button
+    onclick="window.location.href='/existingdata/edit/{{object.id}}'"
+    class="usa-button usa-button--accent-warm"
+    {{edit_disabled}}
+  >
+    Edit Data Entry
+  </button>
+  {% endif %}
+  {% if team %}
+  <button onclick="window.location.href='/existingdata/list/team/{{team.id}}'"
+          class="usa-button usa-button--accent-warm">
+    Back
+  </button>
+  {% elif p_user %}
+  <button onclick="window.location.href='/existingdata/list/user/{{p_user.id}}'"
+          class="usa-button usa-button--accent-warm">
+    Back
+  </button>
+  {% else %}
+  <button onclick="window.location.href='/existingdata'"
+          class="usa-button usa-button--secondary">Back</button>
+  {% endif %}
+
+  {% if not edit_message %}
+  <button onclick="window.location.href='/existingdata/delete/{{object.id}}'"
+          class="usa-button usa-button--secondary">
+    Delete Data Entry
+  </button>
+  {% endif %}
+</div>
+
 {% endblock %}

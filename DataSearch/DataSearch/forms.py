@@ -45,10 +45,8 @@ class ExistingDataForm(ModelForm):
 
     phone = CharField(max_length=32,
                       widget=TextInput({
-                          'class':
-                          'usa-input',
-                          'placeholder':
-                          '(555) 555-5555 or 555-555-5555'
+                          'class': 'usa-input',
+                          'placeholder': '(555) 555-5555 or 555-555-5555'
                       }),
                       label=_("Phone Number"),
                       required=True)
@@ -63,7 +61,8 @@ class ExistingDataForm(ModelForm):
 
     source = ModelChoiceField(label=_("Source"),
                               queryset=ExistingDataSource.objects.all(),
-                              widget=Select(attrs={'class': 'usa-input'}),
+                              widget=Select(
+                                  attrs={'class': 'usa-input usa-select'}),
                               initial=0)
 
     source_title = CharField(max_length=255,
@@ -76,12 +75,9 @@ class ExistingDataForm(ModelForm):
 
     keywords = CharField(max_length=1024,
                          widget=Textarea({
-                             'rows':
-                             2,
-                             'class':
-                             'usa-input',
-                             'placeholder':
-                             'Keywords, Comma Seperated'
+                             'rows': 2,
+                             'class': 'usa-input',
+                             'placeholder': 'Keywords, Comma Seperated'
                          }),
                          label=_("Keywords"),
                          required=False)
@@ -121,8 +117,8 @@ class ExistingDataForm(ModelForm):
         label=_("Upload File Attachments"),
         required=False,
         widget=ClearableFileInput(attrs={
-            'multiple': False,
-            'class': 'custom-file-input'
+            'multiple': True,
+            'class': 'usa-file-input'
         }))
 
     def __init__(self, *args, **kwargs):

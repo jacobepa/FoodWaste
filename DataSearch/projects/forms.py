@@ -77,13 +77,14 @@ class ProjectForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'usa-input usa-select'}),
         required=True)
 
+    # TODO: Need to make sure this is saving properly and populating properly
+    #       when editing an existing project instance (i.e. shared teams
+    #       should already be selected and non-shared teams should not be).
     # Team Members (List of teams related to this project)
     teams = forms.ModelMultipleChoiceField(
         widget=forms.SelectMultiple({
-            'class':
-            'usa-input mb-2',
-            'placeholder':
-            'Teams'
+            'class': 'usa-input mb-2',
+            'placeholder': 'Teams'
         }),
         queryset=Team.objects.all(),
         label=_("Share With Teams"),
@@ -102,12 +103,14 @@ class ProjectForm(forms.ModelForm):
             can_edit = kwargs.pop('can_edit', None)
             kwargs.update(initial={'can_edit': can_edit})
             super(ProjectForm, self).__init__(*args, **kwargs)
-            team_ids = TeamMembership.objects.filter(
-                member=current_user).values_list('team', flat=True)
-            self.fields['teams'].queryset = \
-                Team.objects.filter(id__in=team_ids)
-            self.fields['teams'].label_from_instance = \
-                lambda obj: "%s" % obj.name
+            # TODO: Clarify that this is the desired functionality. Will a
+            #       user ever want to share a project with a non-member Team?
+            # team_ids = TeamMembership.objects.filter(
+            #     member=current_user).values_list('team', flat=True)
+            # self.fields['teams'].queryset = \
+            #     Team.objects.filter(id__in=team_ids)
+            # self.fields['teams'].label_from_instance = \
+            #     lambda obj: "%s" % obj.name
         except Exception:
             super(ProjectForm, self).__init__(*args, **kwargs)
 

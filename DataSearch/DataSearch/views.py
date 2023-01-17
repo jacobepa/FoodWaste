@@ -177,13 +177,16 @@ class ExistingDataDetail(LoginRequiredMixin, DetailView):
             context['edit_message'] = 'You cannot edit this data.'
             context['edit_disabled'] = 'disabled'
 
-        referer = self.request.META['HTTP_REFERER'].split('/')
-        p_id = referer[len(referer) - 1]
-        p_type = referer[len(referer) - 2]
-        if p_type == 'user':
-            context['p_user'] = User.objects.get(id=p_id)
-        elif p_type == 'team':
-            context['team'] = Team.objects.get(id=p_id)
+        referer = self.request.META.get('HTTP_REFERER', None)
+        if referer:
+            referer = referer.split('/')
+            p_id = referer[len(referer) - 1]
+            p_type = referer[len(referer) - 2]
+            if p_type == 'user':
+                context['p_user'] = User.objects.get(id=p_id)
+            elif p_type == 'team':
+                context['team'] = Team.objects.get(id=p_id)
+
         return context
 
 

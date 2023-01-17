@@ -3,139 +3,106 @@
 {% block content %}
 {% load static %}
 
-<div class="container">
-    <div class="row">
-        <h2>SciFinder</h2>
-        <h2>CESER | Center for Environmental Solutions & Emergency Response.</h2>
-    </div>
+<h2>SciFinder</h2>
+<h2>CESER | Center for Environmental Solutions & Emergency Response.</h2>
 
-    <!--------------------------->
-    <!-- Clean up this section -->
-    <h4>
-        Important Information:
-        If you do not have an account please contact Dr. Michael Gonzalez to request access.
-    </h4>
-    <h4>
-        Access is limited to RTP, Duluth, and Cincinnati campuses, per SciFinder license.
-    </h4>
-    <h4>With SciFinder-n, you have access to:</h4>
-    <ul>
-        <li>Predictive and Experimental Retrosynthesis</li>
-        <li>PatentPak</li>
-        <li>MethodsNow for synthetic chemists</li>
-        <li>the unmatched CAS content collection</li>
-    </ul>
-    <p>CAS user survey shows SciFinder-n improves research efficiency by 50% compared to SciFinder</p>
-    <label>To obtain SciFinder login, email the contact for your campus:</label>
-    <div class="row">
-        <div class="col-md-4 my-1">
-            <b>Cincinnati Campus:</b>
-            <button class="btn btn-sm btn-info"
-                    onclick="window.location='mailto:gonzalez.michael@epa.gov?subject=Request access to SciFinder&amp;body=Dr. Gonzalez, Request SciFinder Access'">
-                <span class="fa fa-envelope"></span> Dr. Gonzalez
-            </button>
-        </div>
-        <div class="col-md-4 my-1">
-            <b>Duluth Campus:</b>
-            <button class="btn btn-sm btn-info">
-                <span class="fa fa-envelope"></span> Duluth Campus
-            </button>
-        </div>
-        <div class="col-md-4 my-1">
-            <b>RTP Campus:</b>
-            <button class="btn btn-sm btn-info">
-                <span class="fa fa-envelope"></span> RTP Campus
-            </button>
-        </div>
-    </div>
-    <!--<table>
+<!--------------------------->
+<!-- Clean up this section -->
+<h4>
+    Important Information:
+    If you do not have an account please contact Dr. Michael Gonzalez to request access.
+</h4>
+<h4>Access is limited to RTP, Duluth, and Cincinnati campuses, per SciFinder license.</h4>
+
+<h4>With SciFinder-n, you have access to:</h4>
+
+<ul>
+    <li>Predictive and Experimental Retrosynthesis</li>
+    <li>PatentPak</li>
+    <li>MethodsNow for synthetic chemists</li>
+    <li>the unmatched CAS content collection</li>
+</ul>
+
+<p>CAS user survey shows SciFinder-n improves research efficiency by 50% compared to SciFinder</p>
+
+<label>To obtain SciFinder login, email the contact for your campus:</label>
+
+<table class="usa-table usa-table--borderless">
+    <tbody>
         <tr>
-            <td class="text-right"><label>Cincinnati Campus:</label></td>
-            <td>
-                <button class="btn btn-sm btn-info btn-block"
+            <td style="border: none;"><b>Cincinnati Campus:</b></td>
+            <td style="border: none;">
+                <button class="usa-button"
                         onclick="window.location='mailto:gonzalez.michael@epa.gov?subject=Request access to SciFinder&amp;body=Dr. Gonzalez, Request SciFinder Access'">
                     <span class="fa fa-envelope"></span> Dr. Gonzalez
                 </button>
             </td>
         </tr>
         <tr>
-            <td class="text-right"><label>Duluth Campus:</label></td>
-            <td>
-                <button class="btn btn-sm btn-info btn-block">
+            <td style="border: none;"><b>Duluth Campus:</b></td>
+            <td style="border: none;">
+                <button class="usa-button">
                     <span class="fa fa-envelope"></span> Duluth Campus
                 </button>
             </td>
         </tr>
         <tr>
-            <td class="text-right"><label>RTP Campus:</label></td>
-            <td>
-                <button class="btn btn-sm btn-info btn-block">
+            <td style="border: none;"><b>RTP Campus:</b></td>
+            <td style="border: none;">
+                <button class="usa-button">
                     <span class="fa fa-envelope"></span> RTP Campus
                 </button>
             </td>
         </tr>
-    </table>-->
-    <!--------------------------->
+    </tbody>
+</table>
 
-    <div class="row mt-2">
-        <h4><button onclick="window.open('https://scifinder-n.cas.org/', '_blank')" class="btn btn-success">
-            <span class="fa fa-search"></span>
-            Search with SciFinder and upload your results below
-        </button></h4>
+<button onclick="window.open('https://scifinder-n.cas.org/', '_blank')" class="usa-button">
+    <span class="fa fa-search"></span>
+    Search with SciFinder and upload your results below
+</button>
+
+<form action="" method="post" role="form">
+    {% csrf_token %}
+    <div class="usa-form-group">
+        <label class="usa-label" for="file-input-single">
+            Input accepts multiple files
+        </label>
+        <input id="fileupload" class="usa-file-input"
+            type="file" name="file-input-single" multiple="multiple"
+            data-url="{% url 'scifinder:scifinder_index' %}"
+            data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'
+        />
     </div>
+    <button type="submit" class="usa-button">
+        Upload Files
+    </button>
+</form>
 
-    <div class="row">
-        <button type="button" class="btn btn-info js-upload-files text-center col-md-12">
-            <span class="glyphicon glyphicon-cloud-upload"></span> Upload files
-        </button>
 
-        <div class="well text-muted text-center col-md-12" style="padding-top: 4rem; padding-bottom: 4rem;">
-            <span class="glyphicon glyphicon-arrow-down" style="font-size: 4rem;"></span>
-            <h3>Drop Files Here to Upload</h3>
-        </div>
-
-        {# 2. FILE INPUT TO BE USED BY THE PLUG-IN #}
-        <input id="fileupload" type="file" name="file" multiple
-               style="display: none;"
-               data-url="{% url 'scifinder:scifinder_index' %}"
-               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
-
-        {# 3. TABLE TO DISPLAY THE UPLOADED FILES #}
-        <table id="gallery" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th colspan="2">
-                        Uploaded Files
-                        (<a href="/scifinder/download_files/">Download All</a>)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for file in files %}
-                <tr>
-                    <td><a href="/scifinder/download_file/{{ file.id }}"><span class="fa fa-download"></span> {{ file.name }}</a></td>
-                    <td>
-                        <a href="/scifinder/delete_file/{{ file.id }}">
-                            Delete File
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- NOTE: These script references need to be inside <body> (content block) to properly load. -->
-{% block scripts %}
-    {# JQUERY FILE UPLOAD SCRIPTS #}
-    <script src="{% static 'lib/jquery-file-upload/vendor/jquery.ui.widget.js' %}"></script>
-    <script src="{% static 'lib/jquery-file-upload/jquery.iframe-transport.js' %}"></script>
-    <script src="{% static 'lib/jquery-file-upload/jquery.fileupload.js' %}"></script>
-
-    {# CUSTOM FILE UPLOAD SCRIPT #}
-    <script src="{% static 'scripts/flowsa.upload.js' %}"></script>
-{% endblock %}
+{# 3. TABLE TO DISPLAY THE UPLOADED FILES #}
+<table class="usa-table">
+    <thead>
+        <tr>
+            <th colspan="2">
+                Uploaded Files
+                (<a href="/scifinder/download_files/">Download All</a>)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for file in files %}
+        <tr>
+            <td><a href="/scifinder/download_file/{{ file.id }}"><span class="fa fa-download"></span> {{ file.name }}</a></td>
+            <td>
+                <a href="/scifinder/delete_file/{{ file.id }}">
+                    Delete File
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}
 
