@@ -50,13 +50,11 @@ class FlowsaIndex(LoginRequiredMixin, TemplateView):
             file.uploaded_by = request.user
             file.name = file.file.name
             file.save()
-            data = {'is_valid': True, 'name': file.name,
-                    'download_url': '/flowsa/download_file/%s' % file.id,
-                    'delete_url': '/flowsa/delete_file/%s' % file.id}
-        else:
-            data = {'is_valid': False}
+            form = UploadForm()
 
-        return JsonResponse(data)
+        files_list = Upload.objects.filter(uploaded_by=request.user)
+        return render(request, self.template_name,
+                      {'form': form, 'files': files_list})
 
 
 class FlowsaDelete(LoginRequiredMixin, DeleteView):

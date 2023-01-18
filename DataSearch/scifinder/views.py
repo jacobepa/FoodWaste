@@ -45,19 +45,16 @@ class ScifinderIndex(LoginRequiredMixin, TemplateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """Process the post request with a new scifinder file upload."""
-        form = UploadForm(request.POST, self.request.FILES)
+        form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             file = form.save(commit=False)
             file.uploaded_by = request.user
             file.name = file.file.name
             file.save()
-            data = {'is_valid': True, 'name': file.name,
-                    'download_url': '/scifinder/download_file/%s' % file.id,
-                    'delete_url': '/scifinder/delete_file/%s' % file.id}
-        else:
-            data = {'is_valid': False}
 
-        return JsonResponse(data)
+        files_list = Upload.objects.filter(uploaded_by=request.user)
+        return render(request, self.template_name,
+                      {'form': form, 'files': files_list})
 
 
 class ScifinderDelete(LoginRequiredMixin, DeleteView):

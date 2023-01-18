@@ -57,30 +57,7 @@
     </tbody>
 </table>
 
-<button onclick="window.open('https://scifinder-n.cas.org/', '_blank')" class="usa-button">
-    <span class="fa fa-search"></span>
-    Search with SciFinder and upload your results below
-</button>
-
-<form action="" method="post" role="form">
-    {% csrf_token %}
-    <div class="usa-form-group">
-        <label class="usa-label" for="file-input-single">
-            Input accepts multiple files
-        </label>
-        <input id="fileupload" class="usa-file-input"
-            type="file" name="file-input-single" multiple="multiple"
-            data-url="{% url 'scifinder:scifinder_index' %}"
-            data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'
-        />
-    </div>
-    <button type="submit" class="usa-button">
-        Upload Files
-    </button>
-</form>
-
-
-{# 3. TABLE TO DISPLAY THE UPLOADED FILES #}
+{# TABLE TO DISPLAY THE UPLOADED FILES #}
 <table class="usa-table">
     <thead>
         <tr>
@@ -91,6 +68,7 @@
         </tr>
     </thead>
     <tbody>
+        {% if files %}
         {% for file in files %}
         <tr>
             <td><a href="/scifinder/download_file/{{ file.id }}"><span class="fa fa-download"></span> {{ file.name }}</a></td>
@@ -101,8 +79,27 @@
             </td>
         </tr>
         {% endfor %}
+        {% else %}
+        <tr><td colspan="2">No files have been uploaded...</td></tr>
+        {% endif %}
     </tbody>
 </table>
+
+<button onclick="window.open('https://scifinder-n.cas.org/', '_blank')" class="usa-button">
+    <span class="fa fa-search"></span>
+    Search with SciFinder and upload your results below
+</button>
+
+<form enctype="multipart/form-data" method="post" role="form">
+    {% csrf_token %}
+    <div class="usa-form-group">
+        <label for="id_file" class="usa-label">{{form.file.label}}</label>
+        {{form.file}}
+    </div>
+    <button type="submit" class="usa-button">
+        Upload File
+    </button>
+</form>
 
 {% endblock %}
 

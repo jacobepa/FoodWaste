@@ -6,12 +6,21 @@
 
 """Definition of forms."""
 
-from django.forms import ModelForm
+from django.forms import ModelForm, FileField, ClearableFileInput
+from django.utils.translation import gettext_lazy as _
 from scifinder.models import Upload
 
 
 class UploadForm(ModelForm):
     """Form that handles SciFinder attachment uploads."""
+
+    file = FileField(
+        label=_("Upload one File at a time"),
+        required=True,
+        widget=ClearableFileInput(attrs={
+            'multiple': False,
+            'class': 'usa-file-input'
+        }))
 
     class Meta:
         """Meta class to specify the base model and fields to implement."""

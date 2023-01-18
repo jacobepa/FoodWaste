@@ -57,9 +57,9 @@
         <!-- By team: -->
         <div class="grid-col-6">
             <div class="grid-row">
-                <label class="usa-label grid-col-12" for="user-select">View existing entries by Team</label>
+                <label class="usa-label grid-col-12" for="team-select">View existing entries by Team</label>
                 <div class="usa-combo-box">
-                    <select class="usa-select" name="user-select" id="user-select"
+                    <select class="usa-select" name="team-select" id="team-select"
                                     onchange="entryByTeam(this)">
                         <option value>Select a Team</option>
                         {% for team in teams %}
@@ -74,12 +74,8 @@
     <div class="grid-row">
         <label class="usa-label grid-col-12" for="">or create...</label>
         <div class="grid-col-12 usa-button-group">
-            <div>
-                <button class="usa-button usa-button--outline">New Team</button>
-            </div>
-            <div>
-                <button class="usa-button usa-button--outline">New Data Entry</button>
-            </div>
+            <button class="usa-button usa-button--outline" onclick="window.location.href='/teams/team'">New Team</button>
+            <button class="usa-button usa-button--outline" onclick="window.location.href='/existingdata/create'">New Existing Data</button>
         </div>
     </div>
 </div>
