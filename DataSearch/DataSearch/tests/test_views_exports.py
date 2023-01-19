@@ -3,7 +3,6 @@
 # coding=utf-8
 # young.daniel@epa.gov
 # py-lint: disable=W0511,R0904
-
 """
 This file demonstrates writing tests using the unittest module.
 
@@ -41,37 +40,52 @@ class TestViewExportsAuthenticated(TestCase):
         self.request_factory = RequestFactory()
         self.test_str = 'Test'
         self.client = Client()
-        self.client.login(username='dyoung11', password='Evelynj1!')
+        self.user = User.objects.create_user(username='testuser',
+                                             password='12345')
+        self.client.login(username='testuser', password='12345')
         # User 1 created the team, User 2 created ExistingData,
         # User 3 has no privileges
-        self.user = User.objects.get(id=1)
         self.team = Team.objects.create(created_by=self.user, name='testteam')
-        TeamMembership.objects.create(
-            member=self.user, team=self.team, is_owner=True, can_edit=True)
+        TeamMembership.objects.create(member=self.user,
+                                      team=self.team,
+                                      is_owner=True,
+                                      can_edit=True)
         # Build some models to be used in this test class:
         self.source = ExistingDataSource.objects.get(id=1)
         self.data_dict = {
-            'work': self.test_str, 'email': self.test_str,
+            'work': self.test_str,
+            'email': self.test_str,
             'phone': self.test_str,
-            'search': self.test_str, 'source': self.source,
-            'source_title': self.test_str, 'keywords': self.test_str,
-            'url': self.test_str, 'disclaimer_req': True,
+            'search': self.test_str,
+            'source': self.source,
+            'source_title': self.test_str,
+            'keywords': self.test_str,
+            'url': self.test_str,
+            'disclaimer_req': True,
             'citation': self.test_str,
-            'comments': self.test_str, 'created_by': self.user,
-            'teams': []}
-        self.dat = ExistingData.objects.create(
-            work=self.test_str, email=self.test_str, phone=self.test_str,
-            search=self.test_str, source=self.source,
-            source_title=self.test_str,
-            keywords=self.test_str, url=self.test_str, disclaimer_req=False,
-            citation=self.test_str, comments=self.test_str,
-            created_by=self.user)
+            'comments': self.test_str,
+            'created_by': self.user,
+            'teams': []
+        }
+        self.dat = ExistingData.objects.create(work=self.test_str,
+                                               email=self.test_str,
+                                               phone=self.test_str,
+                                               search=self.test_str,
+                                               source=self.source,
+                                               source_title=self.test_str,
+                                               keywords=self.test_str,
+                                               url=self.test_str,
+                                               disclaimer_req=False,
+                                               citation=self.test_str,
+                                               comments=self.test_str,
+                                               created_by=self.user)
         self.dat_team_map = ExistingDataSharingTeamMap.objects.create(
             data=self.dat, team=self.team, can_edit=True)
         self.dat.teams.add(self.dat_team_map.team)
         self.file = SimpleUploadedFile('test.txt', b'This is a test file.')
-        self.att = Attachment.objects.create(
-            name='Test', file=self.file, uploaded_by=self.user)
+        self.att = Attachment.objects.create(name='Test',
+                                             file=self.file,
+                                             uploaded_by=self.user)
         self.dat.attachments.add(self.att)
 
     def test_export_pdf_single(self):
@@ -87,9 +101,11 @@ class TestViewExportsAuthenticated(TestCase):
         """
         zip_mem = BytesIO()
         archive = ZipFile(zip_mem, 'w')
-        att1 = Attachment.objects.create(name='Test1', file=self.file,
+        att1 = Attachment.objects.create(name='Test1',
+                                         file=self.file,
                                          uploaded_by=self.user)
-        att2 = Attachment.objects.create(name='Test2', file=self.file,
+        att2 = Attachment.objects.create(name='Test2',
+                                         file=self.file,
                                          uploaded_by=self.user)
         self.assertTrue(len(archive.filelist) == 0)
         archive = add_attachments_to_zip(archive, [att1.id, att2.id])
