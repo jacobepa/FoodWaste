@@ -1,6 +1,7 @@
 ﻿{% extends "main/base.html" %}
 
 {% block content %}
+
 <h1>QUALITY ASSURANCE PROJECT PLAN.</h1>
 <h2>Office of Research and Development (ORD)</h2>
 <h3>Center for Environmental Solutions & Emergency Response (CESER)</h3>
@@ -71,7 +72,9 @@
         </div>
     </div>
 </div>
-{% endblock %}{% block scripts %}
+{% endblock %}
+
+{% block scripts %}
 <script>
     function entryByUser(selObj) {
         let val = selObj.value;
@@ -82,68 +85,4 @@
         window.location.href=`/qar5/list/team/${val}`;
     }
 </script>
-{% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <label class="col-sm-12">View QAPP documents for...</label>
-                    <button class="btn btn-info dropdown-toggle col-sm-12" type="button"
-                            id="dropdownUserButton" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Users
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownUserButton">
-                        {% for user in users %}
-                        <a class="dropdown-item" href="/qar5/list/user/{{user.id}}">
-                            {{user.username}} ({{user.first_name}} {{user.last_name}})
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="col-sm-5 offset-sm-1">
-                    <button class="btn btn-info dropdown-toggle col-sm-12" type="button"
-                            id="dropdownTeamButton" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Teams
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownTeamButton">
-                        {% for team in teams %}
-                        <a class="dropdown-item" href="/qar5/list/team/{{team.id}}">
-                            {{team.name}}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <label class="col-sm-12">or create a new QAPP...</label>
-                <button onclick="window.location.href='{% url 'team_create' %}'" class="col-sm-5 btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    New Team
-                </button>
-                <button onclick="window.location.href='/qar5/create/'" class="col-sm-5 offset-sm-1 btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    New QAPP
-                </button>
-            </div>
-        </div>
-    </div>
 {% endblock %}

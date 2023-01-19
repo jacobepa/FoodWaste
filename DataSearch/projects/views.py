@@ -139,29 +139,29 @@ class ProjectEditView(LoginRequiredMixin, UpdateView):
         # Verify the current user has permissions to modify this Project:
         self.object = form.save(commit=False)
         self.object.save()
-        # Prepare and insert teams data.
-        if form.cleaned_data['teams']:
-            form_teams = form.cleaned_data['teams']
 
-            # Remove any team maps that have been deselected:
-            remove_teams = ProjectSharingTeamMap.objects.filter(
-                project=self.object).exclude(team__in=form_teams)
+        form_teams = form.cleaned_data['teams']
 
-            for team in remove_teams:
-                team.delete()
+        # Remove any team maps that have been deselected:
+        remove_teams = ProjectSharingTeamMap.objects.filter(
+            project=self.object).exclude(team__in=form_teams)
 
-            # Insert or update selected team maps:
-            for team in form_teams:
-                data_team_map = ProjectSharingTeamMap.objects.filter(
-                    project=self.object, team=team).first()
-                # Create new team map if not exists:
-                if not data_team_map:
-                    data_team_map = ProjectSharingTeamMap()
-                    data_team_map.team = team
-                    data_team_map.project = self.object
-                # Update (or set) the can_edit field:
-                data_team_map.can_edit = form.cleaned_data['can_edit']
-                data_team_map.save()
+        for team in remove_teams:
+            team.delete()
+
+        # Insert or update selected team maps:
+        for team in form_teams:
+            data_team_map = ProjectSharingTeamMap.objects.filter(
+                project=self.object, team=team).first()
+            # Create new team map if not exists:
+            if not data_team_map:
+                data_team_map = ProjectSharingTeamMap()
+                data_team_map.team = team
+                data_team_map.project = self.object
+            # Update (or set) the can_edit field:
+            data_team_map.can_edit = form.cleaned_data['can_edit']
+            data_team_map.save()
+
         # Return back to the details page:
         return HttpResponseRedirect('/projects/detail/' + str(self.object.id))
 

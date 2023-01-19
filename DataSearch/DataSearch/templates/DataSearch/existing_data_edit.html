@@ -1,103 +1,90 @@
 ﻿{% extends "main/base.html" %} {% block content %}
 
-<div class="container">
   {% if edit_message %}
-  <div class="row text-danger">{{edit_message}}</div>
+  <div class="usa-alert usa-alert--info">
+    <div class="usa-alert__body">
+      <p class="usa-alert__text">{{edit_message}}</p>
+    </div>
+  </div>
   {% endif %}
-  <div class="row">
-    <div class="col-md-12">
+
       <form enctype="multipart/form-data" action="/existingdata/edit/{{object.id}}" method="post" role="form">
         {% csrf_token %}
-        <div class="form-group">
-          <div class="col-sm-3">
+
+        <div class="usa-form-group">
             <label for="" class="col-sm-12 control-label">{{form.teams.label}}</label>
             <a href="{% url 'team_create' %}" class="col-sm-8 btn btn-sm btn-success">
               <span class="glyphicon glyphicon-plus"></span>
               Create Team
             </a>
-          </div>
-          <div class="col-sm-9">{{form.teams}}</div>
+            {{form.teams}}
         </div>
 
-        <div class="form-group">
-          <label for="" class="col-sm-3 control-label">{{form.work.label}}</label>
-          <div class="col-sm-9">{{form.work}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.work.label}}</label>
+          {{form.work}}
         </div>
 
-        <div class="form-group">
-          <label for="" class="col-sm-3 control-label">{{form.email.label}}</label>
-          <div class="col-sm-9">{{form.email}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.email.label}}</label>
+          {{form.email}}
         </div>
 
-        <div class="form-group">
-          <label for="" class="col-sm-3 control-label">{{form.phone.label}}</label>
-          <div class="col-sm-9">{{form.phone}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.phone.label}}</label>
+          {{form.phone}}
         </div>
 
-        <div class="form-group col-sm-12 mt-2">
-          <label for="" class="col-sm-3 control-label">{{form.search.label}}</label>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.search.label}}</label>
           <div class="col-sm-9">
-            <div class="col-sm-11">{{form.search}}</div>
+            <div class="col-sm-11">{{form.search}}
           </div>
         </div>
 
-        <div class="form-group col-sm-12 hidden-div">
-          <label for="" class="col-sm-3 control-label">{{form.source.label}}</label>
-          <div class="col-sm-9">{{form.source}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.source.label}}</label>
+          {{form.source}}
         </div>
 
-        <div class="form-group col-sm-12 hidden-div">
-          <label for="" class="col-sm-3 control-label">{{form.source_title.label}}</label>
-          <div class="col-sm-9">{{form.source_title}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.source_title.label}}</label>
+          {{form.source_title}}
         </div>
 
-        <div class="form-group col-sm-12 hidden-div">
-          <label for="" class="col-sm-3 control-label">{{form.keywords.label}}</label>
-          <div class="col-sm-9">{{form.keywords}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.keywords.label}}</label>
+          {{form.keywords}}
         </div>
 
-        <div class="form-group col-sm-12 hidden-div">
-          <label for="" class="col-sm-3 control-label">{{form.url.label}}</label>
-          <div class="col-sm-9">{{form.url}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.url.label}}</label>
+          {{form.url}}
         </div>
 
-        <div class="form-group col-sm-12 hidden-div">
-          <label for="" class="col-sm-3 control-label">{{form.disclaimer_req.label}}</label>
-          <div class="col-sm-9">{{form.disclaimer_req}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.disclaimer_req.label}}</label>
+          {{form.disclaimer_req}}
         </div>
 
-        <div class="form-group col-sm-12 hidden-div">
-          <label for="" class="col-sm-3 control-label">{{form.citation.label}}</label>
-          <div class="col-sm-9">{{form.citation}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.citation.label}}</label>
+          {{form.citation}}
         </div>
 
-        <div class="form-group col-sm-12 hidden-div">
-          <label for="" class="col-sm-3 control-label">{{form.comments.label}}</label>
-          <div class="col-sm-9">{{form.comments}}</div>
+        <div class="usa-form-group">
+          <label for="" class="usa-label">{{form.comments.label}}</label>
+          {{form.comments}}
         </div>
 
-        <div class="form-group col-sm-12">
-          <label class="col-sm-3" for="id_attachments">{{form.attachments.label}}</label>
-          <div class="col-sm-9">
+        <div class="usa-form-group">
+          <label class="usa-label" for="id_attachments">{{form.attachments.label}}</label>
             {{form.attachments}}
-            <label class="custom-file-label" for="id_attachments">Select a file...</label>
           </div>
         </div>
-
-        {% include 'edit_buttons_partial.html' %}
+        <div class="usa-form-group">
+          {% include 'edit_buttons_partial.html' %}
+        </div>
       </form>
-    </div>
-  </div>
-</div>
 
-{% endblock %} {% block scripts %}
-<script>
-  $('.custom-file-input').on('change', function () {
-    var fileName = $(this).val().split('\\').pop();
-    // Single upload implementation:
-    if (fileName) $(this).next('.custom-file-label').addClass('selected').html(fileName);
-    else $(this).next('.custom-file-label').addClass('selected').html('Select a file...');
-    // Multiple upload implementation, broken...
-  });
-</script>
 {% endblock %}
