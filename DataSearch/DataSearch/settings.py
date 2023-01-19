@@ -170,7 +170,7 @@ ENABLE_RSS_FEEDS = False
 APP_NAME = 'ExistingData'
 APP_NAME_LONG = 'DataSearch'
 
-APP_VERSION = '1.0.0'
+APP_VERSION = '1.1.0'
 APP_DISCLAIMER = 'The information and data presented in this product ' + \
                  'were obtained from sources that are believed to be ' + \
                  'reliable. However, in many cases the quality of the ' + \
