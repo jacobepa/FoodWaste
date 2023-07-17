@@ -24,7 +24,7 @@ class Upload(models.Model):
     """
 
     name = models.CharField(max_length=255, blank=True)
-    file = models.FileField(null=False, blank=False,
+    file = models.FileField(null=True, blank=True,
                             upload_to=get_flowsa_storage_path,
                             storage=upload_storage)
     uploaded_by = models.ForeignKey(User, blank=False,
