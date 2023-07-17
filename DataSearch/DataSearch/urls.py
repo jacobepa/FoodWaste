@@ -8,7 +8,7 @@
 
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, re_path
+from django.urls import include, path, re_path
 from DataSearch.views import home, contact, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
     ExistingDataEdit, ExistingDataDelete, web_dev_tools, clean_qapps, \
@@ -108,6 +108,9 @@ urlpatterns = [
     re_path(r'^scifinder/', include('scifinder.urls', namespace='scifinder')),
     re_path(r'^support/', include('support.urls')),
     re_path(r'^teams/', include('teams.urls')),
+
+    # auth
+    path('oauth2/', include('django_auth_adfs.urls')),
 ]
 
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

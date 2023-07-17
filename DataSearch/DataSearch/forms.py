@@ -117,7 +117,7 @@ class ExistingDataForm(ModelForm):
         label=_("Upload File Attachments"),
         required=False,
         widget=ClearableFileInput(attrs={
-            'multiple': True,
+            'multiple': False,
             'class': 'usa-file-input'
         }))
 

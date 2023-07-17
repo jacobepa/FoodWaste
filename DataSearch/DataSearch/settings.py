@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    # auth
+    'django_auth_adfs',
     # Add your apps here to enable them.
     'accounts',
     'constants',
@@ -91,6 +93,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_auth_adfs.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'DataSearch.urls'
@@ -118,6 +121,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'DataSearch.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases.
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'datasearch',
+        'USER': 'postgres',
+        'PASSWORD': '____________________',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
+    }
+}
 
 # Password validation.
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators.
@@ -170,7 +183,7 @@ ENABLE_RSS_FEEDS = False
 APP_NAME = 'ExistingData'
 APP_NAME_LONG = 'DataSearch'
 
-APP_VERSION = '1.1.0'
+APP_VERSION = '1.2.0'
 APP_DISCLAIMER = 'The information and data presented in this product ' + \
                  'were obtained from sources that are believed to be ' + \
                  'reliable. However, in many cases the quality of the ' + \
@@ -178,8 +191,51 @@ APP_DISCLAIMER = 'The information and data presented in this product ' + \
                  'sources; therefore, no claim is made regarding ' + \
                  'their quality.'
 
+# ##########################################################################
+# django-auth-adfs section
+
+AUTHENTICATION_BACKENDS = (
+    'django_auth_adfs.backend.AdfsAuthCodeBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# ##############################################################################
+# NOTE: Overwrite these values AND the AUTH_ADFS dictionary in local_settings.py
+client_id = ''
+client_secret = ''
+tenant_id = ''
+
+login_exempt_urls = [
+    '^$',
+    '/',
+    '/contact/?$',
+    '/dashboard/?$'
+]
+
+AUTH_ADFS = {
+    'AUDIENCE': client_id,
+    'CLIENT_ID': client_id,
+    'CLIENT_SECRET': client_secret,
+    'CLAIM_MAPPING': {'first_name': 'given_name',
+                      'last_name': 'family_name',
+                      'email': 'upn'},
+    'GROUPS_CLAIM': 'roles',
+    'MIRROR_GROUPS': True,
+    'USERNAME_CLAIM': 'email',
+    'TENANT_ID': tenant_id,
+    'RELYING_PARTY_ID': client_id,
+    'LOGIN_EXEMPT_URLS': login_exempt_urls,
+}
+# END Overwrite section
+# ##############################################################################
+
+# Configure django to redirect users to the right URL for login
+LOGIN_URL = "django_auth_adfs:login"
+LOGIN_REDIRECT_URL = "/"
+
+
 try:
-    from .local_settings import *
+    from .local_settings import *  # noqa: F401
     # py-lint: disable=E0012
 except ImportError:
     pass
