@@ -12,7 +12,7 @@
 #---------------------------------------------------------------------------------------#
 
 # Required for site to run:
-Django>=4.1.6                     # Python Modules.
+Django>=4.2.3                     # Python Modules.
 django-phonenumber-field>=7.0.2   # An international phone number field for django models.
 djangorestframework>=3.14.0       # Powerful and flexible toolkit for building Web APIs.
 django-wkhtmltopdf>=3.4.0         # Allows a Django site to output dynamic PDFs.
