@@ -49,7 +49,6 @@ class TestFlowsa(TestCase):
             'file': self.file,
             'uploaded_by': self.user
         }
-
     ############################
     # START test models section
 
@@ -70,28 +69,27 @@ class TestFlowsa(TestCase):
         print(response)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'FLOWSA Project Lead', 1)
-        self.assertContains(response, 'Drop Files Here to Upload', 1)
+        self.assertContains(response, 'Upload one File at a time', 1)
         self.assertContains(response, 'Uploaded Files', 1)
         self.assertContains(response, 'Download All', 1)
 
     def test_flowsa_index_post(self):
-        """Test the get method for the flowsa index (list) page."""
+        """Test the post method for the flowsa index (list) page."""
         request = self.request_factory.post('/flowsa/', data=self.upload_dict)
         request.user = self.user
         request.FILES['file'] = self.file
         response = FlowsaIndex.as_view()(request=request)
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, b'"is_valid": false')
-        self.assertContains(response, b'"is_valid": true')
+        self.assertContains(response, b'test.txt')
 
     def test_flowsa_index_post_bad(self):
         """Test the get method for the flowsa index (list) page."""
         request = self.request_factory.post('/flowsa/', data=self.upload_dict)
         request.user = self.user
         response = FlowsaIndex.as_view()(request=request)
-        print(response.content)
+
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, b'{"is_valid": false}')
+        self.assertNotContains(response, b'test.txt')
 
     def test_flowsa_delete(self):
         """Test the delete method for flowsa uploads."""

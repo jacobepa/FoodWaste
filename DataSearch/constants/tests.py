@@ -226,19 +226,19 @@ class TestUtils(TestCase):
         """Test that the DataSearch Attachment path is returned properly."""
         response = get_attachment_storage_path(instance=self.attachment_1,
                                                filename=self.test_str)
-        self.assertTrue('dyoung11/attachments/' in response)
+        self.assertTrue('testuser/attachments/' in response)
 
     def test_get_flowsa_storage_path(self):
         """Test that the Flowsa Upload storage path is returned properly."""
         response = get_flowsa_storage_path(instance=self.flowsa_upload,
                                            filename=self.test_str)
-        self.assertTrue('dyoung11/flowsa/' in response)
+        self.assertTrue('testuser/flowsa/' in response)
 
     def test_get_scifinder_storage_path(self):
         """Test that the Scifinder Upload storage path is returned properly."""
         response = get_scifinder_storage_path(instance=self.scifinder_upload,
                                               filename=self.test_str)
-        self.assertTrue('dyoung11/scifinder/' in response)
+        self.assertTrue('testuser/scifinder/' in response)
 
     def test_download_files(self):
         """Test the function to download multiple files as a zip."""
