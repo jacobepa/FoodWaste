@@ -40,9 +40,9 @@ class TestViewExportsAuthenticated(TestCase):
         self.request_factory = RequestFactory()
         self.test_str = 'Test'
         self.client = Client()
-        self.user = User.objects.create_user(username='melissa@gqc.com',
-                                             password='MelFeb2@18')
-        self.client.login(username='melissa@gqc.com', password='MelFeb2@18')
+        self.user = User.objects.create_user(username='testuser',
+                                             password='12345')
+        self.client.login(username='testuser', password='12345')
         # User 1 created the team, User 2 created ExistingData,
         # User 3 has no privileges
         self.team = Team.objects.create(created_by=self.user, name='testteam')
@@ -119,48 +119,48 @@ class TestViewExportsAuthenticated(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(b'workbook.xml' in response.content)
 
-    # def test_export_doc_single(self):
-    #     """
-    #     Test the function to export a single Existing Data object as Word Doc.
-    #     """
-    #     response = self.client.post(f'/existingdata/exportdocx/{self.dat.id}')
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTrue(b'word/numbering.xml' in response.content)
+    def test_export_doc_single(self):
+        """
+        Test the function to export a single Existing Data object as Word Doc.
+        """
+        response = self.client.post(f'/existingdata/exportdocx/{self.dat.id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(b'word/numbering.xml' in response.content)
 
-    # def test_export_user_doc(self):
-    #     """
-    #     Test the function to export multiple Existing Data objects for a user
-    #     as a zip file of Word Doc.
-    #     """
-    #     response = self.client.post(
-    #         f'/existingdata/exportdocx/user/{self.user.id}')
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTrue(b'test.docx.zip' in response.content)
-    #     self.assertTrue(b'This is a test file.' in response.content)
+    def test_export_user_doc(self):
+        """
+        Test the function to export multiple Existing Data objects for a user
+        as a zip file of Word Doc.
+        """
+        response = self.client.post(
+            f'/existingdata/exportdocx/user/{self.user.id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(b'test.docx.zip' in response.content)
+        self.assertTrue(b'This is a test file.' in response.content)
 
-    # def test_export_user_pdf(self):
-    #     """
-    #     Test the function to export multiple Existing Data objects for a user
-    #     as a zip file of PDF.
-    #     """
-    #     response = self.client.post(
-    #         f'/existingdata/exportpdf/user/{self.user.id}')
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTrue(b'export_Test.pdf.zip' in response.content)
-    #     self.assertTrue(b'This is a test file.' in response.content)
-    #     self.assertTrue(
-    #         b'ReportLab Generated PDF document' in response.content)
+    def test_export_user_pdf(self):
+        """
+        Test the function to export multiple Existing Data objects for a user
+        as a zip file of PDF.
+        """
+        response = self.client.post(
+            f'/existingdata/exportpdf/user/{self.user.id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(b'export_Test.pdf.zip' in response.content)
+        self.assertTrue(b'This is a test file.' in response.content)
+        self.assertTrue(
+            b'ReportLab Generated PDF document' in response.content)
 
-    # def test_export_user_excel(self):
-    #     """
-    #     Test the function to export multiple Existing Data objects for a user
-    #     as a zip file of Excel.
-    #     """
-    #     response = self.client.post(
-    #         f'/existingdata/exportexcel/user/{self.user.id}')
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTrue(b'export_Test.xlsx.zip' in response.content)
-    #     self.assertTrue(b'This is a test file.' in response.content)
+    def test_export_user_excel(self):
+        """
+        Test the function to export multiple Existing Data objects for a user
+        as a zip file of Excel.
+        """
+        response = self.client.post(
+            f'/existingdata/exportexcel/user/{self.user.id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(b'export_Test.xlsx.zip' in response.content)
+        self.assertTrue(b'This is a test file.' in response.content)
 
     # def test_export_team_doc(self):
     #     """
