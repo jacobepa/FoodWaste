@@ -15,6 +15,7 @@ import django
 from django.test import Client, TestCase
 from django.test.client import RequestFactory
 from DataSearch.models import Attachment, ExistingDataSource, ExistingData
+from django.contrib.auth.models import Permission
 
 
 class AttachmentTest(TestCase):

@@ -20,6 +20,7 @@ from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
 from django.test.client import RequestFactory
+from django.contrib.auth.models import Permission
 # from django.core.mail import EmailMultiAlternatives
 # from GSC_SSSENR.utils import replace_none_empty_str
 from support.models import SupportType

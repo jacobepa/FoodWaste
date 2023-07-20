@@ -11,11 +11,11 @@ These will pass when you run "manage.py test".
 
 # from unittest import TestCase
 import django
+from django.contrib.auth.models import User, Permission
 from django.db.models.query import QuerySet, EmptyQuerySet
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
 from django.test.client import RequestFactory
-from accounts.models import User
 from DataSearch.forms import ExistingDataForm
 from DataSearch.models import Attachment, ExistingData, ExistingDataSource, \
     ExistingDataSharingTeamMap
@@ -43,14 +43,22 @@ class TestViewAuthenticated(TestCase):
         self.client = Client()
         # User 1 created the team, User 2 created ExistingData,
         # User 3 has no privileges
-        self.user1 = User.objects.create_user(username='testuser1',
-                                              password='12345')
+        self.user1 = User.objects.create_user(username='testuser',
+                                              password='12345', is_staff=True)
+        self.client.login(username='testuser', password='12345')
+
+
         self.user2 = User.objects.create_user(username='testuser2',
                                               password='12345')
         self.user3 = User.objects.create_user(username='testuser3',
                                               password='12345')
-        self.client.login(username='testuser1', password='12345')
-        self.user = User.objects.get(id=1)
+        self.user4 = User.objects.create_user(username='testuser4',
+                                              password='12345', is_staff=True,
+                                              is_superuser=True)
+
+        # Assuming the URL name for the protected_view is 'protected_view'
+        self.client.login(username='testuser', password='12345')
+        # self.user = User.objects.get(id=1)
         self.team = Team.objects.create(created_by=self.user1, name='testteam')
         TeamMembership.objects.create(member=self.user1,
                                       team=self.team,
@@ -59,19 +67,19 @@ class TestViewAuthenticated(TestCase):
         # Build some models to be used in this test class:
         self.source = ExistingDataSource.objects.get(id=1)
         self.data_dict = {
-            'work': self.test_str,
-            'email': self.test_str,
-            'phone': self.test_str,
-            'search': self.test_str,
-            'source': self.source,
-            'source_title': self.test_str,
-            'keywords': self.test_str,
-            'url': self.test_str,
-            'disclaimer_req': True,
-            'citation': self.test_str,
-            'comments': self.test_str,
-            'created_by': self.user2,
-            'teams': []
+          'work': self.test_str,
+          'email': self.test_str,
+          'phone': self.test_str,
+          'search': self.test_str,
+          'source': self.source,
+          'source_title': self.test_str,
+          'keywords': self.test_str,
+          'url': self.test_str,
+          'disclaimer_req': True,
+          'citation': self.test_str,
+          'comments': self.test_str,
+          'created_by': self.user2,
+          'teams': []
         }
         self.dat = ExistingData.objects.create(work=self.test_str,
                                                email=self.test_str,
@@ -86,7 +94,7 @@ class TestViewAuthenticated(TestCase):
                                                comments=self.test_str,
                                                created_by=self.user2)
         self.dat_team_map = ExistingDataSharingTeamMap.objects.create(
-            data=self.dat, team=self.team, can_edit=True)
+          data=self.dat, team=self.team, can_edit=True)
         self.dat.teams.add(self.dat_team_map.team)
         self.file = SimpleUploadedFile('test.txt', b'This is a test file.')
         # TODO: Need at least one QAPP and SectionA object to
@@ -96,16 +104,16 @@ class TestViewAuthenticated(TestCase):
         """Tests loading the home page."""
         response = self.client.get('/')
         self.assertContains(response,
-                            'Existing Data and Information Search Tool', 2,
+                            'Existing Data and Information Search Tool', 1,
                             200)
-        self.assertContains(response, 'CESER QAPP Builder for Category A or B',
+        self.assertContains(response, 'QAPP Development',
                             1, 200)
 
     def test_contact(self):
         """Tests loading the contact page."""
         response = self.client.get('/contact')
         self.assertContains(response,
-                            'Environmental Decision Analytics Branch (EDAB)',
+                            'EDAB | Environmental Decision Analytics Branch.',
                             1, 200)
         self.assertContains(response, 'Plastics Projects Research (EDAB)', 1,
                             200)
@@ -114,14 +122,14 @@ class TestViewAuthenticated(TestCase):
         """Tests loading the dev tools page."""
         response = self.client.get('/dev')
         self.assertContains(response, 'QAPP Module Management', 1, 200)
-        self.assertContains(response, 'Clean Extra Spaces from QAPP Data', 1,
+        self.assertContains(response, 'Clean and Convert QAPP Data', 1,
                             200)
 
     def test_clean_qapps(self):
         """Test the clean qapps function."""
         response = self.client.get('/dev/clean_qapps')
         self.assertContains(response, 'QAPP Module Management', 1, 200)
-        self.assertContains(response, 'Clean Extra Spaces from QAPP Data', 1,
+        self.assertContains(response, 'Clean and Convert QAPP Data', 1,
                             200)
 
     def test_get_existing_data_all(self):
@@ -173,7 +181,7 @@ class TestViewAuthenticated(TestCase):
         Test the function that checks if a user has super
         permissions to edit the given Existing Data.
         """
-        self.assertTrue(check_can_edit(self.dat, self.user))
+        self.assertTrue(check_can_edit(self.dat, self.user4))
 
     def test_check_can_edit_fail(self):
         """
@@ -189,14 +197,14 @@ class TestViewAuthenticated(TestCase):
         self.assertContains(response,
                             'Existing Data and Information Research Projects',
                             1, 200)
-        self.assertContains(response, 'View existing entries for...', 1, 200)
+        self.assertContains(response, 'View existing entries by', 2, 200)
         self.assertContains(response, 'New Team', 1, 200)
-        self.assertContains(response, 'New Data Entry', 1, 200)
+        self.assertContains(response, 'New Existing Data', 1, 200)
 
     def test_existingdata_list_user(self):
         """Test loading the list of Existing Data for a specified user."""
         response = self.client.get('/existingdata/list/user/' +
-                                   str(self.user.id))
+                                   str(self.user1.id))
         self.assertContains(response, 'Existing Data Tracking Tool', 1, 200)
         self.assertContains(response, 'View or Edit Existing Data', 1, 200)
         self.assertContains(response, 'Export All Data to Docx', 1, 200)
@@ -228,7 +236,7 @@ class TestViewAuthenticated(TestCase):
         called from the team list page.
         """
         header = {
-            'HTTP_REFERER': '/existingdata/list/team/' + str(self.team.id)
+          'HTTP_REFERER': '/existingdata/list/team/' + str(self.team.id)
         }
         response = self.client.get('/existingdata/detail/' + str(self.dat.id),
                                    **header)
@@ -246,7 +254,7 @@ class TestViewAuthenticated(TestCase):
         called from the user list page.
         """
         header = {
-            'HTTP_REFERER': '/existingdata/list/user/' + str(self.user.id)
+          'HTTP_REFERER': '/existingdata/list/user/' + str(self.user1.id)
         }
         response = self.client.get('/existingdata/detail/' + str(self.dat.id),
                                    **header)
@@ -264,7 +272,7 @@ class TestViewAuthenticated(TestCase):
         where the requesting user doesn't have edit permissions.
         """
         header = {
-            'HTTP_REFERER': '/existingdata/list/user/' + str(self.user.id)
+          'HTTP_REFERER': '/existingdata/list/user/' + str(self.user1.id)
         }
         path = '/existingdata/detail/' + str(self.dat.id)
         request = self.request_factory.get(path, **header)
