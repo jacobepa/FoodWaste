@@ -5,10 +5,11 @@
 
 
 """Definition of urls for DataSearch."""
+import django_saml2_auth.views
 
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.urls import include, re_path
 from DataSearch.views import home, contact, ExistingDataIndex, \
     ExistingDataList, ExistingDataCreate, ExistingDataDetail, \
     ExistingDataEdit, ExistingDataDelete, web_dev_tools, clean_qapps, \
@@ -20,6 +21,26 @@ from DataSearch.settings import MEDIA_ROOT, MEDIA_URL
 
 
 urlpatterns = [
+    # ########################################################################
+    # Auth SAML
+    # ########################################################################
+    # SAML2 related URLs. You can change "^saml2_auth/" regex to # any path you
+    # want, like "^sso/", "^sso_auth/", "^sso_login/", etc. (required)
+    re_path(r'^sso/', include('django_saml2_auth.urls')),
+
+    # The following line will replace default user login with SAML2 (optional)
+    # If you want to specific the after-login-redirect-URL,
+    # use parameter "?next=/the/path/you/want" with this view.
+    re_path(r'^accounts/login/$', django_saml2_auth.views.signin),
+
+    # The following line will replace the admin login with SAML2 (optional)
+    # If you want to specific the after-login-redirect-URL, use parameter
+    # "?next=/the/path/you/want" with this view.
+    re_path(r'^admin/login/$', django_saml2_auth.views.signin),
+    # ########################################################################
+    # END Auth SAML
+    # ########################################################################
+
     re_path(r'^admin', admin.site.urls),
 
     re_path(r'^$', home, name='home'),
@@ -108,9 +129,6 @@ urlpatterns = [
     re_path(r'^scifinder/', include('scifinder.urls', namespace='scifinder')),
     re_path(r'^support/', include('support.urls')),
     re_path(r'^teams/', include('teams.urls')),
-
-    # auth
-    path('oauth2/', include('django_auth_adfs.urls')),
 ]
 
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
