@@ -71,7 +71,7 @@ INSTALLED_APPS = [
     # Auth SAML2
     'django_saml2_auth',
     # Add your apps here to enable them.
-    'accounts',
+    # 'accounts',
     'constants',
     'DataSearch',
     'flowsa',
@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'support',
     'teams',
     'phonenumber_field',
+    'django_extensions',
 ]
 
 # Middleware framework.
@@ -179,7 +180,7 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 
 ENABLE_RSS_FEEDS = False
 
-APP_NAME = 'ExistingData'
+APP_NAME = 'DataSearch'
 APP_NAME_LONG = 'DataSearch'
 
 APP_VERSION = '1.2.0'

@@ -49,12 +49,12 @@
       {% if user.is_staff %}
       <li class="menu__item"><a href="{% url 'admin:index' %}" class="menu__link">Admin Portal</a></li>
       {% endif %}
-      <li class="menu__item"><a href="{% url 'accounts:logout' %}" class="menu__link">Logout</a></li>
+      <li class="menu__item"><a href="{% url 'logout' %}" class="menu__link">Logout</a></li>
     </ul>
   </li>
 
   {% else %}
   <li class="menu__item">
-    <a href="{% url 'accounts:login' %}" class="menu__link">Log-in</a>
+    <a href="{% url 'login' %}" class="menu__link">Log-in</a>
   </li>
   {% endif %}

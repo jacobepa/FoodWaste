@@ -31,7 +31,7 @@ urlpatterns = [
     # The following line will replace default user login with SAML2 (optional)
     # If you want to specific the after-login-redirect-URL,
     # use parameter "?next=/the/path/you/want" with this view.
-    re_path(r'^accounts/login/$', django_saml2_auth.views.signin),
+    re_path(r'^accounts/login/$', django_saml2_auth.views.signin, name='login'),
 
     # The following line will replace the admin login with SAML2 (optional)
     # If you want to specific the after-login-redirect-URL, use parameter
@@ -122,7 +122,7 @@ urlpatterns = [
             name='tracking_tool'),
 
     # Begin other module import URLs.
-    re_path(r'^accounts/', include('accounts.urls')),
+#     re_path(r'^accounts/', include('accounts.urls')),
     re_path(r'^flowsa/', include('flowsa.urls', namespace='flowsa')),
     re_path(r'^projects/', include('projects.urls')),
     re_path(r'^qar5/', include('qar5.urls')),
