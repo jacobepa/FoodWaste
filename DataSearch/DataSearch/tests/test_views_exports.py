@@ -12,14 +12,14 @@ These will pass when you run "manage.py test".
 # from unittest import TestCase
 from io import BytesIO
 import django
-from django.db.models.query import QuerySet, EmptyQuerySet
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
 from django.test.client import RequestFactory
+from django.contrib.auth.models import User
 from DataSearch.forms import ExistingDataForm
 from DataSearch.models import Attachment, ExistingData, ExistingDataSource, \
-  ExistingDataSharingTeamMap
+    ExistingDataSharingTeamMap
 from DataSearch.views_exports import add_attachments_to_zip
 from teams.models import Team, TeamMembership
 from zipfile import ZipFile
